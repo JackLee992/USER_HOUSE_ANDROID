@@ -1,1 +1,3 @@
+# Patch context retains upstream whitespace literally.
+tools/space-cadet/source.patch -whitespace
 android/gradlew.bat text eol=crlf
