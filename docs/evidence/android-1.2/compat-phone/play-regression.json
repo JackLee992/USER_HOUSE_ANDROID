@@ -1,0 +1,80 @@
+{
+  "passed": true,
+  "checks": [
+    "FreeCell native touch move/undo/auto toggle, HOME/resume exact board with explicit resume",
+    "Match3 real hinted exchange and scoring; ice/endless/classic preserve independent board",
+    "Bubble Shooter real touch shot and Android HOME/resume stays paused",
+    {
+      "pinballReady": {
+        "ready": true,
+        "renderer": "software",
+        "score": 43500,
+        "lives": 1,
+        "extraBalls": 0,
+        "gameover": false,
+        "paused": false,
+        "gameMode": 1,
+        "rank": 1,
+        "rankProgress": 0,
+        "missionId": 0,
+        "mission": "Awaiting Deployment",
+        "info": "Continue Play",
+        "tilted": false,
+        "multiplier": 0,
+        "plungerBoost": 0,
+        "plungerMax": 100,
+        "plungerIncrement": 1,
+        "components": 343,
+        "elapsedMs": 0,
+        "ticks": 0,
+        "tableRect": {
+          "x": 0,
+          "y": 0,
+          "width": 365,
+          "height": 470
+        },
+        "left": 0,
+        "right": 0,
+        "inputs": [
+          false,
+          false,
+          false,
+          false,
+          false,
+          false
+        ],
+        "balls": [
+          {
+            "active": false,
+            "x": 0,
+            "y": 0,
+            "z": -0.8,
+            "speed": 0,
+            "vx": 0,
+            "vy": 0
+          }
+        ]
+      },
+      "controls": [
+        {
+          "id": "",
+          "cls": "",
+          "text": "◀ 左挡板"
+        },
+        {
+          "id": "",
+          "cls": "",
+          "text": "右挡板 ▶"
+        },
+        {
+          "id": "",
+          "cls": "",
+          "text": "震台"
+        }
+      ],
+      "realLaunchAndTwoFingerFlippers": true
+    },
+    "Space Cadet native HOME pauses engine ticks; user resume restarts ticks"
+  ],
+  "errors": []
+}

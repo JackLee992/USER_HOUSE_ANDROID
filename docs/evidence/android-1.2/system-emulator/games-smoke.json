@@ -1,0 +1,736 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "id": "tetris",
+      "name": "俄罗斯方块",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": [
+          {
+            "width": 300,
+            "height": 600
+          }
+        ]
+      }
+    },
+    {
+      "id": "snake",
+      "name": "贪吃蛇",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": [
+          {
+            "width": 420,
+            "height": 420
+          }
+        ]
+      }
+    },
+    {
+      "id": "game2048",
+      "name": "2048",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": []
+      }
+    },
+    {
+      "id": "watermelon",
+      "name": "合成大西瓜",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": [
+          {
+            "width": 400,
+            "height": 500
+          }
+        ]
+      }
+    },
+    {
+      "id": "memory",
+      "name": "翻牌记忆",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": []
+      }
+    },
+    {
+      "id": "jump",
+      "name": "跳一跳",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": [
+          {
+            "width": 520,
+            "height": 640
+          }
+        ]
+      }
+    },
+    {
+      "id": "plank",
+      "name": "搭木板",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": [
+          {
+            "width": 520,
+            "height": 360
+          }
+        ]
+      }
+    },
+    {
+      "id": "sudoku",
+      "name": "数独",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": []
+      }
+    },
+    {
+      "id": "minesweeper",
+      "name": "扫雷",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": []
+      }
+    },
+    {
+      "id": "uyangle",
+      "name": "U了个U",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": []
+      }
+    },
+    {
+      "id": "screw",
+      "name": "拧螺丝",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": [
+          {
+            "width": 420,
+            "height": 560
+          }
+        ]
+      }
+    },
+    {
+      "id": "popstar",
+      "name": "消灭星星",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": []
+      }
+    },
+    {
+      "id": "paopao",
+      "name": "泡泡龙",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": [
+          {
+            "width": 1034,
+            "height": 1399
+          }
+        ]
+      }
+    },
+    {
+      "id": "game1010",
+      "name": "1010!",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": [
+          {
+            "width": 1005,
+            "height": 1811
+          }
+        ]
+      }
+    },
+    {
+      "id": "turkey",
+      "name": "土耳其方块",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": []
+      }
+    },
+    {
+      "id": "spider",
+      "name": "无尽蜘蛛纸牌",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": []
+      }
+    },
+    {
+      "id": "linklink",
+      "name": "连连看",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": []
+      }
+    },
+    {
+      "id": "shuerte",
+      "name": "舒尔特方格",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": []
+      }
+    },
+    {
+      "id": "pinball",
+      "name": "三维弹球",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": []
+      }
+    },
+    {
+      "id": "match3",
+      "name": "消消乐",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": []
+      }
+    },
+    {
+      "id": "freecell",
+      "name": "空当接龙",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": []
+      }
+    },
+    {
+      "id": "zuma",
+      "name": "祖玛",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": [
+          {
+            "width": 900,
+            "height": 620
+          }
+        ]
+      }
+    },
+    {
+      "id": "watersort",
+      "name": "倒瓶子",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": []
+      }
+    },
+    {
+      "id": "ludo",
+      "name": "双人飞行棋",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": []
+      }
+    },
+    {
+      "id": "guessnumber",
+      "name": "猜数字",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": []
+      }
+    },
+    {
+      "id": "wordguess",
+      "name": "我说你猜",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": []
+      }
+    },
+    {
+      "id": "tictactoe",
+      "name": "井字棋",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": []
+      }
+    },
+    {
+      "id": "gomoku",
+      "name": "五子棋",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": []
+      }
+    },
+    {
+      "id": "territory",
+      "name": "电子围地盘",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": []
+      }
+    },
+    {
+      "id": "oldmaid",
+      "name": "抽鬼牌",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": []
+      }
+    },
+    {
+      "id": "reversi",
+      "name": "翻转棋",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": []
+      }
+    },
+    {
+      "id": "bombnumber",
+      "name": "数字炸弹",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": []
+      }
+    },
+    {
+      "id": "connect4d",
+      "name": "立体四子棋",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": []
+      }
+    },
+    {
+      "id": "draughts",
+      "name": "跳棋",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": []
+      }
+    },
+    {
+      "id": "blackjack",
+      "name": "21点",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": []
+      }
+    },
+    {
+      "id": "westernchess",
+      "name": "国际象棋",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": []
+      }
+    },
+    {
+      "id": "chinesechess",
+      "name": "中国象棋",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 412,
+        "height": 842,
+        "scrollWidth": 412,
+        "canvases": []
+      }
+    }
+  ],
+  "errors": [],
+  "requests": [
+    "https://appassets.androidplatform.net/assets/www/standalone/index.html",
+    "https://appassets.androidplatform.net/assets/www/style.css",
+    "https://appassets.androidplatform.net/assets/www/standalone/app.css",
+    "https://appassets.androidplatform.net/assets/www/standalone/game-art.css",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/standalone/app.js",
+    "https://appassets.androidplatform.net/assets/www/src/runtime/wanban-app.js",
+    "https://appassets.androidplatform.net/assets/www/standalone/app-info.js",
+    "https://appassets.androidplatform.net/assets/www/standalone/content-state.js",
+    "https://appassets.androidplatform.net/assets/www/standalone/game-updates.js",
+    "https://appassets.androidplatform.net/assets/www/standalone/i18n.js",
+    "https://appassets.androidplatform.net/assets/www/standalone/game-art.js",
+    "https://appassets.androidplatform.net/assets/www/src/core/metadata.js",
+    "https://appassets.androidplatform.net/assets/www/src/core/sillytavern.js",
+    "https://appassets.androidplatform.net/assets/www/standalone/capabilities.js",
+    "https://appassets.androidplatform.net/assets/www/standalone/licenses.js",
+    "https://appassets.androidplatform.net/assets/www/src/runtime/wanban-prompts.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/registry.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/space-cadet.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/match3.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/snake/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/jump/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/plank/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/sudoku/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/minesweeper/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/shuerte/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/uyangle/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/screw/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/popstar/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/paopao/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/game1010/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/turkey/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/spider/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/linklink/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/blackjack/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/game2048/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/watermelon/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/memory/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/ludo/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/guessnumber/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/wordguess/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/tictactoe/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/gomoku/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/territory/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/oldmaid/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/reversi/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/bombnumber/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/connect4d/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/draughts/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/westernchess/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/chinesechess/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/tetris/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/zuma/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/watersort/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/pinball/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/match3/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/plugins/freecell/index.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/space-cadet-data.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/zuma.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/water-sort.js",
+    "https://appassets.androidplatform.net/assets/www/src/games/freecell.js",
+    "https://appassets.androidplatform.net/assets/www/locales/zh-CN.json",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/locales/en.json",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/game-art/premium/v1/candy-bubbles.png",
+    "https://appassets.androidplatform.net/assets/www/assets/game-art/premium/v1/fruits.png",
+    "https://appassets.androidplatform.net/assets/www/assets/game-art/premium/v1/materials.png",
+    "https://appassets.androidplatform.net/assets/www/assets/game-art/premium/v1/pieces.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/game-art/premium/v1/materials.png",
+    "https://appassets.androidplatform.net/assets/www/assets/game-art/premium/v1/candy-bubbles.png",
+    "https://appassets.androidplatform.net/assets/www/assets/game-art/premium/v1/fruits.png",
+    "https://appassets.androidplatform.net/assets/www/assets/game-art/premium/v1/pieces.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/game-icons/jump-stand.png",
+    "https://appassets.androidplatform.net/assets/www/assets/game-icons/jump-down.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/game-icons/plank-stand.png",
+    "https://appassets.androidplatform.net/assets/www/assets/game-icons/plank-walk.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/game-art/premium/v1/candy-bubbles.png",
+    "https://appassets.androidplatform.net/assets/www/assets/game-art/premium/v1/fruits.png",
+    "https://appassets.androidplatform.net/assets/www/assets/game-art/premium/v1/pieces.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/game-icons/spider-card.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/space-cadet/host.html?v=3.10.0&session=cadet-mtsk74yf-1biq4ixzv96",
+    "https://appassets.androidplatform.net/assets/www/assets/space-cadet/host.js",
+    "https://appassets.androidplatform.net/assets/www/assets/space-cadet/display.js",
+    "https://appassets.androidplatform.net/assets/www/assets/space-cadet/space-cadet.js",
+    "https://appassets.androidplatform.net/assets/www/assets/space-cadet/playfield-hd.png",
+    "https://appassets.androidplatform.net/assets/www/assets/space-cadet/space-cadet.data",
+    "https://appassets.androidplatform.net/assets/www/assets/space-cadet/space-cadet.wasm",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/src/runtime/wanban-wordguess-bank.txt",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/game-icons/oldmaid-back.jpg",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/app-icon.png",
+    "https://appassets.androidplatform.net/assets/www/assets/app-brand/international/app-icon.png"
+  ]
+}

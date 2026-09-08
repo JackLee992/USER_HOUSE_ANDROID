@@ -1,0 +1,503 @@
+{
+  "measuredAt": "2026-09-08T11:13:34.863Z",
+  "note": "Debug GeckoView real-touch workload; RAF cadence measures scheduling, not GPU presentation. Gecko long-task absence is reported unavailable, not zero.",
+  "results": [
+    {
+      "game": "paopao",
+      "before": {
+        "url": "http://127.0.0.1:38657/assets/www/standalone/index.html",
+        "viewport": {
+          "width": 360,
+          "height": 746,
+          "dpr": 3
+        },
+        "canvases": [
+          {
+            "frame": "main",
+            "id": "wb-paopao-canvas",
+            "width": 1026,
+            "height": 1386,
+            "cssWidth": 342,
+            "cssHeight": 462,
+            "art": "candy-bubbles"
+          }
+        ],
+        "snapshot": null
+      },
+      "after": {
+        "url": "http://127.0.0.1:38657/assets/www/standalone/index.html",
+        "viewport": {
+          "width": 360,
+          "height": 746,
+          "dpr": 3
+        },
+        "canvases": [
+          {
+            "frame": "main",
+            "id": "wb-paopao-canvas",
+            "width": 1026,
+            "height": 1386,
+            "cssWidth": 342,
+            "cssHeight": 462,
+            "art": "candy-bubbles"
+          }
+        ],
+        "snapshot": null
+      },
+      "actions": [
+        "aim-release",
+        "aim-release",
+        "aim-release",
+        "aim-release",
+        "aim-release",
+        "aim-release",
+        "aim-release",
+        "aim-release",
+        "aim-release",
+        "aim-release",
+        "aim-release",
+        "aim-release",
+        "aim-release",
+        "aim-release"
+      ],
+      "display": [
+        "  DisplayDeviceInfo{\"内置屏幕\": uniqueId=\"local:4630946538759461506\", 1080 x 2340, modeId 1, defaultModeId 1, supportedModes [{id=1, width=1080, height=2340, fps=60.000004, alternativeRefreshRates=[120.00001]}, {id=2, width=1080, height=2340, fps=120.00001, alternativeRefreshRates=[60.000004]}], colorMode 0, supportedColorModes [0, 7, 9], hdrCapabilities HdrCapabilities{mSupportedHdrTypes=[2, 3, 4], mMaxLuminance=420.0, mMaxAverageLuminance=210.1615, mMinLuminance=0.323}, allmSupported false, gameContentTypeSupported false, density 480, 391.885 x 391.026 dpi, appVsyncOff 1000000, presDeadline 16666666, cutout DisplayCutout{insets=Rect(0, 102 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(502, 0 - 580, 102), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=1080 displayHeight=2340 density={3.0} cutoutSpec={M-37.9-0.4v63c0,21.5,17.5,39,39,39c21.5,0,39-17.5,39-39v-63H-37.9z} rotation={0} scale={1.0}}}}, touch INTERNAL, rotation 0, type INTERNAL, address {port=130, model=0x40446d5758951a}, deviceProductInfo DeviceProductInfo{name=, manufacturerPnpId=QCM, productId=1, modelYear=null, manufactureDate=ManufactureDate{week=27, year=2006}, connectionToSinkType=0}, state ON, frameRateOverride , brightnessMinimum 0.0, brightnessMaximum 1.0, brightnessDefault 0.12941177, FLAG_DEFAULT_DISPLAY, FLAG_ROTATES_WITH_CONTENT, FLAG_SECURE, FLAG_SUPPORTS_PROTECTED_BUFFERS}",
+        "    mActiveModeId=1",
+        "    mActiveSfDisplayMode=DisplayMode{id=0, width=1080, height=2340, xDpi=391.885, yDpi=391.026, refreshRate=60.000004, appVsyncOffsetNanos=1000000, presentationDeadlineNanos=16666666, group=0}"
+      ],
+      "metrics": [
+        {
+          "frame": 0,
+          "durationMs": 32324,
+          "frames": 646,
+          "rafHz": 19.99390897633664,
+          "intervalMedian": 16.760000000009313,
+          "intervalP95": 150.71999999997206,
+          "intervalP99": 184.2600000000093,
+          "intervalMax": 201.0800000000745,
+          "intervalsOver25ms": 261,
+          "intervalsOver50ms": 259,
+          "estimatedMissed60HzFrames": 1284,
+          "timerDelayP95": 6,
+          "timerDelayMax": 44,
+          "longTasksSupported": false,
+          "longTaskCount": null
+        }
+      ]
+    },
+    {
+      "game": "match3",
+      "before": {
+        "url": "http://127.0.0.1:38657/assets/www/standalone/index.html",
+        "viewport": {
+          "width": 360,
+          "height": 746,
+          "dpr": 3
+        },
+        "canvases": [],
+        "snapshot": null
+      },
+      "after": {
+        "url": "http://127.0.0.1:38657/assets/www/standalone/index.html",
+        "viewport": {
+          "width": 360,
+          "height": 746,
+          "dpr": 3
+        },
+        "canvases": [],
+        "snapshot": null
+      },
+      "actions": [
+        "hinted-swap",
+        "hinted-swap",
+        "hinted-swap",
+        "hinted-swap",
+        "hinted-swap",
+        "hinted-swap",
+        "hinted-swap",
+        "hinted-swap",
+        "hinted-swap",
+        "hinted-swap",
+        "hinted-swap",
+        "hinted-swap"
+      ],
+      "display": [
+        "  DisplayDeviceInfo{\"内置屏幕\": uniqueId=\"local:4630946538759461506\", 1080 x 2340, modeId 1, defaultModeId 1, supportedModes [{id=1, width=1080, height=2340, fps=60.000004, alternativeRefreshRates=[120.00001]}, {id=2, width=1080, height=2340, fps=120.00001, alternativeRefreshRates=[60.000004]}], colorMode 0, supportedColorModes [0, 7, 9], hdrCapabilities HdrCapabilities{mSupportedHdrTypes=[2, 3, 4], mMaxLuminance=420.0, mMaxAverageLuminance=210.1615, mMinLuminance=0.323}, allmSupported false, gameContentTypeSupported false, density 480, 391.885 x 391.026 dpi, appVsyncOff 1000000, presDeadline 16666666, cutout DisplayCutout{insets=Rect(0, 102 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(502, 0 - 580, 102), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=1080 displayHeight=2340 density={3.0} cutoutSpec={M-37.9-0.4v63c0,21.5,17.5,39,39,39c21.5,0,39-17.5,39-39v-63H-37.9z} rotation={0} scale={1.0}}}}, touch INTERNAL, rotation 0, type INTERNAL, address {port=130, model=0x40446d5758951a}, deviceProductInfo DeviceProductInfo{name=, manufacturerPnpId=QCM, productId=1, modelYear=null, manufactureDate=ManufactureDate{week=27, year=2006}, connectionToSinkType=0}, state ON, frameRateOverride , brightnessMinimum 0.0, brightnessMaximum 1.0, brightnessDefault 0.12941177, FLAG_DEFAULT_DISPLAY, FLAG_ROTATES_WITH_CONTENT, FLAG_SECURE, FLAG_SUPPORTS_PROTECTED_BUFFERS}",
+        "    mActiveModeId=1",
+        "    mActiveSfDisplayMode=DisplayMode{id=0, width=1080, height=2340, xDpi=391.885, yDpi=391.026, refreshRate=60.000004, appVsyncOffsetNanos=1000000, presentationDeadlineNanos=16666666, group=0}"
+      ],
+      "metrics": [
+        {
+          "frame": 0,
+          "durationMs": 30841,
+          "frames": 1523,
+          "rafHz": 49.45209802879979,
+          "intervalMedian": 16.740000000107102,
+          "intervalP95": 33.52000000001863,
+          "intervalP99": 50.26000000000931,
+          "intervalMax": 83.73999999999069,
+          "intervalsOver25ms": 268,
+          "intervalsOver50ms": 40,
+          "estimatedMissed60HzFrames": 316,
+          "timerDelayP95": 30,
+          "timerDelayMax": 89,
+          "longTasksSupported": false,
+          "longTaskCount": null
+        }
+      ]
+    },
+    {
+      "game": "pinball",
+      "before": {
+        "url": "http://127.0.0.1:38657/assets/www/standalone/index.html",
+        "viewport": {
+          "width": 360,
+          "height": 746,
+          "dpr": 3
+        },
+        "canvases": [
+          {
+            "frame": "iframe",
+            "id": "canvas",
+            "width": 332,
+            "height": 427,
+            "cssWidth": 332,
+            "cssHeight": 427.66668701171875,
+            "art": null
+          },
+          {
+            "frame": "iframe",
+            "id": "display",
+            "width": 996,
+            "height": 1283,
+            "cssWidth": 332,
+            "cssHeight": 427.66668701171875,
+            "art": null
+          }
+        ],
+        "snapshot": {
+          "ready": true,
+          "renderer": "software",
+          "score": 0,
+          "lives": 3,
+          "extraBalls": 0,
+          "gameover": false,
+          "paused": false,
+          "gameMode": 1,
+          "rank": 1,
+          "rankProgress": 0,
+          "missionId": 0,
+          "mission": "Awaiting Deployment",
+          "info": "Continue Play",
+          "tilted": false,
+          "multiplier": 0,
+          "plungerBoost": 0,
+          "plungerMax": 100,
+          "plungerIncrement": 1,
+          "components": 343,
+          "elapsedMs": 696,
+          "ticks": 87,
+          "tableRect": {
+            "x": 0,
+            "y": 0,
+            "width": 365,
+            "height": 470
+          },
+          "left": 0,
+          "right": 0,
+          "inputs": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "balls": [
+            {
+              "active": false,
+              "x": 0,
+              "y": 0,
+              "z": -0.8,
+              "speed": 0,
+              "vx": 0,
+              "vy": 0
+            }
+          ]
+        }
+      },
+      "after": {
+        "url": "http://127.0.0.1:38657/assets/www/standalone/index.html",
+        "viewport": {
+          "width": 360,
+          "height": 746,
+          "dpr": 3
+        },
+        "canvases": [
+          {
+            "frame": "iframe",
+            "id": "canvas",
+            "width": 332,
+            "height": 427,
+            "cssWidth": 332,
+            "cssHeight": 427.66668701171875,
+            "art": null
+          },
+          {
+            "frame": "iframe",
+            "id": "display",
+            "width": 996,
+            "height": 1283,
+            "cssWidth": 332,
+            "cssHeight": 427.66668701171875,
+            "art": null
+          }
+        ],
+        "snapshot": {
+          "ready": true,
+          "renderer": "software",
+          "score": 26000,
+          "lives": 2,
+          "extraBalls": 0,
+          "gameover": false,
+          "paused": false,
+          "gameMode": 1,
+          "rank": 1,
+          "rankProgress": 0,
+          "missionId": 0,
+          "mission": "Awaiting Deployment",
+          "info": "Player 1",
+          "tilted": false,
+          "multiplier": 0,
+          "plungerBoost": 0,
+          "plungerMax": 100,
+          "plungerIncrement": 1,
+          "components": 343,
+          "elapsedMs": 32496,
+          "ticks": 4062,
+          "tableRect": {
+            "x": 0,
+            "y": 0,
+            "width": 365,
+            "height": 470
+          },
+          "left": 0,
+          "right": 0,
+          "inputs": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "balls": [
+            {
+              "active": true,
+              "x": -7.02503,
+              "y": 11.6747,
+              "z": 0.3,
+              "speed": 0.0319788,
+              "vx": -0.00000214186,
+              "vy": -0.0319788
+            }
+          ]
+        }
+      },
+      "actions": [
+        "charged-launch",
+        "two-finger-flippers",
+        "two-finger-flippers",
+        "two-finger-flippers",
+        "two-finger-flippers",
+        "two-finger-flippers",
+        "two-finger-flippers",
+        "two-finger-flippers",
+        "two-finger-flippers",
+        "two-finger-flippers",
+        "two-finger-flippers",
+        "two-finger-flippers",
+        "two-finger-flippers",
+        "two-finger-flippers",
+        "two-finger-flippers",
+        "two-finger-flippers",
+        "two-finger-flippers",
+        "two-finger-flippers",
+        "two-finger-flippers",
+        "two-finger-flippers",
+        "two-finger-flippers",
+        "two-finger-flippers",
+        "two-finger-flippers",
+        "two-finger-flippers",
+        "two-finger-flippers",
+        "two-finger-flippers",
+        "two-finger-flippers",
+        "two-finger-flippers",
+        "two-finger-flippers"
+      ],
+      "display": [
+        "  DisplayDeviceInfo{\"内置屏幕\": uniqueId=\"local:4630946538759461506\", 1080 x 2340, modeId 1, defaultModeId 1, supportedModes [{id=1, width=1080, height=2340, fps=60.000004, alternativeRefreshRates=[120.00001]}, {id=2, width=1080, height=2340, fps=120.00001, alternativeRefreshRates=[60.000004]}], colorMode 0, supportedColorModes [0, 7, 9], hdrCapabilities HdrCapabilities{mSupportedHdrTypes=[2, 3, 4], mMaxLuminance=420.0, mMaxAverageLuminance=210.1615, mMinLuminance=0.323}, allmSupported false, gameContentTypeSupported false, density 480, 391.885 x 391.026 dpi, appVsyncOff 1000000, presDeadline 16666666, cutout DisplayCutout{insets=Rect(0, 102 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(502, 0 - 580, 102), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=1080 displayHeight=2340 density={3.0} cutoutSpec={M-37.9-0.4v63c0,21.5,17.5,39,39,39c21.5,0,39-17.5,39-39v-63H-37.9z} rotation={0} scale={1.0}}}}, touch INTERNAL, rotation 0, type INTERNAL, address {port=130, model=0x40446d5758951a}, deviceProductInfo DeviceProductInfo{name=, manufacturerPnpId=QCM, productId=1, modelYear=null, manufactureDate=ManufactureDate{week=27, year=2006}, connectionToSinkType=0}, state ON, frameRateOverride , brightnessMinimum 0.0, brightnessMaximum 1.0, brightnessDefault 0.12941177, FLAG_DEFAULT_DISPLAY, FLAG_ROTATES_WITH_CONTENT, FLAG_SECURE, FLAG_SUPPORTS_PROTECTED_BUFFERS}",
+        "    mActiveModeId=1",
+        "    mActiveSfDisplayMode=DisplayMode{id=0, width=1080, height=2340, xDpi=391.885, yDpi=391.026, refreshRate=60.000004, appVsyncOffsetNanos=1000000, presentationDeadlineNanos=16666666, group=0}"
+      ],
+      "metrics": [
+        {
+          "frame": 0,
+          "durationMs": 30078,
+          "frames": 1597,
+          "rafHz": 53.140974319965416,
+          "intervalMedian": 16.739999999990687,
+          "intervalP95": 33.47999999998137,
+          "intervalP99": 33.52000000001863,
+          "intervalMax": 50.21999999997206,
+          "intervalsOver25ms": 194,
+          "intervalsOver50ms": 4,
+          "estimatedMissed60HzFrames": 198,
+          "timerDelayP95": 14,
+          "timerDelayMax": 27,
+          "longTasksSupported": false,
+          "longTaskCount": null
+        },
+        {
+          "frame": 1,
+          "durationMs": 30079,
+          "frames": 1597,
+          "rafHz": 53.14097431996505,
+          "intervalMedian": 16.74000000000069,
+          "intervalP95": 33.47999999999956,
+          "intervalP99": 33.539999999997235,
+          "intervalMax": 50.23999999999796,
+          "intervalsOver25ms": 194,
+          "intervalsOver50ms": 4,
+          "estimatedMissed60HzFrames": 198,
+          "timerDelayP95": 14,
+          "timerDelayMax": 22,
+          "longTasksSupported": false,
+          "longTaskCount": null
+        }
+      ]
+    },
+    {
+      "game": "jump",
+      "before": {
+        "url": "http://127.0.0.1:38657/assets/www/standalone/index.html",
+        "viewport": {
+          "width": 360,
+          "height": 746,
+          "dpr": 3
+        },
+        "canvases": [
+          {
+            "frame": "main",
+            "id": "wb-jump",
+            "width": 520,
+            "height": 640,
+            "cssWidth": 330,
+            "cssHeight": 416,
+            "art": "pieces"
+          }
+        ],
+        "snapshot": null
+      },
+      "after": {
+        "url": "http://127.0.0.1:38657/assets/www/standalone/index.html",
+        "viewport": {
+          "width": 360,
+          "height": 746,
+          "dpr": 3
+        },
+        "canvases": [
+          {
+            "frame": "main",
+            "id": "wb-jump",
+            "width": 520,
+            "height": 640,
+            "cssWidth": 330,
+            "cssHeight": 416,
+            "art": "pieces"
+          }
+        ],
+        "snapshot": null
+      },
+      "actions": [
+        {
+          "action": "charge-release",
+          "holdMs": 627.426181132816
+        },
+        {
+          "action": "charge-release",
+          "holdMs": 627.426181132816
+        },
+        "next-round",
+        {
+          "action": "charge-release",
+          "holdMs": 627.426181132816
+        },
+        {
+          "action": "charge-release",
+          "holdMs": 627.426181132816
+        },
+        "next-round",
+        {
+          "action": "charge-release",
+          "holdMs": 627.426181132816
+        },
+        {
+          "action": "charge-release",
+          "holdMs": 627.426181132816
+        },
+        "next-round",
+        {
+          "action": "charge-release",
+          "holdMs": 627.426181132816
+        },
+        {
+          "action": "charge-release",
+          "holdMs": 627.426181132816
+        },
+        "next-round",
+        {
+          "action": "charge-release",
+          "holdMs": 627.426181132816
+        },
+        {
+          "action": "charge-release",
+          "holdMs": 627.426181132816
+        },
+        {
+          "action": "charge-release",
+          "holdMs": 561.0010842574583
+        },
+        "next-round",
+        {
+          "action": "charge-release",
+          "holdMs": 627.426181132816
+        }
+      ],
+      "display": [
+        "  DisplayDeviceInfo{\"内置屏幕\": uniqueId=\"local:4630946538759461506\", 1080 x 2340, modeId 1, defaultModeId 1, supportedModes [{id=1, width=1080, height=2340, fps=60.000004, alternativeRefreshRates=[120.00001]}, {id=2, width=1080, height=2340, fps=120.00001, alternativeRefreshRates=[60.000004]}], colorMode 0, supportedColorModes [0, 7, 9], hdrCapabilities HdrCapabilities{mSupportedHdrTypes=[2, 3, 4], mMaxLuminance=420.0, mMaxAverageLuminance=210.1615, mMinLuminance=0.323}, allmSupported false, gameContentTypeSupported false, density 480, 391.885 x 391.026 dpi, appVsyncOff 1000000, presDeadline 16666666, cutout DisplayCutout{insets=Rect(0, 102 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(502, 0 - 580, 102), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=1080 displayHeight=2340 density={3.0} cutoutSpec={M-37.9-0.4v63c0,21.5,17.5,39,39,39c21.5,0,39-17.5,39-39v-63H-37.9z} rotation={0} scale={1.0}}}}, touch INTERNAL, rotation 0, type INTERNAL, address {port=130, model=0x40446d5758951a}, deviceProductInfo DeviceProductInfo{name=, manufacturerPnpId=QCM, productId=1, modelYear=null, manufactureDate=ManufactureDate{week=27, year=2006}, connectionToSinkType=0}, state ON, frameRateOverride , brightnessMinimum 0.0, brightnessMaximum 1.0, brightnessDefault 0.12941177, FLAG_DEFAULT_DISPLAY, FLAG_ROTATES_WITH_CONTENT, FLAG_SECURE, FLAG_SUPPORTS_PROTECTED_BUFFERS}",
+        "    mActiveModeId=1",
+        "    mActiveSfDisplayMode=DisplayMode{id=0, width=1080, height=2340, xDpi=391.885, yDpi=391.026, refreshRate=60.000004, appVsyncOffsetNanos=1000000, presentationDeadlineNanos=16666666, group=0}"
+      ],
+      "metrics": [
+        {
+          "frame": 0,
+          "durationMs": 32742,
+          "frames": 1933,
+          "rafHz": 59.10169098712956,
+          "intervalMedian": 16.739999999990687,
+          "intervalP95": 16.78000000002794,
+          "intervalP99": 16.880000000121072,
+          "intervalMax": 50.4000000001397,
+          "intervalsOver25ms": 17,
+          "intervalsOver50ms": 4,
+          "estimatedMissed60HzFrames": 21,
+          "timerDelayP95": 4,
+          "timerDelayMax": 56,
+          "longTasksSupported": false,
+          "longTaskCount": null
+        }
+      ]
+    }
+  ]
+}

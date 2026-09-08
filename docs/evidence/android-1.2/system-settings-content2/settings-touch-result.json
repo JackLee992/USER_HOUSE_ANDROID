@@ -1,0 +1,183 @@
+{
+  "passed": false,
+  "engine": "system",
+  "serial": "emulator-5554",
+  "results": [
+    {
+      "selector": "#wanba-language",
+      "from": "zh-CN",
+      "requestedValue": "zh-CN",
+      "nativeText": "简体中文",
+      "nativeBounds": [
+        70,
+        806,
+        1010,
+        974
+      ],
+      "passed": true
+    },
+    {
+      "selector": "#wanba-language",
+      "from": "zh-CN",
+      "requestedValue": "en",
+      "nativeText": "English",
+      "nativeBounds": [
+        70,
+        1148,
+        1010,
+        1316
+      ],
+      "passed": true
+    },
+    {
+      "selector": "#wanba-language",
+      "cancelled": true,
+      "value": "en"
+    },
+    {
+      "selector": "#wanba-language",
+      "from": "en",
+      "requestedValue": "zh-CN",
+      "nativeText": "简体中文",
+      "nativeBounds": [
+        70,
+        806,
+        1010,
+        974
+      ],
+      "passed": true
+    },
+    {
+      "selector": "#wb-theme",
+      "from": "night",
+      "requestedValue": "day",
+      "nativeText": "梦幻掌机",
+      "nativeBounds": [
+        70,
+        635,
+        1010,
+        803
+      ],
+      "passed": true
+    },
+    {
+      "selector": "#wb-theme",
+      "cancelled": true,
+      "value": "day"
+    },
+    {
+      "selector": "#wb-theme",
+      "from": "day",
+      "requestedValue": "night",
+      "nativeText": "霓虹游戏舱",
+      "nativeBounds": [
+        70,
+        1319,
+        1010,
+        1487
+      ],
+      "passed": true
+    },
+    {
+      "selector": "#wanba-language",
+      "from": "zh-CN",
+      "requestedValue": "en",
+      "nativeText": "English",
+      "nativeBounds": [
+        70,
+        1148,
+        1010,
+        1316
+      ],
+      "passed": true
+    },
+    {
+      "selector": "#wb-theme",
+      "from": "night",
+      "requestedValue": "day",
+      "nativeText": "Dream handheld",
+      "nativeBounds": [
+        70,
+        635,
+        1010,
+        803
+      ],
+      "passed": true
+    },
+    {
+      "persistence": {
+        "homeWaitMs": 10000,
+        "forceStopped": true,
+        "language": "en",
+        "theme": "day",
+        "performance": "skipped"
+      },
+      "passed": true
+    },
+    {
+      "selector": "#wanba-language",
+      "from": "en",
+      "requestedValue": "zh-CN",
+      "nativeText": "简体中文",
+      "nativeBounds": [
+        70,
+        806,
+        1010,
+        974
+      ],
+      "passed": true
+    },
+    {
+      "selector": "#wb-theme",
+      "from": "day",
+      "requestedValue": "night",
+      "nativeText": "霓虹游戏舱",
+      "nativeBounds": [
+        70,
+        1319,
+        1010,
+        1487
+      ],
+      "passed": true
+    },
+    {
+      "selector": "#wanba-language",
+      "from": "zh-CN",
+      "requestedValue": "zh-CN",
+      "nativeText": "简体中文",
+      "nativeBounds": [
+        70,
+        806,
+        1010,
+        974
+      ],
+      "passed": true
+    },
+    {
+      "selector": "#wb-theme",
+      "from": "night",
+      "requestedValue": "night",
+      "nativeText": "霓虹游戏舱",
+      "nativeBounds": [
+        70,
+        1319,
+        1010,
+        1487
+      ],
+      "passed": true
+    }
+  ],
+  "skips": [
+    {
+      "selector": "#wanba-performance",
+      "reason": "Optional older content lacks performance picker; not counted as passed"
+    }
+  ],
+  "restoration": {
+    "language": true,
+    "theme": true,
+    "performance": "skipped"
+  },
+  "failure": "Error: {\"exceptionId\":1,\"text\":\"Uncaught\",\"lineNumber\":0,\"columnNumber\":81,\"scriptId\":\"87\",\"stackTrace\":{\"callFrames\":[{\"functionName\":\"\",\"scriptId\":\"87\",\"url\":\"\",\"lineNumber\":0,\"columnNumber\":87},{\"functionName\":\"\",\"scriptId\":\"87\",\"url\":\"\",\"lineNumber\":0,\"columnNumber\":259}]},\"exception\":{\"type\":\"object\",\"subtype\":\"error\",\"className\":\"Error\",\"description\":\"Error: Missing/disabled control\\n    at <anonymous>:1:88\\n    at <anonymous>:1:260\",\"objectId\":\"-4842225586969691211.1.2\"}}\n    at Object.evaluate (file:///Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/tests/android-cdp.mjs:13:153)\n    at async touch (file:///Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/tests/android-native-select.mjs:21:15)\n    at async file:///Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/tests/android-settings-touch.mjs:74:17",
+  "note": "All production select choices use real touch plus native UI XML bounds and adb tap. No value assignment or synthetic change. Native XML is temporary under .local and removed after parsing."
+}

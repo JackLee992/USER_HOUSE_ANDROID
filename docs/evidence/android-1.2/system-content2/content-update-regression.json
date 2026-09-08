@@ -1,0 +1,100 @@
+{
+  "passed": false,
+  "testedAt": "2026-09-08T11:46:55.337Z",
+  "checks": [
+    {
+      "check": "real GitHub signed manifest accepted",
+      "repository": "JackLee992/USER_HOUSE_GAME_PACKS",
+      "oldId": "00d804b26f32d67d1358161a709c6a9d336082b98d5ea6a5c1ef1fb38409b238",
+      "newId": "ee361cb03fe2e87f860dbe5977a6a74b312a29879efd5ca4b11ac5e6b593bd9c",
+      "changed": [
+        {
+          "id": "game.wordguess",
+          "kind": "game",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-2/game.wordguess-1.0.1.zip",
+          "sha256": "abf474c754c4a50ef2faa2cbf0ea650775668b0e3eef335191053f40296cc74c",
+          "size": 4865
+        }
+      ]
+    },
+    {
+      "check": "only the changed package downloaded; prior active snapshot and all five storage keys unchanged",
+      "job": {
+        "jobId": "update-1788867962337-5",
+        "action": "download",
+        "state": "ready",
+        "downloadedBytes": 4865,
+        "totalBytes": 4865,
+        "message": "下载完成，回到首页后可安装"
+      }
+    },
+    {
+      "check": "immutable snapshot atomically activated and marked healthy; unchanged package records and exact raw checkpoint retained",
+      "unchangedPackages": 80,
+      "bootHealthy": true,
+      "storage": {
+        "wanbanXiaowu_settings_v1": {
+          "bytes": 1246,
+          "sha256": "26bb5602b7aca5040a057d40b057d8d00efe2ea05000eb49f0bb04b6fff72633"
+        },
+        "wanbanXiaowu_scores_v1": {
+          "bytes": 640,
+          "sha256": "d8e1bb3993502d37e810b33a46e9289c3c381c09739cf1ecb75ba73467b56756"
+        },
+        "wanbanXiaowu_progress_v1": {
+          "bytes": 89795,
+          "sha256": "d3c04606e5305885b8f302ef6ce593671003791a29c47ce8a520659537de17c0"
+        },
+        "wanbanXiaowu_records_v1": {
+          "bytes": 2,
+          "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+        },
+        "wanbanXiaowu_sudokuState_v1": {
+          "bytes": 2,
+          "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+        }
+      }
+    },
+    {
+      "check": "updated wordguess 1.0.1 plugin rendered its new labeled UI and a real submitted guess persisted",
+      "storage": {
+        "wanbanXiaowu_settings_v1": {
+          "bytes": 1246,
+          "sha256": "26bb5602b7aca5040a057d40b057d8d00efe2ea05000eb49f0bb04b6fff72633"
+        },
+        "wanbanXiaowu_scores_v1": {
+          "bytes": 640,
+          "sha256": "d8e1bb3993502d37e810b33a46e9289c3c381c09739cf1ecb75ba73467b56756"
+        },
+        "wanbanXiaowu_progress_v1": {
+          "bytes": 89619,
+          "sha256": "98e9da445f3c9c03b6d8f023f2b8ce08861c2d279ef7a19e7851114fd764bb80"
+        },
+        "wanbanXiaowu_records_v1": {
+          "bytes": 2,
+          "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+        },
+        "wanbanXiaowu_sudokuState_v1": {
+          "bytes": 2,
+          "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+        }
+      }
+    },
+    {
+      "check": "Wi-Fi and mobile data disabled: cold process launch remains healthy on the downloaded immutable snapshot with exact saved data",
+      "bootHealthy": true,
+      "radiosDuring": {
+        "wifi": "0",
+        "data": "0"
+      }
+    },
+    {
+      "check": "English legacy DOM-click rollback returned to content1 and retained all five current storage keys byte-for-byte",
+      "legacyUiWorkaround": true
+    }
+  ],
+  "backendPassed": true,
+  "realTouchRollbackPassed": false,
+  "failureReason": "Old core rollback touch target replacement plus English text locator; native rollback verified separately with DOM click."
+}

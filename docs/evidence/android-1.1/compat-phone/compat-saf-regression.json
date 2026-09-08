@@ -1,5 +1,10 @@
 {
-  "passed": false,
-  "checks": [],
-  "filename": "wanba-qa-1788864447782.json"
+  "passed": true,
+  "checks": [
+    "ACTION_CREATE_DOCUMENT writes UTF8 JSON with unchanged actual saved game progress",
+    "cancel backup reports visible cancellation",
+    "ACTION_OPEN_DOCUMENT -> native private file import -> Gecko FileReader -> explicit confirm preserves game progress",
+    "cancel import leaves saved games unchanged"
+  ],
+  "filename": "awanba-qa-1788864687765.json"
 }

@@ -1,0 +1,607 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "id": "tetris",
+      "name": "俄罗斯方块",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [
+          {
+            "width": 300,
+            "height": 600
+          }
+        ],
+        "body": null
+      }
+    },
+    {
+      "id": "snake",
+      "name": "贪吃蛇",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [
+          {
+            "width": 420,
+            "height": 420
+          }
+        ],
+        "body": null
+      }
+    },
+    {
+      "id": "game2048",
+      "name": "2048",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [],
+        "body": null
+      }
+    },
+    {
+      "id": "watermelon",
+      "name": "合成大西瓜",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [
+          {
+            "width": 400,
+            "height": 500
+          }
+        ],
+        "body": null
+      }
+    },
+    {
+      "id": "memory",
+      "name": "翻牌记忆",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [],
+        "body": null
+      }
+    },
+    {
+      "id": "jump",
+      "name": "跳一跳",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [
+          {
+            "width": 520,
+            "height": 640
+          }
+        ],
+        "body": null
+      }
+    },
+    {
+      "id": "plank",
+      "name": "搭木板",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [
+          {
+            "width": 520,
+            "height": 360
+          }
+        ],
+        "body": null
+      }
+    },
+    {
+      "id": "sudoku",
+      "name": "数独",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [],
+        "body": null
+      }
+    },
+    {
+      "id": "minesweeper",
+      "name": "扫雷",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [],
+        "body": null
+      }
+    },
+    {
+      "id": "uyangle",
+      "name": "U了个U",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [],
+        "body": null
+      }
+    },
+    {
+      "id": "screw",
+      "name": "拧螺丝",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [
+          {
+            "width": 420,
+            "height": 560
+          }
+        ],
+        "body": null
+      }
+    },
+    {
+      "id": "popstar",
+      "name": "消灭星星",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [],
+        "body": null
+      }
+    },
+    {
+      "id": "paopao",
+      "name": "泡泡龙",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [
+          {
+            "width": 1026,
+            "height": 1386
+          }
+        ],
+        "body": null
+      }
+    },
+    {
+      "id": "game1010",
+      "name": "1010!",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [
+          {
+            "width": 990,
+            "height": 1779
+          }
+        ],
+        "body": null
+      }
+    },
+    {
+      "id": "turkey",
+      "name": "土耳其方块",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [],
+        "body": null
+      }
+    },
+    {
+      "id": "spider",
+      "name": "无尽蜘蛛纸牌",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [],
+        "body": null
+      }
+    },
+    {
+      "id": "linklink",
+      "name": "连连看",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [],
+        "body": null
+      }
+    },
+    {
+      "id": "shuerte",
+      "name": "舒尔特方格",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [],
+        "body": null
+      }
+    },
+    {
+      "id": "pinball",
+      "name": "三维弹球",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [],
+        "body": null
+      }
+    },
+    {
+      "id": "match3",
+      "name": "消消乐",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [],
+        "body": null
+      }
+    },
+    {
+      "id": "freecell",
+      "name": "空当接龙",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [],
+        "body": null
+      }
+    },
+    {
+      "id": "zuma",
+      "name": "祖玛",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [
+          {
+            "width": 900,
+            "height": 620
+          }
+        ],
+        "body": null
+      }
+    },
+    {
+      "id": "watersort",
+      "name": "倒瓶子",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [],
+        "body": null
+      }
+    },
+    {
+      "id": "ludo",
+      "name": "双人飞行棋",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [],
+        "body": null
+      }
+    },
+    {
+      "id": "guessnumber",
+      "name": "猜数字",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [],
+        "body": null
+      }
+    },
+    {
+      "id": "wordguess",
+      "name": "我说你猜",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [],
+        "body": null
+      }
+    },
+    {
+      "id": "tictactoe",
+      "name": "井字棋",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [],
+        "body": null
+      }
+    },
+    {
+      "id": "gomoku",
+      "name": "五子棋",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [],
+        "body": null
+      }
+    },
+    {
+      "id": "territory",
+      "name": "电子围地盘",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [],
+        "body": null
+      }
+    },
+    {
+      "id": "oldmaid",
+      "name": "抽鬼牌",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [],
+        "body": null
+      }
+    },
+    {
+      "id": "reversi",
+      "name": "翻转棋",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [],
+        "body": null
+      }
+    },
+    {
+      "id": "bombnumber",
+      "name": "数字炸弹",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [],
+        "body": null
+      }
+    },
+    {
+      "id": "connect4d",
+      "name": "立体四子棋",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [],
+        "body": null
+      }
+    },
+    {
+      "id": "draughts",
+      "name": "跳棋",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [],
+        "body": null
+      }
+    },
+    {
+      "id": "blackjack",
+      "name": "21点",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [],
+        "body": null
+      }
+    },
+    {
+      "id": "westernchess",
+      "name": "国际象棋",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [],
+        "body": null
+      }
+    },
+    {
+      "id": "chinesechess",
+      "name": "中国象棋",
+      "started": true,
+      "paused": true,
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "scrollWidth": 360,
+        "canvases": [],
+        "body": null
+      }
+    }
+  ],
+  "errors": [],
+  "requests": [
+    "http://127.0.0.1:38657/assets/www/style.css",
+    "http://127.0.0.1:38657/assets/www/standalone/app.css",
+    "http://127.0.0.1:38657/assets/www/standalone/game-art.css",
+    "http://127.0.0.1:38657/assets/www/assets/app-brand/app-icon.png",
+    "http://127.0.0.1:38657/assets/www/standalone/app.js",
+    "http://127.0.0.1:38657/assets/www/src/runtime/wanban-app.js",
+    "http://127.0.0.1:38657/assets/www/standalone/app-info.js",
+    "http://127.0.0.1:38657/assets/www/standalone/content-state.js",
+    "http://127.0.0.1:38657/assets/www/standalone/game-updates.js",
+    "http://127.0.0.1:38657/assets/www/standalone/game-art.js",
+    "http://127.0.0.1:38657/assets/www/standalone/i18n.js",
+    "http://127.0.0.1:38657/assets/www/src/core/metadata.js",
+    "http://127.0.0.1:38657/assets/www/src/core/sillytavern.js",
+    "http://127.0.0.1:38657/assets/www/standalone/capabilities.js",
+    "http://127.0.0.1:38657/assets/www/standalone/licenses.js",
+    "http://127.0.0.1:38657/assets/www/src/runtime/wanban-prompts.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/registry.js",
+    "http://127.0.0.1:38657/assets/www/src/games/space-cadet.js",
+    "http://127.0.0.1:38657/assets/www/src/games/match3.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/snake/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/jump/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/plank/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/uyangle/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/screw/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/sudoku/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/minesweeper/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/shuerte/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/popstar/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/paopao/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/game1010/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/turkey/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/spider/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/linklink/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/blackjack/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/game2048/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/watermelon/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/memory/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/ludo/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/guessnumber/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/wordguess/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/tictactoe/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/gomoku/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/territory/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/oldmaid/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/reversi/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/bombnumber/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/connect4d/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/draughts/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/westernchess/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/chinesechess/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/tetris/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/zuma/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/pinball/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/watersort/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/match3/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/plugins/freecell/index.js",
+    "http://127.0.0.1:38657/assets/www/src/games/space-cadet-data.js",
+    "http://127.0.0.1:38657/assets/www/src/games/zuma.js",
+    "http://127.0.0.1:38657/assets/www/src/games/water-sort.js",
+    "http://127.0.0.1:38657/assets/www/src/games/freecell.js",
+    "http://127.0.0.1:38657/assets/www/locales/zh-CN.json",
+    "http://127.0.0.1:38657/assets/www/assets/game-art/premium/v1/candy-bubbles.png",
+    "http://127.0.0.1:38657/assets/www/assets/game-art/premium/v1/materials.png",
+    "http://127.0.0.1:38657/assets/www/assets/game-art/premium/v1/fruits.png",
+    "http://127.0.0.1:38657/assets/www/assets/game-art/premium/v1/pieces.png",
+    "http://127.0.0.1:38657/assets/www/assets/game-icons/jump-stand.png",
+    "http://127.0.0.1:38657/assets/www/assets/game-icons/jump-down.png",
+    "http://127.0.0.1:38657/assets/www/assets/game-icons/plank-stand.png",
+    "http://127.0.0.1:38657/assets/www/assets/game-icons/plank-walk.png",
+    "http://127.0.0.1:38657/assets/www/assets/game-icons/spider-card.png",
+    "http://127.0.0.1:38657/assets/www/assets/space-cadet/host.html?v=3.10.0&session=cadet-mtsk02r4-77w3zstam34",
+    "http://127.0.0.1:38657/assets/www/src/runtime/wanban-wordguess-bank.txt",
+    "http://127.0.0.1:38657/assets/www/assets/game-icons/oldmaid-back.jpg"
+  ]
+}

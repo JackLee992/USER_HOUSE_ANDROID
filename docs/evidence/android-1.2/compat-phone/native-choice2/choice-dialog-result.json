@@ -1,0 +1,72 @@
+{
+  "passed": true,
+  "engine": "compat",
+  "serial": "AKRSVB1A09000369",
+  "results": [
+    {
+      "selector": "#wanba-choice-qa-single",
+      "from": "first",
+      "requestedValue": "second",
+      "nativeText": "QA Second",
+      "nativeBounds": [
+        75,
+        909,
+        1005,
+        1053
+      ],
+      "changeCount": 1,
+      "trusted": true,
+      "passed": true
+    },
+    {
+      "selector": "#wanba-choice-qa-single",
+      "cancelled": true,
+      "value": "second",
+      "passed": true
+    },
+    {
+      "single": "disabled-option-and-group",
+      "disabledOptionEnabled": "false",
+      "disabledGroupChildEnabled": "false",
+      "unchanged": true,
+      "passed": true
+    },
+    {
+      "multiple": "add-bravo-confirm",
+      "selected": [
+        "alpha",
+        "bravo",
+        "disabled",
+        "locked"
+      ],
+      "disabledOptionEnabled": "false",
+      "disabledGroupChildEnabled": "false",
+      "disabledTapsPreserved": true,
+      "passed": true
+    },
+    {
+      "multiple": "cancel-uncheck-alpha",
+      "selected": [
+        "alpha",
+        "bravo",
+        "disabled",
+        "locked"
+      ],
+      "passed": true
+    },
+    {
+      "multiple": "remove-alpha-confirm",
+      "selected": [
+        "bravo",
+        "disabled",
+        "locked"
+      ],
+      "changeCount": 2,
+      "trusted": true,
+      "passed": true
+    }
+  ],
+  "cleanup": true,
+  "failure": null,
+  "note": "Only temporary isolated QA HTML controls are created. All actual choices use WebDriver touch and native XML coordinates. Raw native XML is removed by the shared helper after parsing."
+}

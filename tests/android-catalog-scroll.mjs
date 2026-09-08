@@ -17,7 +17,8 @@ try {
    // Android MotionEvents exercise Gecko APZ; Marionette's synthesized moves
    // may dispatch DOM touch events without driving native asynchronous scroll.
    const scale=initial.dpr;
-   adb('shell','input','swipe',String(Math.round(p.x*scale)),String(Math.round(y1*scale)),String(Math.round(p.x*scale)),String(Math.round(y2*scale)),'350');
+   const nativeTop=Math.max(p.top,initial.height*.28)*scale,nativeBottom=Math.min(p.bottom,initial.height*.78)*scale;
+   adb('shell','input','swipe',String(Math.round(p.x*scale)),String(Math.round(up?nativeBottom:nativeTop)),String(Math.round(p.x*scale)),String(Math.round(up?nativeTop:nativeBottom)),'450');
   }else {
   await c.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[{x:p.x,y:y1}]});await c.wait(35);
   for(let tick=1;tick<=7;tick++){await c.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:p.x,y:y1+(y2-y1)*tick/7}]});await c.wait(35)}

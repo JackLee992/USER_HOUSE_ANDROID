@@ -1,0 +1,66 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "locale": "zh-CN",
+      "brand": "玩吧",
+      "navigation": [
+        "单人游戏\n23",
+        "人机挑战\n14",
+        "设置"
+      ],
+      "firstGame": "▦\n俄罗斯方块\n当前最高分：0分",
+      "settingsLanguage": "zh-CN",
+      "noOverflow": true
+    },
+    {
+      "locale": "zh-TW",
+      "brand": "玩吧",
+      "navigation": [
+        "單人遊戲\n23",
+        "人機挑戰\n14",
+        "設定"
+      ],
+      "firstGame": "▦\n俄羅斯方塊\n最高：0 分",
+      "settingsLanguage": "zh-TW",
+      "noOverflow": true
+    },
+    {
+      "locale": "en",
+      "brand": "Nookcade",
+      "navigation": [
+        "Solo games\n23",
+        "Play the computer\n14",
+        "Settings"
+      ],
+      "firstGame": "▦\nFalling Blocks\nBest: 0 points",
+      "settingsLanguage": "en",
+      "noOverflow": true
+    },
+    {
+      "locale": "ja",
+      "brand": "ヌックケード",
+      "navigation": [
+        "ひとりで遊ぶ\n23",
+        "コンピューター対戦\n14",
+        "設定"
+      ],
+      "firstGame": "▦\nブロックパズル\n最高：0 点",
+      "settingsLanguage": "ja",
+      "noOverflow": true
+    },
+    {
+      "locale": "ko",
+      "brand": "눅케이드",
+      "navigation": [
+        "혼자 놀기\n23",
+        "컴퓨터 대전\n14",
+        "설정"
+      ],
+      "firstGame": "▦\n블록 퍼즐\n최고: 0 점",
+      "settingsLanguage": "ko",
+      "noOverflow": true
+    }
+  ],
+  "restoredLocale": "zh-CN"
+}

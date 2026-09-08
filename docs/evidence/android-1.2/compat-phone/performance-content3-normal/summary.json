@@ -1,0 +1,75 @@
+{
+  "measuredAt": "2026-09-08T12:14:57.065Z",
+  "profile": "normal",
+  "note": "Debug GeckoView real-touch workload; RAF cadence measures scheduling, not GPU presentation. Gecko long-task absence is reported unavailable, not zero.",
+  "results": [
+    {
+      "game": "paopao",
+      "before": {
+        "url": "http://127.0.0.1:38657/assets/updates/8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2/www/standalone/index.html",
+        "viewport": {
+          "width": 360,
+          "height": 746,
+          "dpr": 3
+        },
+        "canvases": [
+          {
+            "frame": "main",
+            "id": "wb-paopao-canvas",
+            "width": 658,
+            "height": 888,
+            "cssWidth": 329,
+            "cssHeight": 444,
+            "art": "bubbles"
+          }
+        ],
+        "snapshot": null
+      },
+      "after": {
+        "url": "http://127.0.0.1:38657/assets/updates/8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2/www/standalone/index.html",
+        "viewport": {
+          "width": 360,
+          "height": 746,
+          "dpr": 3
+        },
+        "canvases": [
+          {
+            "frame": "main",
+            "id": "wb-paopao-canvas",
+            "width": 658,
+            "height": 888,
+            "cssWidth": 329,
+            "cssHeight": 444,
+            "art": "bubbles"
+          }
+        ],
+        "snapshot": null
+      },
+      "actions": [],
+      "display": [
+        "  DisplayDeviceInfo{\"内置屏幕\": uniqueId=\"local:4630946538759461506\", 1080 x 2340, modeId 1, defaultModeId 1, supportedModes [{id=1, width=1080, height=2340, fps=60.000004, alternativeRefreshRates=[120.00001]}, {id=2, width=1080, height=2340, fps=120.00001, alternativeRefreshRates=[60.000004]}], colorMode 0, supportedColorModes [0, 7, 9], hdrCapabilities HdrCapabilities{mSupportedHdrTypes=[2, 3, 4], mMaxLuminance=420.0, mMaxAverageLuminance=210.1615, mMinLuminance=0.323}, allmSupported false, gameContentTypeSupported false, density 480, 391.885 x 391.026 dpi, appVsyncOff 1000000, presDeadline 16666666, cutout DisplayCutout{insets=Rect(0, 102 - 0, 0) waterfall=Insets{left=0, top=0, right=0, bottom=0} boundingRect={Bounds=[Rect(0, 0 - 0, 0), Rect(502, 0 - 580, 102), Rect(0, 0 - 0, 0), Rect(0, 0 - 0, 0)]} cutoutPathParserInfo={CutoutPathParserInfo{displayWidth=1080 displayHeight=2340 density={3.0} cutoutSpec={M-37.9-0.4v63c0,21.5,17.5,39,39,39c21.5,0,39-17.5,39-39v-63H-37.9z} rotation={0} scale={1.0}}}}, touch INTERNAL, rotation 0, type INTERNAL, address {port=130, model=0x40446d5758951a}, deviceProductInfo DeviceProductInfo{name=, manufacturerPnpId=QCM, productId=1, modelYear=null, manufactureDate=ManufactureDate{week=27, year=2006}, connectionToSinkType=0}, state ON, frameRateOverride , brightnessMinimum 0.0, brightnessMaximum 1.0, brightnessDefault 0.12941177, FLAG_DEFAULT_DISPLAY, FLAG_ROTATES_WITH_CONTENT, FLAG_SECURE, FLAG_SUPPORTS_PROTECTED_BUFFERS}",
+        "    mActiveModeId=1",
+        "    mActiveSfDisplayMode=DisplayMode{id=0, width=1080, height=2340, xDpi=391.885, yDpi=391.026, refreshRate=60.000004, appVsyncOffsetNanos=1000000, presentationDeadlineNanos=16666666, group=0}"
+      ],
+      "metrics": [
+        {
+          "frame": 0,
+          "durationMs": 10033,
+          "frames": 597,
+          "rafHz": 59.63464043408429,
+          "intervalMedian": 16.74000000000524,
+          "intervalP95": 16.760000000009313,
+          "intervalP99": 17.05999999999767,
+          "intervalMax": 33.48000000001048,
+          "intervalsOver25ms": 1,
+          "intervalsOver50ms": 0,
+          "estimatedMissed60HzFrames": 1,
+          "timerDelayP95": 2,
+          "timerDelayMax": 18,
+          "longTasksSupported": false,
+          "longTaskCount": null
+        }
+      ]
+    }
+  ]
+}

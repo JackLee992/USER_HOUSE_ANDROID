@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "check": "content3 real touch rollback to complete cached content2; healthy and exact five raw storage strings retained",
+      "snapshotId": "ee361cb03fe2e87f860dbe5977a6a74b312a29879efd5ca4b11ac5e6b593bd9c"
+    },
+    {
+      "check": "release APK starts on newer builtin content3 after active2; new catalog is visible",
+      "debugTransportUsed": false
+    },
+    {
+      "check": "release actual SAF export retains all game data and settings after expected export UI changes",
+      "unchangedItems": [
+        "scores",
+        "progress",
+        "records",
+        "sudokuState"
+      ],
+      "expectedSettingsChanges": [
+        "lastTab single→settings caused by opening export UI",
+        "three empty API fields are omitted by normal backup policy"
+      ],
+      "compared": "parsed JSON values; not raw storage byte equality"
+    },
+    {
+      "check": "installed release has no DEBUGGABLE flag; app-specific automation YAML removed"
+    }
+  ],
+  "testedAt": "2026-09-08T12:21:27.619Z",
+  "verificationNote": "Initial strict settings comparison detected only normal navigation/export-policy changes; replayed comparison against captured before/SAF data with those explicit expectations, no APK or storage edits."
+}

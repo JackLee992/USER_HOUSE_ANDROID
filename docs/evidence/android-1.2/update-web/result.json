@@ -4,7 +4,8 @@
     "boot stays locked until the asynchronous health marker commits",
     "one-package preview → download → home-only activation with five-key checkpoint",
     "update controls are absent during a game; progress survives return home",
-    "real browser touch gesture at list top triggers pull-to-refresh"
+    "real browser touch gesture at list top triggers pull-to-refresh",
+    "real touch rollback confirmation survives touchend and does not tap through to a game"
   ],
   "errors": []
 }

@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "checkedAt": "2026-09-08T11:08:41.844Z",
+  "repository": "JackLee992/USER_HOUSE_GAME_PACKS",
+  "activeSnapshotId": "00d804b26f32d67d1358161a709c6a9d336082b98d5ea6a5c1ef1fb38409b238",
+  "activeVersion": "1.0.0",
+  "candidate": null,
+  "job": {
+    "jobId": "update-1788865717837-2",
+    "action": "check",
+    "state": "upToDate",
+    "downloadedBytes": 0,
+    "totalBytes": 0,
+    "message": "游戏内容已是最新"
+  },
+  "url": "http://127.0.0.1:38657/assets/www/standalone/index.html"
+}

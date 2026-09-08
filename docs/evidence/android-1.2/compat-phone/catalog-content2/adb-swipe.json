@@ -1,0 +1,102 @@
+{
+  "before": {
+    "scrollTop": 0,
+    "parents": [
+      {
+        "tag": "DIV",
+        "id": "wb-body",
+        "touchAction": "auto",
+        "overflow": "auto",
+        "overflowY": "auto"
+      },
+      {
+        "tag": "DIV",
+        "id": "wanbanXiaowu-popup",
+        "touchAction": "auto",
+        "overflow": "visible",
+        "overflowY": "visible"
+      },
+      {
+        "tag": "DIV",
+        "id": "wanbanXiaowu-shell",
+        "touchAction": "auto",
+        "overflow": "auto",
+        "overflowY": "auto"
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "touchAction": "auto",
+        "overflow": "visible",
+        "overflowY": "visible"
+      },
+      {
+        "tag": "HTML",
+        "id": "",
+        "touchAction": "auto",
+        "overflow": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    "rect": {
+      "x": 0,
+      "y": 105,
+      "width": 360,
+      "height": 641,
+      "top": 105,
+      "right": 360,
+      "bottom": 746,
+      "left": 0
+    }
+  },
+  "after": {
+    "scrollTop": 520,
+    "parents": [
+      {
+        "tag": "DIV",
+        "id": "wb-body",
+        "touchAction": "auto",
+        "overflow": "auto",
+        "overflowY": "auto"
+      },
+      {
+        "tag": "DIV",
+        "id": "wanbanXiaowu-popup",
+        "touchAction": "auto",
+        "overflow": "visible",
+        "overflowY": "visible"
+      },
+      {
+        "tag": "DIV",
+        "id": "wanbanXiaowu-shell",
+        "touchAction": "auto",
+        "overflow": "auto",
+        "overflowY": "auto"
+      },
+      {
+        "tag": "BODY",
+        "id": "",
+        "touchAction": "auto",
+        "overflow": "visible",
+        "overflowY": "visible"
+      },
+      {
+        "tag": "HTML",
+        "id": "",
+        "touchAction": "auto",
+        "overflow": "visible",
+        "overflowY": "visible"
+      }
+    ],
+    "rect": {
+      "x": 0,
+      "y": 105,
+      "width": 360,
+      "height": 641,
+      "top": 105,
+      "right": 360,
+      "bottom": 746,
+      "left": 0
+    }
+  }
+}

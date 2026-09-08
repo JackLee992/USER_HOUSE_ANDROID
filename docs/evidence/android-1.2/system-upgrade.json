@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "upgrade": "1.1.0 to 1.2.0 same package and signing key",
+  "fiveStorageKeysByteIdentical": true,
+  "app": {
+    "appVersion": "1.2.0",
+    "versionCode": 3,
+    "webVersion": "1.2.0",
+    "gameBaseline": "3.10.0",
+    "flavor": "system",
+    "flavorLabel": "系统版",
+    "engine": "Android System WebView",
+    "engineLabel": "系统 Android WebView",
+    "engineVersion": "124.0.6367.219",
+    "providerVersion": "124.0.6367.219",
+    "source": "native",
+    "versionMatches": true
+  },
+  "snapshotId": "00d804b26f32d67d1358161a709c6a9d336082b98d5ea6a5c1ef1fb38409b238",
+  "bootHealthy": true,
+  "packages": 81,
+  "games": 37
+}

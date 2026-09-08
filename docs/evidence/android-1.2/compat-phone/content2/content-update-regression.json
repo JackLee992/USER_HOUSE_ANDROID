@@ -1,0 +1,105 @@
+{
+  "passed": false,
+  "testedAt": "2026-09-08T11:18:19.257Z",
+  "checks": [
+    {
+      "check": "real GitHub signed manifest accepted",
+      "repository": "JackLee992/USER_HOUSE_GAME_PACKS",
+      "oldId": "00d804b26f32d67d1358161a709c6a9d336082b98d5ea6a5c1ef1fb38409b238",
+      "newId": "ee361cb03fe2e87f860dbe5977a6a74b312a29879efd5ca4b11ac5e6b593bd9c",
+      "changed": [
+        {
+          "id": "game.wordguess",
+          "kind": "game",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-2/game.wordguess-1.0.1.zip",
+          "sha256": "abf474c754c4a50ef2faa2cbf0ea650775668b0e3eef335191053f40296cc74c",
+          "size": 4865
+        }
+      ]
+    },
+    {
+      "check": "only the changed package downloaded; prior active snapshot and all five storage keys unchanged",
+      "job": {
+        "jobId": "update-1788866286487-6",
+        "action": "download",
+        "state": "ready",
+        "downloadedBytes": 4865,
+        "totalBytes": 4865,
+        "message": "下载完成，回到首页后可安装"
+      }
+    },
+    {
+      "check": "immutable snapshot atomically activated and marked healthy; 80 unchanged package records; exact raw checkpoint retained",
+      "bootHealthy": true,
+      "storage": {
+        "wanbanXiaowu_settings_v1": {
+          "bytes": 1244,
+          "sha256": "592e40b52c218a776d2af1dbf90815e759e4c314bcf2ec2cebf8b01cf3fae817"
+        },
+        "wanbanXiaowu_scores_v1": {
+          "bytes": 642,
+          "sha256": "fe2e81ece9757552ca9636b2c36f25ef0982bee769fdcef61c971012869f3cd5"
+        },
+        "wanbanXiaowu_progress_v1": {
+          "bytes": 89458,
+          "sha256": "fe888ede26d45727aad16cbd1117f5e45fe160ed51ceb2ebea3fdc76ed0afc99"
+        },
+        "wanbanXiaowu_records_v1": {
+          "bytes": 12477,
+          "sha256": "6e202ddd4244d0ea0b5e9e9ed64b97ef6e2c770995e50cee1f473494f8102fcf"
+        },
+        "wanbanXiaowu_sudokuState_v1": {
+          "bytes": 2,
+          "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+        }
+      }
+    },
+    {
+      "check": "updated wordguess 1.0.1 plugin rendered its new labeled UI and a real submitted guess persisted",
+      "storage": {
+        "wanbanXiaowu_settings_v1": {
+          "bytes": 1244,
+          "sha256": "592e40b52c218a776d2af1dbf90815e759e4c314bcf2ec2cebf8b01cf3fae817"
+        },
+        "wanbanXiaowu_scores_v1": {
+          "bytes": 642,
+          "sha256": "fe2e81ece9757552ca9636b2c36f25ef0982bee769fdcef61c971012869f3cd5"
+        },
+        "wanbanXiaowu_progress_v1": {
+          "bytes": 89708,
+          "sha256": "9b0ca7af3a17734179daf47f56b300fcd6e5e159afcc41a7907a9ad7ea030740"
+        },
+        "wanbanXiaowu_records_v1": {
+          "bytes": 12477,
+          "sha256": "6e202ddd4244d0ea0b5e9e9ed64b97ef6e2c770995e50cee1f473494f8102fcf"
+        },
+        "wanbanXiaowu_sudokuState_v1": {
+          "bytes": 2,
+          "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+        }
+      }
+    },
+    {
+      "check": "HOME+10 seconds then both radios disabled and cold process launch: all five keys identical, new guess retained, snapshot healthy",
+      "evidence": ".local/qa-v1.2/compat-phone/normal-persist10.log"
+    },
+    {
+      "check": "Native healthy manual rollback from content2 to content1 retained all five keys byte-for-byte including post-update guess",
+      "realTouch": false,
+      "storage": {
+        "wanbanXiaowu_settings_v1": "592e40b52c218a776d2af1dbf90815e759e4c314bcf2ec2cebf8b01cf3fae817",
+        "wanbanXiaowu_scores_v1": "fe2e81ece9757552ca9636b2c36f25ef0982bee769fdcef61c971012869f3cd5",
+        "wanbanXiaowu_progress_v1": "df22be92b9d42de56781a4d7b1fcc08e090a90e219f4113c5cf5613673dde209",
+        "wanbanXiaowu_records_v1": "6e202ddd4244d0ea0b5e9e9ed64b97ef6e2c770995e50cee1f473494f8102fcf",
+        "wanbanXiaowu_sudokuState_v1": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+      }
+    }
+  ],
+  "backendPassed": true,
+  "realTouchRollbackPassed": false,
+  "limitations": [
+    "Gecko legacy localStorage retained all keys after HOME+10s; HOME+2s then force-stop lost latest wordguess changes. Immediate crash durability is not guaranteed.",
+    "Old core removes the rollback confirmation on touchend. Native rollback and exact post-update save preservation passed using DOM click; real touch must be rerun with the core fix."
+  ]
+}
