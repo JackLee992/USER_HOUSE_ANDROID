@@ -30,3 +30,7 @@ export function waitForHostReady(timeoutMs = 30000) {
     }, { once: true });
   });
 }
+// Optional host adapter: the Android entry does not import SillyTavern's script.js.
+export function getRequestHeaders() {
+  return getSillyTavernContext()?.getRequestHeaders?.() || { 'Content-Type': 'application/json' };
+}

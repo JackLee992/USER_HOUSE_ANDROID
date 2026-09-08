@@ -1,0 +1,46 @@
+:root { color-scheme:light; font-family:system-ui,-apple-system,"Noto Sans CJK SC","Microsoft YaHei",sans-serif; }
+html,body { width:100%; height:100%; margin:0; background:#fff1f5; overscroll-behavior:none; }
+body { -webkit-tap-highlight-color:transparent; }
+button,input,select,textarea { font:inherit; }
+#wanba-boot { min-height:85vh; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#665078; text-align:center; padding:20px; }
+#wanba-boot img { border-radius:22px; }
+#wanba-boot h1 { margin:12px 0 0; font-size:30px; }
+body.wanba-standalone #wanbanXiaowu-shell { position:fixed; inset:0; padding:0!important; border:0; background:transparent; width:100%; max-width:100%; overscroll-behavior:none; }
+body.wanba-standalone #wanbanXiaowu-popup { width:100%!important; max-width:100%!important; min-height:100%; border:0!important; border-radius:0!important; margin:0!important; box-shadow:none!important; font-family:system-ui,-apple-system,"Noto Sans CJK SC","Microsoft YaHei",sans-serif!important; }
+body.wanba-standalone #wanbanXiaowu-popup .wb-head { padding:10px 12px; display:flex; flex-wrap:wrap; gap:10px; grid-template-columns:unset; }
+body.wanba-standalone #wanbanXiaowu-popup .wb-title { display:flex; align-items:center; gap:8px; font-size:20px; font-family:inherit!important; }
+body.wanba-standalone #wanbanXiaowu-popup .wb-title img { border-radius:8px; }
+body.wanba-standalone #wanbanXiaowu-popup .wb-title::before { display:none!important; }
+body.wanba-standalone #wanbanXiaowu-popup .wb-tabs { display:flex; width:auto; flex:1; }
+body.wanba-standalone #wanbanXiaowu-popup .wb-tabs .wb-tab { min-height:38px; font-size:12px; letter-spacing:0; }
+body.wanba-standalone #wanbanXiaowu-popup .wb-tabs .wb-tab[data-tab="settings"] { min-width:44px!important; }
+body.wanba-standalone #wanbanXiaowu-popup.wb-playing .wb-head { display:none; }
+/* Pinball supplies a pause cover above its iframe; retain the input blocker but
+   avoid showing a second label and darkening the playfield twice. */
+body.wanba-standalone #wanbanXiaowu-popup .wb-gamebox-pinball > .wb-pause-overlay { background:transparent; }
+body.wanba-standalone #wanbanXiaowu-popup .wb-gamebox-pinball > .wb-pause-overlay > span { visibility:hidden; }
+body.wanba-standalone .wb-modal-mask { font-family:system-ui,-apple-system,"Noto Sans CJK SC","Microsoft YaHei",sans-serif!important; }
+body.wanba-standalone #wanbanXiaowu-popup .wanba-settings { display:grid; gap:14px; width:min(100%,720px); margin:0 auto; }
+body.wanba-standalone .wanba-settings .wb-panel { padding:18px; }
+body.wanba-standalone .wanba-settings p { margin:8px 0; line-height:1.7; font-size:13px; }
+body.wanba-standalone .wanba-settings .wb-btn { min-height:44px; }
+body.wanba-standalone .wanba-settings .wb-field { margin:14px 0; }
+body.wanba-standalone .wanba-settings label { display:flex; align-items:center; gap:10px; }
+body.wanba-standalone .wanba-settings input[type="checkbox"] { width:20px; height:20px; accent-color:var(--wb-accent); }
+body.wanba-standalone .wanba-settings .wb-select { width:100%; min-height:44px; }
+#wanba-toast { position:fixed; z-index:2147483647; left:50%; bottom:max(22px,env(safe-area-inset-bottom)); transform:translateX(-50%); max-width:calc(100% - 56px); padding:12px 18px; border-radius:12px; background:rgba(30,25,39,.95); color:white; font:14px/1.5 system-ui,sans-serif; box-shadow:0 4px 20px #0003; text-align:center; pointer-events:none; }
+#wanba-toast[hidden] { display:none; }
+.wanba-records { max-height:60vh; overflow-y:auto; margin-bottom:14px; }
+.wanba-record { padding:12px 0; border-bottom:1px solid var(--wb-border); }
+.wanba-record dl { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin:0 0 10px; }
+.wanba-record dt { font-size:12px; color:var(--wb-sub); }
+.wanba-record dd { margin:2px 0 0; font-size:14px; overflow-wrap:anywhere; }
+.wanba-record button { min-height:40px; }
+.wanba-license-list { display:grid; gap:8px; margin-bottom:14px; }
+.wanba-license-list button { min-height:44px; text-align:left; }
+.wanba-license-text { max-height:65vh; overflow:auto; white-space:pre-wrap; overflow-wrap:anywhere; font:13px/1.6 ui-monospace,monospace; user-select:text; -webkit-user-select:text; }
+@media (max-width:480px) {
+  body.wanba-standalone #wanbanXiaowu-popup .wb-head { gap:8px; }
+  body.wanba-standalone #wanbanXiaowu-popup .wb-tabs { flex-basis:100%; }
+  body.wanba-standalone #wanbanXiaowu-popup .wb-body.wb-settings-mode { padding:10px; }
+}

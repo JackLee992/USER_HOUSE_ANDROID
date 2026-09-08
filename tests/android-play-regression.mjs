@@ -1,0 +1,45 @@
+import assert from 'node:assert/strict';
+import {writeFileSync} from 'node:fs';
+import {connect,adb,screenshot} from './android-cdp.mjs';
+const c=await connect(),out='docs/evidence/android-1.0',checks=[];
+const open=async id=>{for(let n=0;n<3;n++)await c.evaluate('wanbaApp.back()');await c.click('[data-tab="single"]');await c.click(`[data-game="${id}"]`);await c.wait(180);if(await c.evaluate('!!document.querySelector("#wb-progress-continue")'))await c.click('#wb-progress-continue');else await c.click('#wb-start-cover-btn');await c.until('wanbaApp.inspect().started');};
+const touch=async(selector,type='tap',hold=70)=>{const p=await c.evaluate(`(()=>{const el=document.querySelector(${JSON.stringify(selector)});el.scrollIntoView({block:'nearest'});const r=el.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};})()`);await c.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[p]});await c.wait(hold);await c.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});};
+try{
+ assert.deepEqual(await c.evaluate('[typeof jQuery,typeof $,typeof SillyTavern,typeof wbTest]'),['undefined','undefined','undefined','undefined']);
+ await open('freecell');
+ const before=await c.evaluate('wanbaApp.inspect().controller');const col=before.columns.findIndex(p=>p.length),slot=before.freecells.findIndex(x=>x===null);assert.ok(slot>=0);
+ await touch(`.fc-pile[data-index="${col}"] .fc-card:last-child`);await c.wait(450);await touch(`.fc-slot[data-type="freecell"][data-index="${slot}"]`);await c.wait(500);
+ const moved=await c.evaluate('wanbaApp.inspect().controller');assert.equal(moved.freecells[slot],before.columns[col].at(-1));assert.equal(moved.moves,before.moves+1);
+ await touch('[data-action="undo"]');await c.wait(200);assert.deepEqual(await c.evaluate('wanbaApp.inspect().controller.columns'),before.columns);
+ await touch('[data-action="toggle-auto"]');assert.equal(await c.evaluate('wanbaApp.inspect().controller.autoHome'),true);
+ const stable=await c.evaluate('wanbaApp.inspect().controller');
+ adb('shell','input','keyevent','3');await c.wait(650);adb('shell','am','start','-n','io.github.jacklee992.wanba/.MainActivity');await c.wait(600);
+ assert.equal(await c.evaluate('wanbaApp.inspect().paused'),true);assert.deepEqual(await c.evaluate('wanbaApp.inspect().controller'),stable);
+ await c.click('#wb-pause');await c.until('!wanbaApp.inspect().paused',7000);
+ await touch('[data-action="toggle-auto"]');
+ checks.push('FreeCell native touch move/undo/auto toggle, HOME/resume exact board with explicit resume');
+ screenshot(`${out}/freecell-play-device.png`);
+ await open('match3');await c.click('.m3-hint');const hints=await c.evaluate('[...document.querySelectorAll(".m3-cell.m3-suggest")].map(e=>[...e.parentElement.children].indexOf(e))');assert.equal(hints.length,2);
+ const m3before=await c.evaluate('wanbaApp.inspect().controller');
+ await touch(`.m3-cell:nth-child(${hints[0]+1})`);await touch(`.m3-cell:nth-child(${hints[1]+1})`);await c.until('!document.querySelector(".m3-mode").disabled',20000);
+ const m3after=await c.evaluate('wanbaApp.inspect().controller');assert.ok(m3after.score>m3before.score||m3after.levelScore>m3before.levelScore);assert.notDeepEqual(m3after.board,m3before.board);
+ await c.evaluate('document.querySelector(".m3-mode").value="ice";document.querySelector(".m3-mode").dispatchEvent(new Event("change"))');await c.click('.m3-confirm-ok');await c.wait(300);assert.equal(await c.evaluate('wanbaApp.inspect().controller.mode'),'ice');assert.ok(await c.evaluate('wanbaApp.inspect().controller.ice.some(x=>x>0)'));
+ await c.evaluate('document.querySelector(".m3-mode").value="endless";document.querySelector(".m3-mode").dispatchEvent(new Event("change"))');await c.click('.m3-confirm-ok');await c.wait(300);assert.equal(await c.evaluate('wanbaApp.inspect().controller.mode'),'endless');
+ await c.evaluate('document.querySelector(".m3-mode").value="classic";document.querySelector(".m3-mode").dispatchEvent(new Event("change"))');await c.click('.m3-confirm-ok');await c.wait(300);assert.deepEqual(await c.evaluate('wanbaApp.inspect().controller.board'),m3after.board);
+ checks.push('Match3 real hinted exchange and scoring; ice/endless/classic preserve independent board');screenshot(`${out}/match3-play-device.png`);
+ await open('paopao');const canv=await c.evaluate('[...document.querySelectorAll("canvas")].map(e=>({id:e.id,width:e.width,height:e.height}))');assert.ok(canv.length);
+ await touch('canvas');await c.wait(1200);assert.equal(await c.evaluate('wanbaApp.inspect().game'),'paopao');
+ adb('shell','input','keyevent','3');await c.wait(600);adb('shell','am','start','-n','io.github.jacklee992.wanba/.MainActivity');await c.wait(500);assert.equal(await c.evaluate('wanbaApp.inspect().paused'),true);
+ checks.push('Bubble Shooter real touch shot and Android HOME/resume stays paused');
+ await open('pinball');await c.until('document.querySelector(".wb-cadet-frame")?.contentWindow?.cadetHost?.snapshot()?.ready',25000);
+ const host='document.querySelector(".wb-cadet-frame").contentWindow.cadetHost';
+ const pinBefore=await c.evaluate(`${host}.snapshot()`);assert.ok(pinBefore.ready);
+ const buttons=await c.evaluate('[...document.querySelectorAll("button")].map(e=>({id:e.id,cls:e.className,text:e.innerText})).filter(e=>/发射|挡板|震台/.test(e.text))');
+ await touch('.cd-controls [data-action=launch]','hold',3200);await c.wait(1000);
+ const coords=await c.evaluate('[...document.querySelectorAll(".cd-controls [data-action=left],.cd-controls [data-action=right]")].map(e=>{const r=e.getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2}})');await c.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:coords});await c.wait(150);assert.equal(await c.evaluate('document.querySelectorAll(".cd-held").length'),2);await c.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});checks.push({pinballReady:pinBefore,controls:buttons,realLaunchAndTwoFingerFlippers:true});
+ adb('shell','input','keyevent','3');await c.wait(650);adb('shell','am','start','-n','io.github.jacklee992.wanba/.MainActivity');await c.wait(500);const t=await c.evaluate(`${host}.snapshot().ticks`);await c.wait(500);assert.equal(await c.evaluate(`${host}.snapshot().ticks`),t);
+ await c.click('#wb-pause');await c.until('!wanbaApp.inspect().paused',7000);await c.wait(400);assert.ok(await c.evaluate(`${host}.snapshot().ticks>${t}`));
+ screenshot(`${out}/pinball-play-device.png`);checks.push('Space Cadet native HOME pauses engine ticks; user resume restarts ticks');
+ assert.deepEqual(c.errors,[]);console.log(JSON.stringify({passed:true,checks},null,2));
+}catch(e){screenshot(`${out}/play-failure.png`);console.error(e);process.exitCode=1}
+finally{writeFileSync(`${out}/play-regression.json`,JSON.stringify({passed:process.exitCode!==1,checks,errors:c.errors},null,2));c.close()}

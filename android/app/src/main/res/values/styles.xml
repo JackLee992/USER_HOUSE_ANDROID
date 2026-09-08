@@ -1,0 +1,12 @@
+<resources>
+    <style name="Theme.Wanba" parent="android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:fontFamily">sans</item>
+        <item name="android:colorAccent">@color/wanba_accent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:statusBarColor">@color/wanba_background</item>
+        <item name="android:navigationBarColor">@color/wanba_background</item>
+        <item name="android:windowBackground">@color/wanba_background</item>
+        <item name="android:windowActionModeOverlay">true</item>
+    </style>
+</resources>

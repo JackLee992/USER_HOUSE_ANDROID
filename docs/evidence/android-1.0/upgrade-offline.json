@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "checks": [
+    "final APK native Back cancels Match3 confirmation; second Back returns to catalog",
+    "release overlay installs; offline cold start restores the previous game or catalog confirmed by device screenshot and release DOM; release package is not DEBUGGABLE",
+    "release -> same-signature debug readback confirms exact progress/scores/records and theme preserved"
+  ],
+  "releaseSHA256": "96d502c9328f410f45b191077eca75e4d05fec8714b5e5dd48f917e970cff5ae",
+  "saveSHA256": "35e05d9409313517bef9706979e6cdf630e786feb673ada425e7a75d51608084",
+  "radioDisabledDuringColdStart": true,
+  "finalInstalledBuild": "release",
+  "releaseDevtoolsVisible": true,
+  "emulatorDebuggable": "1"
+}

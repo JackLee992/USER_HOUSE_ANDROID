@@ -1,4 +1,5 @@
-import { getRequestHeaders } from '../../../../../../script.js';
+import { getRequestHeaders } from '../core/sillytavern.js';
+import { constrainStandaloneSettings, STANDALONE_THEMES } from '../../standalone/capabilities.js';
 import { EXTENSION_VERSION } from '../core/metadata.js';
 import { DEFAULT_LINES, PROMPT_TEMPLATES } from './wanban-prompts.js';
 import { createZumaGame } from '../games/zuma.js';
@@ -10,6 +11,7 @@ import { createMatch3Game, validMatch3Progress } from '../games/match3.js';
 // Runtime migrated from 益智小游戏/玩伴小屋V1.0.1.json.
 // Keep this file behavior-compatible with the original script; split new code into src/* modules when extending.
 let runtimeStarted = false;
+let runtimeApi = null;
 let activePromptTemplates = PROMPT_TEMPLATES;
 
 function clonePromptTemplates() {
@@ -67,10 +69,11 @@ function promptTemplates() {
   return activePromptTemplates || PROMPT_TEMPLATES;
 }
 
-export async function initWanbanXiaowu() {
-  if (runtimeStarted) return;
+export async function initWanbanXiaowu(options = {}) {
+  if (runtimeStarted) return runtimeApi;
   runtimeStarted = true;
-  await loadPromptTextTemplates();
+  const standalone = options.standalone === true;
+  if (!standalone) await loadPromptTextTemplates();
 
   const SCRIPT_ID = 'wanbanXiaowu';
   const POPUP_ID = SCRIPT_ID + '-popup';
@@ -251,7 +254,7 @@ export async function initWanbanXiaowu() {
     selectedWorldPresetName: '',
     charName: '{{char}}',
     userName: '{{user}}',
-    rememberWindow: false,
+    rememberWindow: standalone,
     floatingBallEnabled: false,
     floatingBallX: 18,
     floatingBallY: 180,
@@ -449,8 +452,8 @@ export async function initWanbanXiaowu() {
   function isPlainObject(v) { return !!v && typeof v === 'object' && !Array.isArray(v); }
   function safeObject(v) { return isPlainObject(v) ? v : {}; }
   function safeArray(v) { return Array.isArray(v) ? v : []; }
-  function settings() { return Object.assign({}, DEFAULT_SETTINGS, safeObject(loadJSON(STORAGE_SETTINGS, {}))); }
-  function setSettings(next) { saveJSON(STORAGE_SETTINGS, Object.assign(settings(), next)); }
+  function settings() { const loaded = Object.assign({}, DEFAULT_SETTINGS, safeObject(loadJSON(STORAGE_SETTINGS, {}))); return standalone ? constrainStandaloneSettings(loaded) : loaded; }
+  function setSettings(next) { const merged = Object.assign(settings(), next); saveJSON(STORAGE_SETTINGS, standalone ? constrainStandaloneSettings(merged) : merged); }
   function extensionUpdateHeaders() {
     try { return getRequestHeaders(); }
     catch(e) { return { 'Content-Type': 'application/json' }; }
@@ -655,7 +658,7 @@ export async function initWanbanXiaowu() {
       return;
     }
     const tab = GAME_META[cfg.lastGame] ? GAME_META[cfg.lastGame].mode : cfg.lastTab;
-    currentTab = (tab === 'double' || tab === 'intimacy' || tab === 'settings' || tab === 'single') ? tab : 'single';
+    currentTab = (tab === 'double' || (!standalone && tab === 'intimacy') || tab === 'settings' || tab === 'single') ? tab : 'single';
     currentGame = GAME_META[cfg.lastGame] ? cfg.lastGame : null;
   }
   function scores() {
@@ -836,12 +839,14 @@ export async function initWanbanXiaowu() {
     }
   }
   function applyTimedGameRewards(durationMs) {
+    if (standalone) return;
     while (durationMs >= gamePetRewardNextMs) {
       petApplyTimedGameGrowth();
       gamePetRewardNextMs += 10 * 60 * 1000;
     }
   }
   function startGameDurationRewardTimer() {
+    if (standalone) return;
     if (gameDurationRewardTimer) clearInterval(gameDurationRewardTimer);
     gameDurationRewardTimer = setInterval(() => {
       if (gameStarted && !gamePaused && currentGame) commitGameActiveDuration(true);
@@ -904,6 +909,7 @@ export async function initWanbanXiaowu() {
     saveJSON(STORAGE_WORD_GUESS_BANK, store);
   }
   function wordGuessBankSource() {
+    if (standalone) return 'default';
     const v = localStorage.getItem(STORAGE_WORD_GUESS_BANK_SOURCE);
     return v === 'default' ? 'default' : 'role';
   }
@@ -1005,12 +1011,13 @@ export async function initWanbanXiaowu() {
   }
   function records() { const all = safeObject(loadJSON(STORAGE_RECORDS, {})); let changed = false; Object.keys(all || {}).forEach(game => { if (!Array.isArray(all[game])) { all[game] = []; changed = true; return; } (all[game] || []).forEach((r, i) => { if (!r.id) { r.id = 'rec_legacy_' + game + '_' + (r.savedAt || Date.now()) + '_' + i; changed = true; } if (r.log == null) { r.log = ''; changed = true; } }); }); if (changed) saveJSON(STORAGE_RECORDS, all); return all || {}; }
   function saveRecords(v) { saveJSON(STORAGE_RECORDS, v); }
-  function companionName() { const cfg = settings(); const ctx = getHostContext(); const char = ctx && ctx.characters && ctx.characterId >= 0 ? ctx.characters[ctx.characterId] : (ctx && ctx.character ? ctx.character : null); const charData = char?.data || char || {}; return (cfg.charName && cfg.charName !== '{{char}}') ? cfg.charName : (charData.name || ctx?.name2 || '{{char}}'); }
-  function displayCharNameForGame(game) { return settings().companion ? activeGameRoleName(game) : 'TA'; }
+  function companionName() { if (standalone) return '电脑'; const cfg = settings(); const ctx = getHostContext(); const char = ctx && ctx.characters && ctx.characterId >= 0 ? ctx.characters[ctx.characterId] : (ctx && ctx.character ? ctx.character : null); const charData = char?.data || char || {}; return (cfg.charName && cfg.charName !== '{{char}}') ? cfg.charName : (charData.name || ctx?.name2 || '{{char}}'); }
+  function displayCharNameForGame(game) { return standalone ? '电脑' : settings().companion ? activeGameRoleName(game) : 'TA'; }
   function displayCharName() { return displayCharNameForGame(currentGame); }
   function displayCharTextForGame(text, game) {
     const name = displayCharNameForGame(game);
     let out = String(text || '').replace(/{{char}}/g, name);
+    if (standalone) out = out.replace(/TA/g, '电脑');
     [companionName(), activeGameRoleName(game)].filter(Boolean).forEach(n => { out = out.replace(new RegExp(String(n).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), name); });
     return out;
   }
@@ -2074,6 +2081,7 @@ export async function initWanbanXiaowu() {
 	    return (Array.isArray(cfg.customFonts) ? cfg.customFonts : []).find(x => x && x.name === name && x.url) || null;
 	  }
 	  function applySelectedFont() {
+      if (standalone) return;
 	    const doc = getHostDocument();
 	    const old = qs('#' + SCRIPT_ID + '-font-css', doc);
 	    const font = selectedFontConfig();
@@ -2140,7 +2148,15 @@ export async function initWanbanXiaowu() {
     (popup || doc.body).appendChild(mask);
     return mask;
   }
-  function toast(msg) { if (typeof toastr !== 'undefined') toastr.info(msg); else console.log('[玩伴小屋]', msg); }
+  let toastTimer = null;
+  function toast(msg) {
+    if (!standalone && typeof toastr !== 'undefined') { toastr.info(msg); return; }
+    const doc = getHostDocument();
+    let el = qs('#wanba-toast', doc);
+    if (!el) { el = doc.createElement('div'); el.id = 'wanba-toast'; el.setAttribute('role', 'status'); el.setAttribute('aria-live', 'polite'); doc.body.appendChild(el); }
+    el.textContent = String(msg); el.hidden = false;
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => { el.hidden = true; }, 3600);
+  }
   function updateLineGenerationStatusUI() {
     const status = qs('#wb-line-generation-status');
     if (status) status.textContent = lineGenerationStatus;
@@ -2850,10 +2866,6 @@ export async function initWanbanXiaowu() {
         display: flex;
         flex-direction: column;
       }
-      @font-face { font-family: 'WanbanCyberPixel'; src: url('https://s3plus.meituan.net/opapisdk/op_ticket_885190757_1759071282816_qdqqd_d815d3.ttf') format('truetype'); font-display:swap; }
-      @font-face { font-family: 'WanbanLetter'; src: url('https://s3plus.meituan.net/opapisdk/op_ticket_1_885190757_1763396927198_qdqqd_gnxuoc.ttf') format('truetype'); font-display:swap; }
-      @font-face { font-family: 'WanbanIntimacyButton'; src: url('https://s3plus.meituan.net/opapisdk/op_ticket_1_5673241091_1762496170336_qdqqd_cyuxp9.ttf') format('truetype'); font-display:swap; }
-      @font-face { font-family: 'WanbanCardTheater'; src: url('https://s3plus.meituan.net/opapisdk/op_ticket_1_885190757_1763396605104_qdqqd_izlvcf.ttf') format('truetype'); font-display:swap; }
       #${POPUP_ID}.wb-day { --wb-bg:#fff7fb; --wb-panel:#fffefd; --wb-soft:#ffeaf1; --wb-text:#2f2430; --wb-sub:#8a6470; --wb-border:#e8b9c5; --wb-accent:#c65b7c; --wb-accent2:#3a8f91; --wb-board:#fff2e6; --wb-input:#fff9fb; --wb-glow:rgba(198,91,124,.26); --wb-gold:#c99738; --wb-screen:#fff9f2; --wb-on-accent:#fff; }
       #${POPUP_ID}.wb-arcade { --wb-bg:#F3FAFF; --wb-panel:#FFFDF8; --wb-soft:#E5F4FF; --wb-text:#28435A; --wb-sub:#6F8EA3; --wb-border:#B8DCEF; --wb-accent:#5FA8D7; --wb-accent2:#F6C8D8; --wb-board:#F8FCFF; --wb-input:#FFFDF8; --wb-glow:rgba(95,168,215,.14); --wb-gold:#5FA8D7; --wb-screen:#FFFDF8; --wb-on-accent:#fff; }
       #${POPUP_ID}.wb-spring { --wb-bg:#EAF6D4; --wb-panel:#F6E7C8; --wb-soft:#D8EDB2; --wb-text:#4C3B2A; --wb-sub:#7A6752; --wb-border:#BFA372; --wb-accent:#6FA85A; --wb-accent2:#7DB9D8; --wb-board:#E2F0BF; --wb-input:#F8EED6; --wb-glow:rgba(111,168,90,.24); --wb-gold:#E3C56A; --wb-screen:#F4F1D3; --wb-on-accent:#fff; }
@@ -7380,6 +7392,7 @@ export async function initWanbanXiaowu() {
     render();
   }
   function closePopupShell() {
+    if (standalone) { standaloneBack(); return; }
     pauseGameForInactiveSurface();
     const doc = getHostDocument();
     const shell = qs('#' + SHELL_ID, doc);
@@ -7404,10 +7417,14 @@ export async function initWanbanXiaowu() {
     const doubleCount = Object.values(GAME_META).filter(g => g.mode === 'double').length;
     const intimacyCount = 1;
     const countBadge = n => '<span class="wb-tab-count">' + esc(n) + '</span>';
+    if (standalone) {
+      p.innerHTML = '<div class="wb-head"><div class="wb-title"><img src="' + new URL('../../assets/app-brand/app-icon.png', import.meta.url).href + '" alt="" width="28" height="28">玩吧</div><div class="wb-tabs"><button class="wb-tab" data-tab="single">单人游戏' + countBadge(singleCount) + '</button><button class="wb-tab" data-tab="double">人机挑战' + countBadge(doubleCount) + '</button><button class="wb-tab" data-tab="settings">设置</button></div></div><div class="wb-body" id="wb-body"></div>';
+    } else {
     p.innerHTML = '<div class="wb-head"><div class="wb-title">玩伴小屋</div><div class="wb-tabs"><button class="wb-tab" data-tab="single">单人游戏' + countBadge(singleCount) + '</button><button class="wb-tab" data-tab="double">双人游戏' + countBadge(doubleCount) + '</button><button class="wb-tab" data-tab="intimacy">亲密互动' + countBadge(intimacyCount) + '</button><button class="wb-tab" data-tab="settings">设置</button></div><div class="wb-head-meta" aria-label="当前版本 V' + esc(EXTENSION_VERSION) + '，本游戏发布者 Gloria"><span><i>当前版本</i>V' + esc(EXTENSION_VERSION) + '</span><span><i>发布者</i>Gloria</span></div><button class="wb-iconbtn" id="wb-close" title="关闭">×</button></div><div class="wb-body" id="wb-body"></div>';
+    }
     syncUpdateNoticeClass();
     qsa('.wb-tab', p).forEach(b => { b.classList.toggle('active', b.dataset.tab === currentTab); b.onclick = () => { flushSettingsProgress(); stopGame(); currentGame = null; currentTab = b.dataset.tab; saveWindowState(currentTab, ''); render(); }; });
-    qs('#wb-close', p).onclick = () => { flushSettingsProgress(); saveWindowState(currentTab, currentGame); stopGame(); closePopupShell(); };
+    const closeButton = qs('#wb-close', p); if (closeButton) closeButton.onclick = () => { flushSettingsProgress(); saveWindowState(currentTab, currentGame); stopGame(); closePopupShell(); };
     try {
       if (currentGame) renderGame(currentGame); else if (currentTab === 'settings') renderSettings(); else if (currentTab === 'intimacy') renderIntimacy(); else renderSelect(currentTab);
       if (settings().petDesktopEnabled) syncFloatingBall();
@@ -7445,7 +7462,7 @@ export async function initWanbanXiaowu() {
       return;
     }
     let sx = 0, sy = 0;
-    const tabs = ['single','double','intimacy','settings'];
+    const tabs = standalone ? ['single','double','settings'] : ['single','double','intimacy','settings'];
     body.ontouchstart = e => { const t = e.touches && e.touches[0]; if (!t) return; sx = t.clientX; sy = t.clientY; };
     body.ontouchend = e => {
       if (currentGame || body.classList.contains('wb-game-mode')) return;
@@ -7650,7 +7667,6 @@ export async function initWanbanXiaowu() {
       .wb-modal-mask .wb-pet-stage-tip-box:before{top:6px}.wb-modal-mask .wb-pet-stage-tip-box:after{bottom:6px}
       .wb-modal-mask .wb-pet-adopt-success-modal{width:min(92vw,520px)!important;max-width:520px!important}.wb-modal-mask .wb-pet-adopt-success-modal .wb-pet-scroll{padding:12px 14px}.wb-modal-mask .wb-pet-adopt-success-card{box-shadow:none!important}
       .wb-modal-mask .wb-pet-avatar img{width:100%;height:100%;object-fit:cover;display:block}.wb-modal-mask .wb-pet-full-caretaker{grid-template-columns:48px 72px minmax(0,1fr)!important;text-align:left}.wb-modal-mask .wb-pet-char-pick{grid-template-columns:48px minmax(0,1fr)!important;text-align:left}.wb-modal-mask .wb-pet-full-caretaker .wb-pet-snapshot{width:72px;height:52px}.wb-modal-mask .wb-pet-full-caretaker > div:last-child{min-width:0;overflow:hidden}.wb-modal-mask .wb-pet-adopt-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:start}.wb-modal-mask .wb-pet-adopt-wide{grid-column:1/-1}.wb-modal-mask .wb-pet-egg-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:6px}.wb-modal-mask .wb-pet-egg-choice{min-height:66px;padding:5px!important;display:grid!important;place-items:center;gap:3px}.wb-modal-mask .wb-pet-egg-choice img{width:32px;height:32px;object-fit:contain;image-rendering:pixelated}.wb-modal-mask .wb-pet-egg-choice span{font-size:10px}.wb-modal-mask .wb-pet-egg-choice.selected{outline:3px solid var(--wb-accent);outline-offset:2px}.wb-modal-mask .wb-pet-empty-stage{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);padding:10px 14px;border:2px dashed color-mix(in srgb,var(--wb-text) 55%,transparent);background:color-mix(in srgb,var(--wb-panel) 78%,transparent);font-size:12px;font-weight:900;color:var(--wb-text)}#${POPUP_ID} .wb-pet-new-adoption{min-height:42px;width:100%;font-size:15px}#${POPUP_ID} .wb-pet-test-select .wb-pet-egg-grid,#${POPUP_ID} .wb-pet-test-select .wb-pet-species-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}#${POPUP_ID} .wb-pet-test-select .wb-pet-egg-choice{min-height:74px;padding:6px;display:grid;place-items:center;gap:4px}#${POPUP_ID} .wb-pet-test-select .wb-pet-egg-choice img{width:38px;height:38px;object-fit:contain;image-rendering:pixelated}#${POPUP_ID} .wb-pet-test-select .selected{outline:3px solid var(--wb-accent);outline-offset:2px}
-      @font-face{font-family:'WanbanPetHandwrite';src:url('https://s3plus.meituan.net/opapisdk/op_ticket_1_885190757_1760703781087_qdqqd_135pzt.ttf') format('truetype');font-display:swap;}
       .wb-modal-mask .wb-pet-note-page{position:relative;background:radial-gradient(circle at 18px 18px,rgba(112,151,170,.10) 0 2px,transparent 3px),repeating-linear-gradient(to bottom,#fffdf5 0,#fffdf5 31px,rgba(139,177,190,.26) 32px),#fffdf5;color:#31404a;border:2px solid #d7bd83;box-shadow:0 8px 0 #947247,0 18px 42px rgba(68,43,18,.18);padding:20px 24px 24px;line-height:1.8;overflow:hidden}.wb-modal-mask .wb-pet-note-page::before{content:none}.wb-modal-mask .wb-pet-note-page::after{content:'';position:absolute;left:0;right:0;top:0;height:8px;background:repeating-linear-gradient(90deg,rgba(155,199,239,.72) 0 14px,rgba(246,223,159,.72) 14px 28px,rgba(152,214,197,.72) 28px 42px);opacity:.55}
       .wb-modal-mask .wb-pet-diary-cover{position:relative;margin:4px 0 14px 42px;padding:14px 16px 12px;border:1px solid rgba(183,147,88,.5);border-radius:16px;background:linear-gradient(135deg,rgba(255,247,217,.92),rgba(255,255,255,.58));box-shadow:0 6px 18px rgba(122,88,35,.12)}.wb-modal-mask .wb-pet-diary-kicker{font-size:11px;letter-spacing:2px;color:#b17b54;font-weight:900;text-align:center}.wb-modal-mask .wb-pet-diary-meta{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:8px}.wb-modal-mask .wb-pet-diary-meta span{display:inline-flex;align-items:baseline;gap:5px;padding:2px 4px;color:#8d7252;font-size:12px;white-space:nowrap}.wb-modal-mask .wb-pet-diary-meta b{min-width:54px;padding:0 8px 1px;border-bottom:2px solid #c8b17f;font-family:'WanbanPetHandwrite','Comic Sans MS','KaiTi',cursive;font-size:16px;font-weight:500;color:#30404b;text-align:center}.wb-modal-mask .wb-pet-note-tags{display:flex;gap:7px;flex-wrap:wrap;justify-content:center;margin:0 0 12px 42px}.wb-modal-mask .wb-pet-note-tag{padding:3px 8px;border:1.5px solid #9bc7ef;background:rgba(236,247,255,.72);color:#3f7fb5;border-radius:4px;font-family:'WanbanPetHandwrite','Comic Sans MS','KaiTi',cursive;font-size:15px;line-height:1.15;transform:rotate(-.5deg)}.wb-modal-mask .wb-pet-diary-two{display:grid;gap:8px;margin:0 0 14px 42px}.wb-modal-mask .wb-pet-diary-two div{display:grid;grid-template-columns:96px 1fr;gap:8px;align-items:start;padding:7px 9px;border-radius:12px;background:rgba(255,250,230,.64);border:1px dashed #d8bf87}.wb-modal-mask .wb-pet-diary-two em{font-style:normal;color:#d56a52;font-weight:900}.wb-modal-mask .wb-pet-diary-two span{font-family:'WanbanPetHandwrite','Comic Sans MS','KaiTi',cursive;font-size:16px;color:#30404b;white-space:normal;overflow-wrap:anywhere;word-break:break-all;line-break:anywhere}.wb-modal-mask .wb-pet-diary-title{margin:8px 0 12px 42px;text-align:center;font-family:'WanbanPetHandwrite','Comic Sans MS','KaiTi',cursive;font-size:31px;line-height:1.25;color:#cf604e;text-shadow:0 2px 0 rgba(255,255,255,.8)}.wb-modal-mask .wb-pet-diary-body{margin-left:42px;background:transparent;padding-top:1px}.wb-modal-mask .wb-pet-diary-body p{min-height:33px;margin:0 0 7px;font-family:'WanbanPetHandwrite','Comic Sans MS','KaiTi',cursive;font-size:18px;line-height:33px;letter-spacing:.3px;text-indent:2em}.wb-modal-mask .wb-pet-note-title{font-family:'WanbanPetHandwrite','Comic Sans MS','KaiTi',cursive;font-size:26px;text-align:center;color:#d56a52;font-weight:900}
       .wb-modal-mask .wb-pet-note-meta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:8px 0 14px 42px}.wb-modal-mask .wb-pet-note-line{border-bottom:1px solid #b7d7dc;min-height:24px;font-family:'Comic Sans MS','KaiTi',cursive}.wb-modal-mask#wb-pet-log-mask .wb-pet-scroll{display:grid;gap:10px}.wb-modal-mask#wb-pet-log-mask .wb-field{margin:0;padding:10px;border:1px solid rgba(214,189,134,.65);border-radius:14px;background:rgba(255,253,245,.78);box-shadow:0 4px 14px rgba(122,88,35,.08)}.wb-modal-mask#wb-pet-log-mask .wb-field span{font-weight:900;color:#9f724c}.wb-modal-mask#wb-pet-log-mask .wb-select,.wb-modal-mask#wb-pet-log-mask .wb-textarea{border-radius:12px;background:#fffdf7}.wb-modal-mask#wb-pet-log-mask #wb-pet-log-generate{min-height:40px;border-radius:0!important;background:var(--wb-accent)!important;color:var(--wb-on-accent,#fff)!important}.wb-modal-mask#wb-pet-log-mask #wb-pet-log-preview:empty{display:none}
@@ -9710,7 +9726,65 @@ export async function initWanbanXiaowu() {
     qs('#wb-rules-close', mask).onclick = () => mask.remove();
   }
 
+  function renderStandaloneSettings() {
+    const cfg = settings(), body = qs('#wb-body');
+    syncPopupModeClass();
+    body.className = 'wb-body wb-settings-mode';
+    body.innerHTML = '<div class="wanba-settings">'
+      + '<section class="wb-panel"><div class="wb-section-title">外观与进度</div><div class="wb-field"><label for="wb-theme">界面主题</label><select class="wb-select" id="wb-theme">' + STANDALONE_THEMES.map(([id,name]) => '<option value="' + id + '">' + name + '</option>').join('') + '</select></div>'
+      + '<div class="wb-field"><label><input type="checkbox" id="wb-remember-window">下次打开时回到上次游戏</label><p class="wb-muted">游戏进度会自动保存到本机。返回游戏时可选择继续；此开关只控制打开应用后的页面。</p></div></section>'
+      + '<section class="wb-panel"><div class="wb-section-title">游戏备份</div><p>备份包含游戏进度、历史记录和主题设置。换机前请先导出；导入也支持玩伴小屋的旧版游戏备份。</p><div class="wb-actions"><button class="wb-btn primary" id="wb-export-data">导出备份</button><button class="wb-btn" id="wb-import-data">导入备份</button><input type="file" id="wb-import-file" accept="application/json,.json" hidden></div><p class="wb-muted" id="wb-import-export-status" role="status">数据保存在当前设备，卸载应用会删除本机存档。</p></section>'
+      + '<section class="wb-panel"><div class="wb-section-title">关于玩吧</div><p>版本 1.0.0 · Android<br>游戏基线 ' + esc(EXTENSION_VERSION) + ' · ' + Object.keys(GAME_META).length + ' 款游戏</p><p>单人游戏与人机挑战均可离线游玩。</p><div class="wb-actions"><button class="wb-btn" id="wanba-downloads">下载更新</button><button class="wb-btn" id="wanba-credits">开源致谢</button></div><p class="wb-muted">从下载页安装新版本即可保留存档。请使用同一来源的更新包，无需卸载。</p></section></div>';
+    qs('#wb-theme').value = cfg.theme;
+    qs('#wb-remember-window').checked = cfg.rememberWindow;
+    qs('#wb-theme').onchange = () => { setSettings({theme:qs('#wb-theme').value}); syncPopupModeClass(); toast('主题已保存'); };
+    qs('#wb-remember-window').onchange = () => setSettings({rememberWindow:qs('#wb-remember-window').checked});
+    qs('#wb-export-data').onclick = exportAllData;
+    qs('#wb-import-data').onclick = () => qs('#wb-import-file').click();
+    qs('#wb-import-file').onchange = importAllDataFromFile;
+    qs('#wanba-downloads').onclick = () => {
+      if (typeof window.NativeBridge?.openDownloads === 'function') window.NativeBridge.openDownloads();
+      else window.open('https://github.com/JackLee992/USER_HOUSE_ANDROID/releases', '_blank', 'noopener,noreferrer');
+    };
+    qs('#wanba-credits').onclick = () => {
+      const mask = getHostDocument().createElement('div'); mask.className = modalMaskClass(); mask.id = 'wanba-credits-mask';
+      mask.innerHTML = '<div class="wb-modal"><div class="wb-modal-title">开源致谢</div><div class="wb-api-status wb-text-segments"><p>玩吧基于 Gloria 的 USER_HOUSE / 玩伴小屋游戏集合及 JackLee992 的 3.10.0 版本改造。</p><p>三维弹球引擎：SpaceCadetPinball，k4zmu2a 与 alula 等贡献者，MIT 许可证。随包球台资源：Open Space Cadet，CC0。高清球台与应用图标使用生成素材。</p><p>网页内核运行于系统 Android WebView；游戏文件随应用提供。</p><p>完整来源与构建说明随仓库提供，许可证可在本机离线查看。</p></div><div class="wb-actions"><button class="wb-btn" id="wanba-licenses">查看许可证</button><button class="wb-btn" id="wanba-credits-close">关闭</button></div></div>';
+      appendModalMask(mask); qs('#wanba-credits-close',mask).onclick = () => mask.remove();
+      qs('#wanba-licenses',mask).onclick = showStandaloneLicenses;
+    };
+  }
+
+  function showStandaloneLicenses() {
+    const files = [
+      ['ENGINE-LICENSE.txt','SpaceCadetPinball · MIT'],
+      ['EMSCRIPTEN-LICENSE.txt','Emscripten'],
+      ['SDL2-LICENSE.txt','SDL 2'],
+      ['SDL2-MIXER-LICENSE.txt','SDL 2 Mixer'],
+      ['OPEN-CADET-CC0.txt','Open Space Cadet · CC0'],
+      ['OPEN-CADET-NOTICE.md','Open Space Cadet · 来源声明'],
+    ];
+    const mask = getHostDocument().createElement('div'); mask.className = modalMaskClass(); mask.id = 'wanba-licenses-mask';
+    mask.innerHTML = '<div class="wb-modal"><div class="wb-modal-title">开源许可证</div><div class="wanba-license-list">' + files.map(([file,label]) => '<button class="wb-btn" data-license="' + file + '">' + esc(label) + '</button>').join('') + '</div><div class="wb-actions"><button class="wb-btn" id="wanba-licenses-close">关闭</button></div></div>';
+    appendModalMask(mask); qs('#wanba-licenses-close',mask).onclick = () => mask.remove();
+    qsa('[data-license]',mask).forEach(button => button.onclick = async () => {
+      const file = files.find(([name]) => name === button.dataset.license);
+      if (!file) return;
+      const viewer = getHostDocument().createElement('div'); viewer.className = modalMaskClass(); viewer.id = 'wanba-license-view-mask';
+      viewer.innerHTML = '<div class="wb-modal"><div class="wb-modal-title">' + esc(file[1]) + '</div><pre class="wanba-license-text" role="document">正在读取本地许可证…</pre><div class="wb-actions"><button class="wb-btn" id="wanba-license-view-close">关闭</button></div></div>';
+      appendModalMask(viewer); qs('#wanba-license-view-close',viewer).onclick = () => viewer.remove();
+      try {
+        const response = await fetch(new URL('../../licenses/space-cadet/' + file[0],import.meta.url));
+        if (!response.ok) throw Error('许可证文件未随当前安装包提供');
+        const text = await response.text();
+        if (viewer.isConnected) qs('.wanba-license-text',viewer).textContent = text;
+      } catch (error) {
+        if (viewer.isConnected) qs('.wanba-license-text',viewer).textContent = '读取失败：' + error.message;
+      }
+    });
+  }
+
   function renderSettings() {
+    if (standalone) { renderStandaloneSettings(); return; }
     const cfg = settings();
     const body = qs('#wb-body');
     body.className = 'wb-body wb-settings-mode';
@@ -10018,6 +10092,7 @@ export async function initWanbanXiaowu() {
     } catch(e) { if (status) status.textContent = '加载失败: ' + e.message; toast('加载失败: ' + e.message); }
   }
   function exportDataKeys() {
+    if (standalone) return [STORAGE_SETTINGS, STORAGE_SCORES, STORAGE_PROGRESS, STORAGE_RECORDS, STORAGE_SUDOKU_STATE];
     return [
       STORAGE_SETTINGS,
       STORAGE_SCORES,
@@ -10052,10 +10127,11 @@ export async function initWanbanXiaowu() {
       delete clean.apiUrl;
       delete clean.apiKey;
       delete clean.apiModel;
-      return Object.assign({}, DEFAULT_SETTINGS, clean, currentApi || {});
+      const merged = Object.assign({}, DEFAULT_SETTINGS, clean, currentApi || {});
+      return standalone ? constrainStandaloneSettings(merged) : merged;
     }
     if (key === STORAGE_WORLD_PRESETS || key === STORAGE_SUMMARIES) return safeArray(value).filter(x => x && typeof x === 'object');
-    if (key === STORAGE_SETTINGS || key === STORAGE_SCORES || key === STORAGE_LINES || key === STORAGE_ROLE_LINES || key === STORAGE_THEATERS || key === STORAGE_LINE_PRESET_SELECTION || key === STORAGE_PROGRESS || key === STORAGE_RECORDS) return safeObject(value);
+    if (key === STORAGE_SETTINGS || key === STORAGE_SCORES || key === STORAGE_LINES || key === STORAGE_ROLE_LINES || key === STORAGE_THEATERS || key === STORAGE_LINE_PRESET_SELECTION || key === STORAGE_PROGRESS || key === STORAGE_RECORDS || key === STORAGE_SUDOKU_STATE) return safeObject(value);
     if (key === STORAGE_WORD_GUESS_BANK) return (Array.isArray(value) || isPlainObject(value)) ? value : {};
     if (key === STORAGE_SUMMARY_REQ) return String(value || '');
     return value == null ? {} : value;
@@ -10068,7 +10144,7 @@ export async function initWanbanXiaowu() {
       if (!Object.prototype.hasOwnProperty.call(items, key)) return;
       plan[key] = sanitizeImportValue(key, items[key], currentApi);
     });
-    if (!Object.keys(plan).length) throw new Error('没有找到可导入的玩伴小屋数据。');
+    if (!Object.keys(plan).length) throw new Error('没有找到可导入的游戏数据。');
     return plan;
   }
   function commitImportPlan(plan) {
@@ -10091,23 +10167,28 @@ export async function initWanbanXiaowu() {
     }
   }
   function exportAllData() {
-    flushSettingsProgress();
-    const data = { app:'玩伴小屋', scriptId:SCRIPT_ID, version:EXTENSION_VERSION, exportedAt:new Date().toISOString(), items:{} };
+    saveStandaloneState();
+    const data = { app:standalone ? '玩吧' : '玩伴小屋', scriptId:SCRIPT_ID, version:standalone ? '1.0.0' : EXTENSION_VERSION, gameBaseline:EXTENSION_VERSION, exportedAt:new Date().toISOString(), items:{} };
     exportDataKeys().forEach(key => {
       if (key === STORAGE_SETTINGS) data.items[key] = settingsWithoutApi(loadJSON(key, {}));
       else if (key === STORAGE_SUMMARY_REQ) data.items[key] = localStorage.getItem(key) || '';
       else data.items[key] = loadJSON(key, null);
     });
     const text = JSON.stringify(data, null, 2);
+    const filename = (standalone ? '玩吧' : '玩伴小屋') + '-备份-' + new Date().toISOString().slice(0,10) + '.json';
+    if (standalone && typeof window.NativeBridge?.saveBackup === 'function') {
+      try { window.NativeBridge.saveBackup(filename, text); } catch (error) { toast('无法导出备份：' + error.message); }
+      return;
+    }
     const blob = new Blob([text], { type:'application/json;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = getHostDocument().createElement('a');
     a.href = url;
-    a.download = '玩伴小屋-备份-' + new Date().toISOString().slice(0,10) + '.json';
+    a.download = filename;
     getHostDocument().body.appendChild(a);
     a.click();
     setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 800);
-    const st = qs('#wb-import-export-status'); if (st) st.textContent = '已导出备份：不包含 API 配置和 API 预设。';
+    const st = qs('#wb-import-export-status'); if (st) st.textContent = standalone ? '已导出游戏进度、记录和主题设置。' : '已导出备份：不包含 API 配置和 API 预设。';
     toast('已导出备份');
   }
   function importAllDataFromFile(e) {
@@ -10120,7 +10201,7 @@ export async function initWanbanXiaowu() {
         const items = data.items || data;
         const plan = buildImportPlan(items);
         const st = qs('#wb-import-export-status'); if (st) st.textContent = '已读取备份：' + (file.name || '备份文件') + '，等待确认导入。';
-        showConfirm('导入备份', '导入前会先校验并修复可恢复的数据；如果手机存储空间不足或写入失败，会放弃导入并保留当前数据。当前 API 配置和 API 预设会保留，不会被覆盖。确定要继续导入吗？', () => {
+        showConfirm('导入备份', standalone ? '备份中包含的游戏进度、记录和主题将覆盖对应的当前数据。写入失败会保留原数据。确定导入吗？' : '导入前会先校验并修复可恢复的数据；如果手机存储空间不足或写入失败，会放弃导入并保留当前数据。当前 API 配置和 API 预设会保留，不会被覆盖。确定要继续导入吗？', () => {
           try {
             commitImportPlan(plan);
           } catch(importErr) {
@@ -10130,8 +10211,8 @@ export async function initWanbanXiaowu() {
             return;
           }
           theaterCache = safeObject(loadJSON(STORAGE_THEATERS, {}));
-          const doneStatus = qs('#wb-import-export-status'); if (doneStatus) doneStatus.textContent = '已导入：' + (file.name || '备份文件') + '。API 配置和 API 预设已保留。';
-          toast('导入完成，API 配置和 API 预设未被覆盖');
+          const doneStatus = qs('#wb-import-export-status'); if (doneStatus) doneStatus.textContent = '已导入：' + (file.name || '备份文件') + (standalone ? '。' : '。API 配置和 API 预设已保留。');
+          toast(standalone ? '游戏备份导入完成' : '导入完成，API 配置和 API 预设未被覆盖');
           renderSettings();
           e.target.value = '';
         }, () => {
@@ -10144,6 +10225,7 @@ export async function initWanbanXiaowu() {
         e.target.value = '';
       }
     };
+    reader.onerror = () => { toast('文件读取失败，未修改当前数据'); e.target.value = ''; };
     reader.readAsText(file, 'utf-8');
   }
   function saveApiConfigFromUI() { setSettings({ apiUrl: qs('#wb-api-url').value.trim(), apiKey: qs('#wb-api-key').value.trim(), apiModel: qs('#wb-api-model').value || 'gpt-4o-mini' }); updateApiStatusUI(); toast('API配置已保存'); }
@@ -11821,7 +11903,7 @@ export async function initWanbanXiaowu() {
 
   function init() { addMenuItem(); bindMessageNotifyEvents(); syncFloatingBall(); scheduleInitialUpdateCheck(); }
 
-  if (typeof window[FLAG] === 'undefined') {
+  if (!standalone && typeof window[FLAG] === 'undefined') {
     window[FLAG] = true;
     const waitJQ = setInterval(() => {
       const jq = getHostJQ();
@@ -11835,7 +11917,7 @@ export async function initWanbanXiaowu() {
         else doc.addEventListener('DOMContentLoaded', go);
       }
     }, 100);
-  } else {
+  } else if (!standalone) {
     console.warn('[玩伴小屋] Script already loaded, skipping.');
   }
 
@@ -11970,13 +12052,13 @@ export async function initWanbanXiaowu() {
     syncPopupModeClass();
     const g = GAME_META[id]; const cfg = settings(); const body = qs('#wb-body'); body.className = 'wb-body wb-game-mode';
     const lineTools = cfg.companion ? '<div class="wb-line-tools"><select class="wb-select" id="wb-line-preset-select"></select><button class="wb-btn primary" id="wb-generate-lines">生成</button></div>' : '';
-    const wordBankTools = id === 'wordguess' ? '<select class="wb-select" id="wb-word-bank-source-inline" title="我说你猜题库"><option value="role">角色题库</option><option value="default">默认题库</option></select>' : '';
+    const wordBankTools = !standalone && id === 'wordguess' ? '<select class="wb-select" id="wb-word-bank-source-inline" title="我说你猜题库"><option value="role">角色题库</option><option value="default">默认题库</option></select>' : '';
     const pauseBtn = '<button class="wb-btn" id="wb-pause">暂停</button>';
     const companionPanel = cfg.companion ? '<div class="wb-panel wb-side-companion">' + companionHTML() + '</div>' : '';
     const dockSide = companionDockSide(cfg);
     const layoutClass = (cfg.companion ? ('companion-pc-' + (dockSide === 'start' ? 'left' : 'right') + ' companion-mobile-' + (dockSide === 'start' ? 'top' : 'bottom')) : 'no-companion') + ' game-layout-' + id;
     body.innerHTML = '<div class="wb-layout ' + layoutClass + '"><div class="wb-panel wb-game-main"><div class="wb-toolbar"><button class="wb-btn" id="wb-back">返回</button><div class="wb-stat"><span class="wb-pill wb-title-row"><span class="wb-game-title-text">' + esc(g.name) + '</span><button class="wb-rule-btn" id="wb-game-rules" title="游戏介绍" aria-label="游戏介绍" type="button">💡</button></span><span class="wb-pill" id="wb-score">本局：0</span><span class="wb-pill" id="wb-high">' + esc(scoreDisplay(id)) + '</span></div><div class="wb-actions">' + wordBankTools + lineTools + '<button class="wb-btn" id="wb-game-records">记录</button>' + pauseBtn + '<button class="wb-btn" id="wb-restart">重开</button></div></div><div class="wb-board-wrap wb-gamebox-' + esc(id) + '" id="wb-gamebox"><div class="wb-start-cover"><div>准备开始</div><button class="wb-btn primary" id="wb-start-cover-btn">开始游戏</button></div></div></div>' + companionPanel + '</div>';
-    primeMessageNotifyBaseline();
+    if (!standalone) primeMessageNotifyBaseline();
     gameStarted = false; gamePaused = true;
     qs('#wb-back').onclick = () => { stopGame(); currentGame = null; saveWindowState(currentTab, ''); syncPopupModeClass(); renderSelect(currentTab); };
     qs('#wb-start-cover-btn').onclick = () => startCurrentGame(id);
@@ -12037,7 +12119,7 @@ export async function initWanbanXiaowu() {
     const coverBtn = qs('#wb-start-cover-btn'); if (coverBtn) coverBtn.style.display = 'none';
     if (randomLineTimer) clearInterval(randomLineTimer);
     lastDialogueAt = Date.now();
-    randomLineTimer = setInterval(() => {
+    if (!standalone) randomLineTimer = setInterval(() => {
       if (currentGame && gameStarted && !gamePaused && Date.now() - lastDialogueAt >= 10000) speak(currentGame, 'random');
     }, 1000);
     if (id === 'snake') startSnake(resumeState);
@@ -12246,6 +12328,7 @@ export async function initWanbanXiaowu() {
   }
 
 function showGameRecords(game, page) {
+    if (standalone) { showStandaloneRecords(game, page); return; }
     page = Math.max(1, page || 1);
     const doc = getHostDocument();
     const old = qs('#wb-record-mask', doc); if (old) old.remove();
@@ -12310,6 +12393,24 @@ function showGameRecords(game, page) {
     mask.innerHTML = '<div class="wb-modal wb-summary-modal" style="width:min(960px,100%);"><div class="wb-modal-title">批量生成调试</div><textarea class="wb-textarea" readonly style="min-height:420px;font-family:monospace;white-space:pre;overflow:auto;">' + esc(text) + '</textarea><div class="wb-actions" style="margin-top:12px;justify-content:flex-end;"><button class="wb-btn" id="wb-batch-debug-close">关闭</button></div></div>';
     appendModalMask(mask);
     qs('#wb-batch-debug-close', mask).onclick = () => mask.remove();
+  }
+
+  function showStandaloneRecords(game, page = 1) {
+    const all = records()[game] || [], total = Math.max(1, Math.ceil(all.length / 12));
+    page = Math.max(1, Math.min(total, page));
+    qs('#wb-record-mask')?.remove();
+    const sourceHeaders = recordTableHeaders(game).filter(h => h !== '日志' && h !== '操作');
+    const cards = all.slice((page - 1) * 12, page * 12).map(record => {
+      const cells = recordDisplayCells(game, record);
+      return '<article class="wanba-record"><dl>' + sourceHeaders.map((label,index) => label === '陪伴者' ? '' : '<div><dt>' + esc(label) + '</dt><dd>' + esc(cells[index] || '—') + '</dd></div>').join('') + '</dl><button class="wb-btn wb-record-del" data-id="' + esc(record.id) + '">删除记录</button></article>';
+    }).join('');
+    const mask = getHostDocument().createElement('div'); mask.className = modalMaskClass(); mask.id = 'wb-record-mask';
+    mask.innerHTML = '<div class="wb-modal"><div class="wb-modal-title">' + esc(GAME_META[game]?.name || '游戏') + ' · 游戏记录</div><div class="wanba-records">' + (cards || '<p>还没有完成的游戏记录。</p>') + '</div><div class="wb-actions"><button class="wb-btn" id="wb-record-prev" ' + (page === 1 ? 'disabled' : '') + '>上一页</button><span>' + page + ' / ' + total + '</span><button class="wb-btn" id="wb-record-next" ' + (page === total ? 'disabled' : '') + '>下一页</button><button class="wb-btn" id="wb-record-close">关闭</button></div></div>';
+    appendModalMask(mask);
+    qs('#wb-record-close',mask).onclick = () => mask.remove();
+    qs('#wb-record-prev',mask).onclick = () => showStandaloneRecords(game,page-1);
+    qs('#wb-record-next',mask).onclick = () => showStandaloneRecords(game,page+1);
+    qsa('.wb-record-del',mask).forEach(button => button.onclick = () => showConfirm('删除游戏记录','确定删除这条记录吗？',() => { deleteRecord(game,button.dataset.id); showStandaloneRecords(game,page); }));
   }
   function showProgressChoice(game, state) {
     const doc = getHostDocument();
@@ -12461,7 +12562,7 @@ function showGameRecords(game, page) {
     mask.className = modalMaskClass();
     mask.id = 'wb-gameover-mask';
 	    const logAction = settings().companion ? '<button class="wb-btn" id="wb-generate-log">生成日志</button>' : '';
-	    mask.innerHTML = '<div class="wb-modal"><div class="wb-modal-title">' + esc(title || '游戏结束') + '</div><div style="margin-bottom:14px;line-height:1.8;"><div>游戏：' + esc(g.name) + '</div><div>' + esc(displayCharTextForGame(scoreText || '本局分数：0' + g.unit, game)) + '</div><div>' + esc(high) + '</div><div>陪伴者：' + esc(displayCharNameForGame(game)) + '</div></div><div class="wb-actions"><button class="wb-btn primary" id="wb-next-round">开启下一把</button>' + logAction + '<button class="wb-btn" id="wb-over-close">留在本局</button></div></div>';
+	    mask.innerHTML = '<div class="wb-modal"><div class="wb-modal-title">' + esc(title || '游戏结束') + '</div><div style="margin-bottom:14px;line-height:1.8;"><div>游戏：' + esc(g.name) + '</div><div>' + esc(displayCharTextForGame(scoreText || '本局分数：0' + g.unit, game)) + '</div><div>' + esc(high) + '</div>' + (standalone ? '' : '<div>陪伴者：' + esc(displayCharNameForGame(game)) + '</div>') + '</div><div class="wb-actions"><button class="wb-btn primary" id="wb-next-round">开启下一把</button>' + logAction + '<button class="wb-btn" id="wb-over-close">留在本局</button></div></div>';
     appendModalMask(mask);
     const allowDrawTheater = !(outcome === 'draw' && ['gomoku','oldmaid','ludo'].includes(game));
     const shouldShowTheater = !!(settings().companion && settings().theaterEnabled && allowDrawTheater && (special || Math.random() < 0.6));
@@ -18475,4 +18576,57 @@ function showGameRecords(game, page) {
     el.ontouchcancel = () => { touchStart = null; };
   }
 
+  function saveStandaloneState() {
+    commitGameActiveDuration(true);
+    activeGameController?.save?.();
+    flushAllProgressSaves();
+    flushSettingsProgress();
+    saveWindowState(currentTab, currentGame);
+  }
+  function pauseStandalone() {
+    // A native pause can arrive during a resume countdown. Cancel it first so a
+    // queued callback cannot restart physics behind another Android activity.
+    for (const selector of ['#wb-resume-cancel', '#wb-count-cancel']) qs(selector)?.click();
+    pauseGameForInactiveSurface();
+    // The native engine is in an iframe with its own RAF. Freeze synchronously,
+    // before Android suspends WebView timers (its controller polls every 100 ms).
+    qsa('.wb-cadet-frame').forEach(frame => {
+      try { frame.contentWindow?.cadetHost?.pause(true); } catch (error) { console.warn('[玩吧] 弹球暂停失败', error); }
+    });
+    saveStandaloneState();
+  }
+  function standaloneBack() {
+    const match3Cancel = qs('.m3-confirm:not([hidden]) .m3-confirm-cancel');
+    if (match3Cancel) { match3Cancel.click(); return true; }
+    const masks = qsa('.wb-modal-mask').filter(mask => mask.isConnected && !mask.hidden);
+    const mask = masks[masks.length - 1];
+    if (mask) {
+      const cancel = qs('button[id$="-cancel"],button[id$="-close"],button[id$="-back"],#wb-count-cancel',mask);
+      if (cancel) cancel.click(); else mask.remove();
+      return true;
+    }
+    if (currentGame) { saveStandaloneState(); stopGame(); currentGame = null; saveWindowState(currentTab, ''); render(); return true; }
+    if (currentTab === 'settings') { currentTab = 'single'; saveWindowState(currentTab, ''); render(); return true; }
+    return false;
+  }
+  if (standalone) {
+    getHostDocument().body.classList.add('wanba-standalone');
+    setSettings({});
+    buildPopup();
+    runtimeApi = Object.freeze({
+      pause:pauseStandalone,
+      save:saveStandaloneState,
+      back:standaloneBack,
+      notify:toast,
+      inspect:() => JSON.parse(JSON.stringify({
+        version:'1.0.0', gameBaseline:EXTENSION_VERSION,
+        tab:currentTab, game:currentGame, started:gameStarted, paused:gamePaused,
+        games:Object.values(GAME_META).map(({id,name,mode}) => ({id,name,mode})),
+        theme:settings().theme,
+        controller:activeGameController?.getState?.() || null,
+        progress:currentGame ? gameProgress(currentGame) : null,
+      })),
+    });
+    return runtimeApi;
+  }
 }

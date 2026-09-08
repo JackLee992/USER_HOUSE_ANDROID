@@ -1,0 +1,33 @@
+{
+  "generatedMaster": {
+    "size": [
+      1254,
+      1254
+    ],
+    "tool": "built-in image_gen"
+  },
+  "foregroundLayerPx": [
+    1080,
+    1080
+  ],
+  "layerDp": 108,
+  "safeCircleDp": 66,
+  "coreAlphaMeasurementThreshold": 16,
+  "alphaPreserved": true,
+  "coreBoundsPx": [
+    263,
+    313,
+    816,
+    766
+  ],
+  "coreDiameterDp": 64.58,
+  "safeAreaPass": true,
+  "staticMaskViewportDp": 72,
+  "backgroundColor": "#061744",
+  "previewsPx": [
+    48,
+    96,
+    192
+  ],
+  "squircleNote": "Representative superellipse mask; OEM shapes may differ."
+}

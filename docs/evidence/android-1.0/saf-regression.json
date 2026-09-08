@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "checks": [
+    "Android ACTION_CREATE_DOCUMENT wrote valid backup to Downloads",
+    "cancel export returns visible cancellation and permits another operation",
+    "real SAF JSON selection -> FileReader -> user confirm restores exported theme and progress",
+    "cancel import leaves existing theme and progress unchanged",
+    "packaged license readable offline; native back closes only top modal"
+  ]
+}
