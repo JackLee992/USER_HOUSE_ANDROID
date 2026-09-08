@@ -1,23 +1,36 @@
 {
   "schema": 1,
   "gameId": "watermelon",
-  "artVersion": "1.0.0",
-  "sharedArtVersion": "1.0.0",
+  "artVersion": "1.0.1",
+  "sharedArtVersion": "1.0.1",
   "stylesheet": "standalone/game-art.css",
   "rendererHelper": "standalone/game-art.js",
   "assetRefs": [
-    "assets/game-art/premium/v1/fruits.png"
+    "assets/game-art/premium/v1/fruits.png",
+    "assets/game-art/icons-v2/sheet-01.png"
   ],
   "appliedSurfaces": [
     "Nine fruit evolution sprites",
-    "Next fruit and aim ghost"
+    "Next fruit and aim ghost",
+    "Individually illustrated game directory icon"
   ],
   "retainedPresentation": [
     "Physics and background remain existing"
   ],
   "directoryIcon": {
-    "atlas": "assets/game-art/premium/v1/fruits.png",
-    "cell": 10,
-    "mark": ""
+    "atlas": "assets/game-art/icons-v2/sheet-01.png",
+    "sourceSize": [
+      1254,
+      1254
+    ],
+    "sourceRect": [
+      0,
+      407,
+      419,
+      390
+    ],
+    "cell": 3,
+    "subject": "Juicy watermelon merging fruit",
+    "rendererHelper": "standalone/game-icons.js"
   }
 }

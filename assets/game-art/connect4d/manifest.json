@@ -1,24 +1,37 @@
 {
   "schema": 1,
   "gameId": "connect4d",
-  "artVersion": "1.0.0",
-  "sharedArtVersion": "1.0.0",
+  "artVersion": "1.0.1",
+  "sharedArtVersion": "1.0.1",
   "stylesheet": "standalone/game-art.css",
   "rendererHelper": "standalone/game-art.js",
   "assetRefs": [
     "assets/game-art/premium/v1/pieces.png",
-    "assets/game-art/premium/v1/materials.png"
+    "assets/game-art/premium/v1/materials.png",
+    "assets/game-art/icons-v2/sheet-04.png"
   ],
   "appliedSurfaces": [
     "Green baize board surround",
-    "Red and sapphire blue disks including falling pieces"
+    "Red and sapphire blue disks including falling pieces",
+    "Individually illustrated game directory icon"
   ],
   "retainedPresentation": [
     "Board holes, targets and animation preserved"
   ],
   "directoryIcon": {
-    "atlas": "assets/game-art/premium/v1/pieces.png",
-    "cell": 3,
-    "mark": "4"
+    "atlas": "assets/game-art/icons-v2/sheet-04.png",
+    "sourceSize": [
+      1254,
+      1254
+    ],
+    "sourceRect": [
+      837,
+      407,
+      417,
+      390
+    ],
+    "cell": 5,
+    "subject": "Upright colored disk connection rack",
+    "rendererHelper": "standalone/game-icons.js"
   }
 }

@@ -1,25 +1,38 @@
 {
   "schema": 1,
   "gameId": "uyangle",
-  "artVersion": "1.0.0",
-  "sharedArtVersion": "1.0.0",
+  "artVersion": "1.0.1",
+  "sharedArtVersion": "1.0.1",
   "stylesheet": "standalone/game-art.css",
   "rendererHelper": "standalone/game-art.js",
   "assetRefs": [
     "assets/game-art/premium/v1/fruits.png",
-    "assets/game-art/premium/v1/materials.png"
+    "assets/game-art/premium/v1/materials.png",
+    "assets/game-art/icons-v2/sheet-02.png"
   ],
   "appliedSurfaces": [
     "Twelve fruit tile identities",
     "Fruit tray and holding slots",
-    "Porcelain tile surface"
+    "Porcelain tile surface",
+    "Individually illustrated game directory icon"
   ],
   "retainedPresentation": [
     "Existing tile IDs and overlap rules retained"
   ],
   "directoryIcon": {
-    "atlas": "assets/game-art/premium/v1/fruits.png",
+    "atlas": "assets/game-art/icons-v2/sheet-02.png",
+    "sourceSize": [
+      1254,
+      1254
+    ],
+    "sourceRect": [
+      0,
+      0,
+      419,
+      407
+    ],
     "cell": 0,
-    "mark": "3×"
+    "subject": "Triple matched tiles and sheep",
+    "rendererHelper": "standalone/game-icons.js"
   }
 }

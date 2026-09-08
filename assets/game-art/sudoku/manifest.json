@@ -1,23 +1,36 @@
 {
   "schema": 1,
   "gameId": "sudoku",
-  "artVersion": "1.0.0",
-  "sharedArtVersion": "1.0.0",
+  "artVersion": "1.0.1",
+  "sharedArtVersion": "1.0.1",
   "stylesheet": "standalone/game-art.css",
   "rendererHelper": "standalone/game-art.js",
   "assetRefs": [
-    "assets/game-art/premium/v1/materials.png"
+    "assets/game-art/premium/v1/materials.png",
+    "assets/game-art/icons-v2/sheet-01.png"
   ],
   "appliedSurfaces": [
     "Maple board",
-    "Porcelain numbered cells"
+    "Porcelain numbered cells",
+    "Individually illustrated game directory icon"
   ],
   "retainedPresentation": [
     "Puzzle numbers, notes and selection preserved"
   ],
   "directoryIcon": {
-    "atlas": "assets/game-art/premium/v1/candy-bubbles.png",
-    "cell": 15,
-    "mark": "1–9"
+    "atlas": "assets/game-art/icons-v2/sheet-01.png",
+    "sourceSize": [
+      1254,
+      1254
+    ],
+    "sourceRect": [
+      419,
+      797,
+      418,
+      430
+    ],
+    "cell": 7,
+    "subject": "Ivory numbered Sudoku grid",
+    "rendererHelper": "standalone/game-icons.js"
   }
 }

@@ -15,11 +15,11 @@ test('wordguess 1.0.1 splits metadata without exposing the answer or interpretin
   assert.equal(host.node('#wb-word-meta').children[2].children[2].children.length,0);
   assert.deepEqual(host.snapshot().rounds,wordGuessFixture());assert.equal(host.snapshot().roundWord,'风筝');assert.equal(host.bankReads(),1);
 });
-test('existing language 1.0.0 translates separate hint and score labels without changing puzzle data',async()=>{
+test('language 1.0.1 translates separate controls without changing Chinese puzzle data',async()=>{
   const i18n=createI18n({language:'en',load:async id=>JSON.parse(readFileSync(new URL('../locales/'+id+'.json',import.meta.url)))});await i18n.init();
   const host=await wordGuessHarness(createGame),fields=host.fields();
   assert.equal(i18n.translateSource(fields.clues.label),'Hint');assert.equal(i18n.translateSource(fields.score.label),'Score');
-  assert.equal(i18n.translateSource(fields.question.label),'当前题','a missing label remains honest until the independent language update');
+  assert.equal(i18n.translateSource(fields.question.label),'Question');assert.equal(i18n.translateSource(fields.source.label),'Puzzle source');
   assert.deepEqual(host.snapshot().rounds,wordGuessFixture());
 });
 test('saved puzzles resume without reading a new bank and preserve the old save shape exactly',async()=>{

@@ -1,24 +1,37 @@
 {
   "schema": 1,
   "gameId": "snake",
-  "artVersion": "1.0.0",
-  "sharedArtVersion": "1.0.0",
+  "artVersion": "1.0.1",
+  "sharedArtVersion": "1.0.1",
   "stylesheet": "standalone/game-art.css",
   "rendererHelper": "standalone/game-art.js",
   "assetRefs": [
     "assets/game-art/premium/v1/fruits.png",
-    "assets/game-art/premium/v1/candy-bubbles.png"
+    "assets/game-art/premium/v1/candy-bubbles.png",
+    "assets/game-art/icons-v2/sheet-01.png"
   ],
   "appliedSurfaces": [
     "Canvas apple food",
-    "Glass snake body segments"
+    "Glass snake body segments",
+    "Individually illustrated game directory icon"
   ],
   "retainedPresentation": [
     "Directional eyes and grid remain vector"
   ],
   "directoryIcon": {
-    "atlas": "assets/game-art/premium/v1/candy-bubbles.png",
-    "cell": 10,
-    "mark": "→"
+    "atlas": "assets/game-art/icons-v2/sheet-01.png",
+    "sourceSize": [
+      1254,
+      1254
+    ],
+    "sourceRect": [
+      419,
+      0,
+      418,
+      407
+    ],
+    "cell": 1,
+    "subject": "Emerald S snake and apple",
+    "rendererHelper": "standalone/game-icons.js"
   }
 }

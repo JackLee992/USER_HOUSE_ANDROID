@@ -37,6 +37,14 @@ try{
  await evaluate('qaState.candidate=null;qaState.candidateReady=false;qaState.job=null;wanbaApp.onGameUpdate("{}");document.querySelector("#wb-body").scrollTop=0');await wait(200);
  const before=await evaluate('qaCalls.filter(c=>c==="check").length'),point=await evaluate('(()=>{const r=document.querySelector(".wanba-update-status").getBoundingClientRect();return {x:r.x+20,y:r.y+5};})()');
  await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[point]});await send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[{x:point.x,y:point.y+100}]});await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await until(`qaCalls.filter(c=>c==='check').length>${before}`);checks.push('real browser touch gesture at list top triggers pull-to-refresh');
+ // A real Android-style touch sequence must not delete a transient confirmation
+ // before its click or fall through to the game card behind the update panel.
+ await evaluate('qaState.previousSnapshotId="previous";qaState.candidate=null;qaState.job=null;wanbaApp.onGameUpdate("{}")');await wait(200);
+ const touchButton=async expression=>{await evaluate(`(${expression}).scrollIntoView({block:'center'})`);const p=await evaluate(`(()=>{const r=(${expression}).getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};})()`);await send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[p]});await wait(70);await send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});await wait(200);};
+ await touchButton('[...document.querySelectorAll(".wanba-updates button")].find(b=>b.textContent==="回退内容版本")');
+ assert.equal(await evaluate('!!document.querySelector(".wanba-update-confirm")'),true);
+ await touchButton('[...document.querySelectorAll(".wanba-update-confirm button")].find(b=>b.textContent==="确认回退")');
+ await until('qaCalls.includes("rollback")');assert.equal(await evaluate('wanbaApp.inspect().game'),null);checks.push('real touch rollback confirmation survives touchend and does not tap through to a game');
  assert.equal(await evaluate('document.documentElement.scrollWidth<=innerWidth'),true);assert.equal(errors.length,0,JSON.stringify(errors));
  const shot=await send('Page.captureScreenshot',{format:'png'});writeFileSync(out+'/update-panel.png',Buffer.from(shot.data,'base64'));writeFileSync(out+'/result.json',JSON.stringify({passed:true,checks,errors},null,2));console.log(JSON.stringify({passed:true,checks},null,2));
 }finally{socket.close();}

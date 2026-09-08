@@ -1,23 +1,36 @@
 {
   "schema": 1,
   "gameId": "guessnumber",
-  "artVersion": "1.0.0",
-  "sharedArtVersion": "1.0.0",
+  "artVersion": "1.0.1",
+  "sharedArtVersion": "1.0.1",
   "stylesheet": "standalone/game-art.css",
   "rendererHelper": "standalone/game-art.js",
   "assetRefs": [
-    "assets/game-art/premium/v1/materials.png"
+    "assets/game-art/premium/v1/materials.png",
+    "assets/game-art/icons-v2/sheet-03.png"
   ],
   "appliedSurfaces": [
     "Porcelain keypad and guess history",
-    "Porcelain panel"
+    "Porcelain panel",
+    "Individually illustrated game directory icon"
   ],
   "retainedPresentation": [
     "Digits and answer feedback remain text"
   ],
   "directoryIcon": {
-    "atlas": "assets/game-art/premium/v1/candy-bubbles.png",
-    "cell": 15,
-    "mark": "1234"
+    "atlas": "assets/game-art/icons-v2/sheet-03.png",
+    "sourceSize": [
+      1254,
+      1254
+    ],
+    "sourceRect": [
+      0,
+      797,
+      419,
+      420
+    ],
+    "cell": 6,
+    "subject": "Four number lock wheels and lens",
+    "rendererHelper": "standalone/game-icons.js"
   }
 }

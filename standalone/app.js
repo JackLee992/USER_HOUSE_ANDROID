@@ -4,11 +4,13 @@ import { readContentState, restoreCheckpoint, confirmContentReady } from './cont
 import { installGameUpdates } from './game-updates.js';
 import { initI18n, observeLocalizedUI } from './i18n.js';
 import { preloadGameArt } from './game-art.js';
+import { initPerformance } from './performance.js';
 
 try {
   const contentState = await readContentState(window);
   if (contentState?.restoreStorage) restoreCheckpoint(window.localStorage, contentState.restoreStorage);
   await initI18n();
+  initPerformance(window);
   await preloadGameArt(window);
   const runtime = await initWanbanXiaowu({ standalone:true, appInfo:await readAppInfo(window), contentState, startupBlocked:true });
   let updates;

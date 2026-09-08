@@ -1,24 +1,39 @@
 {
   "schema": 1,
   "gameId": "paopao",
-  "artVersion": "1.0.0",
-  "sharedArtVersion": "1.0.0",
+  "artVersion": "1.0.1",
+  "sharedArtVersion": "1.0.1",
   "stylesheet": "standalone/game-art.css",
   "rendererHelper": "standalone/game-art.js",
   "assetRefs": [
-    "assets/game-art/premium/v1/candy-bubbles.png"
+    "assets/game-art/premium/v1/candy-bubbles.png",
+    "assets/game-art/icons-v2/sheet-02.png",
+    "assets/game-art/premium/v2/bubbles.png"
   ],
   "appliedSurfaces": [
     "Six bubble colors",
     "Bomb sprite",
-    "Flying and next bubbles"
+    "Flying and next bubbles",
+    "Individually illustrated game directory icon",
+    "Six complete circular bubble sprites with transparent padding"
   ],
   "retainedPresentation": [
     "Trajectory and background remain existing vector"
   ],
   "directoryIcon": {
-    "atlas": "assets/game-art/premium/v1/candy-bubbles.png",
-    "cell": 9,
-    "mark": ""
+    "atlas": "assets/game-art/icons-v2/sheet-02.png",
+    "sourceSize": [
+      1254,
+      1254
+    ],
+    "sourceRect": [
+      0,
+      407,
+      419,
+      390
+    ],
+    "cell": 3,
+    "subject": "Gold bubble cannon and color arc",
+    "rendererHelper": "standalone/game-icons.js"
   }
 }

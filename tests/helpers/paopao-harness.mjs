@@ -1,9 +1,10 @@
 import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
 import { drawGameSprite } from '../../standalone/game-art.js';
+import { getCanvasPixelRatio } from '../../standalone/performance.js';
 
 // Execute the production game with a deterministic clock and a minimal Canvas/DOM host.
-export function createPaopaoHarness() {
+export function createPaopaoHarness({mode='normal',devicePixelRatio=1}={}) {
   const source = readFileSync(new URL('../../src/games/plugins/paopao/index.js', import.meta.url), 'utf8');
   const begin = source.indexOf('  function startPaopao(state) {');
   const end = source.indexOf('\n  startPaopao(state);', begin);
@@ -17,17 +18,18 @@ export function createPaopaoHarness() {
     if (!nodes.has(selector)) nodes.set(selector, {
       style:{}, classList:{ toggle:noop }, getContext:() => ctx,
       getBoundingClientRect:() => ({ left:0, top:0, width:360, height:560 }),
-      addEventListener:noop,
+      addEventListener:(name,fn)=>{nodes.get(selector)['on'+name]=fn;},
     });
     return nodes.get(selector);
   }
   const host = {
+    devicePixelRatio,localStorage:{getItem:()=>mode},
     addEventListener:(name, fn) => listeners.set(name, fn),
     removeEventListener:(name, fn) => { if (listeners.get(name) === fn) listeners.delete(name); },
   };
   const context = vm.createContext({
-    drawGameSprite,
-    qs:node, devicePixelRatio:1, currentGame:'paopao', gamePaused:false,
+    drawGameSprite,getCanvasPixelRatio,
+    qs:node, devicePixelRatio, currentGame:'paopao', gamePaused:false,
     activeGameController:null, performance:{ now:() => now },
     getHostWindow:() => host, getHostDocument:() => ({ hidden:false }),
     requestAnimationFrame:fn => { frames.set(++id, fn); return id; },
@@ -54,5 +56,6 @@ export function createPaopaoHarness() {
     destroy() { context.activeGameController?.destroy(); },
     pending:() => ({ frames:frames.size, timers:timers.size, listeners:listeners.size }),
     draws:() => draws,
+    canvas:()=>node('#wb-paopao-canvas'),
   };
 }

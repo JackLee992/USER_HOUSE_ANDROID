@@ -1,22 +1,35 @@
 {
   "schema": 1,
   "gameId": "tetris",
-  "artVersion": "1.0.0",
-  "sharedArtVersion": "1.0.0",
+  "artVersion": "1.0.1",
+  "sharedArtVersion": "1.0.1",
   "stylesheet": "standalone/game-art.css",
   "rendererHelper": "standalone/game-art.js",
   "assetRefs": [
-    "assets/game-art/premium/v1/candy-bubbles.png"
+    "assets/game-art/premium/v1/candy-bubbles.png",
+    "assets/game-art/icons-v2/sheet-01.png"
   ],
   "appliedSurfaces": [
-    "Canvas falling and settled blocks"
+    "Canvas falling and settled blocks",
+    "Individually illustrated game directory icon"
   ],
   "retainedPresentation": [
     "Next-piece preview remains vector"
   ],
   "directoryIcon": {
-    "atlas": "assets/game-art/premium/v1/candy-bubbles.png",
-    "cell": 5,
-    "mark": "▦"
+    "atlas": "assets/game-art/icons-v2/sheet-01.png",
+    "sourceSize": [
+      1254,
+      1254
+    ],
+    "sourceRect": [
+      0,
+      0,
+      419,
+      407
+    ],
+    "cell": 0,
+    "subject": "Falling tetromino blocks",
+    "rendererHelper": "standalone/game-icons.js"
   }
 }

@@ -11,7 +11,7 @@ test('locale selection recognizes device regions and script variants',()=>{
 });
 test('every shipped locale contains all 37 titles, rule summaries and the same complete UI key set',()=>{
   const base=data['zh-CN'];assert.equal(Object.keys(base.games).length,37);
-  for(const locale of LOCALES){const catalog=data[locale.id];assert.equal(catalog.locale,locale.id);assert.equal(catalog.version,'1.0.0');assert.deepEqual(Object.keys(catalog.games).sort(),Object.keys(base.games).sort());assert.deepEqual(Object.keys(catalog.strings).sort(),Object.keys(base.strings).sort());assert.deepEqual(Object.keys(catalog.templates).sort(),Object.keys(base.templates).sort());for(const item of Object.values(catalog.games)){assert.ok(item.title.length>0);assert.ok(item.rules.length>20);}}
+  for(const locale of LOCALES){const catalog=data[locale.id];assert.equal(catalog.locale,locale.id);assert.equal(catalog.version,'1.0.1');assert.deepEqual(Object.keys(catalog.games).sort(),Object.keys(base.games).sort());assert.deepEqual(Object.keys(catalog.strings).sort(),Object.keys(base.strings).sort());assert.deepEqual(Object.keys(catalog.templates).sort(),Object.keys(base.templates).sort());for(const item of Object.values(catalog.games)){assert.ok(item.title.length>0);assert.ok(item.rules.length>20);}}
 });
 test('language changes translate real controls and dynamic status while keeping source text available',async()=>{
   const storage=memory(),service=createI18n({load,storage,language:'zh-CN'});await service.init();
@@ -30,4 +30,8 @@ test('translations remain inert text and missing entries preserve a readable fal
 });
 test('Chinese rule text resolves host-role tokens without altering puzzle data',async()=>{
   const service=createI18n({load,language:'zh-CN'});await service.init();assert.doesNotMatch(service.gameRules('tictactoe'),/\{\{char\}\}/);assert.match(service.gameRules('tictactoe'),/电脑/);
+});
+test('all five languages cover native update states, download errors and performance controls',async()=>{
+  const labels=['当前题','题库来源','性能与画质','性能模式','省电','普通','游戏','正在检查游戏内容','游戏内容已是最新','已有可用更新','发现可用的游戏内容更新','正在下载变化的资源包','下载完成，回到首页后可安装','正在切换已验证的内容','游戏内容已就绪','新版内容未能启动，已恢复上一版本和更新前存档','已回到上一内容版本，当前存档保留','可用空间不足，请清理空间后重试','下载包校验失败'];
+  for(const {id}of LOCALES){const service=createI18n({load,language:id});await service.init();for(const label of labels)assert.equal(service.translateSource(label),data[id].strings[label],id+' '+label);assert.equal(service.translateSource('正在下载 game.paopao'),service.t('downloadingPackage',{value:'game.paopao'}));assert.equal(service.translateSource('GitHub 下载失败（503），已保留离线内容'),service.t('githubDownloadFailure',{value:'503'}));assert.equal(service.translateSource('内容更新暂不可用：下载包校验失败'),service.t('contentUnavailable',{value:service.t('下载包校验失败')}));}
 });

@@ -3,6 +3,7 @@ import { constrainStandaloneSettings, STANDALONE_THEMES } from '../../standalone
 import { APP_VERSION, normalizeAppInfo, readWebCapabilities } from '../../standalone/app-info.js';
 import { standaloneLicenses } from '../../standalone/licenses.js';
 import { gameRules as localizedGameRules, mountLanguagePicker } from '../../standalone/i18n.js';
+import { mountPerformancePicker } from '../../standalone/performance.js';
 import { EXTENSION_VERSION } from '../core/metadata.js';
 import { DEFAULT_LINES, PROMPT_TEMPLATES } from './wanban-prompts.js';
 import { gamePlugin } from '../games/plugins/registry.js';
@@ -7422,8 +7423,10 @@ export async function initWanbanXiaowu(options = {}) {
 	  }
   function render() {
     const cfg = settings(); const p = qs('#' + POPUP_ID); syncPopupModeClass();
-    p.onwheel = (e) => { e.stopPropagation(); };
-    p.ontouchmove = (e) => { e.stopPropagation(); };
+    // Only the embedded plugin needs to shield its host page from these events.
+    // Standalone scrolling must not wait on non-passive popup listeners.
+    p.onwheel = standalone ? null : (e) => { e.stopPropagation(); };
+    p.ontouchmove = standalone ? null : (e) => { e.stopPropagation(); };
     const singleCount = Object.values(GAME_META).filter(g => g.mode === 'single').length;
     const doubleCount = Object.values(GAME_META).filter(g => g.mode === 'double').length;
     const intimacyCount = 1;
@@ -7467,6 +7470,8 @@ export async function initWanbanXiaowu(options = {}) {
   function bindMainSwipe() {
     const body = qs('#wb-body');
     if (!body) return;
+    body._wanbaSwipeCleanup?.();
+    body._wanbaSwipeCleanup = null;
     if (currentGame || body.classList.contains('wb-game-mode')) {
       body.ontouchstart = null;
       body.ontouchend = null;
@@ -7474,8 +7479,8 @@ export async function initWanbanXiaowu(options = {}) {
     }
     let sx = 0, sy = 0;
     const tabs = standalone ? ['single','double','settings'] : ['single','double','intimacy','settings'];
-    body.ontouchstart = e => { const t = e.touches && e.touches[0]; if (!t) return; sx = t.clientX; sy = t.clientY; };
-    body.ontouchend = e => {
+    const start = e => { const t = e.touches && e.touches[0]; if (!t) return; sx = t.clientX; sy = t.clientY; };
+    const end = e => {
       if (currentGame || body.classList.contains('wb-game-mode')) return;
       const t = e.changedTouches && e.changedTouches[0]; if (!t || !sx) return;
       const dx = t.clientX - sx, dy = t.clientY - sy; sx = sy = 0;
@@ -7484,6 +7489,14 @@ export async function initWanbanXiaowu(options = {}) {
       const next = tabs[Math.max(0, Math.min(tabs.length - 1, i + (dx < 0 ? 1 : -1)))];
       if (next && next !== currentTab) { flushSettingsProgress(); stopGame(); currentGame = null; mainSwipeAnimation = dx < 0 ? 'wb-swipe-enter-left' : 'wb-swipe-enter-right'; currentTab = next; saveWindowState(currentTab, ''); render(); }
     };
+    if (standalone) {
+      const cancel = () => { sx = sy = 0; };
+      body.ontouchstart = body.ontouchend = null;
+      body.addEventListener('touchstart', start, { passive:true });
+      body.addEventListener('touchend', end, { passive:true });
+      body.addEventListener('touchcancel', cancel, { passive:true });
+      body._wanbaSwipeCleanup = () => { body.removeEventListener('touchstart', start); body.removeEventListener('touchend', end); body.removeEventListener('touchcancel', cancel); };
+    } else { body.ontouchstart = start; body.ontouchend = end; }
   }
 
   function renderIntimacy() {
@@ -9754,6 +9767,7 @@ export async function initWanbanXiaowu(options = {}) {
       + '<section class="wb-panel"><div class="wb-section-title">关于玩吧</div><p id="wanba-version">版本 ' + esc(standaloneAppInfo.appVersion) + ' · ' + esc(standaloneAppInfo.flavorLabel) + '</p><p id="wanba-engine">内核：' + esc(standaloneAppInfo.engineLabel) + (standaloneAppInfo.engineVersion ? ' ' + esc(standaloneAppInfo.engineVersion) : '') + (standaloneAppInfo.source === 'native' ? '' : '（浏览器检测）') + '</p>' + '<p>游戏基线 ' + esc(EXTENSION_VERSION) + ' · ' + Object.keys(GAME_META).length + ' 款游戏</p><p>单人游戏与人机挑战均可离线游玩。</p><div class="wb-actions"><button class="wb-btn" id="wanba-downloads">下载更新</button><button class="wb-btn" id="wanba-credits">开源致谢</button></div><p class="wb-muted">从下载页安装新版本即可保留存档。请使用同一来源的更新包，无需卸载。</p></section></div>';
     qs('#wb-theme').value = cfg.theme;
     mountLanguagePicker(qs('.wanba-settings', body));
+    mountPerformancePicker(qs('.wanba-settings', body));
     qs('#wb-remember-window').checked = cfg.rememberWindow;
     qs('#wb-theme').onchange = () => { setSettings({theme:qs('#wb-theme').value}); syncPopupModeClass(); toast('主题已保存'); };
     qs('#wb-remember-window').onchange = () => setSettings({rememberWindow:qs('#wb-remember-window').checked});

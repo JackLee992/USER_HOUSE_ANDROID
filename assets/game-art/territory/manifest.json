@@ -1,22 +1,35 @@
 {
   "schema": 1,
   "gameId": "territory",
-  "artVersion": "1.0.0",
-  "sharedArtVersion": "1.0.0",
+  "artVersion": "1.0.1",
+  "sharedArtVersion": "1.0.1",
   "stylesheet": "standalone/game-art.css",
   "rendererHelper": "standalone/game-art.js",
   "assetRefs": [
-    "assets/game-art/premium/v1/materials.png"
+    "assets/game-art/premium/v1/materials.png",
+    "assets/game-art/icons-v2/sheet-04.png"
   ],
   "appliedSurfaces": [
-    "Maple dots-and-boxes play surface"
+    "Maple dots-and-boxes play surface",
+    "Individually illustrated game directory icon"
   ],
   "retainedPresentation": [
     "Ownership colors, nodes and edges preserved"
   ],
   "directoryIcon": {
-    "atlas": "assets/game-art/premium/v1/pieces.png",
-    "cell": 15,
-    "mark": "□"
+    "atlas": "assets/game-art/icons-v2/sheet-04.png",
+    "sourceSize": [
+      1254,
+      1254
+    ],
+    "sourceRect": [
+      419,
+      0,
+      418,
+      407
+    ],
+    "cell": 1,
+    "subject": "Dots edges and claimed square",
+    "rendererHelper": "standalone/game-icons.js"
   }
 }

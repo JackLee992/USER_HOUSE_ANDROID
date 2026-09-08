@@ -1,23 +1,36 @@
 {
   "schema": 1,
   "gameId": "turkey",
-  "artVersion": "1.0.0",
-  "sharedArtVersion": "1.0.0",
+  "artVersion": "1.0.1",
+  "sharedArtVersion": "1.0.1",
   "stylesheet": "standalone/game-art.css",
   "rendererHelper": "standalone/game-art.js",
   "assetRefs": [
-    "assets/game-art/premium/v1/materials.png"
+    "assets/game-art/premium/v1/materials.png",
+    "assets/game-art/icons-v2/sheet-02.png"
   ],
   "appliedSurfaces": [
     "Maple board",
-    "Color-tinted porcelain sliding blocks"
+    "Color-tinted porcelain sliding blocks",
+    "Individually illustrated game directory icon"
   ],
   "retainedPresentation": [
     "Block widths, labels and effects preserved"
   ],
   "directoryIcon": {
-    "atlas": "assets/game-art/premium/v1/candy-bubbles.png",
+    "atlas": "assets/game-art/icons-v2/sheet-02.png",
+    "sourceSize": [
+      1254,
+      1254
+    ],
+    "sourceRect": [
+      837,
+      407,
+      417,
+      390
+    ],
     "cell": 5,
-    "mark": "↔"
+    "subject": "Red sliding block and right exit",
+    "rendererHelper": "standalone/game-icons.js"
   }
 }

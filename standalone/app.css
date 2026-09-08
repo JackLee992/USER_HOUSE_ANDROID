@@ -6,6 +6,14 @@ button,input,select,textarea { font:inherit; }
 #wanba-boot img { border-radius:22px; }
 #wanba-boot h1 { margin:12px 0 0; font-size:30px; }
 body.wanba-standalone #wanbanXiaowu-shell { position:fixed; inset:0; padding:0!important; border:0; background:transparent; width:100%; max-width:100%; overscroll-behavior:none; }
+/* The app has no host page behind this shell to blur. */
+body.wanba-standalone #wanbanXiaowu-shell {backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+body.wanba-standalone #wanbanXiaowu-popup:not(.wb-playing):is(.wb-tab-single,.wb-tab-double) #wb-body {contain:layout paint;overflow-x:hidden;overscroll-behavior-y:contain;touch-action:pan-y pinch-zoom}
+body.wanba-standalone #wanbanXiaowu-popup .wb-cardgrid {contain:layout style}
+@media (hover:none), (pointer:coarse) {
+  body.wanba-standalone #wanbanXiaowu-popup .wb-game-card,
+  body.wanba-standalone #wanbanXiaowu-popup .wb-game-card:hover {transform:none!important;transition:none!important;box-shadow:0 2px 6px rgba(30,25,39,.10)!important}
+}
 body.wanba-standalone #wanbanXiaowu-popup { width:100%!important; max-width:100%!important; min-height:100%; border:0!important; border-radius:0!important; margin:0!important; box-shadow:none!important; font-family:system-ui,-apple-system,"Noto Sans CJK SC","Microsoft YaHei",sans-serif!important; }
 body.wanba-standalone #wanbanXiaowu-popup .wb-head { padding:10px 12px; display:flex; flex-wrap:wrap; gap:10px; grid-template-columns:unset; }
 body.wanba-standalone #wanbanXiaowu-popup .wb-title { display:flex; align-items:center; gap:8px; font-size:20px; font-family:inherit!important; }
@@ -53,4 +61,13 @@ body.wanba-standalone .wanba-settings .wb-select { width:100%; min-height:44px; 
   body.wanba-standalone #wanbanXiaowu-popup .wb-head { gap:8px; }
   body.wanba-standalone #wanbanXiaowu-popup .wb-tabs { flex-basis:100%; }
   body.wanba-standalone #wanbanXiaowu-popup .wb-body.wb-settings-mode { padding:10px; }
+  /* Give game status its own row, so localized actions keep usable touch targets. */
+  body.wanba-standalone #wanbanXiaowu-popup .wb-layout.no-companion .wb-toolbar {grid-template-columns:auto minmax(0,1fr);grid-template-rows:auto auto;gap:5px 8px;padding:5px}
+  body.wanba-standalone #wanbanXiaowu-popup .wb-layout.no-companion .wb-stat {grid-column:2;grid-row:1;display:flex;align-items:center;gap:6px;overflow:hidden}
+  body.wanba-standalone #wanbanXiaowu-popup .wb-stat .wb-title-row {flex:1 1 auto;max-width:none;min-width:0;padding:0;font-size:12px}
+  body.wanba-standalone #wanbanXiaowu-popup .wb-stat #wb-score {flex:0 1 auto;max-width:48%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px;line-height:1.4}
+  body.wanba-standalone #wanbanXiaowu-popup .wb-layout.no-companion .wb-toolbar > .wb-actions {grid-column:1 / -1;grid-row:2;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:100%;margin:0;gap:6px}
+  body.wanba-standalone #wanbanXiaowu-popup .wb-toolbar > .wb-actions > .wb-btn {min-width:0;width:100%;min-height:36px;padding:5px 4px;font-size:12px;letter-spacing:0}
+  body.wanba-standalone #wanbanXiaowu-popup #wb-back {min-height:34px;padding:4px 8px;font-size:12px;letter-spacing:0}
+  body.wanba-standalone #wanbanXiaowu-popup .wb-rule-btn {width:28px;min-width:28px;height:28px;min-height:28px}
 }

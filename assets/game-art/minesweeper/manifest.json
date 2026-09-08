@@ -1,25 +1,38 @@
 {
   "schema": 1,
   "gameId": "minesweeper",
-  "artVersion": "1.0.0",
-  "sharedArtVersion": "1.0.0",
+  "artVersion": "1.0.1",
+  "sharedArtVersion": "1.0.1",
   "stylesheet": "standalone/game-art.css",
   "rendererHelper": "standalone/game-art.js",
   "assetRefs": [
     "assets/game-art/premium/v1/materials.png",
-    "assets/game-art/premium/v1/candy-bubbles.png"
+    "assets/game-art/premium/v1/candy-bubbles.png",
+    "assets/game-art/icons-v2/sheet-01.png"
   ],
   "appliedSurfaces": [
     "Maple board",
     "Porcelain closed cells",
-    "Bomb sprite on revealed mines"
+    "Bomb sprite on revealed mines",
+    "Individually illustrated game directory icon"
   ],
   "retainedPresentation": [
     "Neighbor counts and flags remain text"
   ],
   "directoryIcon": {
-    "atlas": "assets/game-art/premium/v1/candy-bubbles.png",
-    "cell": 14,
-    "mark": ""
+    "atlas": "assets/game-art/icons-v2/sheet-01.png",
+    "sourceSize": [
+      1254,
+      1254
+    ],
+    "sourceRect": [
+      837,
+      797,
+      417,
+      430
+    ],
+    "cell": 8,
+    "subject": "Black mine and red grid flag",
+    "rendererHelper": "standalone/game-icons.js"
   }
 }

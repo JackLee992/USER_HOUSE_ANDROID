@@ -1,22 +1,35 @@
 {
   "schema": 1,
   "gameId": "wordguess",
-  "artVersion": "1.0.0",
-  "sharedArtVersion": "1.0.0",
+  "artVersion": "1.0.1",
+  "sharedArtVersion": "1.0.1",
   "stylesheet": "standalone/game-art.css",
   "rendererHelper": "standalone/game-art.js",
   "assetRefs": [
-    "assets/game-art/premium/v1/materials.png"
+    "assets/game-art/premium/v1/materials.png",
+    "assets/game-art/icons-v2/sheet-03.png"
   ],
   "appliedSurfaces": [
-    "Porcelain clue cards and history panel"
+    "Porcelain clue cards and history panel",
+    "Individually illustrated game directory icon"
   ],
   "retainedPresentation": [
     "Word bank content remains existing"
   ],
   "directoryIcon": {
-    "atlas": "assets/game-art/premium/v1/candy-bubbles.png",
-    "cell": 15,
-    "mark": "ABC"
+    "atlas": "assets/game-art/icons-v2/sheet-03.png",
+    "sourceSize": [
+      1254,
+      1254
+    ],
+    "sourceRect": [
+      419,
+      797,
+      418,
+      420
+    ],
+    "cell": 7,
+    "subject": "Letter and question speech bubbles",
+    "rendererHelper": "standalone/game-icons.js"
   }
 }

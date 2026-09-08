@@ -1,7 +1,8 @@
 import { drawGameSprite, drawGameMaterial } from '../../../../standalone/game-art.js';
+import { getCanvasPixelRatio } from '../../../../standalone/performance.js';
 // Independently versioned game plugin. Keep imports relative to this immutable snapshot.
 export const GAME_ID = 'paopao';
-export const GAME_VERSION = '1.0.0';
+export const GAME_VERSION = '1.0.1';
 export const HOST_API_VERSION = 1;
 export const REQUIRED_ENV = Object.freeze(["activeGameController","clearProgress","currentGame","gamePaused","getHostDocument","getHostWindow","qs","saveProgress","setScore","showGameOver","speak","toast"]);
 
@@ -44,18 +45,19 @@ export function createGame(env, state) {
     if (!next) next = randomColor();
     function resize() {
       const rect = box.getBoundingClientRect();
-      const rawW = Math.max(300, Math.floor(rect.width || 360));
+      const rawW = Math.max(1, Math.floor(rect.width || 360));
       const rawH = Math.max(460, Math.floor(rect.height || 560));
       boardPad = Math.max(8, Math.min(12, rawW * .025));
       const maxW = Math.min(rawW - 4, 468);
-      D = Math.floor(Math.min(30, (maxW - boardPad * 2) / N, (rawH - 86 - boardPad * 2) / (VISIBLE_ROWS * 0.8660254 + 3.08)));
+      D = Math.floor(Math.min(30, (maxW - boardPad * 2) / (N + .5), (rawH - 86 - boardPad * 2) / (VISIBLE_ROWS * 0.8660254 + 3.08)));
       D = Math.max(19, D); R = D / 2; rowH = D * 0.8660254;
       W = Math.floor(D * (N + .5) + boardPad * 2); lineY = Math.floor(boardPad + R + rowH * VISIBLE_ROWS + D * .1);
       launch = { x:W / 2, y:Math.floor(lineY + D * 1.82) };
       H = Math.floor(launch.y + D * 1.22);
-      c.width = Math.floor(W * devicePixelRatio); c.height = Math.floor(H * devicePixelRatio);
+      const pixelRatio = getCanvasPixelRatio(env.getHostWindow());
+      c.width = Math.floor(W * pixelRatio); c.height = Math.floor(H * pixelRatio);
       c.style.width = W + 'px'; c.style.height = H + 'px';
-      ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+      ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
       const bombBtn = env.qs('#wb-paopao-bomb');
       if (bombBtn) {
         const canvasLeft = (rawW - W) / 2;
@@ -203,7 +205,8 @@ export function createGame(env, state) {
     function roundRectPaopao(ctx,x,y,w,h,r){ if(ctx.roundRect){ ctx.beginPath(); ctx.roundRect(x,y,w,h,r); } else { ctx.beginPath(); ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r); ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h); ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r); ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y); } }
     function drawBubble(x,y,color,scale) {
       scale = scale || 1; const rr = R * scale;
-      if(drawGameSprite(ctx,'candy-bubbles',({red:8,blue:9,green:10,yellow:11,purple:12,orange:13,bomb:14})[color],x-rr*1.06,y-rr*1.06,rr*2.12,rr*2.12))return;
+      if(color!=='bomb'&&drawGameSprite(ctx,'bubbles',({red:0,blue:1,green:2,yellow:3,purple:4,orange:5})[color],x-rr,y-rr,rr*2,rr*2))return;
+      if(color==='bomb'&&drawGameSprite(ctx,'candy-bubbles',14,x-rr,y-rr,rr*2,rr*2))return;
       const base = color === 'bomb' ? palette.bomb : palette[color];
       const grad = ctx.createRadialGradient(x-rr*.28,y-rr*.32,rr*.18,x,y,rr*.98);
       grad.addColorStop(0, shade(base, .18)); grad.addColorStop(.62, base); grad.addColorStop(1, shade(base, -.16));
@@ -290,6 +293,8 @@ export function createGame(env, state) {
     }
     function frame(now) {
       if (destroyed || over || env.currentGame !== 'paopao') return;
+      // Include the frame that removes the final particle, to clear its last pixels.
+      const moving = !env.gamePaused && !env.getHostDocument().hidden && !!(flying || falling.length || popping.length);
       if (env.gamePaused || env.getHostDocument().hidden) {
         lastT = null;
       } else {
@@ -300,7 +305,7 @@ export function createGame(env, state) {
         update(elapsed > 1000 ? 0 : Math.max(0, Math.min(250, elapsed)));
       }
       if (!destroyed && !over) {
-        draw();
+        if (moving) draw();
         raf = requestAnimationFrame(frame);
       }
     }
@@ -324,7 +329,7 @@ export function createGame(env, state) {
     }
     function updateBombUI(){ const el=env.qs('#wb-paopao-bombs'); if(el) el.textContent=bombs; const btn=env.qs('#wb-paopao-bomb'); if(btn){ btn.disabled=over||flying||resolving||bombs<=0; btn.classList.toggle('primary', armedBomb); } updateSwapUI(); }
     function updateSwapUI(){ const btn=env.qs('#wb-paopao-swap'); if(btn){ const disabled=over||flying||resolving||aiming||armedBomb; btn.disabled=disabled; btn.style.opacity=disabled ? '.32' : '.9'; btn.style.cursor=disabled ? 'default' : 'pointer'; } }
-    c.addEventListener('pointerdown', startAim); c.addEventListener('pointermove', moveAim); c.addEventListener('pointerup', fire); c.addEventListener('pointercancel', () => aiming=false);
+    c.addEventListener('pointerdown', startAim); c.addEventListener('pointermove', moveAim); c.addEventListener('pointerup', fire); c.addEventListener('pointercancel', () => { aiming=false; draw(); });
     env.qs('#wb-paopao-bomb').onclick = () => { if(env.gamePaused||over||flying||resolving||bombs<=0) return; armedBomb = !armedBomb; if(armedBomb){ bombs--; env.speak('paopao','bomb'); } else bombs++; updateBombUI(); save(); draw(); };
     env.qs('#wb-paopao-swap').onclick = e => { e.preventDefault(); if(env.gamePaused||over||flying||resolving||aiming||armedBomb) return; const old=current; current=next; next=old || randomColor(); updateSwapUI(); save(); draw(); };
     resize(); updateBombUI(); env.setScore('paopao', score); checkDanger(); save(); draw();

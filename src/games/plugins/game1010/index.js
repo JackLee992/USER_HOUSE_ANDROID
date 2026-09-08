@@ -1,7 +1,8 @@
 import { drawGameMaterial } from '../../../../standalone/game-art.js';
+import { getCanvasPixelRatio } from '../../../../standalone/performance.js';
 // Independently versioned game plugin. Keep imports relative to this immutable snapshot.
 export const GAME_ID = 'game1010';
-export const GAME_VERSION = '1.0.0';
+export const GAME_VERSION = '1.0.1';
 export const HOST_API_VERSION = 1;
 export const REQUIRED_ENV = Object.freeze(["canvasThemePalette","clearProgress","currentGame","gamePaused","getHostWindow","qs","saveProgress","setScore","settings","showGameOver","speak"]);
 
@@ -87,9 +88,10 @@ export function createGame(env, state) {
       let maxBoard = Math.min(rawW - gap * 2, H - slotH - gap * 3);
       maxBoard = Math.max(150, Math.floor(maxBoard / N) * N);
       W = Math.min(rawW, Math.floor(maxBoard + gap * 2));
-      c.width = Math.floor(W * devicePixelRatio); c.height = Math.floor(H * devicePixelRatio);
+      const pixelRatio = getCanvasPixelRatio(env.getHostWindow());
+      c.width = Math.floor(W * pixelRatio); c.height = Math.floor(H * pixelRatio);
       c.style.width = W + 'px'; c.style.height = H + 'px';
-      ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+      ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
       board.size = Math.floor(Math.min(maxBoard, W - gap * 2) / N) * N;
       board.cell = board.size / N;
       board.x = Math.floor((W - board.size) / 2);

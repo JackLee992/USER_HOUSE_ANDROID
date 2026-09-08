@@ -70,6 +70,8 @@ export function createI18n({load,storage,language='zh-CN',onChange=()=>{}}={}) {
           [/^版本 (.+)$/,'version'],[/^内核：(.+)$/,'engine'],[/^游戏：(.+)$/,'game'],[/^模式：(.+)$/,'mode'],
           [/^当前最高分：(.+)$/,'best'],[/^胜率：(.+)$/,'wins'],[/^最短次数：(.+)$/,'fewest'],[/^最小次数：(.+)$/,'fewest'],[/^最默契：(.+)$/,'partner'],
           [/^资源版本 (.+)$/,'resourceVersion'],
+          [/^内容更新暂不可用：(.+)$/,'contentUnavailable'],[/^正在下载 (.+)$/,'downloadingPackage'],
+          [/^GitHub 下载失败（(\d+)），已保留离线内容$/,'githubDownloadFailure'],
           [/^步数[： ]([\d.,/]+|无限制)$/,'moves'],[/^配对：(.+)$/,'pairs'],[/^题面：(\d+)格$/,'givens'],
           [/^剩余雷：(.+)$/,'mines'],[/^已开：(.+)$/,'revealed'],[/^剩余[： ](.+)$/,'remaining'],[/^槽位：(.+)$/,'slots'],
           [/^进度 (.+)%$/,'progress'],[/^第 ?(\d+) ?关$/,'level'],[/^目标[： ](.+)$/,'target'],

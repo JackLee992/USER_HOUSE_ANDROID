@@ -1,24 +1,37 @@
 {
   "schema": 1,
   "gameId": "spider",
-  "artVersion": "1.0.0",
-  "sharedArtVersion": "1.0.0",
+  "artVersion": "1.0.1",
+  "sharedArtVersion": "1.0.1",
   "stylesheet": "standalone/game-art.css",
   "rendererHelper": "standalone/game-art.js",
   "assetRefs": [
-    "assets/game-art/premium/v1/materials.png"
+    "assets/game-art/premium/v1/materials.png",
+    "assets/game-art/icons-v2/sheet-02.png"
   ],
   "appliedSurfaces": [
     "Green baize board",
     "Porcelain card fronts",
-    "Navy velvet card backs"
+    "Navy velvet card backs",
+    "Individually illustrated game directory icon"
   ],
   "retainedPresentation": [
     "Rank and suit symbols preserved"
   ],
   "directoryIcon": {
-    "atlas": "assets/game-art/premium/v1/pieces.png",
-    "cell": 5,
-    "mark": "♠"
+    "atlas": "assets/game-art/icons-v2/sheet-02.png",
+    "sourceSize": [
+      1254,
+      1254
+    ],
+    "sourceRect": [
+      0,
+      797,
+      419,
+      430
+    ],
+    "cell": 6,
+    "subject": "Spade card cascades and gold spider",
+    "rendererHelper": "standalone/game-icons.js"
   }
 }

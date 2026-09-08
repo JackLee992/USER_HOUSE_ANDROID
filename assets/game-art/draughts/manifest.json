@@ -1,24 +1,37 @@
 {
   "schema": 1,
   "gameId": "draughts",
-  "artVersion": "1.0.0",
-  "sharedArtVersion": "1.0.0",
+  "artVersion": "1.0.1",
+  "sharedArtVersion": "1.0.1",
   "stylesheet": "standalone/game-art.css",
   "rendererHelper": "standalone/game-art.js",
   "assetRefs": [
     "assets/game-art/premium/v1/pieces.png",
-    "assets/game-art/premium/v1/materials.png"
+    "assets/game-art/premium/v1/materials.png",
+    "assets/game-art/icons-v2/sheet-04.png"
   ],
   "appliedSurfaces": [
     "Maple board",
-    "Red and sapphire blue disks"
+    "Red and sapphire blue disks",
+    "Individually illustrated game directory icon"
   ],
   "retainedPresentation": [
     "Star-board zones and legal destinations preserved"
   ],
   "directoryIcon": {
-    "atlas": "assets/game-art/premium/v1/pieces.png",
-    "cell": 2,
-    "mark": "☆"
+    "atlas": "assets/game-art/icons-v2/sheet-04.png",
+    "sourceSize": [
+      1254,
+      1254
+    ],
+    "sourceRect": [
+      0,
+      797,
+      419,
+      430
+    ],
+    "cell": 6,
+    "subject": "Six-pointed star Chinese checkers board",
+    "rendererHelper": "standalone/game-icons.js"
   }
 }

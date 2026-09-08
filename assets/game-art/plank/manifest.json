@@ -1,23 +1,36 @@
 {
   "schema": 1,
   "gameId": "plank",
-  "artVersion": "1.0.0",
-  "sharedArtVersion": "1.0.0",
+  "artVersion": "1.0.1",
+  "sharedArtVersion": "1.0.1",
   "stylesheet": "standalone/game-art.css",
   "rendererHelper": "standalone/game-art.js",
   "assetRefs": [
-    "assets/game-art/premium/v1/pieces.png"
+    "assets/game-art/premium/v1/pieces.png",
+    "assets/game-art/icons-v2/sheet-01.png"
   ],
   "appliedSurfaces": [
     "Cream fox player",
-    "Wood bridge plank sprite"
+    "Wood bridge plank sprite",
+    "Individually illustrated game directory icon"
   ],
   "retainedPresentation": [
     "Pillars and sky remain existing vector art"
   ],
   "directoryIcon": {
-    "atlas": "assets/game-art/premium/v1/pieces.png",
-    "cell": 7,
-    "mark": "━"
+    "atlas": "assets/game-art/icons-v2/sheet-01.png",
+    "sourceSize": [
+      1254,
+      1254
+    ],
+    "sourceRect": [
+      0,
+      797,
+      419,
+      430
+    ],
+    "cell": 6,
+    "subject": "Fox walking across wood bridge",
+    "rendererHelper": "standalone/game-icons.js"
   }
 }

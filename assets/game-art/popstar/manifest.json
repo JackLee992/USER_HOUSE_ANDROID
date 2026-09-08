@@ -1,24 +1,37 @@
 {
   "schema": 1,
   "gameId": "popstar",
-  "artVersion": "1.0.0",
-  "sharedArtVersion": "1.0.0",
+  "artVersion": "1.0.1",
+  "sharedArtVersion": "1.0.1",
   "stylesheet": "standalone/game-art.css",
   "rendererHelper": "standalone/game-art.js",
   "assetRefs": [
     "assets/game-art/premium/v1/candy-bubbles.png",
-    "assets/game-art/premium/v1/materials.png"
+    "assets/game-art/premium/v1/materials.png",
+    "assets/game-art/icons-v2/sheet-02.png"
   ],
   "appliedSurfaces": [
     "Five distinct candy silhouettes by original color",
-    "Navy velvet game board"
+    "Navy velvet game board",
+    "Individually illustrated game directory icon"
   ],
   "retainedPresentation": [
     "Clear effects and score labels remain existing"
   ],
   "directoryIcon": {
-    "atlas": "assets/game-art/premium/v1/candy-bubbles.png",
-    "cell": 3,
-    "mark": ""
+    "atlas": "assets/game-art/icons-v2/sheet-02.png",
+    "sourceSize": [
+      1254,
+      1254
+    ],
+    "sourceRect": [
+      837,
+      0,
+      417,
+      407
+    ],
+    "cell": 2,
+    "subject": "Colorful popping star blocks",
+    "rendererHelper": "standalone/game-icons.js"
   }
 }

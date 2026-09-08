@@ -1,26 +1,39 @@
 {
   "schema": 1,
   "gameId": "zuma",
-  "artVersion": "1.0.0",
-  "sharedArtVersion": "1.0.0",
+  "artVersion": "1.0.1",
+  "sharedArtVersion": "1.0.1",
   "stylesheet": "standalone/game-art.css",
   "rendererHelper": "standalone/game-art.js",
   "assetRefs": [
     "assets/game-art/premium/v1/candy-bubbles.png",
     "assets/game-art/premium/v1/pieces.png",
-    "assets/game-art/premium/v1/materials.png"
+    "assets/game-art/premium/v1/materials.png",
+    "assets/game-art/icons-v2/sheet-03.png"
   ],
   "appliedSurfaces": [
     "Glass ball chain and launcher balls",
     "Jade frog launcher",
-    "Maple grain play surface"
+    "Maple grain play surface",
+    "Individually illustrated game directory icon"
   ],
   "retainedPresentation": [
     "Track, hole, trajectory and particles remain existing"
   ],
   "directoryIcon": {
-    "atlas": "assets/game-art/premium/v1/pieces.png",
-    "cell": 6,
-    "mark": ""
+    "atlas": "assets/game-art/icons-v2/sheet-03.png",
+    "sourceSize": [
+      1254,
+      1254
+    ],
+    "sourceRect": [
+      0,
+      407,
+      419,
+      390
+    ],
+    "cell": 3,
+    "subject": "Carved jade frog and marble chain",
+    "rendererHelper": "standalone/game-icons.js"
   }
 }

@@ -1,7 +1,41 @@
 // Immutable raster assets shared by the independently versioned game plugins.
-export const GAME_ART_VERSION = '1.0.0';
-export const GAME_ART = Object.freeze(Object.fromEntries(['candy-bubbles','fruits','materials','pieces'].map(name => [name,new URL('../assets/game-art/premium/v1/' + name + '.png',import.meta.url).href])));
+export const GAME_ART_VERSION = '1.0.1';
+export const GAME_ART = Object.freeze({...Object.fromEntries(['candy-bubbles','fruits','materials','pieces'].map(name => [name,new URL('../assets/game-art/premium/v1/' + name + '.png',import.meta.url).href])),bubbles:new URL('../assets/game-art/premium/v2/bubbles.png',import.meta.url).href});
 const stores = new WeakMap();
+const spriteCaches = new WeakMap(), canvasAtlases = new WeakMap();
+// Full sphere silhouettes with transparent padding. The generated sheet is kept
+// intact; source rectangles center each bubble without clipping its circular rim.
+export const BUBBLE_SOURCE_RECTS = Object.freeze([[76,59,408,408],[565,60,408,408],[1051,60,408,408],[76,539,408,408],[565,540,408,408],[1052,539,408,408]].map(Object.freeze));
+function sourceRect(img,atlas,index) {
+  if(atlas==='bubbles')return BUBBLE_SOURCE_RECTS[index];
+  const grid=atlas==='materials'?2:4,inset=atlas==='materials'?0:.02;
+  if(index>=grid*grid)return null;
+  const sw=img.naturalWidth/grid,sh=img.naturalHeight/grid;
+  return [((index%grid)+inset)*sw,(Math.floor(index/grid)+inset)*sh,sw*(1-inset*2),sh*(1-inset*2)];
+}
+function cachedSprite(ctx,win,img,atlas,index,rect,width,height) {
+  const doc=ctx.canvas?.ownerDocument;
+  if(atlas==='materials'||!doc?.createElement)return null;
+  const transform=ctx.getTransform?.(),ratio=Math.min(4,Math.max(1,Math.abs(transform?.a)||1,Math.abs(transform?.d)||1));
+  const w=Math.ceil(width*ratio/8)*8,h=Math.ceil(height*ratio/8)*8;
+  if(w>512||h>512)return null;
+  let cache=spriteCaches.get(win);if(!cache){cache={entries:new Map(),bytes:0};spriteCaches.set(win,cache);}
+  const key=atlas+':'+index+':'+w+':'+h;
+  if(cache.entries.has(key))return cache.entries.get(key);
+  const canvas=doc.createElement('canvas');canvas.width=w;canvas.height=h;
+  const paint=canvas.getContext('2d');if(!paint)return null;
+  // Legacy round sprites keep their old shape. Dedicated bubbles need no mask.
+  if(atlas==='candy-bubbles'&&index>=8&&index<=13){paint.beginPath();paint.arc(w/2,h/2,Math.min(w,h)*.445,0,Math.PI*2);paint.clip();}
+  paint.drawImage(img,...rect,0,0,w,h);
+  // Bound both object count and pixel memory. Quantized sizes avoid allocating
+  // a fresh raster for each animation frame; old size variants are evicted.
+  const bytes=w*h*4;
+  while(cache.entries.size&&(cache.entries.size>=64||cache.bytes+bytes>8*1024*1024)){
+    const oldest=cache.entries.keys().next().value,entry=cache.entries.get(oldest);
+    cache.bytes-=entry.width*entry.height*4;cache.entries.delete(oldest);
+  }
+  cache.entries.set(key,canvas);cache.bytes+=bytes;return canvas;
+}
 function imageStore(win) {
   if (!win || typeof win.Image !== 'function') return null;
   if (stores.has(win)) return stores.get(win);
@@ -23,19 +57,15 @@ export async function preloadGameArt(win = globalThis) {
 export function drawGameSprite(ctx, atlas, index, x, y, width, height, alpha = 1) {
   const win=ctx?.canvas?.ownerDocument?.defaultView || globalThis;
   const img=imageStore(win)?.[atlas]?.img;
-  const grid=atlas==='materials'?2:4;
-  if (!img?.complete || !img.naturalWidth || !Number.isInteger(index) || index<0 || index>=grid*grid || width<=0 || height<=0) return false;
-  const sw=img.naturalWidth/grid,sh=img.naturalHeight/grid;
-  ctx.save(); ctx.globalAlpha*=alpha;
-  if(atlas==='candy-bubbles'&&index>=8&&index<=13){ctx.beginPath();ctx.arc(x+width/2,y+height/2,Math.min(width,height)*.445,0,Math.PI*2);ctx.clip();}
-  // Trim the transparent sprite cell margins so neighboring cells never bleed at small sizes.
-  const inset=atlas==='materials'?0:.02;
-  ctx.drawImage(img,((index%grid)+inset)*sw,(Math.floor(index/grid)+inset)*sh,sw*(1-inset*2),sh*(1-inset*2),x,y,width,height);
-  ctx.restore();
-  if (ctx.canvas.dataset) {
-    const used=(ctx.canvas.dataset.gameArt || '').split(' ').filter(Boolean);
-    if (!used.includes(atlas)) ctx.canvas.dataset.gameArt=[...used,atlas].join(' ');
-  }
+  if (!img?.complete || !img.naturalWidth || !Number.isInteger(index) || index<0 || width<=0 || height<=0) return false;
+  const rect=sourceRect(img,atlas,index);if(!rect)return false;
+  const cached=cachedSprite(ctx,win,img,atlas,index,rect,width,height);
+  const oldAlpha=ctx.globalAlpha;if(alpha!==1)ctx.globalAlpha=oldAlpha*alpha;
+  if(cached)ctx.drawImage(cached,x,y,width,height);
+  else if(atlas==='candy-bubbles'&&index>=8&&index<=13){ctx.save();ctx.beginPath();ctx.arc(x+width/2,y+height/2,Math.min(width,height)*.445,0,Math.PI*2);ctx.clip();ctx.drawImage(img,...rect,x,y,width,height);ctx.restore();}
+  else ctx.drawImage(img,...rect,x,y,width,height);
+  if(alpha!==1)ctx.globalAlpha=oldAlpha;
+  if(ctx.canvas?.dataset){let used=canvasAtlases.get(ctx.canvas);if(!used){used=new Set();canvasAtlases.set(ctx.canvas,used);}if(!used.has(atlas)){used.add(atlas);ctx.canvas.dataset.gameArt=[...used].join(' ');}}
   return true;
 }
 export function drawGameMaterial(ctx,index,x,y,width,height,alpha=1) {
@@ -53,9 +83,6 @@ export function pairSpriteHTML(value) {
   return sprite ? gameSpriteHTML(sprite[0],sprite[1],value) : escapeHTML(value);
 }
 
-const ART_ICONS = Object.freeze({"tetris":["candy-bubbles",5,"▦"],"snake":["candy-bubbles",10,"→"],"game2048":["candy-bubbles",15,"2048"],"watermelon":["fruits",10,""],"memory":["fruits",1,"2×"],"jump":["pieces",7,"↑"],"plank":["pieces",7,"━"],"sudoku":["candy-bubbles",15,"1–9"],"minesweeper":["candy-bubbles",14,""],"uyangle":["fruits",0,"3×"],"screw":["pieces",12,""],"popstar":["candy-bubbles",3,""],"paopao":["candy-bubbles",9,""],"game1010":["candy-bubbles",15,"10×10"],"turkey":["candy-bubbles",5,"↔"],"spider":["pieces",5,"♠"],"linklink":["fruits",4,"2×"],"shuerte":["candy-bubbles",15,"1→25"],"pinball":["candy-bubbles",6,"★"],"match3":["candy-bubbles",0,"3"],"freecell":["pieces",4,"A♠"],"zuma":["pieces",6,""],"watersort":["candy-bubbles",9,"↕"],"ludo":["pieces",8,""],"guessnumber":["candy-bubbles",15,"1234"],"wordguess":["candy-bubbles",15,"ABC"],"tictactoe":["pieces",3,"X O"],"gomoku":["pieces",0,"5"],"territory":["pieces",15,"□"],"oldmaid":["pieces",7,"J"],"reversi":["pieces",0,"●○"],"bombnumber":["candy-bubbles",14,"1–99"],"connect4d":["pieces",3,"4"],"draughts":["pieces",2,"☆"],"blackjack":["pieces",4,"21"],"westernchess":["pieces",4,"♔"],"chinesechess":["pieces",1,"将"]});
-export function gameArtworkIconHTML(id) {
-  const spec=ART_ICONS[id];
-  if(!spec)return '';
-  return `<div class="wb-game-icon wanba-game-art-icon" aria-hidden="true">${gameSpriteHTML(spec[0],spec[1])}${spec[2]?`<b class="wanba-art-icon-mark">${escapeHTML(spec[2])}</b>`:''}</div>`;
-}
+// Directory artwork uses complete individually illustrated icons.
+import { gameArtworkIconV2HTML } from './game-icons.js';
+export const gameArtworkIconHTML = gameArtworkIconV2HTML;
