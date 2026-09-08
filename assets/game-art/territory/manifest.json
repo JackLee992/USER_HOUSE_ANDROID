@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "gameId": "territory",
+  "artVersion": "1.0.0",
+  "sharedArtVersion": "1.0.0",
+  "stylesheet": "standalone/game-art.css",
+  "rendererHelper": "standalone/game-art.js",
+  "assetRefs": [
+    "assets/game-art/premium/v1/materials.png"
+  ],
+  "appliedSurfaces": [
+    "Maple dots-and-boxes play surface"
+  ],
+  "retainedPresentation": [
+    "Ownership colors, nodes and edges preserved"
+  ],
+  "directoryIcon": {
+    "atlas": "assets/game-art/premium/v1/pieces.png",
+    "cell": 15,
+    "mark": "□"
+  }
+}

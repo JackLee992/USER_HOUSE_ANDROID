@@ -23,7 +23,7 @@ try {
   await send('Runtime.enable'); await send('Network.enable'); await send('Page.enable');
   await send('Emulation.setDeviceMetricsOverride',{width:412,height:820,deviceScaleFactor:2.625,mobile:true});
   await send('Page.navigate',{url}); await until('!!window.wanbaApp');
-  await evaluate('localStorage.clear()'); await send('Page.reload'); await until('!!window.wanbaApp');
+  await evaluate('localStorage.clear();localStorage.setItem("wanba_locale_v1","zh-CN")'); await send('Page.reload'); await until('!!window.wanbaApp');
   assert.deepEqual(await evaluate('[typeof jQuery,typeof $,typeof SillyTavern,typeof wbTest]'),['undefined','undefined','undefined','undefined']);
   assert.equal(await evaluate('wanbaApp.inspect().games.length'),37);
   assert.deepEqual(await evaluate('[...document.querySelectorAll(".wb-tab")].map(e=>e.dataset.tab)'),['single','double','settings']);

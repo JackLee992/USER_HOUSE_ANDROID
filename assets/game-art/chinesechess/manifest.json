@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "gameId": "chinesechess",
+  "artVersion": "1.0.0",
+  "sharedArtVersion": "1.0.0",
+  "stylesheet": "standalone/game-art.css",
+  "rendererHelper": "standalone/game-art.js",
+  "assetRefs": [
+    "assets/game-art/premium/v1/materials.png"
+  ],
+  "appliedSurfaces": [
+    "Maple board",
+    "Porcelain lettered pieces"
+  ],
+  "retainedPresentation": [
+    "Chinese piece characters, river and grid lines preserved"
+  ],
+  "directoryIcon": {
+    "atlas": "assets/game-art/premium/v1/pieces.png",
+    "cell": 1,
+    "mark": "将"
+  }
+}

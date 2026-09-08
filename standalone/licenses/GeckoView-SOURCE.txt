@@ -1,0 +1,36 @@
+玩吧兼容版 · GeckoView 来源与许可证
+
+本应用的兼容版内置 Mozilla GeckoView。系统版使用设备提供的 Android
+System WebView，不内置 GeckoView。两版的游戏源码和存档格式相同。
+
+依赖坐标：org.mozilla.geckoview:geckoview:155.0.20260903215306
+Mozilla 运行时版本：155.0.1
+构建编号：20260903215306
+本项目未修改 GeckoView 的引擎代码，使用 Mozilla 发布的二进制依赖。
+
+官方二进制下载：
+https://maven.mozilla.org/maven2/org/mozilla/geckoview/geckoview/155.0.20260903215306/geckoview-155.0.20260903215306.aar
+
+对应源码（从该依赖 assets/omni.ja 内 buildconfig.html 读取）：
+https://hg.mozilla.org/releases/mozilla-release/rev/5fdfd0092780e85643e2cddc0e1b590c8b9ef860
+
+源码下载：
+https://hg.mozilla.org/releases/mozilla-release/archive/5fdfd0092780e85643e2cddc0e1b590c8b9ef860.tar.gz
+
+源码构建说明：
+https://firefox-source-docs.mozilla.org/mobile/android/geckoview/contributor/geckoview-quick-start.html
+
+GeckoView 主要采用 Mozilla Public License 2.0，并含各自许可证下的
+第三方组件。完整条款、版权声明和附加字体许可可在本应用的
+“设置 → 开源致谢 → 查看许可证 → GeckoView · 完整许可证与声明”中离线阅读。
+该文本来自精确依赖自己的 about:license 页面，保留全部许可正文，
+另附 assets/omni.ja 中的 PDF 字体许可证；仅将 HTML 排版转为纯文本。
+
+Mozilla Public License 2.0 官方文本：
+https://www.mozilla.org/MPL/2.0/
+
+玩吧应用源码、原生宿主和构建说明：
+https://github.com/JackLee992/USER_HOUSE_ANDROID
+
+校验与来源记录同目录文件：GeckoView-PROVENANCE.json。
+升级 GeckoView 依赖时应同步更新这些许可证、源码链接与校验记录。

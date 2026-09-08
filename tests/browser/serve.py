@@ -9,6 +9,17 @@ ROOT = pathlib.Path(__file__).resolve().parents[2]
 p = argparse.ArgumentParser(); p.add_argument('--port', type=int, default=8765); p.add_argument('--artifacts', type=pathlib.Path, required=True); p.add_argument('--upstream', action='store_true'); args=p.parse_args()
 args.artifacts.mkdir(parents=True, exist_ok=True)
 PREFIX='/scripts/extensions/third-party/USER_HOUSE/'
+def instrument_paopao(s):
+ for marker in ["    env.getHostWindow().addEventListener('resize', onResize, { passive:true });", "    getHostWindow().addEventListener('resize', onResize, { passive:true });", "    getHostWindow().addEventListener('resize', () => { if(currentGame === 'paopao'){ resize(); draw(); } }, { passive:true });"]:
+  if marker in s:
+   return s.replace(marker,marker+'''
+      window.paopaoTest = {
+        snapshot:() => JSON.parse(JSON.stringify({falling,popping,flying,bubbles,shots,score,lastT})),
+        setup:() => {lastT=performance.now();falling=[{x:100,y:50,vy:1,color:'blue'}];popping=[];},
+        shoot:() => {flying={x:launch.x,y:launch.y,vx:0,vy:-1,color:'blue',bomb:false};},
+      };
+    ''')
+ return s
 class Handler(http.server.BaseHTTPRequestHandler):
  def log_message(self, *a): pass
  def do_GET(self):
@@ -30,18 +41,11 @@ class Handler(http.server.BaseHTTPRequestHandler):
       save:() => activeGameController?.save?.(),
     };
     function init() {''')
-    marker="    getHostWindow().addEventListener('resize', onResize, { passive:true });"
-    if marker not in s:
-     marker="    getHostWindow().addEventListener('resize', () => { if(currentGame === 'paopao'){ resize(); draw(); } }, { passive:true });"
-    s=s.replace(marker,marker+'''
-      window.paopaoTest = {
-        snapshot:() => JSON.parse(JSON.stringify({falling,popping,flying,bubbles,shots,score,lastT})),
-        setup:() => {lastT=performance.now();falling=[{x:100,y:50,vy:1,color:'blue'}];popping=[];},
-        shoot:() => {flying={x:launch.x,y:launch.y,vx:0,vy:-1,color:'blue',bomb:false};},
-      };
-    ''')
+    s=instrument_paopao(s)
     s=s.replace('scheduleInitialUpdateCheck();','')
     data=s.encode()
+   elif rel=='src/games/plugins/paopao/index.js':
+    data=instrument_paopao(data.decode()).encode()
   else: self.send_error(404);return
   self.send_response(200);self.send_header('Content-Type',kind);self.send_header('Cache-Control','no-store');self.end_headers();self.wfile.write(data)
  def do_POST(self):

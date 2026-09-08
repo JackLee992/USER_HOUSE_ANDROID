@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "gameId": "match3",
+  "artVersion": "1.0.0",
+  "sharedArtVersion": "1.0.0",
+  "stylesheet": "standalone/game-art.css",
+  "rendererHelper": "standalone/game-art.js",
+  "assetRefs": [
+    "assets/game-art/premium/v1/candy-bubbles.png",
+    "assets/game-art/premium/v1/materials.png"
+  ],
+  "appliedSurfaces": [
+    "Six candy silhouettes",
+    "Rainbow special sprite",
+    "Navy velvet board"
+  ],
+  "retainedPresentation": [
+    "Special power badges, stripes, ice and saved color identities preserved"
+  ],
+  "directoryIcon": {
+    "atlas": "assets/game-art/premium/v1/candy-bubbles.png",
+    "cell": 0,
+    "mark": "3"
+  }
+}

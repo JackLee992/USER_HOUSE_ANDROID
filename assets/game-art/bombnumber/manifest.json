@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "gameId": "bombnumber",
+  "artVersion": "1.0.0",
+  "sharedArtVersion": "1.0.0",
+  "stylesheet": "standalone/game-art.css",
+  "rendererHelper": "standalone/game-art.js",
+  "assetRefs": [
+    "assets/game-art/premium/v1/materials.png"
+  ],
+  "appliedSurfaces": [
+    "Porcelain selectable number cells"
+  ],
+  "retainedPresentation": [
+    "Danger ranges and chosen-state text preserved"
+  ],
+  "directoryIcon": {
+    "atlas": "assets/game-art/premium/v1/candy-bubbles.png",
+    "cell": 14,
+    "mark": "1–99"
+  }
+}

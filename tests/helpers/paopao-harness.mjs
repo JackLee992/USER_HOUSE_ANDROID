@@ -1,11 +1,12 @@
 import { readFileSync } from 'node:fs';
 import vm from 'node:vm';
+import { drawGameSprite } from '../../standalone/game-art.js';
 
 // Execute the production game with a deterministic clock and a minimal Canvas/DOM host.
 export function createPaopaoHarness() {
-  const source = readFileSync(new URL('../../src/runtime/wanban-app.js', import.meta.url), 'utf8');
+  const source = readFileSync(new URL('../../src/games/plugins/paopao/index.js', import.meta.url), 'utf8');
   const begin = source.indexOf('  function startPaopao(state) {');
-  const end = source.indexOf('\n  function startSnake(', begin);
+  const end = source.indexOf('\n  startPaopao(state);', begin);
   const game = source.slice(begin, end).trim();
   const nodes = new Map(), frames = new Map(), timers = new Map(), listeners = new Map();
   let now = 0, id = 0, draws = 0;
@@ -25,6 +26,7 @@ export function createPaopaoHarness() {
     removeEventListener:(name, fn) => { if (listeners.get(name) === fn) listeners.delete(name); },
   };
   const context = vm.createContext({
+    drawGameSprite,
     qs:node, devicePixelRatio:1, currentGame:'paopao', gamePaused:false,
     activeGameController:null, performance:{ now:() => now },
     getHostWindow:() => host, getHostDocument:() => ({ hidden:false }),
@@ -33,6 +35,8 @@ export function createPaopaoHarness() {
     setTimeout:fn => { timers.set(++id, fn); return id; }, clearTimeout:handle => timers.delete(handle),
     saveProgress:noop, clearProgress:noop, setScore:noop, speak:noop, toast:noop, showGameOver:noop,
   });
+  // The module reads live host bindings through env; setters still reach the same host state.
+  context.env = context;
   // Inspection hooks exist only in this harness, never in the shipped plugin.
   const instrumented = game.slice(0, game.lastIndexOf('}')) + `
     return { snapshot:() => JSON.parse(JSON.stringify({falling,popping,flying,bubbles,shots,score})),

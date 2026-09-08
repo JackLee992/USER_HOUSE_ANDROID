@@ -1,3 +1,4 @@
+import { drawGameSprite, drawGameMaterial } from '../../standalone/game-art.js';
 const WIDTH = 900;
 const HEIGHT = 620;
 const BALL_RADIUS = 17;
@@ -128,6 +129,8 @@ function roundRect(ctx, x, y, width, height, radius) {
 }
 
 function drawBall(ctx, x, y, color, radius, alpha = 1) {
+  const sprite=color==='#30343b'?14:color==='#fff'?6:[8,11,10,9,12,13][COLORS.indexOf(color)];
+  if(drawGameSprite(ctx,'candy-bubbles',sprite,x-radius*1.13,y-radius*1.13,radius*2.26,radius*2.26,alpha))return;
   ctx.save();
   ctx.globalAlpha = alpha;
   const gradient = ctx.createRadialGradient(x - radius * .35, y - radius * .42, radius * .12, x, y, radius);
@@ -632,6 +635,8 @@ export function createZumaGame(state, env) {
     ctx.save();
     ctx.translate(frog.x, frog.y);
     ctx.rotate(aim);
+    const frogArt=drawGameSprite(ctx,'pieces',6,-64,-64,128,128);
+    if(!frogArt){
     ctx.fillStyle = '#4aaa6b';
     ctx.strokeStyle = '#246945';
     ctx.lineWidth = 4;
@@ -658,6 +663,7 @@ export function createZumaGame(state, env) {
     ctx.fillStyle = '#244e37';
     roundRect(ctx, 20, -13, 48, 26, 12);
     ctx.fill();
+    }
     drawBall(ctx, 17, 0, armed === 'bomb' ? '#30343b' : armed === 'rainbow' ? '#fff' : COLORS[current], 15);
     ctx.restore();
     if (aiming) {
@@ -682,6 +688,7 @@ export function createZumaGame(state, env) {
     background.addColorStop(1, '#b9dcca');
     ctx.fillStyle = background;
     ctx.fillRect(0, 0, WIDTH, HEIGHT);
+    drawGameMaterial(ctx,1,0,0,WIDTH,HEIGHT,.18);
     ctx.fillStyle = 'rgba(255,255,255,.28)';
     for (let i = 0; i < 20; i++) {
       ctx.beginPath();

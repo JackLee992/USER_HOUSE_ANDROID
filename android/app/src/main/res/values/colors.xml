@@ -1,1 +1,2 @@
-<resources><color name="wanba_background">#FFF7EA</color><color name="wanba_accent">#F18557</color><color name="wanba_launcher_background">#061744</color></resources>
+<resources><color name="wanba_background">#FFF7EA</color><color name="wanba_accent">#F18557</color><color name="wanba_launcher_background">#061744</color>    <color name="nookcade_launcher_background">#061744</color>
+</resources>

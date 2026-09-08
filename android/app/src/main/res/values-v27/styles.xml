@@ -1,0 +1,6 @@
+<resources>
+    <style name="Theme.Wanba" parent="Theme.Wanba.Base">
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="android:navigationBarColor">@color/wanba_background</item>
+    </style>
+</resources>

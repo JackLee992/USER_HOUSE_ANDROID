@@ -4,7 +4,7 @@ import {dirname,join,resolve,sep} from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import {createHash} from 'node:crypto';
 
-export const ASSET_ROOTS = Object.freeze(['src','style.css','standalone','assets/game-icons','assets/space-cadet','assets/app-brand']);
+export const ASSET_ROOTS = Object.freeze(['src','style.css','standalone','locales','assets/game-icons','assets/game-art','assets/space-cadet','assets/app-brand']);
 export const LICENSE_FILES = Object.freeze(['ENGINE-LICENSE.txt','EMSCRIPTEN-LICENSE.txt','SDL2-LICENSE.txt','SDL2-MIXER-LICENSE.txt','OPEN-CADET-CC0.txt','OPEN-CADET-NOTICE.md']);
 const DEFAULT_REPO = resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const MARKER = '.wanba-assets.json';
@@ -20,7 +20,8 @@ export async function prepareAndroidAssets({repoRoot=DEFAULT_REPO,outputDir}={})
     if(info.isSymbolicLink())throw Error('Asset symlinks are not allowed: '+relative);
     if(info.isDirectory()) {
       for(const name of (await readdir(source)).sort()) {
-        if(relative==='assets/app-brand'&&name!=='app-icon.png')continue;
+        if(relative==='assets/app-brand'&&!['app-icon.png','international'].includes(name))continue;
+        if(relative==='assets/app-brand/international'&&name!=='app-icon.png')continue;
         if(!excluded.has(name)&&!name.startsWith('.'))await collect(join(relative,name),join(outputRelative,name));
       }
     }else if(info.isFile())entries.push({source:relative,relative:outputRelative,bytes:info.size});
@@ -28,7 +29,7 @@ export async function prepareAndroidAssets({repoRoot=DEFAULT_REPO,outputDir}={})
   }
   for(const entry of ASSET_ROOTS) {
     try {await collect(entry);}
-    catch(error){if(entry==='assets/app-brand'&&error.code==='ENOENT')continue;throw error;}
+    catch(error){if(['assets/app-brand','assets/game-art','locales'].includes(entry)&&error.code==='ENOENT')continue;throw error;}
   }
   for(const filename of LICENSE_FILES)await collect('tools/space-cadet/'+filename,'licenses/space-cadet/'+filename);
   if(!entries.some(file=>file.relative==='standalone/index.html'))throw Error('Missing standalone/index.html; build the standalone entry before packaging');

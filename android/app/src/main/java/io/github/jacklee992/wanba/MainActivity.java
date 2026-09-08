@@ -71,10 +71,12 @@ public final class MainActivity extends Activity {
     private final ExecutorService files = Executors.newSingleThreadExecutor();
     private final AtomicBoolean backupBusy = new AtomicBoolean(false);
     private WebView webView;
+    private ContentUpdateManager contentUpdates;
+    private String contentEntryPath;
     private FrameLayout frame;
     private volatile boolean trustedDocument;
-    private boolean destroyed;
-    private boolean activityPaused;
+    private volatile boolean destroyed;
+    private volatile boolean activityPaused;
     private boolean webPaused;
     private boolean backPending;
     private Runnable pendingPause;
@@ -83,6 +85,8 @@ public final class MainActivity extends Activity {
     private boolean allowMultiple;
     private byte[] pendingBackup;
     private OnBackInvokedCallback predictiveBack;
+    private String engineVersion;
+    private String providerVersion;
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +106,16 @@ public final class MainActivity extends Activity {
                     WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS | WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS,
                     WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS | WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS);
         }
+        contentUpdates = new ContentUpdateManager(this, BuildConfig.VERSION_CODE, new ContentUpdateManager.Listener() {
+            @Override public void onLoad(String path) {
+                contentEntryPath = path;
+                if (!destroyed && webView != null) { trustedDocument = false; webView.loadUrl(LocalAssetPolicy.ORIGIN + path); }
+            }
+            @Override public void onEvent(String event) {
+                if (!destroyed && webView != null && trustedDocument)
+                    webView.evaluateJavascript("window.wanbaApp?.onGameUpdate?.(" + JSONObject.quote(event) + ")", null);
+            }
+        });
         openCompatibleWebView();
         if (Build.VERSION.SDK_INT >= 33) {
             predictiveBack = this::handleBack;
@@ -114,7 +128,13 @@ public final class MainActivity extends Activity {
         try { provider = WebView.getCurrentWebViewPackage(); }
         catch (RuntimeException error) { provider = null; }
         frame.removeAllViews();
-        if (provider == null || !LocalAssetPolicy.compatibleWebView(provider.versionName)) {
+        providerVersion = provider == null ? null : provider.versionName;
+        engineVersion = null;
+        if (provider != null) {
+            try { engineVersion = LocalAssetPolicy.chromiumVersion(WebSettings.getDefaultUserAgent(this)); }
+            catch (RuntimeException error) { /* The compatibility screen also covers broken providers. */ }
+        }
+        if (provider == null || !LocalAssetPolicy.compatibleWebView(engineVersion)) {
             showWebViewCompatibilityPrompt(provider);
             return;
         }
@@ -129,11 +149,12 @@ public final class MainActivity extends Activity {
         int padding = Math.round(28 * getResources().getDisplayMetrics().density);
         prompt.setPadding(padding, padding, padding, padding);
         TextView title = new TextView(this);
-        title.setText("更新系统 WebView");
+        title.setText("当前系统内核暂不支持");
         title.setTextSize(24);
         title.setGravity(Gravity.CENTER);
         TextView explanation = new TextView(this);
-        explanation.setText("请先更新 Android System WebView 后重新打开。\n玩吧需要 WebView 124 或更新版本。\n当前版本：" + (provider == null ? "未检测到" : provider.versionName));
+        explanation.setText("轻量版需要 Chromium 124 或更新内核。\n可安装自带内核的「玩吧·兼容版」，或更新系统 WebView 后重试。\n实际内核：" + (engineVersion == null ? "无法识别" : "Chromium " + engineVersion)
+                + "\n系统组件：" + (provider == null ? "未检测到" : provider.packageName + " " + provider.versionName));
         explanation.setTextSize(16);
         explanation.setGravity(Gravity.CENTER);
         explanation.setPadding(0, padding, 0, padding);
@@ -148,7 +169,13 @@ public final class MainActivity extends Activity {
         Button retry = new Button(this);
         retry.setText("更新后重试");
         retry.setOnClickListener(ignored -> openCompatibleWebView());
-        prompt.addView(title); prompt.addView(explanation); prompt.addView(settings); prompt.addView(retry);
+        Button compatibility = new Button(this);
+        compatibility.setText("下载玩吧·兼容版");
+        compatibility.setOnClickListener(ignored -> {
+            try { startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(LocalAssetPolicy.DOWNLOADS))); }
+            catch (ActivityNotFoundException error) { toast("请使用浏览器打开 GitHub 版本下载页"); }
+        });
+        prompt.addView(title); prompt.addView(explanation); prompt.addView(compatibility); prompt.addView(settings); prompt.addView(retry);
         frame.addView(prompt, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
     }
 
@@ -189,7 +216,7 @@ public final class MainActivity extends Activity {
             }
         });
         frame.addView(webView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        webView.loadUrl(LocalAssetPolicy.ENTRY);
+        if (contentEntryPath != null) webView.loadUrl(LocalAssetPolicy.ORIGIN + contentEntryPath);
     }
 
     private final class LocalClient extends WebViewClient {
@@ -204,22 +231,22 @@ public final class MainActivity extends Activity {
                 headers.put("Referrer-Policy", "no-referrer");
                 if ("text/html".equals(mime)) headers.put("Content-Security-Policy", "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; frame-src 'self'; worker-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'none'");
                 boolean text = mime.startsWith("text/") || mime.equals("application/json") || mime.equals("image/svg+xml");
-                return new WebResourceResponse(mime, text ? "UTF-8" : null, 200, "OK", headers, getAssets().open(path));
+                return new WebResourceResponse(mime, text ? "UTF-8" : null, 200, "OK", headers, contentUpdates.openResource(path));
             } catch (Exception error) { return responseError(404, "Not Found"); }
         }
 
         @Override public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-            return request.isForMainFrame() ? !LocalAssetPolicy.isEntry(request.getUrl().toString())
+            return request.isForMainFrame() ? !contentUpdates.isTrustedEntry(request.getUrl().toString())
                     : LocalAssetPolicy.assetPath(request.getUrl().toString()) == null;
         }
 
         @Override public void onPageStarted(WebView view, String url, android.graphics.Bitmap favicon) {
-            trustedDocument = LocalAssetPolicy.isEntry(url);
+            trustedDocument = contentUpdates.isTrustedEntry(url);
             if (!trustedDocument) { view.stopLoading(); view.removeJavascriptInterface("NativeBridge"); }
         }
 
         @Override public void onPageFinished(WebView view, String url) {
-            trustedDocument = LocalAssetPolicy.isEntry(url);
+            trustedDocument = contentUpdates.isTrustedEntry(url);
             if (activityPaused && trustedDocument) pauseAndSave();
         }
     }
@@ -230,12 +257,13 @@ public final class MainActivity extends Activity {
     }
 
     private boolean isTrustedForeground() {
-        return !destroyed && !activityPaused && trustedDocument && webView != null && LocalAssetPolicy.isEntry(webView.getUrl());
+        return !destroyed && !activityPaused && trustedDocument && webView != null && contentUpdates.isTrustedEntry(webView.getUrl());
     }
 
     @Override protected void onPause() {
         super.onPause();
         activityPaused = true;
+        if (contentUpdates != null) contentUpdates.onPause();
         pauseAndSave();
     }
 
@@ -259,6 +287,7 @@ public final class MainActivity extends Activity {
     @Override protected void onResume() {
         super.onResume();
         activityPaused = false;
+        if (contentUpdates != null) contentUpdates.onResume();
         if (pendingPause != null) main.removeCallbacks(pendingPause);
         if (webView != null) { webView.onResume(); webView.resumeTimers(); webPaused = false; }
         // Do not call wanbaApp.resume(): returning to the foreground stays paused.
@@ -269,6 +298,8 @@ public final class MainActivity extends Activity {
         super.onSaveInstanceState(outState);
     }
 
+    // API 33+ is registered with OnBackInvokedDispatcher in onCreate; this is the <=32 fallback.
+    @android.annotation.SuppressLint("GestureBackNavigation")
     @Override public void onBackPressed() { handleBack(); }
 
     private void handleBack() {
@@ -364,6 +395,27 @@ public final class MainActivity extends Activity {
     }
 
     public final class NativeBridge {
+        @JavascriptInterface public String getContentState() { return trustedDocument ? contentUpdates.getContentState() : "{}"; }
+        @JavascriptInterface public String checkGameUpdates() { return canUpdate() ? contentUpdates.checkGameUpdates() : "{\"error\":\"页面不可用\"}"; }
+        @JavascriptInterface public String downloadGameUpdate(String id) { return canUpdate() ? contentUpdates.downloadGameUpdate(id) : "{\"error\":\"页面不可用\"}"; }
+        @JavascriptInterface public String activateGameUpdate(String id, String checkpoint) { return canUpdate() ? contentUpdates.activateGameUpdate(id, checkpoint) : "{\"error\":\"页面不可用\"}"; }
+        @JavascriptInterface public String rollbackGameUpdate() { return canUpdate() ? contentUpdates.rollbackGameUpdate() : "{\"error\":\"页面不可用\"}"; }
+        @JavascriptInterface public String reportGameContentReady(String id) { return trustedDocument ? contentUpdates.reportGameContentReady(id) : "{}"; }
+        private boolean canUpdate() { return trustedDocument && !destroyed && !activityPaused; }
+        @JavascriptInterface public String getAppInfo() {
+            if (!trustedDocument) return "{}";
+            JSONObject info = new JSONObject();
+            try {
+                info.put("appVersion", BuildConfig.VERSION_NAME);
+                info.put("versionCode", BuildConfig.VERSION_CODE);
+                info.put("flavor", "system");
+                info.put("engine", "Chromium / Android System WebView");
+                info.put("engineVersion", engineVersion == null ? "unknown" : engineVersion);
+                info.put("providerVersion", providerVersion);
+            } catch (org.json.JSONException ignored) { }
+            return info.toString();
+        }
+
         @JavascriptInterface public void saveBackup(String filename, String json) {
             if (!trustedDocument || !backupBusy.compareAndSet(false, true)) return;
             files.execute(() -> {
@@ -413,6 +465,7 @@ public final class MainActivity extends Activity {
 
     @Override protected void onDestroy() {
         destroyed = true;
+        if (contentUpdates != null) contentUpdates.close();
         trustedDocument = false;
         main.removeCallbacksAndMessages(null);
         cancelFileChooser();

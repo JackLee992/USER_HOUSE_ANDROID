@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "gameId": "zuma",
+  "artVersion": "1.0.0",
+  "sharedArtVersion": "1.0.0",
+  "stylesheet": "standalone/game-art.css",
+  "rendererHelper": "standalone/game-art.js",
+  "assetRefs": [
+    "assets/game-art/premium/v1/candy-bubbles.png",
+    "assets/game-art/premium/v1/pieces.png",
+    "assets/game-art/premium/v1/materials.png"
+  ],
+  "appliedSurfaces": [
+    "Glass ball chain and launcher balls",
+    "Jade frog launcher",
+    "Maple grain play surface"
+  ],
+  "retainedPresentation": [
+    "Track, hole, trajectory and particles remain existing"
+  ],
+  "directoryIcon": {
+    "atlas": "assets/game-art/premium/v1/pieces.png",
+    "cell": 6,
+    "mark": ""
+  }
+}

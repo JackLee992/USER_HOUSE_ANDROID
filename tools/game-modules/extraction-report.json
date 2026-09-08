@@ -1,0 +1,1002 @@
+{
+  "hostApiVersion": 1,
+  "plugins": [
+    {
+      "id": "snake",
+      "entry": "src/games/plugins/snake/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startSnake"
+      ],
+      "environment": [
+        "addSwipe",
+        "addTapDirection",
+        "canvasThemePalette",
+        "controlModeLabel",
+        "gamePaused",
+        "getHostDocument",
+        "getHostWindow",
+        "isNightTheme",
+        "nextControlMode",
+        "qs",
+        "qsa",
+        "saveProgress",
+        "scheduleFitGameSurface",
+        "setScore",
+        "settings",
+        "showGameOver",
+        "snakeTimer",
+        "speak"
+      ],
+      "mutableEnvironment": [
+        "snakeTimer"
+      ],
+      "originalSha256": "393a0c45a7aa939b7dfc84ddd45e072bfca2786bbb4650e0bfccf485aba1bb59"
+    },
+    {
+      "id": "jump",
+      "entry": "src/games/plugins/jump/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startJump"
+      ],
+      "environment": [
+        "JUMP_DOWN_URL",
+        "JUMP_STAND_URL",
+        "canvasThemePalette",
+        "gamePaused",
+        "getHostDocument",
+        "isNightTheme",
+        "jumpTimer",
+        "preventLongPressSelection",
+        "qs",
+        "saveProgress",
+        "setScore",
+        "settings",
+        "showGameOver",
+        "speak"
+      ],
+      "mutableEnvironment": [
+        "jumpTimer"
+      ],
+      "originalSha256": "b56419b6fb6db8ff440330fcbce60bf26a46898e2e243b5679a82a2a5ca64c0f"
+    },
+    {
+      "id": "plank",
+      "entry": "src/games/plugins/plank/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startPlank"
+      ],
+      "environment": [
+        "PLANK_STAND_URL",
+        "PLANK_WALK_URL",
+        "canvasThemePalette",
+        "gamePaused",
+        "getHostDocument",
+        "isNightTheme",
+        "jumpTimer",
+        "preventLongPressSelection",
+        "qs",
+        "saveProgress",
+        "setScore",
+        "settings",
+        "showGameOver",
+        "speak"
+      ],
+      "mutableEnvironment": [
+        "jumpTimer"
+      ],
+      "originalSha256": "476633870360f320811843545611e979be515946d6cbf73fcd2bfdac6791c7f8"
+    },
+    {
+      "id": "sudoku",
+      "entry": "src/games/plugins/sudoku/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startSudoku"
+      ],
+      "environment": [
+        "choiceForState",
+        "choiceSavePatch",
+        "clearProgress",
+        "currentGameDurationMs",
+        "gamePaused",
+        "getHostDocument",
+        "isValidSudokuProgressState",
+        "isValidSudokuPuzzle",
+        "qs",
+        "qsa",
+        "saveProgress",
+        "scoreWithChoice",
+        "setScore",
+        "settings",
+        "showGameOver",
+        "shuffleArray",
+        "speak",
+        "sudokuScore",
+        "toast"
+      ],
+      "mutableEnvironment": [],
+      "originalSha256": "f87f3244843e84919e17444f1cd6b9a6c79b2c119d3bf32e3eb91ef0dac7640f"
+    },
+    {
+      "id": "minesweeper",
+      "entry": "src/games/plugins/minesweeper/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startMinesweeper"
+      ],
+      "environment": [
+        "choiceForState",
+        "choiceSavePatch",
+        "clearProgress",
+        "currentGameDurationMs",
+        "gamePaused",
+        "minesweeperScore",
+        "qs",
+        "qsa",
+        "saveProgress",
+        "scoreWithChoice",
+        "setScore",
+        "showGameOver",
+        "shuffleArray",
+        "speak"
+      ],
+      "mutableEnvironment": [],
+      "originalSha256": "c01520956df9a9e1a1fe5f8a36cc3932b93488e280c9f08179e25c9cb56ee4cb"
+    },
+    {
+      "id": "shuerte",
+      "entry": "src/games/plugins/shuerte/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startShuerte"
+      ],
+      "environment": [
+        "choiceForState",
+        "choiceSavePatch",
+        "clearProgress",
+        "currentGame",
+        "gamePaused",
+        "getHostDocument",
+        "qs",
+        "qsa",
+        "saveProgress",
+        "scoreWithChoice",
+        "setScore",
+        "showGameOver",
+        "shuerteFinalScore",
+        "shuerteTimer",
+        "shuffleArray",
+        "speak"
+      ],
+      "mutableEnvironment": [
+        "shuerteTimer"
+      ],
+      "originalSha256": "c5c639fc4c42dadcf861252f994d6ff5187509796b59ca9ede8ebf2ba8bb891f"
+    },
+    {
+      "id": "uyangle",
+      "entry": "src/games/plugins/uyangle/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startUYangLe"
+      ],
+      "environment": [
+        "GAME_ICON_BASE",
+        "choiceForState",
+        "choiceSavePatch",
+        "clearProgress",
+        "currentGameDurationMs",
+        "esc",
+        "gamePaused",
+        "getHostWindow",
+        "qs",
+        "qsa",
+        "saveProgress",
+        "scoreWithChoice",
+        "setScore",
+        "showGameOver",
+        "shuffleArray",
+        "speak"
+      ],
+      "mutableEnvironment": [],
+      "originalSha256": "9c1a5eed7d0de5596ba396dccb994763c9bdf8928ef2c6129894bfc7ef417ff3"
+    },
+    {
+      "id": "screw",
+      "entry": "src/games/plugins/screw/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startScrew"
+      ],
+      "environment": [
+        "choiceForState",
+        "choiceSavePatch",
+        "clearProgress",
+        "currentGameDurationMs",
+        "gamePaused",
+        "getHostWindow",
+        "isMobileHost",
+        "qs",
+        "saveProgress",
+        "screwTimer",
+        "setScore",
+        "showGameOver",
+        "speak"
+      ],
+      "mutableEnvironment": [
+        "screwTimer"
+      ],
+      "originalSha256": "8cae09ddb17e45963114a0c3a2a0348a3676c319f7fc75dafdee0ec8df877722"
+    },
+    {
+      "id": "popstar",
+      "entry": "src/games/plugins/popstar/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startPopStar"
+      ],
+      "environment": [
+        "appendModalMask",
+        "choiceForState",
+        "choiceSavePatch",
+        "clearProgress",
+        "esc",
+        "gamePaused",
+        "getHostDocument",
+        "getHostWindow",
+        "isMobileHost",
+        "modalMaskClass",
+        "qs",
+        "qsa",
+        "saveProgress",
+        "scoreWithChoice",
+        "setScore",
+        "showGameOver",
+        "shuffleArray",
+        "speak",
+        "toast"
+      ],
+      "mutableEnvironment": [],
+      "originalSha256": "3cb5cb20fa1d31c951469376b40e785536590baaef70e7e6cede545b95bb5b60"
+    },
+    {
+      "id": "paopao",
+      "entry": "src/games/plugins/paopao/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startPaopao"
+      ],
+      "environment": [
+        "activeGameController",
+        "clearProgress",
+        "currentGame",
+        "gamePaused",
+        "getHostDocument",
+        "getHostWindow",
+        "qs",
+        "saveProgress",
+        "setScore",
+        "showGameOver",
+        "speak",
+        "toast"
+      ],
+      "mutableEnvironment": [
+        "activeGameController"
+      ],
+      "originalSha256": "f5894ac737f4c3df8f47105081d7a38731dae57ace76e94afc4df03bc48c5dff"
+    },
+    {
+      "id": "game1010",
+      "entry": "src/games/plugins/game1010/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startGame1010"
+      ],
+      "environment": [
+        "canvasThemePalette",
+        "clearProgress",
+        "currentGame",
+        "gamePaused",
+        "getHostWindow",
+        "qs",
+        "saveProgress",
+        "setScore",
+        "settings",
+        "showGameOver",
+        "speak"
+      ],
+      "mutableEnvironment": [],
+      "originalSha256": "e0cf9b3ad777ba62da046ff14a2f137cabfa920f7eb6114ee0e32018122db034"
+    },
+    {
+      "id": "turkey",
+      "entry": "src/games/plugins/turkey/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startTurkey"
+      ],
+      "environment": [
+        "clearProgress",
+        "gamePaused",
+        "getHostDocument",
+        "qs",
+        "qsa",
+        "saveProgress",
+        "scores",
+        "setScore",
+        "showGameOver",
+        "shuffleArray",
+        "speak"
+      ],
+      "mutableEnvironment": [],
+      "originalSha256": "a43e4a07a6816ba4bd3de89b3df541aa3205fd9111e5027b4d14a665a4550548"
+    },
+    {
+      "id": "spider",
+      "entry": "src/games/plugins/spider/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startSpider"
+      ],
+      "environment": [
+        "choiceForState",
+        "choiceSavePatch",
+        "clearProgress",
+        "currentGame",
+        "gamePaused",
+        "getHostDocument",
+        "qs",
+        "qsa",
+        "saveProgress",
+        "scores",
+        "setScore",
+        "showConfirm",
+        "showGameOver",
+        "shuffleArray",
+        "speak",
+        "toast"
+      ],
+      "mutableEnvironment": [],
+      "originalSha256": "7827deabe073803e032aeae112e632f0d0b6b706e58ec2399c410a400c658bfd"
+    },
+    {
+      "id": "linklink",
+      "entry": "src/games/plugins/linklink/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startLinkLink"
+      ],
+      "environment": [
+        "SCRIPT_ID",
+        "appendModalMask",
+        "clearProgress",
+        "currentGame",
+        "esc",
+        "formatDuration",
+        "gamePaused",
+        "getHostDocument",
+        "getHostWindow",
+        "linkLinkTimer",
+        "loadJSON",
+        "modalMaskClass",
+        "qs",
+        "qsa",
+        "safeObject",
+        "saveJSON",
+        "saveProgress",
+        "scores",
+        "setScore",
+        "showGameOver",
+        "shuffleArray",
+        "speak"
+      ],
+      "mutableEnvironment": [
+        "linkLinkTimer"
+      ],
+      "originalSha256": "a3b47b781a8ffe6b81f6a1b7d6b7dd030b42a9d55e1b9ce606ce0c68b7886af6"
+    },
+    {
+      "id": "blackjack",
+      "entry": "src/games/plugins/blackjack/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startBlackjack"
+      ],
+      "environment": [
+        "appendModalMask",
+        "clearProgress",
+        "currentGame",
+        "displayCharNameForGame",
+        "esc",
+        "findAvatar",
+        "gamePaused",
+        "getHostDocument",
+        "modalMaskClass",
+        "qs",
+        "qsa",
+        "saveProgress",
+        "scores",
+        "setScore",
+        "showGameOver",
+        "shuffleArray",
+        "speak"
+      ],
+      "mutableEnvironment": [],
+      "originalSha256": "3566c4068ca75773a8af031d48bbba78e60c96ac5dd549407108220ba3e9a8ca"
+    },
+    {
+      "id": "game2048",
+      "entry": "src/games/plugins/game2048/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "start2048"
+      ],
+      "environment": [
+        "DEFAULT_LINES",
+        "addSwipe",
+        "addTapDirection",
+        "choiceForState",
+        "choiceSavePatch",
+        "cloneCheatState",
+        "controlModeLabel",
+        "gamePaused",
+        "getHostDocument",
+        "nextControlMode",
+        "qs",
+        "qsa",
+        "saveProgress",
+        "scoreWithChoice",
+        "setScore",
+        "showGameOver",
+        "speak"
+      ],
+      "mutableEnvironment": [],
+      "originalSha256": "41495ad31fdb187ec60447b650b367770bbf39ee5751bbe85246a0b10953db80"
+    },
+    {
+      "id": "watermelon",
+      "entry": "src/games/plugins/watermelon/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startWatermelon"
+      ],
+      "environment": [
+        "PROGRESS_SAVE_DELAY",
+        "canvasThemePalette",
+        "gamePaused",
+        "getHostDocument",
+        "isNightTheme",
+        "qs",
+        "saveProgress",
+        "setScore",
+        "settings",
+        "showGameOver",
+        "speak",
+        "watermelonTimer"
+      ],
+      "mutableEnvironment": [
+        "watermelonTimer"
+      ],
+      "originalSha256": "295693ca6115c1b3bce07327844de2b9dd5ceeaefc0420a7c5ea49a1e4185437"
+    },
+    {
+      "id": "memory",
+      "entry": "src/games/plugins/memory/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startMemory"
+      ],
+      "environment": [
+        "GAME_ICON_BASE",
+        "clearProgress",
+        "esc",
+        "gamePaused",
+        "qs",
+        "qsa",
+        "saveMemoryBestMoves",
+        "saveProgress",
+        "setScore",
+        "showGameOver",
+        "shuffleArray",
+        "speak"
+      ],
+      "mutableEnvironment": [],
+      "originalSha256": "303e4cbc4edf130874209823b53ef7bfffd11bad0504baa9b162c3a2e47252c6"
+    },
+    {
+      "id": "ludo",
+      "entry": "src/games/plugins/ludo/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startLudo"
+      ],
+      "environment": [
+        "CHEAT_MAX",
+        "cheatAttemptResult",
+        "cheatButtonHTML",
+        "clearProgress",
+        "cloneCheatState",
+        "displayCharName",
+        "gameActiveStartedAt",
+        "gamePaused",
+        "getHostDocument",
+        "hideGamePauseOverlay",
+        "pushCheatUndo",
+        "qs",
+        "refreshCheatButton",
+        "restoreCheatSnapshot",
+        "saveProgress",
+        "scores",
+        "setScore",
+        "showGameOver",
+        "speak",
+        "speakFirstMover",
+        "toast",
+        "toastCheatAlreadyAttempted"
+      ],
+      "mutableEnvironment": [
+        "gameActiveStartedAt",
+        "gamePaused"
+      ],
+      "originalSha256": "a149f7d3b1d8ff4a6e26b7f930dfd13a8aa86bca67d9e8a590159eef0ba7f107"
+    },
+    {
+      "id": "guessnumber",
+      "entry": "src/games/plugins/guessnumber/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startGuessNumber"
+      ],
+      "environment": [
+        "esc",
+        "gamePaused",
+        "isMobileHost",
+        "qs",
+        "qsa",
+        "saveProgress",
+        "scores",
+        "setScore",
+        "showGameOver",
+        "shuffleArray",
+        "speak",
+        "toast"
+      ],
+      "mutableEnvironment": [],
+      "originalSha256": "9887ac0bcb0ca0e5f0beebd33c15e52cfe88b0107fb042f3ee37ad8bc70d9ef4"
+    },
+    {
+      "id": "wordguess",
+      "entry": "src/games/plugins/wordguess/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startWordGuess",
+        "createWordGuessRounds"
+      ],
+      "environment": [
+        "PROMPT_TEMPLATES",
+        "addTaWin",
+        "appendModalMask",
+        "callApiText",
+        "clearProgress",
+        "currentCharDescription",
+        "currentGame",
+        "defaultWordGuessBank",
+        "displayCharName",
+        "esc",
+        "gamePaused",
+        "getHostDocument",
+        "modalMaskClass",
+        "normalizeWordGuessRoundData",
+        "parseGeneratedJson",
+        "promptTemplates",
+        "qs",
+        "saveProgress",
+        "scores",
+        "selectWordGuessRounds",
+        "selectedSummaryText",
+        "selectedWordGuessRoleName",
+        "selectedWorldText",
+        "setScore",
+        "settings",
+        "showGameOver",
+        "speak",
+        "speakText",
+        "toast",
+        "wordGuessBank",
+        "wordGuessBankSource"
+      ],
+      "mutableEnvironment": [],
+      "originalSha256": "e3604cfb45ec2a075c2b5dd32e8fbf3693d10ec163e915cc8cbf96ad00087fc0"
+    },
+    {
+      "id": "tictactoe",
+      "entry": "src/games/plugins/tictactoe/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startTicTacToe",
+        "bestTic",
+        "winner3"
+      ],
+      "environment": [
+        "CHEAT_MAX",
+        "cheatAttemptResult",
+        "cheatButtonHTML",
+        "cloneCheatState",
+        "gamePaused",
+        "markFirstMoverUserAction",
+        "nextCharLineTurn",
+        "pushCheatUndo",
+        "qs",
+        "qsa",
+        "refreshCheatButton",
+        "restoreCheatSnapshot",
+        "saveProgress",
+        "scores",
+        "setScore",
+        "showGameOver",
+        "speak",
+        "speakFirstMover",
+        "toastCheatAlreadyAttempted"
+      ],
+      "mutableEnvironment": [],
+      "originalSha256": "491fcd78fb686d2916fb10c51eb2d4bce80986ee4fea3d7b6b2bbd6b9c1a051e"
+    },
+    {
+      "id": "gomoku",
+      "entry": "src/games/plugins/gomoku/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startGomoku",
+        "startEndlessGomoku",
+        "bestGomoku",
+        "gomokuMoveWins",
+        "gomokuCenterScore",
+        "gomokuMoveScore",
+        "gomokuPattern",
+        "lineScore",
+        "blockRank",
+        "winG",
+        "fiveLine"
+      ],
+      "environment": [
+        "CHEAT_MAX",
+        "cheatAttemptResult",
+        "cheatButtonCompactHTML",
+        "choiceForState",
+        "choiceSavePatch",
+        "clearProgress",
+        "cloneCheatState",
+        "displayCharNameForGame",
+        "esc",
+        "gamePaused",
+        "markFirstMoverUserAction",
+        "nextCharLineTurn",
+        "pushCheatUndo",
+        "qs",
+        "qsa",
+        "refreshCheatButton",
+        "restoreCheatSnapshot",
+        "saveProgress",
+        "scores",
+        "setScore",
+        "showGameOver",
+        "speak",
+        "speakFirstMover",
+        "toastCheatAlreadyAttempted"
+      ],
+      "mutableEnvironment": [],
+      "originalSha256": "2dcbbcb4797f13c2dec0b8f64320de9eeb2a454b9981f31ab2176e329c4e51e8"
+    },
+    {
+      "id": "territory",
+      "entry": "src/games/plugins/territory/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startTerritory"
+      ],
+      "environment": [
+        "CHEAT_MAX",
+        "addTaWin",
+        "cheatAttemptResult",
+        "cheatButtonHTML",
+        "clearProgress",
+        "cloneCheatState",
+        "currentGame",
+        "displayCharName",
+        "gamePaused",
+        "markFirstMoverUserAction",
+        "nextCharLineTurn",
+        "pushCheatUndo",
+        "qs",
+        "qsa",
+        "refreshCheatButton",
+        "restoreCheatSnapshot",
+        "saveProgress",
+        "scores",
+        "setScore",
+        "showGameOver",
+        "speak",
+        "speakFirstMover",
+        "toast",
+        "toastCheatAlreadyAttempted"
+      ],
+      "mutableEnvironment": [],
+      "originalSha256": "6c75db4384d7d1233572af3ab43d42171da4411fbe9a73f93aec02ad5861da82"
+    },
+    {
+      "id": "oldmaid",
+      "entry": "src/games/plugins/oldmaid/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startOldMaid"
+      ],
+      "environment": [
+        "CHEAT_MAX",
+        "OLDMAID_CARD_URL",
+        "addTaWin",
+        "cheatAttemptResult",
+        "cheatButtonHTML",
+        "clearProgress",
+        "cloneCheatState",
+        "currentGame",
+        "displayCharName",
+        "esc",
+        "gamePaused",
+        "markFirstMoverUserAction",
+        "pushCheatUndo",
+        "qs",
+        "qsa",
+        "refreshCheatButton",
+        "restoreCheatSnapshot",
+        "saveProgress",
+        "scores",
+        "setScore",
+        "showGameOver",
+        "shuffleArray",
+        "speak",
+        "speakFirstMover",
+        "toastCheatAlreadyAttempted"
+      ],
+      "mutableEnvironment": [],
+      "originalSha256": "0f0c3b8577f6ee970774af02162208f291bfcebe31ed67337d36d1cd27443a30"
+    },
+    {
+      "id": "reversi",
+      "entry": "src/games/plugins/reversi/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startReversi"
+      ],
+      "environment": [
+        "CHEAT_MAX",
+        "addTaWin",
+        "cheatAttemptResult",
+        "cheatButtonHTML",
+        "clearProgress",
+        "cloneCheatState",
+        "displayCharName",
+        "gamePaused",
+        "markFirstMoverUserAction",
+        "nextCharLineTurn",
+        "pushCheatUndo",
+        "qs",
+        "qsa",
+        "refreshCheatButton",
+        "restoreCheatSnapshot",
+        "saveProgress",
+        "scores",
+        "setScore",
+        "showGameOver",
+        "speak",
+        "speakFirstMover",
+        "toastCheatAlreadyAttempted"
+      ],
+      "mutableEnvironment": [],
+      "originalSha256": "397803d319e0f354620d4467767ec645b5a4dc76532a7bfbc8c30d5b98e41ac0"
+    },
+    {
+      "id": "bombnumber",
+      "entry": "src/games/plugins/bombnumber/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startBombNumber"
+      ],
+      "environment": [
+        "CHEAT_MAX",
+        "addTaWin",
+        "cheatAttemptResult",
+        "cheatButtonHTML",
+        "clearProgress",
+        "cloneCheatState",
+        "displayCharName",
+        "esc",
+        "gamePaused",
+        "markFirstMoverUserAction",
+        "pushCheatUndo",
+        "qs",
+        "qsa",
+        "refreshCheatButton",
+        "restoreCheatSnapshot",
+        "saveProgress",
+        "scores",
+        "setScore",
+        "showGameOver",
+        "speak",
+        "speakFirstMover",
+        "toastCheatAlreadyAttempted"
+      ],
+      "mutableEnvironment": [],
+      "originalSha256": "534d77b913d9085723b74367de61c883e981d7d3cb5d3c89fbfbbfa4a694daca"
+    },
+    {
+      "id": "connect4d",
+      "entry": "src/games/plugins/connect4d/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startConnect4D",
+        "blockRank"
+      ],
+      "environment": [
+        "CHEAT_MAX",
+        "addTaWin",
+        "cheatAttemptResult",
+        "cheatButtonHTML",
+        "clearProgress",
+        "cloneCheatState",
+        "displayCharName",
+        "gamePaused",
+        "getHostDocument",
+        "markFirstMoverUserAction",
+        "nextCharLineTurn",
+        "pushCheatUndo",
+        "qs",
+        "refreshCheatButton",
+        "restoreCheatSnapshot",
+        "saveProgress",
+        "scores",
+        "setScore",
+        "showGameOver",
+        "speak",
+        "speakFirstMover",
+        "toastCheatAlreadyAttempted"
+      ],
+      "mutableEnvironment": [],
+      "originalSha256": "ea68383c4b85e4d4419cf537a0c6b6d0d0715600d11807b7bbc51c7298c1940f"
+    },
+    {
+      "id": "draughts",
+      "entry": "src/games/plugins/draughts/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startDraughts"
+      ],
+      "environment": [
+        "CHEAT_MAX",
+        "addTaWin",
+        "cheatAttemptResult",
+        "cheatButtonHTML",
+        "choiceForState",
+        "choiceSavePatch",
+        "clearProgress",
+        "cloneCheatState",
+        "displayCharName",
+        "gamePaused",
+        "markFirstMoverUserAction",
+        "pushCheatUndo",
+        "qs",
+        "qsa",
+        "refreshCheatButton",
+        "restoreCheatSnapshot",
+        "saveProgress",
+        "scores",
+        "setScore",
+        "showGameOver",
+        "speak",
+        "speakFirstMover",
+        "toastCheatAlreadyAttempted"
+      ],
+      "mutableEnvironment": [],
+      "originalSha256": "9b417d60912c7b8238d10123be1310af62be58895bd2430509922fb290e870cd"
+    },
+    {
+      "id": "westernchess",
+      "entry": "src/games/plugins/westernchess/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startWesternChess"
+      ],
+      "environment": [
+        "CHEAT_MAX",
+        "addTaWin",
+        "cheatAttemptResult",
+        "clearProgress",
+        "cloneCheatState",
+        "displayCharName",
+        "esc",
+        "gamePaused",
+        "markFirstMoverUserAction",
+        "nextCharLineTurn",
+        "pushCheatUndo",
+        "qs",
+        "qsa",
+        "refreshCheatButton",
+        "restoreCheatSnapshot",
+        "saveProgress",
+        "scores",
+        "setScore",
+        "showGameOver",
+        "speak",
+        "toastCheatAlreadyAttempted"
+      ],
+      "mutableEnvironment": [],
+      "originalSha256": "5246d06f39f2130799c5f4d5ef4de04ed0d5d9cf52a80920b57cb8fa60da71f6"
+    },
+    {
+      "id": "chinesechess",
+      "entry": "src/games/plugins/chinesechess/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startChineseChess"
+      ],
+      "environment": [
+        "CHEAT_MAX",
+        "addTaWin",
+        "cheatAttemptResult",
+        "clearProgress",
+        "cloneCheatState",
+        "displayCharName",
+        "esc",
+        "gamePaused",
+        "markFirstMoverUserAction",
+        "nextCharLineTurn",
+        "pushCheatUndo",
+        "qs",
+        "qsa",
+        "refreshCheatButton",
+        "restoreCheatSnapshot",
+        "saveProgress",
+        "scores",
+        "setScore",
+        "showGameOver",
+        "speak",
+        "toastCheatAlreadyAttempted"
+      ],
+      "mutableEnvironment": [],
+      "originalSha256": "0f89cf5cfef625519f3da304860182dbe5e44d00ae6bdf00262554247d95c8dd"
+    },
+    {
+      "id": "tetris",
+      "entry": "src/games/plugins/tetris/index.js",
+      "version": "1.0.0",
+      "functions": [
+        "startTetris"
+      ],
+      "environment": [
+        "addSwipe",
+        "addTapDirection",
+        "canvasThemePalette",
+        "controlModeLabel",
+        "gamePaused",
+        "getHostDocument",
+        "getHostWindow",
+        "isNightTheme",
+        "nextControlMode",
+        "qs",
+        "saveProgress",
+        "scheduleFitGameSurface",
+        "setScore",
+        "settings",
+        "showGameOver",
+        "speak",
+        "tetrisTimer"
+      ],
+      "mutableEnvironment": [
+        "tetrisTimer"
+      ],
+      "originalSha256": "07e1af481b0bba87af7c9737a31ade368fda105197a2555a4a758164dc12d1f5"
+    }
+  ]
+}

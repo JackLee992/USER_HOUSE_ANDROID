@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "gameId": "game1010",
+  "artVersion": "1.0.0",
+  "sharedArtVersion": "1.0.0",
+  "stylesheet": "standalone/game-art.css",
+  "rendererHelper": "standalone/game-art.js",
+  "assetRefs": [
+    "assets/game-art/premium/v1/materials.png"
+  ],
+  "appliedSurfaces": [
+    "Porcelain grain clipped to all draggable and placed blocks"
+  ],
+  "retainedPresentation": [
+    "Original eight colors, block shapes and grid preserved"
+  ],
+  "directoryIcon": {
+    "atlas": "assets/game-art/premium/v1/candy-bubbles.png",
+    "cell": 15,
+    "mark": "10×10"
+  }
+}

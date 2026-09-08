@@ -1,0 +1,25 @@
+{
+  "schema": 1,
+  "gameId": "oldmaid",
+  "artVersion": "1.0.0",
+  "sharedArtVersion": "1.0.0",
+  "stylesheet": "standalone/game-art.css",
+  "rendererHelper": "standalone/game-art.js",
+  "assetRefs": [
+    "assets/game-art/premium/v1/materials.png",
+    "assets/game-art/premium/v1/pieces.png"
+  ],
+  "appliedSurfaces": [
+    "Porcelain card faces",
+    "Navy velvet backs",
+    "Fox Joker card"
+  ],
+  "retainedPresentation": [
+    "Rank/suit text and hand counts preserved"
+  ],
+  "directoryIcon": {
+    "atlas": "assets/game-art/premium/v1/pieces.png",
+    "cell": 7,
+    "mark": "J"
+  }
+}

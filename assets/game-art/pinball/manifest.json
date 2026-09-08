@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "gameId": "pinball",
+  "artVersion": "1.0.0",
+  "sharedArtVersion": "1.0.0",
+  "stylesheet": "standalone/game-art.css",
+  "rendererHelper": "standalone/game-art.js",
+  "assetRefs": [
+    "assets/game-art/premium/v1/materials.png"
+  ],
+  "appliedSurfaces": [
+    "Navy velvet player frame and mission surface"
+  ],
+  "retainedPresentation": [
+    "Existing native Space Cadet playfield-HD artwork and WASM display remain"
+  ],
+  "directoryIcon": {
+    "atlas": "assets/game-art/premium/v1/candy-bubbles.png",
+    "cell": 6,
+    "mark": "★"
+  }
+}

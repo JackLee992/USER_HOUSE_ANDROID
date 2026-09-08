@@ -1,0 +1,45 @@
+import * as snake from './snake/index.js';
+import * as jump from './jump/index.js';
+import * as plank from './plank/index.js';
+import * as sudoku from './sudoku/index.js';
+import * as minesweeper from './minesweeper/index.js';
+import * as shuerte from './shuerte/index.js';
+import * as uyangle from './uyangle/index.js';
+import * as screw from './screw/index.js';
+import * as popstar from './popstar/index.js';
+import * as paopao from './paopao/index.js';
+import * as game1010 from './game1010/index.js';
+import * as turkey from './turkey/index.js';
+import * as spider from './spider/index.js';
+import * as linklink from './linklink/index.js';
+import * as blackjack from './blackjack/index.js';
+import * as game2048 from './game2048/index.js';
+import * as watermelon from './watermelon/index.js';
+import * as memory from './memory/index.js';
+import * as ludo from './ludo/index.js';
+import * as guessnumber from './guessnumber/index.js';
+import * as wordguess from './wordguess/index.js';
+import * as tictactoe from './tictactoe/index.js';
+import * as gomoku from './gomoku/index.js';
+import * as territory from './territory/index.js';
+import * as oldmaid from './oldmaid/index.js';
+import * as reversi from './reversi/index.js';
+import * as bombnumber from './bombnumber/index.js';
+import * as connect4d from './connect4d/index.js';
+import * as draughts from './draughts/index.js';
+import * as westernchess from './westernchess/index.js';
+import * as chinesechess from './chinesechess/index.js';
+import * as tetris from './tetris/index.js';
+import * as zuma from './zuma/index.js';
+import * as watersort from './watersort/index.js';
+import * as pinball from './pinball/index.js';
+import * as match3 from './match3/index.js';
+import * as freecell from './freecell/index.js';
+
+export const GAME_HOST_API_VERSION = 1;
+export const GAME_PLUGINS = Object.freeze({ snake, jump, plank, sudoku, minesweeper, shuerte, uyangle, screw, popstar, paopao, game1010, turkey, spider, linklink, blackjack, game2048, watermelon, memory, ludo, guessnumber, wordguess, tictactoe, gomoku, territory, oldmaid, reversi, bombnumber, connect4d, draughts, westernchess, chinesechess, tetris, zuma, watersort, pinball, match3, freecell });
+export function gamePlugin(id) {
+  const plugin = GAME_PLUGINS[id];
+  if (!plugin) throw new Error('Unknown game plugin: ' + id);
+  return plugin;
+}

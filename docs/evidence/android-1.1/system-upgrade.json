@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "from": "1.0.0/code1 release",
+  "to": "1.1.0/code2 system debug",
+  "storageKeys": 5,
+  "gameProgress": 37,
+  "comparison": "All decoded data identical except pinball.savedAt updated by lifecycle save during installation",
+  "pinballSavedAtBefore": 1788857021865,
+  "pinballSavedAtAfter": 1788858859425
+}

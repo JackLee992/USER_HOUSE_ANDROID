@@ -1,0 +1,23 @@
+{
+  "schema": 1,
+  "gameId": "tictactoe",
+  "artVersion": "1.0.0",
+  "sharedArtVersion": "1.0.0",
+  "stylesheet": "standalone/game-art.css",
+  "rendererHelper": "standalone/game-art.js",
+  "assetRefs": [
+    "assets/game-art/premium/v1/materials.png"
+  ],
+  "appliedSurfaces": [
+    "Maple board",
+    "Porcelain X/O cells"
+  ],
+  "retainedPresentation": [
+    "Player X/O marks remain text"
+  ],
+  "directoryIcon": {
+    "atlas": "assets/game-art/premium/v1/pieces.png",
+    "cell": 3,
+    "mark": "X O"
+  }
+}

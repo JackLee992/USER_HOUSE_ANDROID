@@ -1,0 +1,32 @@
+{
+  "status": "recommended-working-name",
+  "internationalName": "Nookcade",
+  "pronunciation": "NOOK-kayd",
+  "locales": {
+    "zh-CN": {
+      "launcherName": "玩吧",
+      "storeTitle": "玩吧：离线小游戏",
+      "shortDescription": "随时开一局，小游戏都在这里。"
+    },
+    "zh-TW": {
+      "launcherName": "玩吧",
+      "storeTitle": "玩吧：離線小遊戲",
+      "shortDescription": "隨時玩一局，小遊戲都在這裡。"
+    },
+    "en": {
+      "launcherName": "Nookcade",
+      "storeTitle": "Nookcade: Offline Games",
+      "shortDescription": "Your little arcade, ready whenever you are."
+    },
+    "ja": {
+      "launcherName": "ヌックケード",
+      "storeTitle": "Nookcade：オフラインゲーム",
+      "shortDescription": "いつでも遊べる、あなたの小さなゲームセンター。"
+    },
+    "ko": {
+      "launcherName": "눅케이드",
+      "storeTitle": "Nookcade: 오프라인 미니게임",
+      "shortDescription": "언제든 즐기는 나만의 작은 오락실."
+    }
+  }
+}

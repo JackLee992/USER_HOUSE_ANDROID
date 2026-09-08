@@ -1,0 +1,25 @@
+{
+  "ua": "Mozilla/5.0 (Android 12; Mobile; rv:155.0) Gecko/155.0 Firefox/155.0",
+  "appInfo": {
+    "appVersion": "1.1.0",
+    "versionCode": 2,
+    "webVersion": "1.1.0",
+    "gameBaseline": "3.10.0",
+    "flavor": "compat",
+    "flavorLabel": "兼容版",
+    "engine": "GeckoView",
+    "engineLabel": "内置 GeckoView",
+    "engineVersion": "155.0.1",
+    "providerVersion": "155.0.1 (20260903215306)",
+    "source": "native",
+    "versionMatches": true
+  },
+  "features": {
+    "canvasRoundRect": true,
+    "wasm": true,
+    "resizeObserver": true,
+    "pointerEvents": true,
+    "containerUnits": true,
+    "colorMix": true
+  }
+}

@@ -25,13 +25,23 @@ val releaseSigning = Properties().apply {
 
 android {
     namespace = "io.github.jacklee992.wanba"
-    compileSdk { version = release(36) { minorApiLevel = 1 } }
+    compileSdk { version = release(37) { minorApiLevel = 1 } }
     defaultConfig {
         applicationId = "io.github.jacklee992.wanba"
         minSdk = 26
         targetSdk = 36
-        versionCode = 1
-        versionName = "1.0.0"
+        versionCode = 3
+        versionName = "1.2.0"
+    }
+    flavorDimensions += "engine"
+    productFlavors {
+        create("system") { dimension = "engine" }
+        create("compat") {
+            dimension = "engine"
+            applicationIdSuffix = ".compat"
+            // Both mobile ARM architectures; desktop emulator libraries stay out of the download.
+            ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a") }
+        }
     }
     buildFeatures { buildConfig = true }
     if (signingFile.isFile) {
@@ -58,6 +68,12 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     androidResources { noCompress += listOf("wasm", "data", "dat", "wav") }
+    // Compress the large bundled engine in APKs; Android extracts the selected ABI at install.
+    packaging { jniLibs.useLegacyPackaging = true }
+}
+
+dependencies {
+    "compatImplementation"("org.mozilla.geckoview:geckoview:155.0.20260903215306")
 }
 
 abstract class PrepareWanbaAssets : DefaultTask() {
@@ -82,7 +98,7 @@ val prepareWebAssets by tasks.registering(PrepareWanbaAssets::class) {
     prepareScript.set(webRoot.resolve("scripts/prepare-android-assets.mjs"))
     nodeBinary.set(providers.gradleProperty("nodeBinary").orElse("node"))
     sourceFiles.from(webRoot.resolve("style.css"))
-    for (path in listOf("src", "standalone", "assets/game-icons", "assets/space-cadet", "assets/app-brand", "tools/space-cadet")) sourceFiles.from(fileTree(webRoot.resolve(path)))
+    for (path in listOf("src", "standalone", "locales", "assets/game-icons", "assets/game-art", "assets/space-cadet", "assets/app-brand", "tools/space-cadet")) sourceFiles.from(fileTree(webRoot.resolve(path)))
     outputDirectory.set(generatedWebAssets)
 }
 androidComponents {

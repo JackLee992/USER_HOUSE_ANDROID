@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 import { constrainStandaloneSettings, STANDALONE_THEMES } from '../standalone/capabilities.js';
+import { requireCompatibleSave,gameContentMetadata } from '../standalone/content-state.js';
 
 test('legacy settings cannot enable host services or external fonts', () => {
   const old = { companion:true, petDesktopEnabled:true, messageNotify:true, intimacyMode:true, injectChat:true, floatingBallEnabled:true, autoLog:true, theaterEnabled:true, apiKey:'secret', apiUrl:'https://example.test', theme:'tavern', lastTab:'intimacy', selectedFont:'remote', customFonts:[{name:'remote',url:'https://example.test/font'}] };
@@ -26,7 +27,7 @@ function backupHarness({failOnce = false} = {}) {
   const keys = {STORAGE_SETTINGS:'wanbanXiaowu_settings_v1',STORAGE_SCORES:'wanbanXiaowu_scores_v1',STORAGE_PROGRESS:'wanbanXiaowu_progress_v1',STORAGE_RECORDS:'wanbanXiaowu_records_v1',STORAGE_SUDOKU_STATE:'wanbanXiaowu_sudokuState_v1',STORAGE_WORLD_PRESETS:'world',STORAGE_SUMMARIES:'summaries',STORAGE_LINES:'lines',STORAGE_ROLE_LINES:'roleLines',STORAGE_THEATERS:'theaters',STORAGE_LINE_PRESET_SELECTION:'selection',STORAGE_WORD_GUESS_BANK:'wordBank',STORAGE_SUMMARY_REQ:'request'};
   const store = new Map([[keys.STORAGE_SETTINGS,'{"theme":"night"}'],[keys.STORAGE_SCORES,'{"snake":23}']]);
   let remaining = failOnce ? 2 : Infinity;
-  const ctx = vm.createContext({...keys,standalone:true,DEFAULT_SETTINGS:{theme:'day',companion:false,customFonts:[],rememberWindow:true},constrainStandaloneSettings,
+  const ctx = vm.createContext({...keys,standalone:true,GAME_META:{freecell:{},match3:{}},contentForGame:id=>gameContentMetadata(id,null),requireCompatibleSave,DEFAULT_SETTINGS:{theme:'day',companion:false,customFonts:[],rememberWindow:true},constrainStandaloneSettings,
     settings:() => ({theme:'night'}),safeObject:v => v && typeof v === 'object' && !Array.isArray(v) ? v : {},safeArray:v => Array.isArray(v) ? v : [],isPlainObject:v => v && typeof v === 'object' && !Array.isArray(v),
     localStorage:{getItem:key => store.get(key) ?? null,setItem:(key,value) => {if (--remaining === 0) throw Object.assign(new Error('quota'),{name:'QuotaExceededError'}); store.set(key,value);},removeItem:key=>store.delete(key)} });
   vm.runInContext(source.slice(source.indexOf('  function exportDataKeys()'),source.indexOf('  function exportAllData()')),ctx);
@@ -43,6 +44,11 @@ test('old plugin backup imports only game data and strips unavailable capabiliti
 test('invalid or unrelated backup cannot erase existing game data', () => {
   const {ctx,store} = backupHarness(), before = [...store];
   for (const data of [null,[],{unrelated:'content'}]) assert.throws(()=>ctx.buildImportPlan(data));
+  assert.deepEqual([...store],before);
+});
+test('incompatible game schema import is refused before replacing existing saves',()=>{
+  const {ctx,keys,store}=backupHarness(),before=[...store];
+  assert.throws(()=>ctx.buildImportPlan({[keys.STORAGE_PROGRESS]:{match3:{rulesVersion:4,_content:{runtimeApi:1,saveSchema:4}}}}),/已保留原存档/);
   assert.deepEqual([...store],before);
 });
 test('failed partial import restores all original keys', () => {

@@ -1,0 +1,13 @@
+{
+  "manifest_version": 2,
+  "name": "Wanba local app bridge",
+  "version": "1.2.0",
+  "browser_specific_settings": { "gecko": { "id": "wanba-local-bridge@jacklee992.github.io" } },
+  "permissions": ["nativeMessaging", "nativeMessagingFromContent", "geckoViewAddons"],
+  "content_scripts": [{
+    "matches": ["http://127.0.0.1/assets/www/standalone/index.html*", "http://127.0.0.1/assets/updates/*/www/standalone/index.html*"],
+    "js": ["bridge.js"],
+    "run_at": "document_start",
+    "all_frames": false
+  }]
+}

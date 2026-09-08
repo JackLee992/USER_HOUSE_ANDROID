@@ -1,0 +1,46 @@
+{
+  "workingName": "Nookcade",
+  "artworkTool": "built-in image_gen",
+  "originalSizePx": [
+    1254,
+    1254
+  ],
+  "originalMode": "RGBA",
+  "originalSha256": "c4b510af3d0b061375dd48179ef515d6bb4d49915b8bdefe6f6ad1d327ddac10",
+  "layersPx": [
+    1080,
+    1080
+  ],
+  "layerDp": 108,
+  "safeCircleDp": 66,
+  "alphaPreserved": true,
+  "coreAlphaMeasurementThreshold": 16,
+  "coreBoundsPx": [
+    293,
+    271,
+    787,
+    809
+  ],
+  "coreDiameterDp": 64.46,
+  "safeAreaPass": true,
+  "backgroundColor": "#061744",
+  "staticMaskViewportDp": 72,
+  "playStoreIconPx": [
+    512,
+    512
+  ],
+  "legacySizesPx": [
+    48,
+    72,
+    96,
+    144,
+    192
+  ],
+  "maskPreviewSizesPx": [
+    48,
+    96,
+    192
+  ],
+  "squircleNote": "Representative superellipse; OEM masks may differ.",
+  "integrationStatus": "Review assets only; existing app/native icon untouched."
+}

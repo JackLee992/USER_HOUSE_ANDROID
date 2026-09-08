@@ -1,3 +1,4 @@
+import { gameSpriteHTML } from '../../standalone/game-art.js';
 const SIZE = 8;
 const COLORS = 6;
 const copy = board => board.map(row => row.slice());
@@ -296,8 +297,9 @@ const SPECIAL_MARKS = {row:'↔',column:'↕',bomb:'✹',rainbow:'◉'};
 const SPECIAL_STYLES = `
 .m3-game .m3-board{width:min(100%,max(120px,calc(100cqh - 212px)))}.m3-game .m3-goals{min-height:24px;color:#6d4b2c;font-size:12px;text-align:center;line-height:20px;margin-bottom:4px}.m3-game .m3-gem{position:relative}.m3-game .m3-power{position:absolute;right:-3px;bottom:-2px;min-width:17px;height:17px;line-height:17px;background:#fff4d1;color:#583b20;border-radius:6px;font-size:14px;text-align:center;box-shadow:0 1px 4px #000a;z-index:2}.m3-game .m3-special-row,.m3-game .m3-special-column{box-shadow:inset 0 0 0 2px #fff,0 0 8px #fff7}.m3-game .m3-special-row:before,.m3-game .m3-special-column:before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 5px,#fff9 5px 7px);pointer-events:none}.m3-game .m3-special-column:before{background:repeating-linear-gradient(90deg,transparent 0 5px,#fff9 5px 7px)}.m3-game .m3-special-bomb{box-shadow:inset 0 0 0 3px #fff2ab,0 0 9px #ffdb83;clip-path:none;border-radius:35%}.m3-game .m3-special-rainbow{clip-path:none;border-radius:50%;background:conic-gradient(#ff7299,#ffc65b,#7addab,#65b9fa,#b892f0,#ff7299);box-shadow:inset 0 0 0 2px white,0 0 8px #ffffffa0}.m3-game .m3-status{font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 `;
-const NAMES = ['红色菱形','金色圆形','绿色六角形','蓝色方形','紫色五角形','橙色三角形'];
-const MARKS = ['◆','●','✚','■','★','▲'];
+const NAMES = ['红色爱心','金色星星','绿色菱形','蓝色六角形','紫色水滴','橙色方糖'];
+const MARKS = ['♥','★','◆','⬡','♦','■'];
+const ART_GEMS = [0,3,2,1,4,5];
 
 const MODE_STYLES = `
 .m3-game{position:relative}.m3-game .m3-meta{display:flex;gap:8px;align-items:center;justify-content:space-between;min-height:32px;flex-shrink:0;color:#684d2e;font-size:12px}.m3-game .m3-mode{border:1px solid #a88555;border-radius:8px;padding:4px 5px;background:#fff7e5;color:#553c25;font:inherit;max-width:135px}.m3-game .m3-wallet{font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums}.m3-game .m3-board{width:min(100%,max(120px,calc(100cqh - 234px)))}.m3-game .m3-cell[data-ice="1"]{background:#b5efff55;box-shadow:inset 0 0 0 2px #9fe7ff}.m3-game .m3-cell[data-ice="2"]{background:#b5efff77;box-shadow:inset 0 0 0 3px #edfcff,0 0 4px #78ceff}.m3-game .m3-ice{position:absolute;top:0;left:1px;color:#fff;font-size:10px;z-index:3;text-shadow:0 1px 2px #163e5d;pointer-events:none}.m3-game .m3-tools{display:flex;gap:5px;flex-wrap:wrap;justify-content:center}.m3-game .m3-tool{border:1px solid #94ccdd55;border-radius:9px;padding:5px 7px;background:#21425b;color:#ebfaff;font:inherit;font-size:11px;line-height:18px;cursor:pointer}.m3-game .m3-tool:disabled,.m3-game .m3-mode:disabled{opacity:.45;cursor:default}.m3-game .m3-tool[aria-pressed=true]{background:#835623;box-shadow:0 0 0 2px #ebca7a}.m3-game .m3-confirm{position:absolute;inset:0;z-index:10;background:#12243ab8;display:grid;place-items:center;padding:20px;border-radius:14px}.m3-game .m3-confirm[hidden],.m3-game [hidden]{display:none!important}.m3-game .m3-dialog{max-width:330px;padding:20px;background:#fff4dc;border:2px solid #d8b776;border-radius:18px;color:#573f27;font-size:14px;line-height:1.7;box-shadow:0 15px 35px #0005}.m3-game .m3-dialog-actions{display:flex;gap:10px;justify-content:center;margin-top:15px}.m3-game .m3-help{margin:3px 0;font-size:10px;line-height:15px}.m3-game .m3-hint{padding:5px 7px}
@@ -323,7 +325,7 @@ export function createMatch3Game(env, saved) {
     buttons.forEach((button,index)=>{
       const value=at(board,index),kind=specialKind(value),color=value%6,layers=ice[index]||0;
       button.dataset.special=kind;button.dataset.ice=String(layers);
-      button.innerHTML=`<span class="m3-gem"><span class="m3-stone m3-kind-${color} m3-special-${kind}" data-mark="${kind==='rainbow'?'◉':MARKS[color]}"></span>${kind!=='normal'?`<b class="m3-power">${SPECIAL_MARKS[kind]}</b>`:''}</span>${layers?`<span class="m3-ice">❄${layers===2?'²':''}</span>`:''}`;
+      button.innerHTML=`<span class="m3-gem"><span class="m3-stone m3-kind-${color} m3-special-${kind}" data-mark="${kind==='rainbow'?'◉':MARKS[color]}">${gameSpriteHTML('candy-bubbles',kind==='rainbow'?6:ART_GEMS[color],NAMES[color])}</span>${kind!=='normal'?`<b class="m3-power">${SPECIAL_MARKS[kind]}</b>`:''}</span>${layers?`<span class="m3-ice">❄${layers===2?'²':''}</span>`:''}`;
       button.setAttribute('aria-label',`第${Math.floor(index/8)+1}行第${index%8+1}列 ${kind==='rainbow'?'彩虹万能糖':NAMES[color]+(SPECIAL_NAMES[kind]?' · '+SPECIAL_NAMES[kind]:'')}${layers?' · '+layers+'层冰':''}`);
       button.setAttribute('aria-pressed',String(selected===index));button.classList.remove('m3-suggest');
     });

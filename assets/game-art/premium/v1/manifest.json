@@ -1,0 +1,74 @@
+{
+  "schema": 1,
+  "artVersion": "1.0.0",
+  "generator": "built-in imagegen",
+  "atlases": {
+    "candy-bubbles": {
+      "grid": [
+        4,
+        4
+      ],
+      "source": "root generated"
+    },
+    "fruits": {
+      "grid": [
+        4,
+        4
+      ],
+      "source": "root generated"
+    },
+    "materials": {
+      "grid": [
+        2,
+        2
+      ],
+      "source": "exec-36f89c78-3af8-4973-8a5b-297c49d3f50b.png"
+    },
+    "pieces": {
+      "grid": [
+        4,
+        4
+      ],
+      "source": "exec-58f6221b-fbbe-48d0-9d09-6bfbc7b811c7.png"
+    }
+  },
+  "gameManifests": {
+    "blackjack": "assets/game-art/blackjack/manifest.json",
+    "bombnumber": "assets/game-art/bombnumber/manifest.json",
+    "chinesechess": "assets/game-art/chinesechess/manifest.json",
+    "connect4d": "assets/game-art/connect4d/manifest.json",
+    "draughts": "assets/game-art/draughts/manifest.json",
+    "freecell": "assets/game-art/freecell/manifest.json",
+    "game1010": "assets/game-art/game1010/manifest.json",
+    "game2048": "assets/game-art/game2048/manifest.json",
+    "gomoku": "assets/game-art/gomoku/manifest.json",
+    "guessnumber": "assets/game-art/guessnumber/manifest.json",
+    "jump": "assets/game-art/jump/manifest.json",
+    "linklink": "assets/game-art/linklink/manifest.json",
+    "ludo": "assets/game-art/ludo/manifest.json",
+    "match3": "assets/game-art/match3/manifest.json",
+    "memory": "assets/game-art/memory/manifest.json",
+    "minesweeper": "assets/game-art/minesweeper/manifest.json",
+    "oldmaid": "assets/game-art/oldmaid/manifest.json",
+    "paopao": "assets/game-art/paopao/manifest.json",
+    "pinball": "assets/game-art/pinball/manifest.json",
+    "plank": "assets/game-art/plank/manifest.json",
+    "popstar": "assets/game-art/popstar/manifest.json",
+    "reversi": "assets/game-art/reversi/manifest.json",
+    "screw": "assets/game-art/screw/manifest.json",
+    "shuerte": "assets/game-art/shuerte/manifest.json",
+    "snake": "assets/game-art/snake/manifest.json",
+    "spider": "assets/game-art/spider/manifest.json",
+    "sudoku": "assets/game-art/sudoku/manifest.json",
+    "territory": "assets/game-art/territory/manifest.json",
+    "tetris": "assets/game-art/tetris/manifest.json",
+    "tictactoe": "assets/game-art/tictactoe/manifest.json",
+    "turkey": "assets/game-art/turkey/manifest.json",
+    "uyangle": "assets/game-art/uyangle/manifest.json",
+    "watermelon": "assets/game-art/watermelon/manifest.json",
+    "watersort": "assets/game-art/watersort/manifest.json",
+    "westernchess": "assets/game-art/westernchess/manifest.json",
+    "wordguess": "assets/game-art/wordguess/manifest.json",
+    "zuma": "assets/game-art/zuma/manifest.json"
+  }
+}

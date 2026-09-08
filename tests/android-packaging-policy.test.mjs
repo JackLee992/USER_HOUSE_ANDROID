@@ -16,6 +16,10 @@ test('the real Java URL policy denies external/traversal requests and serves web
   static void equal(Object a,Object b){if(!java.util.Objects.equals(a,b))throw new AssertionError(a+" != "+b);}
   public static void main(String[] args){
    equal(LocalAssetPolicy.compatibleWebView("123.0.0"),false);equal(LocalAssetPolicy.compatibleWebView("124.0.6367.179"),true);equal(LocalAssetPolicy.compatibleWebView("999.1"),true);equal(LocalAssetPolicy.compatibleWebView(null),false);equal(LocalAssetPolicy.compatibleWebView("unknown"),false);
+   equal(LocalAssetPolicy.chromiumVersion("Mozilla/5.0 (Linux; Android 12; wv) AppleWebKit/537.36 Version/4.0 Chrome/114.0.5735.196 Mobile Safari/537.36"),"114.0.5735.196");
+   equal(LocalAssetPolicy.chromiumVersion("Mozilla/5.0 Chrome/140.0.0.0 Mobile Safari/537.36"),"140.0.0.0");
+   equal(LocalAssetPolicy.chromiumVersion("12.1.1.324"),null);equal(LocalAssetPolicy.chromiumVersion(null),null);
+   equal(LocalAssetPolicy.compatibleWebView(LocalAssetPolicy.chromiumVersion("Mozilla/5.0 Chrome/140.0.0.0 Huawei/12.1.1.324")),true);
    equal(LocalAssetPolicy.assetPath(LocalAssetPolicy.ENTRY),"www/standalone/index.html");
    equal(LocalAssetPolicy.isEntry(LocalAssetPolicy.ENTRY+"#games"),true);
    equal(LocalAssetPolicy.assetPath(LocalAssetPolicy.ORIGIN+"/assets/www/assets/space-cadet/space-cadet.wasm?v=1"),"www/assets/space-cadet/space-cadet.wasm");
@@ -28,8 +32,8 @@ test('the real Java URL policy denies external/traversal requests and serves web
  const compile=spawnSync(binary('javac'),['-d',directory,join(root,'android/app/src/main/java/io/github/jacklee992/wanba/LocalAssetPolicy.java'),join(directory,'PolicyChecks.java')],{encoding:'utf8'});assert.equal(compile.status,0,compile.stderr);
  const run=spawnSync(binary('java'),['-cp',directory,'io.github.jacklee992.wanba.PolicyChecks'],{encoding:'utf8'});assert.equal(run.status,0,run.stderr);
 });
-test('the Android shell declares no network/storage permission and signs only through external properties',()=>{
- const manifest=readFileSync(join(root,'android/app/src/main/AndroidManifest.xml'),'utf8');assert.doesNotMatch(manifest,/<uses-permission\b/);assert.match(manifest,/android:allowBackup="false"/);
+test('the Android shell permits native content downloads without storage permissions and signs only through external properties',()=>{
+ const manifest=readFileSync(join(root,'android/app/src/main/AndroidManifest.xml'),'utf8');assert.deepEqual([...manifest.matchAll(/<uses-permission\s+android:name="([^"]+)"/g)].map(m=>m[1]),['android.permission.INTERNET']);assert.match(manifest,/android:allowBackup="false"/);
  const native=readFileSync(join(root,'android/app/src/main/java/io/github/jacklee992/wanba/MainActivity.java'),'utf8');assert.match(native,/setWebContentsDebuggingEnabled\(BuildConfig.DEBUG\)/);assert.match(native,/setBlockNetworkLoads\(true\)/);assert.doesNotMatch(native,/handler\.proceed\(|setAllowUniversalAccessFromFileURLs\(true\)/);
- const gradle=readFileSync(join(root,'android/app/build.gradle.kts'),'utf8');assert.match(gradle,/\.local\/signing.properties/);assert.match(gradle,/minorApiLevel = 1/);assert.match(gradle,/minSdk = 26/);assert.match(gradle,/versionName = "1.0.0"/);
+ const gradle=readFileSync(join(root,'android/app/build.gradle.kts'),'utf8');assert.match(gradle,/\.local\/signing.properties/);assert.match(gradle,/minorApiLevel = 1/);assert.match(gradle,/minSdk = 26/);assert.match(gradle,/versionName = "1.2.0"/);
 });

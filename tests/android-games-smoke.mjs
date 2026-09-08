@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {writeFileSync} from 'node:fs';
-import {connect,screenshot} from './android-cdp.mjs';
-const c=await connect(),out='docs/evidence/android-1.0';const results=[];
+import {connect,screenshot,origin} from './android-driver.mjs';
+const c=await connect(),out=process.env.QA_OUT||'docs/evidence/android-1.0';const results=[];
 try{
  await c.send('Page.reload');await c.wait(600);await c.until('!!window.wanbaApp');
  for(let i=0;i<3;i++)await c.evaluate('wanbaApp.back()');
@@ -26,8 +26,8 @@ try{
   await c.evaluate('wanbaApp.back()');await c.wait(120);
   console.log('PASS '+g.id);
  }
- assert.deepEqual(c.errors,[]);
- assert.equal(c.requests.filter(u=>/^https?:/.test(u)&&!u.startsWith('https://appassets.androidplatform.net/')).length,0);
+ if(c.syncEvidence)await c.syncEvidence();assert.deepEqual(c.errors,[]);
+ assert.equal(c.requests.filter(u=>/^https?:/.test(u)&&!u.startsWith(origin+'/')).length,0);
  console.log(results.length+' games opened from real APK entry; no runtime exceptions or external requests.');
 }catch(e){screenshot(`${out}/smoke-failure.png`);console.error(e);process.exitCode=1}
 finally{writeFileSync(`${out}/games-smoke.json`,JSON.stringify({passed:process.exitCode!==1,results,errors:c.errors,requests:c.requests},null,2));c.close()}

@@ -2,7 +2,7 @@
 html,body { width:100%; height:100%; margin:0; background:#fff1f5; overscroll-behavior:none; }
 body { -webkit-tap-highlight-color:transparent; }
 button,input,select,textarea { font:inherit; }
-#wanba-boot { min-height:85vh; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#665078; text-align:center; padding:20px; }
+#wanba-boot { position:fixed; inset:0; z-index:2147483646; background:#fff1f5; min-height:85vh; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#665078; text-align:center; padding:20px; }
 #wanba-boot img { border-radius:22px; }
 #wanba-boot h1 { margin:12px 0 0; font-size:30px; }
 body.wanba-standalone #wanbanXiaowu-shell { position:fixed; inset:0; padding:0!important; border:0; background:transparent; width:100%; max-width:100%; overscroll-behavior:none; }
@@ -39,6 +39,16 @@ body.wanba-standalone .wanba-settings .wb-select { width:100%; min-height:44px; 
 .wanba-license-list { display:grid; gap:8px; margin-bottom:14px; }
 .wanba-license-list button { min-height:44px; text-align:left; }
 .wanba-license-text { max-height:65vh; overflow:auto; white-space:pre-wrap; overflow-wrap:anywhere; font:13px/1.6 ui-monospace,monospace; user-select:text; -webkit-user-select:text; }
+.wanba-updates { max-width:960px; margin:0 auto 16px; padding:14px 16px; border:1px solid var(--wb-border,#dfd9e6); border-radius:16px; background:var(--wb-panel,#fff); color:var(--wb-text,#34303f); font-size:13px; }
+.wanba-update-row { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.wanba-update-row small { display:block; margin-top:4px; color:var(--wb-sub,#746c7e); }
+.wanba-updates .wb-btn { min-height:44px; margin:4px 6px 4px 0; }
+.wanba-updates p { line-height:1.6; margin:8px 0; }
+.wanba-updates details { margin:10px 0; }
+.wanba-updates summary { cursor:pointer; min-height:30px; }
+.wanba-updates ul { max-height:180px; overflow:auto; padding-left:22px; }
+.wanba-updates progress { width:100%; accent-color:var(--wb-accent,#ba769a); }
+.wanba-update-confirm { padding:12px; border:1px solid var(--wb-border); border-radius:12px; }
 @media (max-width:480px) {
   body.wanba-standalone #wanbanXiaowu-popup .wb-head { gap:8px; }
   body.wanba-standalone #wanbanXiaowu-popup .wb-tabs { flex-basis:100%; }

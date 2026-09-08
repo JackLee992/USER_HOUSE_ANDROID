@@ -1,0 +1,27 @@
+{
+  "checkedOn": "2026-09-08",
+  "method": "Public web search, exact-name queries and indexed Google Play / Apple App Store entries; selected result pages opened for verification.",
+  "limitations": "Not a live inventory of every regional storefront, not domain registration verification, and not trademark clearance. Direct Apple / Google store search pages did not return usable content in this session.",
+  "candidates": [
+    {
+      "name": "Nookcade",
+      "queries": ["\"Nookcade\"", "\"Nookcade\" app game", "\"Nookcade\" site:play.google.com", "\"Nookcade\" site:apps.apple.com", "\"Nook Cade\" OR \"ヌックケード\" OR \"눅케이드\""],
+      "finding": "No exact-name app or game result surfaced in the queried public index.",
+      "decision": "Recommended working name"
+    },
+    {
+      "name": "JoyDeck",
+      "queries": ["\"JoyDeck\"", "\"JoyDeck\" app game", "\"JoyDeck\" (site:play.google.com/store/apps OR site:apps.apple.com)", "\"JoyDeck\" \"6792247766\""],
+      "finding": "Exact-name iOS app indexed by AppBrain (Apple ID 6792247766); exact-name active marketing platform also found. Apple detail page was not readable through the web tool.",
+      "sources": ["https://www.appbrain.com/appstore/joydeck/ios-6792247766", "https://myjoydeck.com/", "https://joyjoya.com/blogs/podcast/introducing-our-new-jewelry-marketing-support-platform-joydeck"],
+      "decision": "Do not use for this project"
+    },
+    {
+      "name": "Taploft",
+      "queries": ["\"Taploft\" app game", "\"Taploft\" site:play.google.com/store/apps", "\"Taploft\" games official", "\"Taploft\" \"Apple\" app"],
+      "finding": "Existing mobile / computer game developer named Taploft; historical mobile game listings and its company profile establish same-industry use.",
+      "sources": ["https://www.linkedin.com/company/taploft", "https://www.taptap.io/es/app/47803", "https://geardiary.com/2013/08/29/brave-tribe-is-a-cute-fun-and-engaging-strategy-farming-sim-for-ios/"],
+      "decision": "Do not use for this project"
+    }
+  ]
+}
