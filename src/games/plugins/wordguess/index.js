@@ -1,6 +1,6 @@
 // Independently versioned game plugin. Keep imports relative to this immutable snapshot.
 export const GAME_ID = 'wordguess';
-export const GAME_VERSION = '1.0.0';
+export const GAME_VERSION = '1.0.1';
 export const HOST_API_VERSION = 1;
 export const REQUIRED_ENV = Object.freeze(["PROMPT_TEMPLATES","addTaWin","appendModalMask","callApiText","clearProgress","currentCharDescription","currentGame","defaultWordGuessBank","displayCharName","esc","gamePaused","getHostDocument","modalMaskClass","normalizeWordGuessRoundData","parseGeneratedJson","promptTemplates","qs","saveProgress","scores","selectWordGuessRounds","selectedSummaryText","selectedWordGuessRoleName","selectedWorldText","setScore","settings","showGameOver","speak","speakText","toast","wordGuessBank","wordGuessBankSource"]);
 
@@ -63,7 +63,24 @@ export async function createGame(env, state) {
     }
 	    function reveal(){ if(env.gamePaused||over||revealed) return; revealed=true; clueIndex=Math.min(4, round.clues.length-1); finishQuestion(false, '揭晓答案'); }
 		    function submit(){ if(env.gamePaused||over) return; const input=env.qs('#wb-word-input'); const guess=(input.value||'').trim(); if(!guess){ env.toast('请输入猜测'); return; } input.value=''; if(guess===round.word){ finishQuestion(true, guess); } else { const inter=round.interactions||{}; const wrong=Array.isArray(inter.guess)?inter.guess:[]; guesses.unshift({ guess, ok:false, text: wrong[Math.min(wrong.length-1, guesses.filter(g=>!g.ok).length)] || inter.guess || (role + '轻轻摇头，又把提示说得更软了一点。') }); env.speakText(guesses[0].text); draw(); save(); } }
-    function draw(){ env.qs('#wb-word-meta').textContent = '第 ' + (completed+1) + ' 题　字数：' + (round.length || (round.word || '').length) + ' 字　类型：' + (round.type || '未分类') + '　' + visibleClues().length + '/5　你赢：' + userWins; env.qs('#wb-word-clues').textContent = visibleClues().map((c,i)=>(i+1)+'. '+c).join('\n') + (revealed ? '\n\n答案：' + round.word : ''); env.qs('#wb-word-history').innerHTML = guesses.length ? guesses.map(g=>'<div class="wb-guess-item"><b>'+env.esc(g.guess)+'</b>　'+(g.ok?'你赢':'未中')+'<br>'+env.esc(g.text)+'</div>').join('') : '<div class="wb-muted">还没有猜测。</div>'; }
+    function renderMeta(){
+      const doc=env.getHostDocument(),meta=env.qs('#wb-word-meta');
+      meta.replaceChildren();
+      const field=(key,label,value,preserve=false)=>{
+        const item=doc.createElement('span'),caption=doc.createElement('span'),text=doc.createElement('span');
+        item.dataset.wordStat=key;item.style.display='inline-flex';item.style.gap='0.3em';item.style.marginRight='0.85em';item.style.lineHeight='1.8';
+        caption.textContent=label;text.textContent=String(value);
+        if(preserve)text.dataset.i18nSkip='';
+        item.append(caption,doc.createTextNode(':'),text);meta.append(item);
+      };
+      field('question','当前题',(completed+1)+'/'+roundLimit);
+      field('length','字数',round.length||(round.word||'').length);
+      field('category','类型',round.type||'未分类',true);
+      field('source','题库来源',state?'存档题目':source==='default'?'内置题库':'本地题库');
+      field('clues','提示',visibleClues().length+'/5');
+      field('score','分数',userWins);
+    }
+    function draw(){ renderMeta(); env.qs('#wb-word-clues').textContent = visibleClues().map((c,i)=>(i+1)+'. '+c).join('\n') + (revealed ? '\n\n答案：' + round.word : ''); env.qs('#wb-word-history').innerHTML = guesses.length ? guesses.map(g=>'<div class="wb-guess-item"><b>'+env.esc(g.guess)+'</b>　'+(g.ok?'你赢':'未中')+'<br>'+env.esc(g.text)+'</div>').join('') : '<div class="wb-muted">还没有猜测。</div>'; }
   }
 
   async function createWordGuessRounds(count, forceFallback, scope) {

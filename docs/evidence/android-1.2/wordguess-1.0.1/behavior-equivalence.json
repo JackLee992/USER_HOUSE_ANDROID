@@ -1,0 +1,220 @@
+{
+  "passed": true,
+  "oldVersion": "1.0.0",
+  "newVersion": "1.0.1",
+  "steps": [
+    {
+      "step": "initial five Chinese puzzles",
+      "savesIdentical": true,
+      "eventsIdentical": true
+    },
+    {
+      "step": "paused clue",
+      "savesIdentical": true,
+      "eventsIdentical": true
+    },
+    {
+      "step": "next clue",
+      "savesIdentical": true,
+      "eventsIdentical": true
+    },
+    {
+      "step": "wrong answer",
+      "savesIdentical": true,
+      "eventsIdentical": true
+    },
+    {
+      "step": "correct answer",
+      "savesIdentical": true,
+      "eventsIdentical": true
+    },
+    {
+      "step": "advance to second original puzzle",
+      "savesIdentical": true,
+      "eventsIdentical": true
+    },
+    {
+      "step": "reveal second answer",
+      "savesIdentical": true,
+      "eventsIdentical": true
+    },
+    {
+      "step": "advance after reveal",
+      "savesIdentical": true,
+      "eventsIdentical": true
+    },
+    {
+      "step": "correct answer 3",
+      "savesIdentical": true,
+      "eventsIdentical": true
+    },
+    {
+      "step": "advance 3",
+      "savesIdentical": true,
+      "eventsIdentical": true
+    },
+    {
+      "step": "correct answer 4",
+      "savesIdentical": true,
+      "eventsIdentical": true
+    },
+    {
+      "step": "advance 4",
+      "savesIdentical": true,
+      "eventsIdentical": true
+    },
+    {
+      "step": "correct answer 5",
+      "savesIdentical": true,
+      "eventsIdentical": true
+    },
+    {
+      "step": "advance 5",
+      "savesIdentical": true,
+      "eventsIdentical": true
+    },
+    {
+      "step": "load identical existing save",
+      "savesIdentical": true,
+      "bankReadCount": 0
+    }
+  ],
+  "finalEvents": [
+    [
+      "score",
+      "wordguess",
+      1
+    ],
+    [
+      "modal",
+      "wb-word-next-mask"
+    ],
+    [
+      "taWin",
+      "wordguess"
+    ],
+    [
+      "modal",
+      "wb-word-next-mask"
+    ],
+    [
+      "score",
+      "wordguess",
+      1
+    ],
+    [
+      "modal",
+      "wb-word-next-mask"
+    ],
+    [
+      "score",
+      "wordguess",
+      1
+    ],
+    [
+      "modal",
+      "wb-word-next-mask"
+    ],
+    [
+      "score",
+      "wordguess",
+      1
+    ],
+    [
+      "modal",
+      "wb-word-next-mask"
+    ],
+    [
+      "clear",
+      "wordguess"
+    ],
+    [
+      "finish",
+      "wordguess",
+      "你赢了",
+      "本局：你猜中4题，共5题",
+      "user_win",
+      {
+        "firstClueWin": true,
+        "allCorrect": false,
+        "userWins": 4,
+        "completed": 5,
+        "details": {
+          "rounds": [
+            {
+              "word": "风筝",
+              "clues": [
+                "它和日常生活有关",
+                "人们很久以前就在使用",
+                "可以拿在手里",
+                "各有不同的用途",
+                "想一想它的名字"
+              ],
+              "guesses": [
+                "错误答案",
+                "风筝"
+              ],
+              "winClueIndex": 2
+            },
+            {
+              "word": "算盘",
+              "clues": [
+                "它和日常生活有关",
+                "人们很久以前就在使用",
+                "可以拿在手里",
+                "各有不同的用途",
+                "想一想它的名字"
+              ],
+              "guesses": [
+                "揭晓答案"
+              ],
+              "winClueIndex": 0
+            },
+            {
+              "word": "竹笛",
+              "clues": [
+                "它和日常生活有关",
+                "人们很久以前就在使用",
+                "可以拿在手里",
+                "各有不同的用途",
+                "想一想它的名字"
+              ],
+              "guesses": [
+                "竹笛"
+              ],
+              "winClueIndex": 1
+            },
+            {
+              "word": "雨伞",
+              "clues": [
+                "它和日常生活有关",
+                "人们很久以前就在使用",
+                "可以拿在手里",
+                "各有不同的用途",
+                "想一想它的名字"
+              ],
+              "guesses": [
+                "雨伞"
+              ],
+              "winClueIndex": 1
+            },
+            {
+              "word": "茶杯",
+              "clues": [
+                "它和日常生活有关",
+                "人们很久以前就在使用",
+                "可以拿在手里",
+                "各有不同的用途",
+                "想一想它的名字"
+              ],
+              "guesses": [
+                "茶杯"
+              ],
+              "winClueIndex": 1
+            }
+          ]
+        }
+      }
+    ]
+  ]
+}
