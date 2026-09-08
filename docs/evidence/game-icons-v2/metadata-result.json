@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "artVersion": "1.0.1",
+  "gameCount": 37,
+  "checks": [
+    "all game IDs mapped",
+    "all source rectangles inside their sheets",
+    "all asset refs exist",
+    "37 manifest versions and mappings match renderer",
+    "unknown IDs safely return empty",
+    "no old numeric corner badge"
+  ]
+}

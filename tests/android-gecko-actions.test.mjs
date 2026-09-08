@@ -1,6 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {touchActions} from './android-gecko.mjs';
+import {touchActions,isTrustedEntryUrl,origin} from './android-gecko.mjs';
+
+test('Gecko QA connects to existing builtin or immutable update entry without navigating back to builtin',()=>{
+ assert.equal(isTrustedEntryUrl(origin+'/assets/www/standalone/index.html'),true);
+ assert.equal(isTrustedEntryUrl(origin+'/assets/updates/'+'a'.repeat(64)+'/www/standalone/index.html'),true);
+ for(const url of [origin+'.evil/assets/www/standalone/index.html',origin+'/assets/updates/bad/www/standalone/index.html',origin+'/assets/www/standalone/index.html?other=1','https://example.com'])assert.equal(isTrustedEntryUrl(url),false);
+});
 
 test('Gecko multi-touch begins contacts in separate ticks and holds both until ReleaseActions',()=>{
  const actions=touchActions('touchStart',[{id:7,x:66.1,y:675.2},{id:8,x:294.1,y:675.2}]);

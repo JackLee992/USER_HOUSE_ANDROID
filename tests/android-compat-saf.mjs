@@ -38,10 +38,11 @@ try {
   await c.click('#wb-export-data');await c.wait(450);adb('shell','input','keyevent','4');await c.wait(400);
   assert.match(await c.evaluate('document.querySelector("#wanba-toast")?.textContent||""'),/取消/);checks.push('cancel backup reports visible cancellation');
   await touch('#wb-import-data');await c.wait(650);ui=nodes();
-  if(!ui.some(n=>n.text===state.filename)) {
+  const isBackupFile=n=>n.text===state.filename&&n['resource-id']==='android:id/title';
+  if(!ui.some(isBackupFile)) {
    tap(ui.find(n=>n['resource-id'].endsWith('/option_menu_search')));adb('shell','input','text',state.filename);adb('shell','input','keyevent','66');await c.wait(700);ui=nodes();
   }
-  const file=ui.find(n=>n.text===state.filename);assert.ok(file,'newly exported backup visible in SAF picker');tap(file);await c.wait(800);
+  const file=ui.find(isBackupFile);assert.ok(file,'newly exported backup visible in SAF picker');tap(file);await c.wait(800);
   await c.until('!!document.querySelector("#wb-confirm-ok")');await c.click('#wb-confirm-ok');await c.wait(500);
   assert.deepEqual(await c.evaluate('JSON.parse(localStorage.getItem("wanbanXiaowu_progress_v1"))'),state.before);
   checks.push('ACTION_OPEN_DOCUMENT -> native private file import -> Gecko FileReader -> explicit confirm preserves game progress');

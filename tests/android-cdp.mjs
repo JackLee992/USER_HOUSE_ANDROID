@@ -4,7 +4,7 @@ import {writeFileSync} from 'node:fs';
 export const adb=(...args)=>execFileSync('/Users/jacklee/Library/Android/sdk/platform-tools/adb',['-s','emulator-5554',...args],{encoding:'utf8',maxBuffer:16*1024*1024});
 export const screenshot=path=>writeFileSync(path,execFileSync('/Users/jacklee/Library/Android/sdk/platform-tools/adb',['-s','emulator-5554','exec-out','screencap','-p'],{maxBuffer:16*1024*1024}));
 export async function connect(){
- let tab;for(let attempt=0;attempt<75;attempt++){try{const pid=adb('shell','pidof','io.github.jacklee992.wanba').trim();if(!/^\d+$/.test(pid))throw Error('Wanba not ready');adb('forward','tcp:9224','localabstract:webview_devtools_remote_'+pid);const tabs=await(await fetch('http://127.0.0.1:9224/json')).json();tab=tabs.find(t=>t.type==='page'&&t.url==='https://appassets.androidplatform.net/assets/www/standalone/index.html');if(tab)break;}catch{}await new Promise(r=>setTimeout(r,200));}
+ let tab;for(let attempt=0;attempt<75;attempt++){try{const pid=adb('shell','pidof','io.github.jacklee992.wanba').trim();if(!/^\d+$/.test(pid))throw Error('Wanba not ready');adb('forward','tcp:9224','localabstract:webview_devtools_remote_'+pid);const tabs=await(await fetch('http://127.0.0.1:9224/json')).json();tab=tabs.find(t=>t.type==='page'&&/^https:\/\/appassets\.androidplatform\.net\/assets\/(?:updates\/[0-9a-f]{64}\/)?www\/standalone\/index\.html$/.test(t.url));if(tab)break;}catch{}await new Promise(r=>setTimeout(r,200));}
  if(!tab)throw Error('Dedicated Wanba Android entry not found');
  const socket=new WebSocket(tab.webSocketDebuggerUrl);await new Promise((r,j)=>{socket.onopen=r;socket.onerror=j});
  let id=0;const pending=new Map(),errors=[],requests=[];

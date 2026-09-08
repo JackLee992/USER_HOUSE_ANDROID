@@ -1,0 +1,126 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "mode": "eco",
+      "game": "paopao",
+      "canvas": {
+        "width": 382,
+        "height": 516,
+        "cssWidth": 382,
+        "cssHeight": 516,
+        "inside": true
+      },
+      "shotResolved": true,
+      "animationDraws": 34,
+      "pausedRedraws": 0,
+      "idleRedraws": 0
+    },
+    {
+      "mode": "eco",
+      "game": "game1010",
+      "canvas": {
+        "width": 383,
+        "height": 666,
+        "cssWidth": 383,
+        "cssHeight": 666,
+        "inside": true
+      }
+    },
+    {
+      "mode": "normal",
+      "game": "paopao",
+      "canvas": {
+        "width": 764,
+        "height": 1032,
+        "cssWidth": 382,
+        "cssHeight": 516,
+        "inside": true
+      },
+      "shotResolved": true,
+      "animationDraws": 34,
+      "pausedRedraws": 0,
+      "idleRedraws": 0
+    },
+    {
+      "mode": "normal",
+      "game": "game1010",
+      "canvas": {
+        "width": 766,
+        "height": 1332,
+        "cssWidth": 383,
+        "cssHeight": 666,
+        "inside": true
+      }
+    },
+    {
+      "mode": "game",
+      "game": "paopao",
+      "canvas": {
+        "width": 1146,
+        "height": 1548,
+        "cssWidth": 382,
+        "cssHeight": 516,
+        "inside": true
+      },
+      "shotResolved": true,
+      "animationDraws": 34,
+      "pausedRedraws": 0,
+      "idleRedraws": 0
+    },
+    {
+      "mode": "game",
+      "game": "game1010",
+      "canvas": {
+        "width": 1149,
+        "height": 1998,
+        "cssWidth": 383,
+        "cssHeight": 666,
+        "inside": true
+      }
+    },
+    {
+      "preferencePersistsOnReload": true
+    },
+    {
+      "narrowCanvas": {
+        "left": 15,
+        "right": 306,
+        "boxLeft": 10,
+        "boxRight": 310,
+        "viewport": 320
+      }
+    },
+    {
+      "locale": "zh-CN",
+      "performanceSettings": true,
+      "nativeStatusTranslation": true,
+      "width": 360
+    },
+    {
+      "locale": "zh-TW",
+      "performanceSettings": true,
+      "nativeStatusTranslation": true,
+      "width": 360
+    },
+    {
+      "locale": "en",
+      "performanceSettings": true,
+      "nativeStatusTranslation": true,
+      "width": 360
+    },
+    {
+      "locale": "ja",
+      "performanceSettings": true,
+      "nativeStatusTranslation": true,
+      "width": 360
+    },
+    {
+      "locale": "ko",
+      "performanceSettings": true,
+      "nativeStatusTranslation": true,
+      "width": 360
+    }
+  ],
+  "errors": []
+}

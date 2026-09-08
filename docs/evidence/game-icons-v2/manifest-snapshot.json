@@ -1,0 +1,743 @@
+{
+  "schema": 1,
+  "artVersion": "1.0.1",
+  "status": "integrated",
+  "sampling": "sourceRect",
+  "sheets": {
+    "sheet-01": {
+      "path": "assets/game-art/icons-v2/sheet-01.png",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "grid": [
+        3,
+        3
+      ],
+      "sha256": "46ea2027d8740efe424ab1138364ee9a74f89b021040d734b110411ca1f06083",
+      "bytes": 1811043
+    },
+    "sheet-02": {
+      "path": "assets/game-art/icons-v2/sheet-02.png",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "grid": [
+        3,
+        3
+      ],
+      "sha256": "26bc01a3057c4d26ca05db5d5557adb82c90fc0e0726fa365952b033906ae3e8",
+      "bytes": 1839333
+    },
+    "sheet-03": {
+      "path": "assets/game-art/icons-v2/sheet-03.png",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "grid": [
+        3,
+        3
+      ],
+      "sha256": "259a36408bdedb082dc06b355f694ffd8a4cfae4edad6b7c88abaf61e90d3f22",
+      "bytes": 2020124
+    },
+    "sheet-04": {
+      "path": "assets/game-art/icons-v2/sheet-04.png",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "grid": [
+        3,
+        3
+      ],
+      "sha256": "6c119e41ddbedefd90bcacca8e1ad77d022c8541a5cdc55edbef114661b8b10b",
+      "bytes": 2095699
+    },
+    "sheet-05": {
+      "path": "assets/game-art/icons-v2/sheet-05.png",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "grid": [
+        1,
+        1
+      ],
+      "sha256": "d8e19e6d4947255c8bd77e4657d92213d9825c4167616760e502773518163430",
+      "bytes": 2003134
+    }
+  },
+  "games": {
+    "tetris": {
+      "sheet": "sheet-01",
+      "path": "assets/game-art/icons-v2/sheet-01.png",
+      "cell": 0,
+      "column": 0,
+      "row": 0,
+      "sourceRect": [
+        0,
+        0,
+        419,
+        407
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Falling tetromino blocks"
+    },
+    "snake": {
+      "sheet": "sheet-01",
+      "path": "assets/game-art/icons-v2/sheet-01.png",
+      "cell": 1,
+      "column": 1,
+      "row": 0,
+      "sourceRect": [
+        419,
+        0,
+        418,
+        407
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Emerald S snake and apple"
+    },
+    "game2048": {
+      "sheet": "sheet-01",
+      "path": "assets/game-art/icons-v2/sheet-01.png",
+      "cell": 2,
+      "column": 2,
+      "row": 0,
+      "sourceRect": [
+        837,
+        0,
+        417,
+        407
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Large engraved 2048 tile"
+    },
+    "watermelon": {
+      "sheet": "sheet-01",
+      "path": "assets/game-art/icons-v2/sheet-01.png",
+      "cell": 3,
+      "column": 0,
+      "row": 1,
+      "sourceRect": [
+        0,
+        407,
+        419,
+        390
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Juicy watermelon merging fruit"
+    },
+    "memory": {
+      "sheet": "sheet-01",
+      "path": "assets/game-art/icons-v2/sheet-01.png",
+      "cell": 4,
+      "column": 1,
+      "row": 1,
+      "sourceRect": [
+        419,
+        407,
+        418,
+        390
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Matching strawberry playing tiles"
+    },
+    "jump": {
+      "sheet": "sheet-01",
+      "path": "assets/game-art/icons-v2/sheet-01.png",
+      "cell": 5,
+      "column": 2,
+      "row": 1,
+      "sourceRect": [
+        837,
+        407,
+        417,
+        390
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Fox leaping between platforms"
+    },
+    "plank": {
+      "sheet": "sheet-01",
+      "path": "assets/game-art/icons-v2/sheet-01.png",
+      "cell": 6,
+      "column": 0,
+      "row": 2,
+      "sourceRect": [
+        0,
+        797,
+        419,
+        430
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Fox walking across wood bridge"
+    },
+    "sudoku": {
+      "sheet": "sheet-01",
+      "path": "assets/game-art/icons-v2/sheet-01.png",
+      "cell": 7,
+      "column": 1,
+      "row": 2,
+      "sourceRect": [
+        419,
+        797,
+        418,
+        430
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Ivory numbered Sudoku grid"
+    },
+    "minesweeper": {
+      "sheet": "sheet-01",
+      "path": "assets/game-art/icons-v2/sheet-01.png",
+      "cell": 8,
+      "column": 2,
+      "row": 2,
+      "sourceRect": [
+        837,
+        797,
+        417,
+        430
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Black mine and red grid flag"
+    },
+    "uyangle": {
+      "sheet": "sheet-02",
+      "path": "assets/game-art/icons-v2/sheet-02.png",
+      "cell": 0,
+      "column": 0,
+      "row": 0,
+      "sourceRect": [
+        0,
+        0,
+        419,
+        407
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Triple matched tiles and sheep"
+    },
+    "screw": {
+      "sheet": "sheet-02",
+      "path": "assets/game-art/icons-v2/sheet-02.png",
+      "cell": 1,
+      "column": 1,
+      "row": 0,
+      "sourceRect": [
+        419,
+        0,
+        418,
+        407
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Crossed metal strips and lifted screw"
+    },
+    "popstar": {
+      "sheet": "sheet-02",
+      "path": "assets/game-art/icons-v2/sheet-02.png",
+      "cell": 2,
+      "column": 2,
+      "row": 0,
+      "sourceRect": [
+        837,
+        0,
+        417,
+        407
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Colorful popping star blocks"
+    },
+    "paopao": {
+      "sheet": "sheet-02",
+      "path": "assets/game-art/icons-v2/sheet-02.png",
+      "cell": 3,
+      "column": 0,
+      "row": 1,
+      "sourceRect": [
+        0,
+        407,
+        419,
+        390
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Gold bubble cannon and color arc"
+    },
+    "game1010": {
+      "sheet": "sheet-02",
+      "path": "assets/game-art/icons-v2/sheet-02.png",
+      "cell": 4,
+      "column": 1,
+      "row": 1,
+      "sourceRect": [
+        419,
+        407,
+        418,
+        390
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Inset block-placement board"
+    },
+    "turkey": {
+      "sheet": "sheet-02",
+      "path": "assets/game-art/icons-v2/sheet-02.png",
+      "cell": 5,
+      "column": 2,
+      "row": 1,
+      "sourceRect": [
+        837,
+        407,
+        417,
+        390
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Red sliding block and right exit"
+    },
+    "spider": {
+      "sheet": "sheet-02",
+      "path": "assets/game-art/icons-v2/sheet-02.png",
+      "cell": 6,
+      "column": 0,
+      "row": 2,
+      "sourceRect": [
+        0,
+        797,
+        419,
+        430
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Spade card cascades and gold spider"
+    },
+    "linklink": {
+      "sheet": "sheet-02",
+      "path": "assets/game-art/icons-v2/sheet-02.png",
+      "cell": 7,
+      "column": 1,
+      "row": 2,
+      "sourceRect": [
+        419,
+        797,
+        418,
+        430
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Paired orange tiles with elbow link"
+    },
+    "shuerte": {
+      "sheet": "sheet-02",
+      "path": "assets/game-art/icons-v2/sheet-02.png",
+      "cell": 8,
+      "column": 2,
+      "row": 2,
+      "sourceRect": [
+        837,
+        797,
+        417,
+        430
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Searching number tiles with path"
+    },
+    "pinball": {
+      "sheet": "sheet-03",
+      "path": "assets/game-art/icons-v2/sheet-03.png",
+      "cell": 0,
+      "column": 0,
+      "row": 0,
+      "sourceRect": [
+        0,
+        0,
+        419,
+        407
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Pinball flippers steel ball bumpers"
+    },
+    "match3": {
+      "sheet": "sheet-03",
+      "path": "assets/game-art/icons-v2/sheet-03.png",
+      "cell": 1,
+      "column": 1,
+      "row": 0,
+      "sourceRect": [
+        419,
+        0,
+        418,
+        407
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Three matching red heart gems"
+    },
+    "freecell": {
+      "sheet": "sheet-03",
+      "path": "assets/game-art/icons-v2/sheet-03.png",
+      "cell": 2,
+      "column": 2,
+      "row": 0,
+      "sourceRect": [
+        837,
+        0,
+        417,
+        407
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Four free card slots and suited fan"
+    },
+    "zuma": {
+      "sheet": "sheet-03",
+      "path": "assets/game-art/icons-v2/sheet-03.png",
+      "cell": 3,
+      "column": 0,
+      "row": 1,
+      "sourceRect": [
+        0,
+        407,
+        419,
+        390
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Carved jade frog and marble chain"
+    },
+    "watersort": {
+      "sheet": "sheet-03",
+      "path": "assets/game-art/icons-v2/sheet-03.png",
+      "cell": 4,
+      "column": 1,
+      "row": 1,
+      "sourceRect": [
+        419,
+        407,
+        418,
+        390
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Layered glass tubes pouring colors"
+    },
+    "ludo": {
+      "sheet": "sheet-03",
+      "path": "assets/game-art/icons-v2/sheet-03.png",
+      "cell": 5,
+      "column": 2,
+      "row": 1,
+      "sourceRect": [
+        837,
+        407,
+        417,
+        390
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Red blue planes on Ludo route"
+    },
+    "guessnumber": {
+      "sheet": "sheet-03",
+      "path": "assets/game-art/icons-v2/sheet-03.png",
+      "cell": 6,
+      "column": 0,
+      "row": 2,
+      "sourceRect": [
+        0,
+        797,
+        419,
+        420
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Four number lock wheels and lens"
+    },
+    "wordguess": {
+      "sheet": "sheet-03",
+      "path": "assets/game-art/icons-v2/sheet-03.png",
+      "cell": 7,
+      "column": 1,
+      "row": 2,
+      "sourceRect": [
+        419,
+        797,
+        418,
+        420
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Letter and question speech bubbles"
+    },
+    "tictactoe": {
+      "sheet": "sheet-03",
+      "path": "assets/game-art/icons-v2/sheet-03.png",
+      "cell": 8,
+      "column": 2,
+      "row": 2,
+      "sourceRect": [
+        837,
+        797,
+        417,
+        420
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Red X and teal O grid"
+    },
+    "gomoku": {
+      "sheet": "sheet-04",
+      "path": "assets/game-art/icons-v2/sheet-04.png",
+      "cell": 0,
+      "column": 0,
+      "row": 0,
+      "sourceRect": [
+        0,
+        0,
+        419,
+        407
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Five black stones in one line"
+    },
+    "territory": {
+      "sheet": "sheet-04",
+      "path": "assets/game-art/icons-v2/sheet-04.png",
+      "cell": 1,
+      "column": 1,
+      "row": 0,
+      "sourceRect": [
+        419,
+        0,
+        418,
+        407
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Dots edges and claimed square"
+    },
+    "oldmaid": {
+      "sheet": "sheet-04",
+      "path": "assets/game-art/icons-v2/sheet-04.png",
+      "cell": 2,
+      "column": 2,
+      "row": 0,
+      "sourceRect": [
+        837,
+        0,
+        417,
+        407
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Jester and matching heart cards"
+    },
+    "reversi": {
+      "sheet": "sheet-04",
+      "path": "assets/game-art/icons-v2/sheet-04.png",
+      "cell": 3,
+      "column": 0,
+      "row": 1,
+      "sourceRect": [
+        0,
+        407,
+        419,
+        390
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Black white disks with flipping piece"
+    },
+    "bombnumber": {
+      "sheet": "sheet-04",
+      "path": "assets/game-art/icons-v2/sheet-04.png",
+      "cell": 4,
+      "column": 1,
+      "row": 1,
+      "sourceRect": [
+        419,
+        407,
+        418,
+        390
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Fuse bomb and numeric 50 tile"
+    },
+    "connect4d": {
+      "sheet": "sheet-04",
+      "path": "assets/game-art/icons-v2/sheet-04.png",
+      "cell": 5,
+      "column": 2,
+      "row": 1,
+      "sourceRect": [
+        837,
+        407,
+        417,
+        390
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Upright colored disk connection rack"
+    },
+    "draughts": {
+      "sheet": "sheet-04",
+      "path": "assets/game-art/icons-v2/sheet-04.png",
+      "cell": 6,
+      "column": 0,
+      "row": 2,
+      "sourceRect": [
+        0,
+        797,
+        419,
+        430
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Six-pointed star Chinese checkers board"
+    },
+    "blackjack": {
+      "sheet": "sheet-04",
+      "path": "assets/game-art/icons-v2/sheet-04.png",
+      "cell": 7,
+      "column": 1,
+      "row": 2,
+      "sourceRect": [
+        419,
+        797,
+        418,
+        430
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Spade ace heart king casino chips"
+    },
+    "westernchess": {
+      "sheet": "sheet-04",
+      "path": "assets/game-art/icons-v2/sheet-04.png",
+      "cell": 8,
+      "column": 2,
+      "row": 2,
+      "sourceRect": [
+        837,
+        797,
+        417,
+        430
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Ivory king and black knight board"
+    },
+    "chinesechess": {
+      "sheet": "sheet-05",
+      "path": "assets/game-art/icons-v2/sheet-05.png",
+      "cell": 0,
+      "column": 0,
+      "row": 0,
+      "sourceRect": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "subject": "Red 帅 and black 将 Xiangqi disks"
+    }
+  },
+  "notes": "Use sourceRect and sourceSize. Imagegen rows are not exact thirds. PNG images are unedited built-in imagegen outputs; CSS/Canvas samples complete independent icons directly. No numeric badges or reused gameplay sprites.",
+  "generator": "built-in imagegen"
+}

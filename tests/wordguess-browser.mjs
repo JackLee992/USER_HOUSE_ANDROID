@@ -44,7 +44,7 @@ try{
   await startWordGuess();
   const initial=await readSave(),fields=await readFields();
   assert.equal(fields.clues.label,'Hint');assert.equal(fields.score.label,'Score');
-  assert.equal(fields.question.label,'当前题');assert.equal(fields.question.value,'1/5');
+  assert.equal(fields.question.label,'Question');assert.equal(fields.question.value,'1/5');
   assert.equal(fields.category.value,initial.rounds[0].type);assert.equal(fields.category.preserved,true);
   assert.equal(fields.length.value,String(initial.rounds[0].length));
   assert.equal(await evaluate('document.querySelector("#wb-word-clues").textContent'),'1. '+initial.rounds[0].clues[0]);

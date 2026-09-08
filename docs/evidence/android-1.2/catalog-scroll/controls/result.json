@@ -1,0 +1,132 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "locale": "zh-CN",
+      "mode": "eco",
+      "solo23": true,
+      "computer14": true,
+      "scrollBothDirections": true,
+      "noUnintendedGame": true
+    },
+    {
+      "locale": "zh-CN",
+      "mode": "normal",
+      "solo23": true,
+      "computer14": true,
+      "scrollBothDirections": true,
+      "noUnintendedGame": true
+    },
+    {
+      "locale": "zh-CN",
+      "mode": "game",
+      "solo23": true,
+      "computer14": true,
+      "scrollBothDirections": true,
+      "noUnintendedGame": true
+    },
+    {
+      "locale": "zh-TW",
+      "mode": "eco",
+      "solo23": true,
+      "computer14": true,
+      "scrollBothDirections": true,
+      "noUnintendedGame": true
+    },
+    {
+      "locale": "zh-TW",
+      "mode": "normal",
+      "solo23": true,
+      "computer14": true,
+      "scrollBothDirections": true,
+      "noUnintendedGame": true
+    },
+    {
+      "locale": "zh-TW",
+      "mode": "game",
+      "solo23": true,
+      "computer14": true,
+      "scrollBothDirections": true,
+      "noUnintendedGame": true
+    },
+    {
+      "locale": "en",
+      "mode": "eco",
+      "solo23": true,
+      "computer14": true,
+      "scrollBothDirections": true,
+      "noUnintendedGame": true
+    },
+    {
+      "locale": "en",
+      "mode": "normal",
+      "solo23": true,
+      "computer14": true,
+      "scrollBothDirections": true,
+      "noUnintendedGame": true
+    },
+    {
+      "locale": "en",
+      "mode": "game",
+      "solo23": true,
+      "computer14": true,
+      "scrollBothDirections": true,
+      "noUnintendedGame": true
+    },
+    {
+      "locale": "ja",
+      "mode": "eco",
+      "solo23": true,
+      "computer14": true,
+      "scrollBothDirections": true,
+      "noUnintendedGame": true
+    },
+    {
+      "locale": "ja",
+      "mode": "normal",
+      "solo23": true,
+      "computer14": true,
+      "scrollBothDirections": true,
+      "noUnintendedGame": true
+    },
+    {
+      "locale": "ja",
+      "mode": "game",
+      "solo23": true,
+      "computer14": true,
+      "scrollBothDirections": true,
+      "noUnintendedGame": true
+    },
+    {
+      "locale": "ko",
+      "mode": "eco",
+      "solo23": true,
+      "computer14": true,
+      "scrollBothDirections": true,
+      "noUnintendedGame": true
+    },
+    {
+      "locale": "ko",
+      "mode": "normal",
+      "solo23": true,
+      "computer14": true,
+      "scrollBothDirections": true,
+      "noUnintendedGame": true
+    },
+    {
+      "locale": "ko",
+      "mode": "game",
+      "solo23": true,
+      "computer14": true,
+      "scrollBothDirections": true,
+      "noUnintendedGame": true
+    },
+    {
+      "horizontalTabSwipe": true
+    },
+    {
+      "gameEntryAndReturn": true
+    }
+  ],
+  "errors": []
+}

@@ -1,0 +1,5 @@
+--- a/standalone/game-art.css
++++ b/standalone/game-art.css
+@@ -8,1 +8,2 @@
+ .wanba-standalone #wanbanXiaowu-popup #wb-gamebox :is(.wb-memory-back,.wb-bj-card.back,.wb-spider-card.back,.wb-oldmaid-card.back) {background-image:linear-gradient(135deg,#d6ae6922,#0000),var(--wanba-materials)!important;background-size:100% 100%,200% 200%!important;background-position:0 0,0 100%!important;border:2px solid #d0ac6c!important;box-shadow:inset 0 0 0 4px #f4dcaf55!important}
++.wanba-standalone #wanbanXiaowu-popup #wb-gamebox .wb-bj-table :is(.wb-bj-name,.wb-bj-score,.wb-bj-mid>div:last-child) {color:#fff6dc!important;text-shadow:0 1px 3px #001b13}

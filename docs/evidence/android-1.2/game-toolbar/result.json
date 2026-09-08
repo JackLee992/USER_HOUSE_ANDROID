@@ -1,0 +1,566 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "locale": "zh-CN",
+      "width": 320,
+      "bar": {
+        "left": 10,
+        "right": 310
+      },
+      "elements": [
+        {
+          "selector": "#wb-back",
+          "text": "返回",
+          "left": 16,
+          "right": 58,
+          "top": 14,
+          "bottom": 48,
+          "complete": true
+        },
+        {
+          "selector": "#wb-game-records",
+          "text": "记录",
+          "left": 16,
+          "right": 108,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-pause",
+          "text": "暂停",
+          "left": 114,
+          "right": 206,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-restart",
+          "text": "重开",
+          "left": 212,
+          "right": 304,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-score",
+          "text": "本局：123456",
+          "left": 221.703125,
+          "right": 304,
+          "top": 22.59375,
+          "bottom": 39.390625,
+          "complete": true
+        }
+      ],
+      "documentFits": true
+    },
+    {
+      "locale": "zh-CN",
+      "width": 360,
+      "bar": {
+        "left": 10,
+        "right": 350
+      },
+      "elements": [
+        {
+          "selector": "#wb-back",
+          "text": "返回",
+          "left": 16,
+          "right": 58,
+          "top": 14,
+          "bottom": 48,
+          "complete": true
+        },
+        {
+          "selector": "#wb-game-records",
+          "text": "记录",
+          "left": 16,
+          "right": 121.328125,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-pause",
+          "text": "暂停",
+          "left": 127.328125,
+          "right": 232.65625,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-restart",
+          "text": "重开",
+          "left": 238.65625,
+          "right": 344,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-score",
+          "text": "本局：123456",
+          "left": 261.703125,
+          "right": 344,
+          "top": 22.59375,
+          "bottom": 39.390625,
+          "complete": true
+        }
+      ],
+      "documentFits": true
+    },
+    {
+      "locale": "zh-TW",
+      "width": 320,
+      "bar": {
+        "left": 10,
+        "right": 310
+      },
+      "elements": [
+        {
+          "selector": "#wb-back",
+          "text": "返回",
+          "left": 16,
+          "right": 58,
+          "top": 14,
+          "bottom": 48,
+          "complete": true
+        },
+        {
+          "selector": "#wb-game-records",
+          "text": "記錄",
+          "left": 16,
+          "right": 108,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-pause",
+          "text": "暫停",
+          "left": 114,
+          "right": 206,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-restart",
+          "text": "重開",
+          "left": 212,
+          "right": 304,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-score",
+          "text": "本局：123456",
+          "left": 221.703125,
+          "right": 304,
+          "top": 22.59375,
+          "bottom": 39.390625,
+          "complete": true
+        }
+      ],
+      "documentFits": true
+    },
+    {
+      "locale": "zh-TW",
+      "width": 360,
+      "bar": {
+        "left": 10,
+        "right": 350
+      },
+      "elements": [
+        {
+          "selector": "#wb-back",
+          "text": "返回",
+          "left": 16,
+          "right": 58,
+          "top": 14,
+          "bottom": 48,
+          "complete": true
+        },
+        {
+          "selector": "#wb-game-records",
+          "text": "記錄",
+          "left": 16,
+          "right": 121.328125,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-pause",
+          "text": "暫停",
+          "left": 127.328125,
+          "right": 232.65625,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-restart",
+          "text": "重開",
+          "left": 238.65625,
+          "right": 344,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-score",
+          "text": "本局：123456",
+          "left": 261.703125,
+          "right": 344,
+          "top": 22.59375,
+          "bottom": 39.390625,
+          "complete": true
+        }
+      ],
+      "documentFits": true
+    },
+    {
+      "locale": "en",
+      "width": 320,
+      "bar": {
+        "left": 10,
+        "right": 310
+      },
+      "elements": [
+        {
+          "selector": "#wb-back",
+          "text": "Back",
+          "left": 16,
+          "right": 63.671875,
+          "top": 14,
+          "bottom": 48,
+          "complete": true
+        },
+        {
+          "selector": "#wb-game-records",
+          "text": "Records",
+          "left": 16,
+          "right": 108,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-pause",
+          "text": "Pause",
+          "left": 114,
+          "right": 206,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-restart",
+          "text": "Restart",
+          "left": 212,
+          "right": 304,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-score",
+          "text": "Round: 123456",
+          "left": 212,
+          "right": 304,
+          "top": 22.59375,
+          "bottom": 39.390625,
+          "complete": true
+        }
+      ],
+      "documentFits": true
+    },
+    {
+      "locale": "en",
+      "width": 360,
+      "bar": {
+        "left": 10,
+        "right": 350
+      },
+      "elements": [
+        {
+          "selector": "#wb-back",
+          "text": "Back",
+          "left": 16,
+          "right": 63.671875,
+          "top": 14,
+          "bottom": 48,
+          "complete": true
+        },
+        {
+          "selector": "#wb-game-records",
+          "text": "Records",
+          "left": 16,
+          "right": 121.328125,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-pause",
+          "text": "Pause",
+          "left": 127.328125,
+          "right": 232.65625,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-restart",
+          "text": "Restart",
+          "left": 238.65625,
+          "right": 344,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-score",
+          "text": "Round: 123456",
+          "left": 252,
+          "right": 344,
+          "top": 22.59375,
+          "bottom": 39.390625,
+          "complete": true
+        }
+      ],
+      "documentFits": true
+    },
+    {
+      "locale": "ja",
+      "width": 320,
+      "bar": {
+        "left": 10,
+        "right": 310
+      },
+      "elements": [
+        {
+          "selector": "#wb-back",
+          "text": "戻る",
+          "left": 16,
+          "right": 58,
+          "top": 14,
+          "bottom": 48,
+          "complete": true
+        },
+        {
+          "selector": "#wb-game-records",
+          "text": "記録",
+          "left": 16,
+          "right": 108,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-pause",
+          "text": "一時停止",
+          "left": 114,
+          "right": 206,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-restart",
+          "text": "やり直す",
+          "left": 212,
+          "right": 304,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-score",
+          "text": "今回：123456",
+          "left": 221.703125,
+          "right": 304,
+          "top": 22.59375,
+          "bottom": 39.390625,
+          "complete": true
+        }
+      ],
+      "documentFits": true
+    },
+    {
+      "locale": "ja",
+      "width": 360,
+      "bar": {
+        "left": 10,
+        "right": 350
+      },
+      "elements": [
+        {
+          "selector": "#wb-back",
+          "text": "戻る",
+          "left": 16,
+          "right": 58,
+          "top": 14,
+          "bottom": 48,
+          "complete": true
+        },
+        {
+          "selector": "#wb-game-records",
+          "text": "記録",
+          "left": 16,
+          "right": 121.328125,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-pause",
+          "text": "一時停止",
+          "left": 127.328125,
+          "right": 232.65625,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-restart",
+          "text": "やり直す",
+          "left": 238.65625,
+          "right": 344,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-score",
+          "text": "今回：123456",
+          "left": 261.703125,
+          "right": 344,
+          "top": 22.59375,
+          "bottom": 39.390625,
+          "complete": true
+        }
+      ],
+      "documentFits": true
+    },
+    {
+      "locale": "ko",
+      "width": 320,
+      "bar": {
+        "left": 10,
+        "right": 310
+      },
+      "elements": [
+        {
+          "selector": "#wb-back",
+          "text": "뒤로",
+          "left": 16,
+          "right": 56,
+          "top": 14,
+          "bottom": 48,
+          "complete": true
+        },
+        {
+          "selector": "#wb-game-records",
+          "text": "기록",
+          "left": 16,
+          "right": 108,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-pause",
+          "text": "일시정지",
+          "left": 114,
+          "right": 206,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-restart",
+          "text": "다시 시작",
+          "left": 212,
+          "right": 304,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-score",
+          "text": "이번 판: 123456",
+          "left": 216.203125,
+          "right": 304,
+          "top": 22.59375,
+          "bottom": 39.390625,
+          "complete": true
+        }
+      ],
+      "documentFits": true
+    },
+    {
+      "locale": "ko",
+      "width": 360,
+      "bar": {
+        "left": 10,
+        "right": 350
+      },
+      "elements": [
+        {
+          "selector": "#wb-back",
+          "text": "뒤로",
+          "left": 16,
+          "right": 56,
+          "top": 14,
+          "bottom": 48,
+          "complete": true
+        },
+        {
+          "selector": "#wb-game-records",
+          "text": "기록",
+          "left": 16,
+          "right": 121.328125,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-pause",
+          "text": "일시정지",
+          "left": 127.328125,
+          "right": 232.65625,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-restart",
+          "text": "다시 시작",
+          "left": 238.65625,
+          "right": 344,
+          "top": 53,
+          "bottom": 89,
+          "complete": true
+        },
+        {
+          "selector": "#wb-score",
+          "text": "이번 판: 123456",
+          "left": 256.203125,
+          "right": 344,
+          "top": 22.59375,
+          "bottom": 39.390625,
+          "complete": true
+        }
+      ],
+      "documentFits": true
+    }
+  ],
+  "errors": []
+}

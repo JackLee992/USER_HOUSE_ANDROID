@@ -6,6 +6,8 @@ export const serial=process.env.ADB_SERIAL||'emulator-5554';
 export const packageId='io.github.jacklee992.wanba.compat';
 export const activity=packageId+'/io.github.jacklee992.wanba.CompatActivity';
 export const origin='http://127.0.0.1:38657';
+export const isTrustedEntryUrl=url=>typeof url==='string'&&(url===origin+'/assets/www/standalone/index.html'
+ || (url.startsWith(origin)&&/^\/assets\/updates\/[0-9a-f]{64}\/www\/standalone\/index\.html$/.test(url.slice(origin.length))));
 const adbBinary=process.env.ADB||'/Users/jacklee/Library/Android/sdk/platform-tools/adb';
 export const adb=(...args)=>execFileSync(adbBinary,['-s',serial,...args],{encoding:'utf8',maxBuffer:16*1024*1024});
 export const screenshot=path=>writeFileSync(path,execFileSync(adbBinary,['-s',serial,'exec-out','screencap','-p'],{maxBuffer:16*1024*1024}));
@@ -52,7 +54,8 @@ async function connectOnce(){
  const wait=ms=>new Promise(r=>setTimeout(r,ms));
  const until=async(expr,ms=12000)=>{const end=Date.now()+ms;while(Date.now()<end){if(await evaluate(expr))return;await wait(100)}throw Error('Timeout '+expr);};
  await until('!!window.wanbaApp');
- if(await evaluate('location.href')!==origin+'/assets/www/standalone/index.html')throw Error('Wrong Gecko page');
+ const entryUrl=await evaluate('location.href');
+ if(!isTrustedEntryUrl(entryUrl))throw Error('Wrong Gecko page');
  await evaluate('(()=>{window.__wanbaQaErrors=[];addEventListener("error",e=>__wanbaQaErrors.push({message:e.message,file:e.filename,line:e.lineno}));addEventListener("unhandledrejection",e=>__wanbaQaErrors.push({message:String(e.reason)}));return true;})()');
  const errors=[],requests=[];
  const syncEvidence=async()=>{errors.splice(0,errors.length,...await evaluate('window.__wanbaQaErrors||[]'));requests.splice(0,requests.length,...await evaluate('[...performance.getEntriesByType("resource").map(r=>r.name),...[...document.querySelectorAll("iframe")].flatMap(f=>{try{return f.contentWindow.performance.getEntriesByType("resource").map(r=>r.name)}catch{return []}})]'));};
