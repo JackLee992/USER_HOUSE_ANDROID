@@ -94,6 +94,7 @@ public final class CompatActivity extends Activity {
     private boolean allowMultiple;
     private byte[] pendingBackup;
     private OnBackInvokedCallback predictiveBack;
+    private CompatChoiceDialog choiceDialog;
 
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -160,6 +161,11 @@ public final class CompatActivity extends Activity {
                 }
             });
             session.setPromptDelegate(new GeckoSession.PromptDelegate() {
+                @Override public GeckoResult<PromptResponse> onChoicePrompt(GeckoSession current, ChoicePrompt prompt) {
+                    if (!isTrustedForeground()) return GeckoResult.fromValue(prompt.dismiss());
+                    if (choiceDialog == null) choiceDialog = new CompatChoiceDialog(CompatActivity.this);
+                    return choiceDialog.show(prompt);
+                }
                 @Override public GeckoResult<PromptResponse> onFilePrompt(GeckoSession current, FilePrompt prompt) {
                     if (!isTrustedForeground() || prompt.type == FilePrompt.Type.FOLDER)
                         return GeckoResult.fromValue(prompt.dismiss());
@@ -284,7 +290,7 @@ public final class CompatActivity extends Activity {
         frame.removeAllViews(); frame.addView(error);
     }
 
-    @Override protected void onPause() { super.onPause(); activityPaused = true; if (contentUpdates != null) contentUpdates.onPause(); pauseAndSave(); }
+    @Override protected void onPause() { super.onPause(); activityPaused = true; if (choiceDialog != null) choiceDialog.dismiss(); if (contentUpdates != null) contentUpdates.onPause(); pauseAndSave(); }
 
     private void pauseAndSave() {
         if (destroyed || session == null) return;
@@ -315,6 +321,7 @@ public final class CompatActivity extends Activity {
     @Override public void onBackPressed() { handleBack(); }
 
     private void handleBack() {
+        if (choiceDialog != null && choiceDialog.isShowing()) { choiceDialog.dismiss(); return; }
         if (destroyed || backPending) return;
         if (session == null || !trustedDocument) { finish(); return; }
         backPending = true;
@@ -466,6 +473,7 @@ public final class CompatActivity extends Activity {
     private void toast(String message) { if (!destroyed) Toast.makeText(this, message, Toast.LENGTH_SHORT).show(); }
 
     @Override protected void onDestroy() {
+        if (choiceDialog != null) choiceDialog.dismiss();
         destroyed = true;
         if (contentUpdates != null) contentUpdates.close();
         trustedDocument = false;

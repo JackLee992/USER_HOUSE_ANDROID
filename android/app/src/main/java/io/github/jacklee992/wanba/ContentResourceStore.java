@@ -59,6 +59,10 @@ public final class ContentResourceStore {
 
     public boolean hasPack(ContentManifest.Pack pack) {
         if (isBuiltinPack(pack)) return true;
+        return hasStoredPack(pack);
+    }
+
+    private boolean hasStoredPack(ContentManifest.Pack pack) {
         File folder = new File(directory, "objects/" + pack.sha256);
         if (!new File(folder, ".ready").isFile()) return false;
         for (ContentManifest.FileRef file : pack.files) {
@@ -127,11 +131,41 @@ public final class ContentResourceStore {
     }
 
     public void installSnapshot(ContentManifest manifest) throws Exception {
+        // APK assets are replaced by an app upgrade. Retain the exact verified
+        // bytes used by an installed snapshot so its unchanged packages remain
+        // available for offline rollback after a newer APK is installed.
+        for (ContentManifest.Pack pack : manifest.packages.values()) cacheBuiltinPack(pack);
         verifySnapshot(manifest);
         File folder = new File(directory, "snapshots/" + manifest.id); mkdir(folder);
         writeAtomic(new File(folder, "channel.json"), manifest.channelBytes);
         writeAtomic(new File(folder, "ready"), new byte[]{1});
         snapshots.put(manifest.id, manifest);
+    }
+
+    private void cacheBuiltinPack(ContentManifest.Pack pack) throws Exception {
+        if (!isBuiltinPack(pack) || hasStoredPack(pack)) return;
+        File objects = new File(directory, "objects");
+        File temporary = Files.createTempDirectory(objects.toPath(), ".builtin-").toFile();
+        try {
+            for (ContentManifest.FileRef file : pack.files) {
+                File target = new File(temporary, file.path); mkdir(target.getParentFile());
+                MessageDigest hash = MessageDigest.getInstance("SHA-256"); long size = 0;
+                try (InputStream input = assets.open("www/" + file.path); FileOutputStream output = new FileOutputStream(target)) {
+                    byte[] buffer = new byte[32768]; int count;
+                    while ((count = input.read(buffer)) != -1) {
+                        if (Thread.currentThread().isInterrupted()) throw new IOException("安装已停止");
+                        size += count; if (size > file.size) throw new IOException("内置资源大小不符");
+                        hash.update(buffer, 0, count); output.write(buffer, 0, count);
+                    }
+                    output.getFD().sync();
+                }
+                if (size != file.size || !ContentManifest.hex(hash.digest()).equals(file.sha256)) throw new IOException("内置资源校验失败");
+            }
+            writeAtomic(new File(temporary, ".ready"), pack.sha256.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+            File target = new File(objects, pack.sha256);
+            if (target.exists()) remove(target);
+            Files.move(temporary.toPath(), target.toPath(), StandardCopyOption.ATOMIC_MOVE);
+        } finally { remove(temporary); }
     }
 
     private void verifySnapshot(ContentManifest manifest) throws Exception {

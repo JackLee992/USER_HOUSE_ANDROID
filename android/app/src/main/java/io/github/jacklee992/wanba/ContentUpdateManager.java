@@ -59,6 +59,18 @@ public final class ContentUpdateManager implements AutoCloseable {
                 catch (Exception bad) {
                     current = store.builtinId(); persisted.put("active", current).put("pending", false);
                 }
+                ContentManifest existing = store.get(current);
+                if (store.builtin != null && !store.builtin.id.equals(persisted.optString("seenBuiltin"))) {
+                    if (existing != null && store.builtin.sequence > existing.sequence && !persisted.optBoolean("restore")) {
+                        try {
+                            store.builtin.requireSaveCompatibility(existing);
+                            persisted.put("previous", current).put("active", store.builtin.id).put("pending", false);
+                            current = store.builtin.id;
+                        } catch (Exception incompatible) { /* Keep the valid installed save-compatible content. */ }
+                    }
+                    // A later explicit rollback is intentional; do not undo it on every launch.
+                    persisted.put("seenBuiltin", store.builtin.id);
+                }
                 String previous = persisted.optString("previous");
                 if (!previous.isEmpty()) try { store.loadInstalled(previous); } catch (Exception bad) { persisted.remove("previous"); }
                 activeId = current; saveState();
@@ -126,6 +138,7 @@ public final class ContentUpdateManager implements AutoCloseable {
             if (!store.installed(manifest.id)) throw new IOException("请先完整下载更新");
             store.installSnapshot(manifest);
             manifest.requireSaveCompatibility(store.get(activeId));
+            if (store.get(activeId) != null) store.installSnapshot(store.get(activeId));
             JSONObject storage = validateCheckpoint(checkpointJson);
             ContentResourceStore.writeAtomic(new File(store.directory, "checkpoint.json"), storage.toString().getBytes(StandardCharsets.UTF_8));
             JSONObject next = new JSONObject(persisted.toString());

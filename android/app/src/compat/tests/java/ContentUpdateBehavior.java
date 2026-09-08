@@ -71,7 +71,7 @@ public final class ContentUpdateBehavior {
                 };
             }
         });
-        signatureAndSchema(); packageBehavior(); recoveryBehavior(); activationAndWatchdog(); downloadAndReplay(); redirectAndRoutes();
+        signatureAndSchema(); packageBehavior(); recoveryBehavior(); activationAndWatchdog(); downloadAndReplay(); apkUpgradeBehavior(); redirectAndRoutes();
         System.out.println("PASS "+assertions+" real Java assertions");
     }
     static Fixture fixture(int sequence,String gameText) throws Exception {
@@ -273,6 +273,39 @@ public final class ContentUpdateBehavior {
         java.util.concurrent.atomic.AtomicBoolean busy=(java.util.concurrent.atomic.AtomicBoolean)field.get(manager);
         long end=System.currentTimeMillis()+5000; while(busy.get()&&System.currentTimeMillis()<end) Thread.sleep(1);
         check(!busy.get(),"update job completes");
+    }
+    static void apkUpgradeBehavior() throws Exception {
+        Fixture base=fixture(1,"one"),second=fixture(2,"two"),third=fixture(3,"three");
+        // Also replace the shared core to prove a retained installed snapshot no
+        // longer reads its unchanged packages from the APK that just got replaced.
+        byte[] newCore="new core in APK 3".getBytes(StandardCharsets.UTF_8);
+        third.files.put("standalone/index.html",newCore);
+        for(Object value:third.payload.getJSONArray("packages")) {
+            JSONObject pack=(JSONObject)value;if(!pack.getString("id").equals("core"))continue;
+            pack.getJSONArray("files").getJSONObject(0).put("sha256",ContentManifest.sha256(newCore)).put("size",newCore.length);
+        }
+        replaceArchive(third,"core",zip(Collections.singletonMap("standalone/index.html",newCore)));
+        Context oldContext=context("apk-upgrade",base); ContentResourceStore oldStore=new ContentResourceStore(oldContext,3); install(oldStore,second);
+        String secondId=second.manifest().id,thirdId=third.manifest().id;
+        ContentResourceStore.writeAtomic(new File(oldStore.directory,"active.json"),new JSONObject().put("active",secondId).put("seenBuiltin",base.manifest().id).toString().getBytes(StandardCharsets.UTF_8));
+        Context newerContext=context("apk-upgrade",third); Events events=new Events();ContentUpdateManager manager=new ContentUpdateManager(newerContext,3,events);
+        try {
+            check(events.loaded().equals("/assets/www/standalone/index.html"),"newer save-compatible APK builtin supersedes older installed content");
+            JSONObject state=new JSONObject(manager.getContentState());check(state.getString("activeSnapshotId").equals(thirdId),"APK upgrade selects newer builtin sequence");
+            check(state.getString("previousSnapshotId").equals(secondId)&&state.isNull("restoreStorage"),"APK upgrade keeps verified previous snapshot without replacing user saves");
+            check(read(manager.openResource("updates/"+secondId+"/www/standalone/index.html")).contains("script type=module"),"old shared core survives replacement of the entire APK assets tree");
+            manager.rollbackGameUpdate();events.event("rolledBack");events.loaded();
+        } finally {manager.close();}
+        events=new Events();manager=new ContentUpdateManager(newerContext,3,events);
+        try {events.loaded();check(new JSONObject(manager.getContentState()).getString("activeSnapshotId").equals(secondId),"intentional manual rollback is not undone on every APK launch");}finally{manager.close();}
+
+        Fixture newerInstalled=fixture(4,"four"); ContentResourceStore store=new ContentResourceStore(newerContext,3);install(store,newerInstalled);
+        ContentResourceStore.writeAtomic(new File(store.directory,"active.json"),new JSONObject().put("active",newerInstalled.manifest().id).put("seenBuiltin",base.manifest().id).toString().getBytes(StandardCharsets.UTF_8));
+        events=new Events();manager=new ContentUpdateManager(newerContext,3,events);
+        try {events.loaded();check(new JSONObject(manager.getContentState()).getString("activeSnapshotId").equals(newerInstalled.manifest().id),"APK builtin cannot downgrade a newer installed sequence");}finally{manager.close();}
+        Fixture incompatible=fixture(5,"five");incompatible.payload.getJSONObject("games").getJSONObject("match3").put("saveSchema",4);
+        Context incompatibleContext=context("apk-upgrade",incompatible);events=new Events();manager=new ContentUpdateManager(incompatibleContext,3,events);
+        try {events.loaded();check(new JSONObject(manager.getContentState()).getString("activeSnapshotId").equals(newerInstalled.manifest().id),"incompatible APK builtin keeps the valid save-compatible installed snapshot");}finally{manager.close();}
     }
     static void redirectAndRoutes() throws Exception {
         for(String path:Arrays.asList("../src/a.js","src/../a.js","src/%2e%2e/a.js","src\\a.js","/src/a.js","src/.hidden","src/engine.so","src/engine.dex","standalone/")) check(!ContentManifest.validPath(path),"unsafe logical path rejected: "+path);
