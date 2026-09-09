@@ -17,6 +17,9 @@
       port.postMessage({op: 'backup', filename, json});
   }, bridge, {defineAs: 'saveBackup'});
   exportFunction(() => { if (connected) port.postMessage({op: 'downloads'}); }, bridge, {defineAs: 'openDownloads'});
+  exportFunction(enabled => {
+    if (connected && typeof enabled === 'boolean') port.postMessage({op: 'immersive', enabled});
+  }, bridge, {defineAs: 'setGameImmersive'});
   // The page-realm Promise invokes its executor from the page's principal too.
   // Export that callback explicitly, not just the outer getAppInfo function.
   exportFunction(() => new page.Promise(exportFunction((resolve, reject) => {

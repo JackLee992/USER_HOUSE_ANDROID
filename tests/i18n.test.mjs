@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createI18n, normalizeLocale, LOCALES, LOCALE_STORAGE_KEY} from '../standalone/i18n.js';
 const data=Object.fromEntries(LOCALES.map(({id})=>[id,JSON.parse(readFileSync(new URL('../locales/'+id+'.json',import.meta.url)))]));
+const versions=JSON.parse(readFileSync(new URL('../content/versions.json',import.meta.url)));
 const load=async id=>structuredClone(data[id]);
 const memory=()=>{const map=new Map();return {getItem:key=>map.get(key),setItem:(key,value)=>map.set(key,value),map};};
 
@@ -11,7 +12,7 @@ test('locale selection recognizes device regions and script variants',()=>{
 });
 test('every shipped locale contains all 37 titles, rule summaries and the same complete UI key set',()=>{
   const base=data['zh-CN'];assert.equal(Object.keys(base.games).length,37);
-  for(const locale of LOCALES){const catalog=data[locale.id];assert.equal(catalog.locale,locale.id);assert.equal(catalog.version,'1.0.1');assert.deepEqual(Object.keys(catalog.games).sort(),Object.keys(base.games).sort());assert.deepEqual(Object.keys(catalog.strings).sort(),Object.keys(base.strings).sort());assert.deepEqual(Object.keys(catalog.templates).sort(),Object.keys(base.templates).sort());for(const item of Object.values(catalog.games)){assert.ok(item.title.length>0);assert.ok(item.rules.length>20);}}
+  for(const locale of LOCALES){const catalog=data[locale.id];assert.equal(catalog.locale,locale.id);assert.equal(catalog.version,versions.packages['i18n.'+locale.id]);assert.deepEqual(Object.keys(catalog.games).sort(),Object.keys(base.games).sort());assert.deepEqual(Object.keys(catalog.strings).sort(),Object.keys(base.strings).sort());assert.deepEqual(Object.keys(catalog.templates).sort(),Object.keys(base.templates).sort());for(const item of Object.values(catalog.games)){assert.ok(item.title.length>0);assert.ok(item.rules.length>20);}}
 });
 test('language changes translate real controls and dynamic status while keeping source text available',async()=>{
   const storage=memory(),service=createI18n({load,storage,language:'zh-CN'});await service.init();

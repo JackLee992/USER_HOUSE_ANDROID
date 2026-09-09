@@ -17,8 +17,6 @@ import android.provider.Settings;
 import android.view.View;
 import android.view.Gravity;
 import android.view.ViewGroup;
-import android.view.WindowInsets;
-import android.view.WindowInsetsController;
 import android.webkit.ValueCallback;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -80,6 +78,7 @@ public final class CompatActivity extends Activity {
     private ContentUpdateManager contentUpdates;
     private String contentEntryPath;
     private FrameLayout frame;
+    private GameImmersiveController immersive;
     private WebExtension extension;
     private WebExtension.Port bridgePort;
     private volatile boolean trustedDocument;
@@ -101,19 +100,7 @@ public final class CompatActivity extends Activity {
         frame = new FrameLayout(this);
         frame.setBackgroundColor(Color.rgb(255, 247, 234));
         setContentView(frame);
-        if (Build.VERSION.SDK_INT >= 30) {
-            getWindow().setDecorFitsSystemWindows(false);
-            frame.setOnApplyWindowInsetsListener((view, insets) -> {
-                android.graphics.Insets bars = insets.getInsets(WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout());
-                android.graphics.Insets keyboard = insets.getInsets(WindowInsets.Type.ime());
-                view.setPadding(bars.left, bars.top, bars.right, Math.max(bars.bottom, keyboard.bottom));
-                return insets;
-            });
-            WindowInsetsController controller = getWindow().getInsetsController();
-            if (controller != null) controller.setSystemBarsAppearance(
-                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS | WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS,
-                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS | WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS);
-        }
+        immersive = new GameImmersiveController(getWindow(), frame);
         if (Build.VERSION.SDK_INT >= 33) {
             predictiveBack = this::handleBack;
             getOnBackInvokedDispatcher().registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT, predictiveBack);
@@ -226,6 +213,12 @@ public final class CompatActivity extends Activity {
                         break;
                     case "ready": if (activityPaused) pauseAndSave(); break;
                     case "backup": if (isTrustedForeground()) nativeBridge.saveBackup(message.optString("filename"), message.optString("json")); break;
+                    case "immersive":
+                        if (message.opt("enabled") instanceof Boolean) {
+                            boolean enabled = message.optBoolean("enabled");
+                            if (isTrustedForeground() || (!enabled && trustedDocument)) immersive.request(enabled);
+                        }
+                        break;
                     case "downloads": if (isTrustedForeground()) nativeBridge.openDownloads(); break;
                     case "info":
                         send(json("op", "infoResult", "id", message.optString("id"), "value", nativeBridge.getAppInfo()));
@@ -240,7 +233,7 @@ public final class CompatActivity extends Activity {
                 }
             }
             @Override public void onDisconnect(WebExtension.Port source) {
-                if (source == bridgePort) { bridgePort = null; trustedDocument = false; }
+                if (source == bridgePort) { bridgePort = null; trustedDocument = false; immersive.reset(); }
             }
         });
     }
@@ -261,6 +254,7 @@ public final class CompatActivity extends Activity {
 
     private void loadContent() {
         if (destroyed || session == null || extension == null || contentEntryPath == null) return;
+        immersive.reset();
         trustedDocument = false;
         session.loadUri(CompatAssetServer.ORIGIN + contentEntryPath);
     }
@@ -281,6 +275,7 @@ public final class CompatActivity extends Activity {
 
     private void showStartupError(String message) {
         if (destroyed) return;
+        immersive.reset();
         TextView error = new TextView(this);
         error.setText(message);
         error.setTextSize(18);
@@ -290,7 +285,7 @@ public final class CompatActivity extends Activity {
         frame.removeAllViews(); frame.addView(error);
     }
 
-    @Override protected void onPause() { super.onPause(); activityPaused = true; if (choiceDialog != null) choiceDialog.dismiss(); if (contentUpdates != null) contentUpdates.onPause(); pauseAndSave(); }
+    @Override protected void onPause() { super.onPause(); activityPaused = true; if (immersive != null) immersive.foreground(false); if (choiceDialog != null) choiceDialog.dismiss(); if (contentUpdates != null) contentUpdates.onPause(); pauseAndSave(); }
 
     private void pauseAndSave() {
         if (destroyed || session == null) return;
@@ -307,7 +302,7 @@ public final class CompatActivity extends Activity {
     }
 
     @Override protected void onResume() {
-        super.onResume(); activityPaused = false;
+        super.onResume(); activityPaused = false; if (immersive != null) immersive.foreground(true);
         if (contentUpdates != null) contentUpdates.onResume();
         pauseGeneration++;
         if (pendingPause != null) main.removeCallbacks(pendingPause);
@@ -475,6 +470,7 @@ public final class CompatActivity extends Activity {
     @Override protected void onDestroy() {
         if (choiceDialog != null) choiceDialog.dismiss();
         destroyed = true;
+        if (immersive != null) immersive.destroy();
         if (contentUpdates != null) contentUpdates.close();
         trustedDocument = false;
         main.removeCallbacksAndMessages(null);

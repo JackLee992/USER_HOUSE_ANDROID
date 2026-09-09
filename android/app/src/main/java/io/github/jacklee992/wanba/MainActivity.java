@@ -17,8 +17,6 @@ import android.provider.Settings;
 import android.view.View;
 import android.view.Gravity;
 import android.view.ViewGroup;
-import android.view.WindowInsets;
-import android.view.WindowInsetsController;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
@@ -74,6 +72,7 @@ public final class MainActivity extends Activity {
     private ContentUpdateManager contentUpdates;
     private String contentEntryPath;
     private FrameLayout frame;
+    private GameImmersiveController immersive;
     private volatile boolean trustedDocument;
     private volatile boolean destroyed;
     private volatile boolean activityPaused;
@@ -93,23 +92,11 @@ public final class MainActivity extends Activity {
         frame = new FrameLayout(this);
         frame.setBackgroundColor(Color.rgb(255, 247, 234));
         setContentView(frame);
-        if (Build.VERSION.SDK_INT >= 30) {
-            getWindow().setDecorFitsSystemWindows(false);
-            frame.setOnApplyWindowInsetsListener((view, insets) -> {
-                android.graphics.Insets bars = insets.getInsets(WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout());
-                android.graphics.Insets keyboard = insets.getInsets(WindowInsets.Type.ime());
-                view.setPadding(bars.left, bars.top, bars.right, Math.max(bars.bottom, keyboard.bottom));
-                return insets;
-            });
-            WindowInsetsController controller = getWindow().getInsetsController();
-            if (controller != null) controller.setSystemBarsAppearance(
-                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS | WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS,
-                    WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS | WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS);
-        }
+        immersive = new GameImmersiveController(getWindow(), frame);
         contentUpdates = new ContentUpdateManager(this, BuildConfig.VERSION_CODE, new ContentUpdateManager.Listener() {
             @Override public void onLoad(String path) {
                 contentEntryPath = path;
-                if (!destroyed && webView != null) { trustedDocument = false; webView.loadUrl(LocalAssetPolicy.ORIGIN + path); }
+                if (!destroyed && webView != null) { immersive.reset(); trustedDocument = false; webView.loadUrl(LocalAssetPolicy.ORIGIN + path); }
             }
             @Override public void onEvent(String event) {
                 if (!destroyed && webView != null && trustedDocument)
@@ -241,6 +228,7 @@ public final class MainActivity extends Activity {
         }
 
         @Override public void onPageStarted(WebView view, String url, android.graphics.Bitmap favicon) {
+            immersive.reset();
             trustedDocument = contentUpdates.isTrustedEntry(url);
             if (!trustedDocument) { view.stopLoading(); view.removeJavascriptInterface("NativeBridge"); }
         }
@@ -263,6 +251,7 @@ public final class MainActivity extends Activity {
     @Override protected void onPause() {
         super.onPause();
         activityPaused = true;
+        if (immersive != null) immersive.foreground(false);
         if (contentUpdates != null) contentUpdates.onPause();
         pauseAndSave();
     }
@@ -287,6 +276,7 @@ public final class MainActivity extends Activity {
     @Override protected void onResume() {
         super.onResume();
         activityPaused = false;
+        if (immersive != null) immersive.foreground(true);
         if (contentUpdates != null) contentUpdates.onResume();
         if (pendingPause != null) main.removeCallbacks(pendingPause);
         if (webView != null) { webView.onResume(); webView.resumeTimers(); webPaused = false; }
@@ -395,6 +385,14 @@ public final class MainActivity extends Activity {
     }
 
     public final class NativeBridge {
+        @JavascriptInterface public void setGameImmersive(boolean enabled) {
+            main.post(() -> {
+                // A game may be destroyed after onPause; clearing its request
+                // remains valid then, while entering immersive needs foreground.
+                if (!destroyed && trustedDocument && webView != null && (!enabled || !activityPaused)
+                        && contentUpdates.isTrustedEntry(webView.getUrl())) immersive.request(enabled);
+            });
+        }
         @JavascriptInterface public String getContentState() { return trustedDocument ? contentUpdates.getContentState() : "{}"; }
         @JavascriptInterface public String checkGameUpdates() { return canUpdate() ? contentUpdates.checkGameUpdates() : "{\"error\":\"页面不可用\"}"; }
         @JavascriptInterface public String downloadGameUpdate(String id) { return canUpdate() ? contentUpdates.downloadGameUpdate(id) : "{\"error\":\"页面不可用\"}"; }
@@ -465,6 +463,7 @@ public final class MainActivity extends Activity {
 
     @Override protected void onDestroy() {
         destroyed = true;
+        if (immersive != null) immersive.destroy();
         if (contentUpdates != null) contentUpdates.close();
         trustedDocument = false;
         main.removeCallbacksAndMessages(null);

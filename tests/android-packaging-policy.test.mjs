@@ -5,6 +5,7 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
+import {APP_VERSION} from '../standalone/app-info.js';
 const root=fileURLToPath(new URL('../',import.meta.url));
 
 test('the real Java URL policy denies external/traversal requests and serves web binary MIME types',t=>{
@@ -35,5 +36,7 @@ test('the real Java URL policy denies external/traversal requests and serves web
 test('the Android shell permits native content downloads without storage permissions and signs only through external properties',()=>{
  const manifest=readFileSync(join(root,'android/app/src/main/AndroidManifest.xml'),'utf8');assert.deepEqual([...manifest.matchAll(/<uses-permission\s+android:name="([^"]+)"/g)].map(m=>m[1]),['android.permission.INTERNET']);assert.match(manifest,/android:allowBackup="false"/);
  const native=readFileSync(join(root,'android/app/src/main/java/io/github/jacklee992/wanba/MainActivity.java'),'utf8');assert.match(native,/setWebContentsDebuggingEnabled\(BuildConfig.DEBUG\)/);assert.match(native,/setBlockNetworkLoads\(true\)/);assert.doesNotMatch(native,/handler\.proceed\(|setAllowUniversalAccessFromFileURLs\(true\)/);
- const gradle=readFileSync(join(root,'android/app/build.gradle.kts'),'utf8');assert.match(gradle,/\.local\/signing.properties/);assert.match(gradle,/minorApiLevel = 1/);assert.match(gradle,/minSdk = 26/);assert.match(gradle,/versionName = "1.2.0"/);
+ const gradle=readFileSync(join(root,'android/app/build.gradle.kts'),'utf8');assert.match(gradle,/\.local\/signing.properties/);assert.match(gradle,/minorApiLevel = 1/);assert.match(gradle,/minSdk = 26/);
+ assert.equal(/versionName\s*=\s*"([^"]+)"/.exec(gradle)?.[1],APP_VERSION,'native and web app versions agree');
+ assert.equal(Number(/versionCode\s*=\s*(\d+)/.exec(gradle)?.[1]),4,'1.2.1 Android update uses code4');
 });

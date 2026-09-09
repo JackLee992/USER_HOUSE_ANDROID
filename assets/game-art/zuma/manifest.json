@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "gameId": "zuma",
-  "artVersion": "1.0.1",
+  "artVersion": "1.1.0",
   "sharedArtVersion": "1.0.1",
   "stylesheet": "standalone/game-art.css",
   "rendererHelper": "standalone/game-art.js",
@@ -9,16 +9,24 @@
     "assets/game-art/premium/v1/candy-bubbles.png",
     "assets/game-art/premium/v1/pieces.png",
     "assets/game-art/premium/v1/materials.png",
-    "assets/game-art/icons-v2/sheet-03.png"
+    "assets/game-art/icons-v2/sheet-03.png",
+    "assets/game-art/zuma/classic-v2/temple-background.png",
+    "assets/game-art/zuma/classic-v2/temple-sprites.png",
+    "assets/game-art/zuma/classic-v2/temple-ui.png",
+    "assets/game-art/zuma/classic-v2/mouth-motion.png"
   ],
   "appliedSurfaces": [
-    "Glass ball chain and launcher balls",
-    "Jade frog launcher",
-    "Maple grain play surface",
-    "Individually illustrated game directory icon"
+    "Original ancient-temple stone platform",
+    "Six engraved mineral marbles with distinct symbols",
+    "Dedicated top-down jade frog launcher",
+    "Carved stone skull entrance",
+    "Stone-and-bronze header panel, progress trough, jade button and plaque",
+    "Individually illustrated game directory icon",
+    "Optional closed/open/gulp frog frames and detached skull jaw for mouth animation"
   ],
   "retainedPresentation": [
-    "Track, hole, trajectory and particles remain existing"
+    "Track geometry and live labels are drawn by the game renderer",
+    "Existing directory icon mapping preserved"
   ],
   "directoryIcon": {
     "atlas": "assets/game-art/icons-v2/sheet-03.png",
@@ -35,5 +43,194 @@
     "cell": 3,
     "subject": "Carved jade frog and marble chain",
     "rendererHelper": "standalone/game-icons.js"
+  },
+  "classic": {
+    "background": "classic-v2/temple-background.png",
+    "atlas": "classic-v2/temple-sprites.png",
+    "sprites": {
+      "balls": [
+        [
+          24,
+          23,
+          387,
+          387
+        ],
+        [
+          1355,
+          22,
+          390,
+          390
+        ],
+        [
+          910,
+          20,
+          393,
+          393
+        ],
+        [
+          466,
+          22,
+          388,
+          388
+        ],
+        [
+          28,
+          458,
+          387,
+          387
+        ],
+        [
+          467,
+          458,
+          387,
+          387
+        ]
+      ],
+      "frog": [
+        892,
+        416,
+        433,
+        433
+      ],
+      "skull": [
+        1371,
+        415,
+        363,
+        445
+      ]
+    },
+    "uiAtlas": "classic-v2/temple-ui.png",
+    "ui": {
+      "panel": [
+        134,
+        220,
+        536,
+        173
+      ],
+      "meter": [
+        909,
+        259,
+        505,
+        96
+      ],
+      "button": [
+        116,
+        612,
+        566,
+        214
+      ],
+      "plaque": [
+        914,
+        617,
+        496,
+        211
+      ]
+    },
+    "spriteSize": [
+      1774,
+      887
+    ],
+    "backgroundSize": [
+      1536,
+      1024
+    ],
+    "uiSize": [
+      1536,
+      1024
+    ],
+    "ballOrder": [
+      "RED",
+      "YELLOW",
+      "GREEN",
+      "BLUE",
+      "PURPLE",
+      "ORANGE"
+    ],
+    "frogFacing": "up",
+    "frogMouthAnchor": [
+      0.5,
+      0.19
+    ],
+    "skullMouthAnchor": [
+      0.48,
+      0.74
+    ],
+    "uiSampling": "opaque interior rectangles only; never sample full atlas cells",
+    "files": {
+      "temple-background": {
+        "sha256": "21267f00a5cfcc79f5b22a23016991f65c0a1d6d18cf290eb73f32417a0a066b",
+        "bytes": 3787694,
+        "size": [
+          1536,
+          1024
+        ],
+        "pngColorType": 2
+      },
+      "temple-sprites": {
+        "sha256": "57117b7ff9bfe45d5bf988cf0930386378ec78d35243dd89086f191641d4c98f",
+        "bytes": 2226513,
+        "size": [
+          1774,
+          887
+        ],
+        "pngColorType": 6
+      },
+      "temple-ui": {
+        "sha256": "688f624aeedd94cafb5726e772be028e970d73e40102d45247c1219f82eb7252",
+        "bytes": 2511098,
+        "size": [
+          1536,
+          1024
+        ],
+        "pngColorType": 2
+      }
+    },
+    "motion": {
+      "atlas": "classic-v2/mouth-motion.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "frogFrames": [
+        [
+          20,
+          3,
+          600,
+          600
+        ],
+        [
+          637,
+          3,
+          600,
+          600
+        ],
+        [
+          20,
+          619,
+          600,
+          600
+        ]
+      ],
+      "frogFrameOrder": [
+        "closed",
+        "open",
+        "gulp"
+      ],
+      "frogMouthAnchor": [
+        0.5,
+        0.235
+      ],
+      "frogFacing": "up",
+      "skullJaw": [
+        676,
+        744,
+        529,
+        396
+      ],
+      "skullJawFacing": "down",
+      "sha256": "91b073928b2796dc30bf130b87cffdec55d9e4007d9129e52d2e255011f6f645",
+      "bytes": 1874786,
+      "pngColorType": 6
+    }
   }
 }

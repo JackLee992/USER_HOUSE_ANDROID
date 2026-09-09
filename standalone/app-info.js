@@ -1,6 +1,6 @@
 import { EXTENSION_VERSION } from '../src/core/metadata.js';
 
-export const APP_VERSION = '1.2.0';
+export const APP_VERSION = '1.2.1';
 export const GAME_BASELINE = EXTENSION_VERSION;
 const VERSION = /^\d+\.\d+(?:\.[\dA-Za-z-]+)*$/;
 const cleanVersion = value => typeof value === 'string' && value.length <= 80 && VERSION.test(value) ? value : '';

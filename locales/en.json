@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "version": "1.0.1",
+  "version": "1.0.2",
   "locale": "en",
   "brand": "Nookcade",
   "strings": {
@@ -485,7 +485,7 @@
     },
     "zuma": {
       "title": "Marble Trail",
-      "rules": "Aim and shoot into the moving chain. Connect matching colors to remove groups and stop the chain reaching the end. The chain becomes faster as you progress."
+      "rules": "Match 3 or more touching marbles of one color. Hold anywhere on the board to aim, then release to shoot. Tap the frog or SWAP to exchange your two marbles. Matching ends pull together across a gap and can trigger another match. Fill the gold meter, then clear every remaining marble. Shoot coins and match marked marbles to activate explosion, slow, reverse or precision. You have three lives."
     },
     "watersort": {
       "title": "Water Sort",
