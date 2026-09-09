@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "before": {
+    "proxy": "10.0.2.2:7897",
+    "mode": "lock 0",
+    "accelerometer": "0",
+    "rotation": "0"
+  },
+  "restored": {
+    "proxy": "null",
+    "mode": "free",
+    "accelerometer": "1",
+    "rotation": "0"
+  },
+  "forward9224Removed": true,
+  "scope": "Restoration values explicitly supplied by root handoff; other devices and forwards untouched"
+}

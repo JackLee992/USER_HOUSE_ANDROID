@@ -1,0 +1,82 @@
+{
+  "verifiedAtUtc": "2026-09-09T05:35:02.189662+00:00",
+  "passed": true,
+  "release": {
+    "id": 385240115,
+    "tag_name": "content-5",
+    "html_url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/tag/content-5",
+    "draft": false,
+    "prerelease": false,
+    "immutable": true,
+    "published_at": "2026-09-09T05:09:18Z"
+  },
+  "signatureVerified": "P-256/SHA-256 using compiled content public key",
+  "snapshotId": "60dd78b5b5006de9e0488dba2848e60572346f473512e3de8f1354b543c8161c",
+  "sequence": 5,
+  "contentSnapshotVersion": "1.2.1",
+  "sourceCommit": "7ec8a6defde450b662fd491d27dc4c46d72cef62",
+  "sourceCommitPublicUrl": "https://github.com/JackLee992/USER_HOUSE_ANDROID/commit/7ec8a6defde450b662fd491d27dc4c46d72cef62",
+  "totalSignedPackages": 81,
+  "assets": [
+    {
+      "name": "channel.json",
+      "id": 552041136,
+      "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-5/channel.json",
+      "bytes": 73073,
+      "downloadedSha256": "8f0836e6bc3369b32a777a2e511dc4fab63ead81914c9bdeefd561e695e67fba",
+      "githubDigest": "sha256:8f0836e6bc3369b32a777a2e511dc4fab63ead81914c9bdeefd561e695e67fba",
+      "localBytesMatched": true
+    },
+    {
+      "name": "manifest.json",
+      "id": 552041157,
+      "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-5/manifest.json",
+      "bytes": 75157,
+      "downloadedSha256": "f7735a7cd8a2f82e06352fea1e2a799b098db94e6fbedf9752ad7d7ced0a1bf9",
+      "githubDigest": "sha256:f7735a7cd8a2f82e06352fea1e2a799b098db94e6fbedf9752ad7d7ced0a1bf9",
+      "localBytesMatched": true
+    },
+    {
+      "name": "core-1.1.2.zip",
+      "id": 552041159,
+      "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-5/core-1.1.2.zip",
+      "bytes": 422369,
+      "downloadedSha256": "9dbac20fb9121b0b47880b54caae5403d0e7f90c47863ad8d7ff1ee5a7b58881",
+      "githubDigest": "sha256:9dbac20fb9121b0b47880b54caae5403d0e7f90c47863ad8d7ff1ee5a7b58881",
+      "localBytesMatched": true
+    },
+    {
+      "name": "game.zuma-1.1.1.zip",
+      "id": 552041147,
+      "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-5/game.zuma-1.1.1.zip",
+      "bytes": 31029,
+      "downloadedSha256": "fc678e97b1ab8451b56fbc8f7a04e3803827c033d40b50a08bebd9dc72b54670",
+      "githubDigest": "sha256:fc678e97b1ab8451b56fbc8f7a04e3803827c033d40b50a08bebd9dc72b54670",
+      "localBytesMatched": true
+    }
+  ],
+  "changedPackages": [
+    {
+      "id": "core",
+      "version": "1.1.2",
+      "zipSha256": "9dbac20fb9121b0b47880b54caae5403d0e7f90c47863ad8d7ff1ee5a7b58881",
+      "filesMatchedSignedManifest": 37
+    },
+    {
+      "id": "game.zuma",
+      "version": "1.1.1",
+      "zipSha256": "fc678e97b1ab8451b56fbc8f7a04e3803827c033d40b50a08bebd9dc72b54670",
+      "filesMatchedSignedManifest": 7
+    }
+  ],
+  "ci": {
+    "conclusion": "success",
+    "head_branch": "content-5",
+    "head_sha": "e94e70c1a5eb5a34716c2e3652a632c0d7f0871d",
+    "html_url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/actions/runs/34313742505",
+    "id": 34313742505,
+    "name": "Verify published content",
+    "status": "completed"
+  },
+  "scope": "Anonymous direct release downloads of channel, manifest and two changed ZIPs; all four bytes match local frozen content-5. Unchanged older ZIPs were not re-downloaded. Read-only GitHub checks; no device, release or publishing-directory mutations."
+}

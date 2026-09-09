@@ -1,0 +1,108 @@
+{
+  "passed": true,
+  "stage": "complete",
+  "testedAt": "2026-09-09T05:41:43.932Z",
+  "scope": "emulator native UI + OS installer + normal SAF; no debug interface or adb installation",
+  "checks": [
+    {
+      "check": "Exact non-debug RC APK matches the signed delta base",
+      "base": {
+        "versionCode": 5,
+        "versionName": "1.2.2-rc1",
+        "sha256": "4b0ae3afbcba54df369f199b7671471a0e0d1ca0f938fa4239ee2396a4864480"
+      },
+      "manifestSequence": 1,
+      "manifestPayloadSHA256": "b936f8507005fdabaf9594af5b5d3a1fe53460e7f553d8b79c9eb7b9a11af5fc",
+      "deltaBytes": 884176,
+      "fullBytes": 59222579
+    },
+    {
+      "check": "Normal RC SAF captured all five parsed data items privately before update",
+      "items": [
+        {
+          "key": "wanbanXiaowu_settings_v1",
+          "sha256": "f8142cbfa466009e17829d5691831743af64e7e423bc0f58fc490e40de26f218"
+        },
+        {
+          "key": "wanbanXiaowu_scores_v1",
+          "sha256": "c5abd99f8ae3ea82b422fdabf6f0596a1adf20f1437679b13b549de486fecaa7"
+        },
+        {
+          "key": "wanbanXiaowu_progress_v1",
+          "sha256": "130429200d9ba5496ede2c3854fc7017cf60ffab05be930738a8148c30f10d3b"
+        },
+        {
+          "key": "wanbanXiaowu_records_v1",
+          "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+        },
+        {
+          "key": "wanbanXiaowu_sudokuState_v1",
+          "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+        }
+      ],
+      "progressGames": 37
+    },
+    {
+      "check": "RC baseline and native entry prepared; public check not requested yet"
+    },
+    {
+      "check": "Native UI confirms the matching delta response-body byte count and verifies the rebuilt APK before installation",
+      "deltaBytes": 884176,
+      "fullBytes": 59222579,
+      "downloadRatio": 0.014929711183297167,
+      "bytesOrigin": "Signed manifest and stable production UI summary; excludes HTTP/TLS overhead",
+      "readyText": "增量下载成功：884176 字节（完整 APK 59222579 字节；仅计下载响应体）。 APK 验证通过。安装将由 Android 系统再次确认；游戏数据保留。"
+    },
+    {
+      "check": "Android installer required and received explicit native confirmation",
+      "button": "Update",
+      "appSpecificUnknownSourceEnabled": true
+    },
+    {
+      "check": "OS installed stable code6; installed full APK hash matches signed release and package remains non-debuggable",
+      "target": {
+        "versionCode": 6,
+        "versionName": "1.2.2",
+        "sha256": "d1706b1ecc8c601f30bf5f546ac025c3d0ef31685701b50f4223941fac01f892"
+      }
+    },
+    {
+      "check": "Stable release normal SAF retains all five parsed JSON items exactly",
+      "items": [
+        {
+          "key": "wanbanXiaowu_settings_v1",
+          "sha256": "f8142cbfa466009e17829d5691831743af64e7e423bc0f58fc490e40de26f218"
+        },
+        {
+          "key": "wanbanXiaowu_scores_v1",
+          "sha256": "c5abd99f8ae3ea82b422fdabf6f0596a1adf20f1437679b13b549de486fecaa7"
+        },
+        {
+          "key": "wanbanXiaowu_progress_v1",
+          "sha256": "130429200d9ba5496ede2c3854fc7017cf60ffab05be930738a8148c30f10d3b"
+        },
+        {
+          "key": "wanbanXiaowu_records_v1",
+          "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+        },
+        {
+          "key": "wanbanXiaowu_sudokuState_v1",
+          "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+        }
+      ],
+      "beforeContent": "60dd78b5b5006de9e0488dba2848e60572346f473512e3de8f1354b543c8161c",
+      "afterContent": "60dd78b5b5006de9e0488dba2848e60572346f473512e3de8f1354b543c8161c"
+    }
+  ],
+  "statuses": [
+    {
+      "at": "2026-09-09T05:35:22.624Z",
+      "text": "发现 App 1.2.2。完整安装包 56.5 MiB；下载时优先使用匹配的增量包。"
+    },
+    {
+      "at": "2026-09-09T05:35:29.541Z",
+      "text": "增量下载成功：884176 字节（完整 APK 59222579 字节；仅计下载响应体）。 APK 验证通过。安装将由 Android 系统再次确认；游戏数据保留。"
+    }
+  ],
+  "error": null
+}

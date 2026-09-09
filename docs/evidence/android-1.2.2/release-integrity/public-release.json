@@ -1,0 +1,57 @@
+{
+  "checkedAt": "2026-09-09T05:32:50.954Z",
+  "releaseId": 385244514,
+  "tag": "v1.2.2",
+  "draft": false,
+  "target": "f3e617b72b5d69dfae4b7f4df42080ed99255557",
+  "assets": [
+    {
+      "name": "apk-integrity.json",
+      "size": 77892,
+      "digest": "sha256:80d6310b7c3d96f1c95f3aa53d0531cc1f636462ebb0f5f1c3c3653d43cc0c96"
+    },
+    {
+      "name": "app-updates.json",
+      "size": 3121,
+      "digest": "sha256:15d2d7d7b3fadc669282ec6b1fdbb0e88aa8e5e4b8906f8852b63da364bb8817"
+    },
+    {
+      "name": "SHA256SUMS",
+      "size": 710,
+      "digest": "sha256:331f879b5ab852030c015b40db1b0347866c7ec5ddc574fb12a2c74d24043921"
+    },
+    {
+      "name": "wanba-compat-1.2.2.apk",
+      "size": 224569378,
+      "digest": "sha256:23ebea8f4382a5c356770423020dff19414afe4d307b5f5bc875cab7e1f94bdd"
+    },
+    {
+      "name": "wanba-compat-4-to-6.waup",
+      "size": 5880751,
+      "digest": "sha256:719b9609112f501f8941cae406c7ea909e01fe63ba225e908e82cd1de9aa1dae"
+    },
+    {
+      "name": "wanba-compat-5-to-6.waup",
+      "size": 1969930,
+      "digest": "sha256:4129daa6ea72d9cf2af30039b925fe505e7ee3615d00afb80d3dba28e6c68f9f"
+    },
+    {
+      "name": "wanba-system-1.2.2.apk",
+      "size": 59222579,
+      "digest": "sha256:d1706b1ecc8c601f30bf5f546ac025c3d0ef31685701b50f4223941fac01f892"
+    },
+    {
+      "name": "wanba-system-4-to-6.waup",
+      "size": 1158068,
+      "digest": "sha256:3567242dbc849025a3abbc4c37f321b07bf505436234f4b4293ddca5ee71654a"
+    },
+    {
+      "name": "wanba-system-5-to-6.waup",
+      "size": 884176,
+      "digest": "sha256:a2d18b93ca01438e31089c50e8b06faa5a93d09f4769284b41e59dbd384fa1a4"
+    }
+  ],
+  "publishedAt": "2026-09-09T05:33:12Z",
+  "url": "https://github.com/JackLee992/USER_HOUSE_ANDROID/releases/tag/v1.2.2",
+  "latestChannelSHA256": "15d2d7d7b3fadc669282ec6b1fdbb0e88aa8e5e4b8906f8852b63da364bb8817"
+}

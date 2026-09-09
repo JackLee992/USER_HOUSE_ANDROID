@@ -1,0 +1,122 @@
+{
+  "device": "HONOR physical",
+  "serialRedacted": true,
+  "phases": {
+    "baseline": {
+      "passed": true,
+      "installed": {
+        "versionCode": 4,
+        "versionName": "1.2.1",
+        "debuggable": false,
+        "signatureScheme": 2
+      },
+      "snapshotId": "7a122cbdc1df7cafba30cfb98269303b91da3f1089c81f028467cd9a4bd4e630",
+      "items": [
+        {
+          "key": "wanbanXiaowu_settings_v1",
+          "sha256": "01b93b688690087d9e641584e3b504597b4817022627540822e73ca6b0b27b42"
+        },
+        {
+          "key": "wanbanXiaowu_scores_v1",
+          "sha256": "f81d9b1e26676d7a068952f3ea3188d5b33f1482ca054c4cb1b3617471246990"
+        },
+        {
+          "key": "wanbanXiaowu_progress_v1",
+          "sha256": "ab5bdc02fe1e6b31ede6ee374be6b2f15ecbf39c2f9cbabe755fa07bc6ba1c09"
+        },
+        {
+          "key": "wanbanXiaowu_records_v1",
+          "sha256": "6e202ddd4244d0ea0b5e9e9ed64b97ef6e2c770995e50cee1f473494f8102fcf"
+        },
+        {
+          "key": "wanbanXiaowu_sudokuState_v1",
+          "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+        }
+      ],
+      "zuma": {
+        "score": 4760,
+        "levelIndex": 1,
+        "lives": 1
+      },
+      "normalSaf": true
+    },
+    "upgrade": {
+      "passed": true,
+      "installed": {
+        "versionCode": 6,
+        "versionName": "1.2.2",
+        "debuggable": false,
+        "signatureScheme": 2,
+        "sha256": "23ebea8f4382a5c356770423020dff19414afe4d307b5f5bc875cab7e1f94bdd"
+      },
+      "allFiveParsedItemsEqual": true,
+      "items": [
+        {
+          "key": "wanbanXiaowu_settings_v1",
+          "sha256": "01b93b688690087d9e641584e3b504597b4817022627540822e73ca6b0b27b42"
+        },
+        {
+          "key": "wanbanXiaowu_scores_v1",
+          "sha256": "f81d9b1e26676d7a068952f3ea3188d5b33f1482ca054c4cb1b3617471246990"
+        },
+        {
+          "key": "wanbanXiaowu_progress_v1",
+          "sha256": "ab5bdc02fe1e6b31ede6ee374be6b2f15ecbf39c2f9cbabe755fa07bc6ba1c09"
+        },
+        {
+          "key": "wanbanXiaowu_records_v1",
+          "sha256": "6e202ddd4244d0ea0b5e9e9ed64b97ef6e2c770995e50cee1f473494f8102fcf"
+        },
+        {
+          "key": "wanbanXiaowu_sudokuState_v1",
+          "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+        }
+      ],
+      "snapshotId": "60dd78b5b5006de9e0488dba2848e60572346f473512e3de8f1354b543c8161c",
+      "normalSaf": true,
+      "installation": "adb install -r exact frozen artifact; not an in-app delta claim"
+    },
+    "game": {
+      "passed": true,
+      "realNativeContinueAndPause": true,
+      "pausedText": "继续冒险",
+      "screenshots": [
+        "zuma-running-fullscreen.png",
+        "zuma-paused.png",
+        "home-final.png"
+      ]
+    },
+    "updater": {
+      "passed": true,
+      "launchedViaAbout": true,
+      "nativeActivity": "io.github.jacklee992.wanba.compat/io.github.jacklee992.wanba.appupdater.AppUpdateActivity",
+      "publicChannelCheck": "App 已是最新版本",
+      "installed": {
+        "versionCode": 6,
+        "versionName": "1.2.2",
+        "debuggable": false,
+        "signatureScheme": 2
+      },
+      "installedSHA256": "23ebea8f4382a5c356770423020dff19414afe4d307b5f5bc875cab7e1f94bdd"
+    }
+  },
+  "deviceModel": "NTH-AN00",
+  "rotationBefore": {
+    "mode": "free",
+    "accelerometer": "1",
+    "rotation": "0"
+  },
+  "rotationRestored": {
+    "mode": "free",
+    "accelerometer": "1",
+    "rotation": "0"
+  },
+  "lastRun": {
+    "phase": "updater",
+    "passed": true,
+    "error": null,
+    "testedAt": "2026-09-09T05:38:21.847Z"
+  },
+  "passed": true,
+  "evidenceBoundary": "Only native Android input and normal SAF exports; five parsed items compared before gameplay. Private raw exports retained under .local. No silent installer or debug transport used."
+}
