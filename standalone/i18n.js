@@ -37,6 +37,7 @@ export function createI18n({load,storage,language='zh-CN',onChange=()=>{}}={}) {
     get locale(){return locale;},
     get brand(){return catalog?.brand||'玩吧';},
     get version(){return catalog?.version||null;},
+    get uiLabels(){return {...fallback?.strings,...catalog?.strings,...fallback?.templates,...catalog?.templates};},
     async init(){
       try { const saved=storage?.getItem(LOCALE_STORAGE_KEY);if(supported.has(saved))locale=saved; } catch {}
       try {fallback=await loadCatalog('zh-CN');} catch {fallback=null;}
@@ -174,6 +175,7 @@ export function observeLocalizedUI() {
   translateDocument();
 }
 export const t=(key,params={},fallback=key)=>active?.t(key,params,fallback)??interpolate(fallback,params);
+export const translateSource=value=>active?.translateSource(value)??value;
 export const gameTitle=(id,fallback=id)=>active?.gameTitle(id,fallback)??fallback;
 export const gameRules=(id,fallback='')=>active?.gameRules(id,fallback)??fallback;
 export const getLocale=()=>active?.locale||'zh-CN';
@@ -189,3 +191,6 @@ export function mountLanguagePicker(container) {
   select.onchange=async()=>{select.disabled=true;try{await setLocale(select.value);}finally{select.disabled=false;}};
   field.append(label,select);section.append(field);container.prepend(section);scheduleTranslation();
 }
+
+// Native menus reuse the same signed translations, including dynamic templates.
+export const getUILabels=()=>active?.uiLabels||{};

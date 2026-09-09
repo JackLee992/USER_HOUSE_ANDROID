@@ -1,6 +1,6 @@
 import { EXTENSION_VERSION } from '../src/core/metadata.js';
 
-export const APP_VERSION = '1.2.2';
+export const APP_VERSION = '1.3.0';
 export const GAME_BASELINE = EXTENSION_VERSION;
 const VERSION = /^\d+\.\d+(?:\.[\dA-Za-z-]+)*$/;
 const cleanVersion = value => typeof value === 'string' && value.length <= 80 && VERSION.test(value) ? value : '';
@@ -14,18 +14,19 @@ export function normalizeAppInfo(raw, userAgent = '') {
   const appVersion = cleanVersion(native?.appVersion);
   const engineVersion = cleanVersion(native?.engineVersion);
   const versionCode = native?.versionCode;
-  if (['system', 'compat'].includes(flavor) && appVersion && engineVersion && Number.isSafeInteger(versionCode) && versionCode > 0) {
+  if (['system', 'compat', 'ios'].includes(flavor) && appVersion && engineVersion && Number.isSafeInteger(versionCode) && versionCode > 0) {
+    const ios = flavor === 'ios';
     return Object.freeze({
       appVersion, versionCode, webVersion:APP_VERSION, gameBaseline:GAME_BASELINE,
-      flavor, flavorLabel:flavor === 'compat' ? '兼容版' : '系统版',
-      engine:flavor === 'compat' ? 'GeckoView' : 'Android System WebView',
-      engineLabel:flavor === 'compat' ? '内置 GeckoView' : '系统 Android WebView',
+      flavor, flavorLabel:ios ? 'iOS 版' : flavor === 'compat' ? '兼容版' : '系统版',
+      engine:ios ? 'WKWebView' : flavor === 'compat' ? 'GeckoView' : 'Android System WebView',
+      engineLabel:ios ? '系统 WebKit / WKWebView' : flavor === 'compat' ? '内置 GeckoView' : '系统 Android WebView',
       engineVersion,
       providerVersion:typeof native.providerVersion === 'string' && native.providerVersion.length <= 120 && !/[\x00-\x1f]/.test(native.providerVersion) ? native.providerVersion : '',
       source:'native', versionMatches:appVersion === APP_VERSION,
-      gameUpdatesEnabled:native.gameUpdatesEnabled !== false,
-      nativeSelfUpdateEnabled:native.nativeSelfUpdateEnabled !== false,
-      appUpdaterEnabled:native.appUpdaterEnabled === true,
+      gameUpdatesEnabled:ios ? false : native.gameUpdatesEnabled !== false,
+      nativeSelfUpdateEnabled:ios ? false : native.nativeSelfUpdateEnabled !== false,
+      appUpdaterEnabled:!ios && native.appUpdaterEnabled === true,
     });
   }
   const firefox = /Firefox\/([\d.]+)/.exec(userAgent);

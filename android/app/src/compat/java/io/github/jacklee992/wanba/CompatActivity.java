@@ -60,7 +60,7 @@ import java.util.function.Consumer;
 public final class CompatActivity extends Activity {
     private static final int PICK_FILES = 4101;
     private static final int CREATE_BACKUP = 4102;
-    private static final int MAX_BACKUP_BYTES = 8 * 1024 * 1024;
+    private static final int MAX_BACKUP_BYTES = 16 * 1024 * 1024;
     private static final long MAX_IMPORT_FILE_BYTES = 32L * 1024 * 1024;
     private static final long MAX_IMPORT_TOTAL_BYTES = 64L * 1024 * 1024;
     private static final int MAX_IMPORT_FILES = 64;
@@ -76,6 +76,7 @@ public final class CompatActivity extends Activity {
     private GeckoView geckoView;
     private CompatAssetServer assetServer;
     private ContentUpdateManager contentUpdates;
+    private NativeShellController nativeShell;
     private String contentEntryPath;
     private FrameLayout frame;
     private GameImmersiveController immersive;
@@ -98,7 +99,7 @@ public final class CompatActivity extends Activity {
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         frame = new FrameLayout(this);
-        frame.setBackgroundColor(Color.rgb(255, 247, 234));
+        frame.setBackgroundColor(Color.rgb(245, 246, 250));
         setContentView(frame);
         immersive = new GameImmersiveController(getWindow(), frame);
         if (Build.VERSION.SDK_INT >= 33) {
@@ -107,7 +108,7 @@ public final class CompatActivity extends Activity {
         }
         contentUpdates = new ContentUpdateManager(this, BuildConfig.VERSION_CODE, new ContentUpdateManager.Listener() {
             @Override public void onLoad(String path) { contentEntryPath = path; loadContent(); }
-            @Override public void onEvent(String event) { send(json("op", "gameUpdate", "value", event)); }
+            @Override public void onEvent(String event) { if (nativeShell != null) nativeShell.refreshUpdates(); send(json("op", "gameUpdate", "value", event)); }
         });
         openEngine();
     }
@@ -178,6 +179,12 @@ public final class CompatActivity extends Activity {
             geckoView = new GeckoView(this);
             geckoView.setSession(session);
             frame.addView(geckoView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+            nativeShell = new NativeShellController(this, frame, geckoView, contentUpdates, new NativeShellController.Engine() {
+                @Override public void call(String operation, JSONArray arguments, Consumer<JSONObject> callback) { callShell(operation, arguments, callback); }
+                @Override public void downloads() { nativeBridge.openDownloads(); }
+                @Override public void appUpdater() { nativeBridge.openAppUpdater(); }
+            });
+            nativeShell.loading(contentEntryPath);
             runtime.getWebExtensionController().ensureBuiltIn("resource://android/assets/wanba-bridge/", "wanba-local-bridge@jacklee992.github.io")
                     .accept(installed -> {
                         if (destroyed) return;
@@ -211,7 +218,9 @@ public final class CompatActivity extends Activity {
                         Consumer<JSONObject> callback = callbacks.remove(message.optString("id"));
                         if (callback != null) callback.accept(message);
                         break;
-                    case "ready": if (activityPaused) pauseAndSave(); break;
+                    case "ready": if (activityPaused) pauseAndSave(); send(json("op", "shellProbe")); break;
+                    case "shellState": if (nativeShell != null) nativeShell.acceptState(message.optString("value")); break;
+                    case "shellAvailable": if (!message.optBoolean("available") && nativeShell != null) nativeShell.unavailable(); break;
                     case "backup": if (isTrustedForeground()) nativeBridge.saveBackup(message.optString("filename"), message.optString("json")); break;
                     case "immersive":
                         if (message.opt("enabled") instanceof Boolean) {
@@ -256,6 +265,7 @@ public final class CompatActivity extends Activity {
     private void loadContent() {
         if (destroyed || session == null || extension == null || contentEntryPath == null) return;
         immersive.reset();
+        if (nativeShell != null) nativeShell.loading(contentEntryPath);
         trustedDocument = false;
         session.loadUri(CompatAssetServer.ORIGIN + contentEntryPath);
     }
@@ -272,6 +282,14 @@ public final class CompatActivity extends Activity {
         send(json("op", operation, "id", id));
     }
 
+    private void callShell(String operation, JSONArray arguments, Consumer<JSONObject> callback) {
+        if (!isTrustedForeground() || !NativeShellCommands.ALLOWED.contains(operation)) { callback.accept(null); return; }
+        String id = "native-" + (++nextCommand);
+        callbacks.put(id, callback);
+        main.postDelayed(() -> { Consumer<JSONObject> waiting = callbacks.remove(id); if (waiting != null) waiting.accept(null); }, 10000);
+        send(json("op", "shellCommand", "id", id, "method", operation, "arguments", arguments));
+    }
+
     private boolean isTrustedForeground() { return !destroyed && !activityPaused && trustedDocument && session != null && bridgePort != null; }
 
     private void showStartupError(String message) {
@@ -286,7 +304,7 @@ public final class CompatActivity extends Activity {
         frame.removeAllViews(); frame.addView(error);
     }
 
-    @Override protected void onPause() { super.onPause(); activityPaused = true; if (immersive != null) immersive.foreground(false); if (choiceDialog != null) choiceDialog.dismiss(); if (contentUpdates != null) contentUpdates.onPause(); pauseAndSave(); }
+    @Override protected void onPause() { super.onPause(); activityPaused = true; if (nativeShell != null) nativeShell.foreground(false); if (immersive != null) immersive.foreground(false); if (choiceDialog != null) choiceDialog.dismiss(); if (contentUpdates != null) contentUpdates.onPause(); pauseAndSave(); }
 
     private void pauseAndSave() {
         if (destroyed || session == null) return;
@@ -303,7 +321,7 @@ public final class CompatActivity extends Activity {
     }
 
     @Override protected void onResume() {
-        super.onResume(); activityPaused = false; if (immersive != null) immersive.foreground(true);
+        super.onResume(); activityPaused = false; if (nativeShell != null) nativeShell.foreground(true); if (immersive != null) immersive.foreground(true);
         if (contentUpdates != null) contentUpdates.onResume();
         pauseGeneration++;
         if (pendingPause != null) main.removeCallbacks(pendingPause);
@@ -319,6 +337,7 @@ public final class CompatActivity extends Activity {
     private void handleBack() {
         if (choiceDialog != null && choiceDialog.isShowing()) { choiceDialog.dismiss(); return; }
         if (destroyed || backPending) return;
+        if (nativeShell != null && nativeShell.handleBack()) return;
         if (session == null || !trustedDocument) { finish(); return; }
         backPending = true;
         command("back", result -> {
@@ -346,6 +365,7 @@ public final class CompatActivity extends Activity {
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (nativeShell != null && nativeShell.activityResult(requestCode, resultCode, data)) return;
         if (requestCode == PICK_FILES) {
             ValueCallback<Uri[]> callback = fileCallback;
             fileCallback = null;
@@ -373,7 +393,7 @@ public final class CompatActivity extends Activity {
                         String extension = name == null ? "" : name.substring(name.lastIndexOf('.') + 1).toLowerCase(Locale.ROOT);
                         if (!accepted.contains(extension)) throw new IllegalArgumentException("仅支持所选类型的 JSON、DAT 或 WAV 文件");
                         long limit = extension.equals("json") ? MAX_BACKUP_BYTES : MAX_IMPORT_FILE_BYTES;
-                        if (declaredSize > limit) throw new IllegalArgumentException("文件过大：JSON 最大 8MB，其他文件最大 32MB");
+                        if (declaredSize > limit) throw new IllegalArgumentException("文件过大：JSON 最大 16MB，其他文件最大 32MB");
                         try (InputStream input = getContentResolver().openInputStream(uri)) {
                             if (input == null) throw new IllegalArgumentException("无法读取选中的文件");
                             readable.add(Uri.fromFile(cache.copy(input, name, limit)));
@@ -431,7 +451,7 @@ public final class CompatActivity extends Activity {
                 try {
                     if (json == null || json.length() > MAX_BACKUP_BYTES) throw new IllegalArgumentException("备份内容过大");
                     byte[] bytes = json.getBytes(StandardCharsets.UTF_8);
-                    if (bytes.length > MAX_BACKUP_BYTES) throw new IllegalArgumentException("备份最大支持 8MB");
+                    if (bytes.length > MAX_BACKUP_BYTES) throw new IllegalArgumentException("备份最大支持 16MB");
                     JSONTokener tokener = new JSONTokener(json);
                     Object value = tokener.nextValue();
                     if (!(value instanceof JSONObject || value instanceof JSONArray) || tokener.nextClean() != 0) throw new IllegalArgumentException("备份必须是有效 JSON");
@@ -464,7 +484,7 @@ public final class CompatActivity extends Activity {
         public void openAppUpdater() {
             main.post(() -> {
                 if (!isTrustedForeground() || !BuildConfig.WANBA_APP_UPDATER) return;
-                try { startActivity(new Intent().setClassName(getPackageName(), "io.github.jacklee992.wanba.appupdater.AppUpdateActivity")); }
+                try { startActivity(new Intent().setClassName(getPackageName(), "io.github.jacklee992.wanba.appupdater.AppUpdateActivity").putExtra("wanba.locale",nativeShell==null?"zh-CN":nativeShell.locale())); }
                 catch (ActivityNotFoundException error) { toast("此版本未包含 App 更新模块"); }
             });
         }
@@ -472,6 +492,7 @@ public final class CompatActivity extends Activity {
 
 
     private void notifyBackup(String status, String message) {
+        if (nativeShell != null) nativeShell.backupFinished();
         if (destroyed) return;
         toast(message);
         send(json("op", "backupResult", "success", "saved".equals(status), "message", message));
@@ -482,6 +503,7 @@ public final class CompatActivity extends Activity {
     @Override protected void onDestroy() {
         if (choiceDialog != null) choiceDialog.dismiss();
         destroyed = true;
+        if (nativeShell != null) nativeShell.close();
         if (immersive != null) immersive.destroy();
         if (contentUpdates != null) contentUpdates.close();
         trustedDocument = false;

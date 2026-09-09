@@ -3,6 +3,10 @@ package io.github.jacklee992.wanba.appupdater;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.RippleDrawable;
+import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,19 +25,21 @@ import java.lang.ref.WeakReference;
 public final class AppUpdateActivity extends Activity {
     private static WeakReference<AppUpdateActivity> foreground = new WeakReference<>(null);
     private UpdateController controller;
+    private UpdaterLabels labels;
+    private static final int BACKGROUND=0xfff5f6fa, INK=0xff202636, SECONDARY=0xff647087, ACCENT=0xff4b5ecb;
     private TextView status;
     private Button check, download, install, cancel;
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
-        // Target 35+ draws behind system bars. The dark outer surface owns those insets,
-        // while the white scrolling content starts below the status bar/cutout.
-        int bars = Color.rgb(20, 39, 43);
+        labels=new UpdaterLabels(getIntent().getStringExtra("wanba.locale"));
+        // Only a fixed presentation locale is accepted; updater trust remains compiled in.
+        int bars = BACKGROUND;
         getWindow().setStatusBarColor(bars); getWindow().setNavigationBarColor(bars);
         if (Build.VERSION.SDK_INT >= 30) {
             getWindow().setDecorFitsSystemWindows(false);
         } else {
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
         }
         FrameLayout surface = new FrameLayout(this); surface.setBackgroundColor(bars);
         surface.setOnApplyWindowInsetsListener((view, insets) -> {
@@ -41,7 +47,7 @@ public final class AppUpdateActivity extends Activity {
                 android.graphics.Insets safe = insets.getInsets(WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout());
                 view.setPadding(safe.left, safe.top, safe.right, safe.bottom);
                 WindowInsetsController controller = view.getWindowInsetsController();
-                if (controller != null) controller.setSystemBarsAppearance(0,
+                if (controller != null) controller.setSystemBarsAppearance(WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS | WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS,
                         WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS | WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS);
             } else {
                 view.setPadding(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(),
@@ -49,32 +55,33 @@ public final class AppUpdateActivity extends Activity {
             }
             return insets;
         });
-        ScrollView scroll = new ScrollView(this); scroll.setFillViewport(true); scroll.setBackgroundColor(Color.WHITE);
+        ScrollView scroll = new ScrollView(this); scroll.setFillViewport(true); scroll.setBackgroundColor(BACKGROUND);
         LinearLayout layout = new LinearLayout(this); layout.setOrientation(LinearLayout.VERTICAL); layout.setPadding(dp(20),dp(20),dp(20),dp(20));
         scroll.addView(layout); surface.addView(scroll, new FrameLayout.LayoutParams(-1,-1));
-        TextView title = new TextView(this); title.setText("App 更新"); title.setTextSize(24); layout.addView(title);
-        status = new TextView(this); status.setText("从 GitHub 获取已签名的 App 更新。安装需要系统确认。\n游戏内容更新在原设置中管理。"); status.setPadding(0,dp(16),0,dp(16)); layout.addView(status);
+        TextView title = new TextView(this); title.setText(labels.text("App 更新")); title.setTextSize(34);title.setTypeface(Typeface.create("sans-serif",Typeface.BOLD));title.setTextColor(INK);title.setPadding(0,dp(8),0,dp(16));layout.addView(title);
+        status = new TextView(this); status.setText(labels.text("从 GitHub 获取已签名的 App 更新。安装需要系统确认。\n游戏内容更新在原设置中管理。"));status.setTextSize(15);status.setTextColor(SECONDARY);status.setLineSpacing(dp(3),1);status.setPadding(dp(16),dp(16),dp(16),dp(16));status.setBackground(shape(Color.WHITE));layout.addView(status);
         check = button(layout,"检查 App 更新"); download = button(layout,"下载更新"); install = button(layout,"安装已验证 APK"); cancel = button(layout,"取消下载");
         Button back = button(layout,"返回"); back.setOnClickListener(v -> finish());
         download.setEnabled(false); install.setEnabled(false); cancel.setEnabled(false); setContentView(surface); surface.requestApplyInsets();
         try { controller = new UpdateController(this, this::event); }
-        catch (Exception e) { status.setText(e.getMessage()); check.setEnabled(false); return; }
+        catch (Exception e) { status.setText(labels.message("error",e.getMessage())); check.setEnabled(false); return; }
         check.setOnClickListener(v -> { lock(); controller.check(); });
         download.setOnClickListener(v -> { lock(); controller.download(); });
         install.setOnClickListener(v -> {
             if (!getPackageManager().canRequestPackageInstalls()) {
                 startActivity(new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:" + getPackageName())));
-                status.setText("允许安装后请返回，再点“安装已验证 APK”。"); return;
+                status.setText(labels.text("允许安装后请返回，再点“安装已验证 APK”。")); return;
             }
             lock(); controller.install();
         });
         cancel.setOnClickListener(v -> controller.cancel());
     }
     private int dp(int value) { return Math.round(value * getResources().getDisplayMetrics().density); }
-    private Button button(LinearLayout layout,String text) { Button b = new Button(this); b.setText(text); layout.addView(b); return b; }
+    private GradientDrawable shape(int color){GradientDrawable shape=new GradientDrawable();shape.setColor(color);shape.setCornerRadius(dp(12));return shape;}
+    private Button button(LinearLayout layout,String text) { Button b=new Button(this);b.setText(labels.text(text));b.setTextSize(16);b.setAllCaps(false);b.setGravity(android.view.Gravity.START|android.view.Gravity.CENTER_VERTICAL);b.setTextColor(new ColorStateList(new int[][]{new int[]{-android.R.attr.state_enabled},new int[]{}},new int[]{0xff9ba3b8,ACCENT}));b.setMinHeight(dp(52));b.setPadding(dp(16),dp(10),dp(16),dp(10));b.setBackground(new RippleDrawable(ColorStateList.valueOf(0x204b5ecb),shape(Color.WHITE),shape(Color.WHITE)));LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(-1,-2);params.topMargin=dp(12);layout.addView(b,params);return b; }
     private void lock() { check.setEnabled(false); download.setEnabled(false); install.setEnabled(false); cancel.setEnabled(true); }
     private void event(String state,String message) {
-        status.setText(message);
+        status.setText(labels.message(state,message));
         boolean done = state.equals("available") || state.equals("ready") || state.equals("current") || state.equals("error") || state.equals("cancelled");
         check.setEnabled(done); download.setEnabled(state.equals("available")); install.setEnabled(done && controller.isReady()); cancel.setEnabled(!done && !state.equals("installing"));
     }
@@ -86,8 +93,8 @@ public final class AppUpdateActivity extends Activity {
         Intent action = InstallResultReceiver.takePendingAction();
         if (action != null) { startActivity(action); return; }
         String result = getSharedPreferences(InstallResultReceiver.PREFS, MODE_PRIVATE).getString("status", "");
-        if (result.equals("success")) { status.setText("Android 已完成 App 安装。"); check.setEnabled(true); }
-        else if (result.equals("failed")) { status.setText("系统安装未完成，当前版本和游戏数据保持不变。可重试。"); check.setEnabled(true); install.setEnabled(controller != null && controller.isReady()); }
-        else if (result.equals("confirmation")) { status.setText("安装确认尚未完成。若系统提示已关闭，请重新检查并安装。"); check.setEnabled(true); install.setEnabled(controller != null && controller.isReady()); }
+        if (result.equals("success")) { status.setText(labels.text("Android 已完成 App 安装。")); check.setEnabled(true); }
+        else if (result.equals("failed")) { status.setText(labels.text("系统安装未完成，当前版本和游戏数据保持不变。可重试。")); check.setEnabled(true); install.setEnabled(controller != null && controller.isReady()); }
+        else if (result.equals("confirmation")) { status.setText(labels.text("安装确认尚未完成。若系统提示已关闭，请重新检查并安装。")); check.setEnabled(true); install.setEnabled(controller != null && controller.isReady()); }
     }
 }

@@ -108,9 +108,9 @@ test('only the exact trusted origin and standalone top-level path can install th
   assert.deepEqual(h.sent, [{ op: 'ready' }]);
 });
 
-test('the page receives only the eleven declared native operations on a fixed bridge property', () => {
+test('the page receives only the twelve declared native operations on a fixed bridge property', () => {
   const h = harness();
-  const names = ['activateGameUpdate', 'checkGameUpdates', 'downloadGameUpdate', 'getAppInfo', 'getContentState', 'openAppUpdater', 'openDownloads', 'reportGameContentReady', 'rollbackGameUpdate', 'saveBackup', 'setGameImmersive'];
+  const names = ['activateGameUpdate', 'checkGameUpdates', 'downloadGameUpdate', 'getAppInfo', 'getContentState', 'onShellState', 'openAppUpdater', 'openDownloads', 'reportGameContentReady', 'rollbackGameUpdate', 'saveBackup', 'setGameImmersive'];
   assert.deepEqual(Object.getOwnPropertyNames(h.bridge).sort(), names);
   assert.deepEqual(h.exported.sort(), names);
   for (const name of names) assert.equal(typeof h.bridge[name], 'function');
@@ -179,12 +179,12 @@ test('content update events deliver JSON strings only and failed requests have a
   h.disconnect(); await assert.rejects(h.bridge.checkGameUpdates(), /Native bridge disconnected/);
 });
 
-test('backup requests preserve string data and enforce the declared 8 MiB character limit', () => {
+test('backup requests preserve string data and enforce the declared 16 MiB character limit', () => {
   const h = harness();
   const json = JSON.stringify({ title: '备份', progress: { score: 42 } });
   h.bridge.saveBackup('save.json', json);
   assert.deepEqual(h.sent.at(-1), { op: 'backup', filename: 'save.json', json });
-  const boundary = 'x'.repeat(backupLimit);
+  const boundary = 'x'.repeat(16 * 1024 * 1024);
   h.bridge.saveBackup('boundary.json', boundary);
   assert.equal(h.sent.at(-1).json, boundary);
   const count = h.sent.length;
@@ -394,4 +394,31 @@ test('an info request already pending at disconnect still settles by its existin
   await rejected;
   assert.equal(h.timers.size, 0);
   assert.equal(h.sent.length, 2);
+});
+
+test('native shell state callback accepts bounded JSON strings without adding evaluation capability', () => {
+  const h=harness();h.bridge.onShellState('{"schema":1}');
+  assert.deepEqual(h.sent.at(-1),{op:'shellState',value:'{"schema":1}'});
+  const before=h.sent.length;for(const value of [null,{},42,'x'.repeat(512*1024+1)])h.bridge.onShellState(value);
+  assert.equal(h.sent.length,before);h.disconnect();h.bridge.onShellState('{}');assert.equal(h.sent.length,before);
+});
+
+test('native shell probe detects old cores after ready without exposing a generic evaluation method', () => {
+  const h=harness();h.receive({op:'shellProbe'});assert.deepEqual(h.sent,[{op:'ready'}]);
+  h.page.wanbaApp={save(){}};h.dispatch('wanba-app-ready');assert.deepEqual(h.sent.at(-1),{op:'shellAvailable',available:false});
+  h.page.wanbaApp.catalog=()=>({schema:1});h.receive({op:'shellProbe'});assert.deepEqual(h.sent.at(-1),{op:'shellAvailable',available:true});
+});
+
+test('native shell command clones JSON arguments into the page realm and resolves asynchronous methods', async () => {
+  const h=harness();
+  h.page.wanbaApp=vm.runInNewContext('({setCatalog(value){if(Object.getPrototypeOf(value)!==Object.prototype)throw Error("wrong realm");return {ok:true,favorites:value.favorites};}})');
+  // Use the exact realm behind the bridge for the prototype check.
+  h.page.eval('wanbaApp={setCatalog(value){if(Object.getPrototypeOf(value)!==Object.prototype)throw Error("wrong realm");return {ok:true,favorites:value.favorites};},setLocale:async code=>({ok:true,code})}');
+  h.receive({op:'shellCommand',id:'pref',method:'setCatalog',arguments:[{favorites:['paopao'],order:[]}]});
+  h.receive({op:'shellCommand',id:'locale',method:'setLocale',arguments:['en']});
+  await new Promise(resolve=>setImmediate(resolve));
+  assert.deepEqual(h.sent.find(message=>message.id==='pref'),{op:'ack',id:'pref',ok:true,value:{ok:true,favorites:['paopao']}});
+  assert.deepEqual(h.sent.find(message=>message.id==='locale'),{op:'ack',id:'locale',ok:true,value:{ok:true,code:'en'}});
+  const count=h.sent.length;for(const method of ['eval','constructor','__proto__','save','arbitrary'])h.receive({op:'shellCommand',id:'attack',method,arguments:['globalThis.attacked=true']});
+  assert.equal(h.sent.length,count);assert.equal(h.page.attacked,undefined);
 });

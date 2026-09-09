@@ -1,0 +1,1 @@
+-keep class io.github.jacklee992.wanba.appupdater.AppUpdateProbe { public static java.lang.AutoCloseable check(android.content.Context, java.util.function.Consumer); }

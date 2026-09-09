@@ -71,7 +71,7 @@ export function installGameUpdates({host=window,document:doc=document,runtime,in
   doc.addEventListener('touchstart',event=>{
     if(!gameUpdatesAvailable(state,host))return;
     releasePull(true);const body=doc.querySelector('#wb-body');
-    if(event.touches.length!==1||!isHome()||body.scrollTop>0||!body.contains(event.target)||event.target.closest('button,input,select,summary'))return;
+    if(body?.dataset.catalogEditing==='true'||event.touches.length!==1||!isHome()||body.scrollTop>0||!body.contains(event.target)||event.target.closest('button,input,select,summary'))return;
     const status=panel?.querySelector('.wanba-update-status');
     pull={body,status,originalStatus:status?.textContent||'',x:event.touches[0].clientX,y:event.touches[0].clientY,dy:0,hint:''};
     // Only a gesture beginning at the top may need to cancel native scrolling.

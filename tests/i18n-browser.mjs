@@ -1,7 +1,9 @@
 // Run only with the dedicated temporary Chrome QA profile and local static server.
 import assert from 'node:assert/strict';
 import {mkdirSync,writeFileSync} from 'node:fs';
-const origin='http://127.0.0.1:8768',port=Number(process.argv[2]||9348);
+const pageURL=process.env.WANBA_URL||process.argv[3]||'http://127.0.0.1:8768/standalone/index.html';
+const parsedURL=new URL(pageURL);if(parsedURL.hostname!=='127.0.0.1'||parsedURL.protocol!=='http:')throw Error('Use a task-owned local static server.');
+const origin=parsedURL.origin,port=Number(process.env.CDP_PORT||process.argv[2]||9348);
 const tabs=await(await fetch(`http://127.0.0.1:${port}/json`)).json();const tab=tabs.find(t=>t.type==='page'&&(t.url==='about:blank'||t.url.startsWith(origin+'/')));if(!tab)throw Error('No isolated local page');
 const socket=new WebSocket(tab.webSocketDebuggerUrl);await new Promise((resolve,reject)=>{socket.onopen=resolve;socket.onerror=reject;});
 let id=0;const pending=new Map(),errors=[],results=[];
@@ -10,11 +12,14 @@ const send=(method,params={})=>new Promise((resolve,reject)=>{pending.set(++id,{
 const evaluate=async expression=>{const r=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true,replMode:true});if(r.exceptionDetails)throw Error(JSON.stringify(r.exceptionDetails));return r.result.value;};
 const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));const until=async expression=>{for(let n=0;n<160;n++){if(await evaluate(expression))return;await wait(100);}throw Error('Timeout '+expression);};
 const click=selector=>evaluate(`document.querySelector(${JSON.stringify(selector)}).click()`);
+const navigationBounds=()=>evaluate(`(()=>{const popup=document.querySelector('#wanbanXiaowu-popup');return [...popup.querySelectorAll('.wanba-bottom-nav .wb-tab')].map(node=>{const r=node.getBoundingClientRect(),range=document.createRange();range.selectNodeContents(node.lastElementChild);const label=range.getBoundingClientRect();return{id:node.dataset.tab,width:r.width,height:r.height,left:r.left,right:r.right,top:r.top,bottom:r.bottom,within:r.width>0&&r.height>0&&r.left>=-1&&r.right<=innerWidth+1&&r.top>=-1&&r.bottom<=innerHeight+1&&label.left>=r.left-1&&label.right<=r.right+1&&label.top>=r.top-1&&label.bottom<=r.bottom+1};});})()`);
 const markNextDocument=async()=>{const value=Date.now()+'-'+Math.random();await send('Page.addScriptToEvaluateOnNewDocument',{source:`window.__wanbaI18nQa=${JSON.stringify(value)}`});return value;};
-const out='.local/qa-i18n';mkdirSync(out,{recursive:true});
+const out=process.env.QA_OUT||'.local/qa-i18n';mkdirSync(out,{recursive:true});
 try {
-  await send('Runtime.enable');await send('Page.enable');await send('Emulation.setDeviceMetricsOverride',{width:360,height:760,deviceScaleFactor:2,mobile:true});
-  const initial=await markNextDocument();await send('Page.navigate',{url:origin+'/standalone/index.html'});await until(`window.__wanbaI18nQa===${JSON.stringify(initial)}&&!!window.wanbaApp`);
+  await send('Runtime.enable');await send('Network.enable');await send('Network.setCacheDisabled',{cacheDisabled:true});await send('Page.enable');await send('Emulation.setDeviceMetricsOverride',{width:360,height:760,deviceScaleFactor:2,mobile:true});
+  const initial=await markNextDocument();await send('Page.navigate',{url:pageURL});await until(`window.__wanbaI18nQa===${JSON.stringify(initial)}&&!!window.wanbaApp`);
+  await evaluate(`(()=>{const key='wanbanXiaowu_settings_v1',settings=JSON.parse(localStorage.getItem(key)||'{}');settings.catalog={favorites:[],order:[]};settings.lastGame='';settings.lastTab='single';localStorage.setItem(key,JSON.stringify(settings));})()`);
+  const reset=await markNextDocument();await send('Page.reload',{ignoreCache:true});await until(`window.__wanbaI18nQa===${JSON.stringify(reset)}&&!!window.wanbaApp`);
   await evaluate('wanbaApp.pause();wanbaApp.back();window.i18nQA=await import("./i18n.js")');
   for(const locale of ['zh-CN','zh-TW','en','ja','ko']){
     await click('[data-tab="settings"]');await until('!!document.querySelector("#wanba-language")');
@@ -23,19 +28,45 @@ try {
     const catalog=await evaluate(`await (await fetch('../locales/${locale}.json')).json()`);
     assert.equal(await evaluate('document.title'),catalog.brand);assert.equal(await evaluate('localStorage.getItem("wanba_locale_v1")'),locale);
     assert.equal(await evaluate('document.querySelector("#wb-export-data").textContent'),catalog.strings['导出备份']);
+    assert.equal(await evaluate('document.querySelector(".wanba-header-caption").textContent'),catalog.strings['随时开一局']);
+    assert.equal(await evaluate('document.querySelector(".wanba-bottom-nav").getAttribute("aria-label")'),catalog.strings['主导航']);
+    assert.equal(await evaluate('document.querySelector("[data-tab=my]").textContent'),catalog.strings['我的']);
+    assert.equal(await evaluate('!!document.querySelector("#wb-theme")'),false,'theme selector is removed');
+    assert.equal(await evaluate(`[...document.querySelectorAll('.wanba-settings .wb-section-title')].some(node=>node.textContent===${JSON.stringify(catalog.strings['偏好设置'])})`),true);
     assert.equal(await evaluate('document.documentElement.scrollWidth<=innerWidth+1'),true,locale+' settings width');
+    const bounds=await navigationBounds();assert.equal(bounds.length,4);assert.ok(bounds.every(rect=>rect.within),locale+' navigation controls must be inside the visible viewport: '+JSON.stringify(bounds));
     await click('[data-tab="single"]');await wait(80);
     assert.equal(await evaluate('document.querySelector("[data-game=freecell] .wb-game-name").textContent'),catalog.games.freecell.title);
     assert.equal(await evaluate('document.querySelector("#wanba-check-games").textContent'),catalog.strings['检查更新']);
     assert.equal(await evaluate('document.documentElement.scrollWidth<=innerWidth+1'),true,locale+' catalog width');
+    assert.equal(await evaluate(`(()=>{const r=document.querySelector('[data-game=freecell]').getBoundingClientRect(),body=document.querySelector('#wb-body').getBoundingClientRect();return r.width>80&&r.left>=body.left-1&&r.right<=body.right+1&&body.width>=innerWidth*.9;})()`),true,locale+' launch controls must fit the actual content area');
+    assert.equal(await evaluate('document.querySelector("[data-catalog-favorite=freecell]").getAttribute("aria-label")'),catalog.strings['收藏游戏']);
+    await click('[data-catalog-favorite="freecell"]');await until('document.querySelector("[data-catalog-favorite=freecell]").getAttribute("aria-pressed")==="true"');
+    await wait(80);
+    assert.equal(await evaluate('wanbaApp.inspect().game'),null,'favorite tap never launches');
+    assert.equal(await evaluate('document.querySelector("[data-catalog-favorite=freecell]").getAttribute("aria-label")'),catalog.strings['取消收藏']);
+    await click('.wanba-catalog-edit');await wait(80);
+    assert.equal(await evaluate('document.querySelector(".wanba-catalog-edit").getAttribute("aria-label")'),catalog.strings['完成排序']);
+    assert.equal(await evaluate('document.querySelector(".wanba-catalog-drag").getAttribute("aria-label")'),catalog.strings['长按拖动排序']);
+    assert.equal(await evaluate('document.querySelector("[data-catalog-move=up]").getAttribute("aria-label")'),catalog.strings['上移']);
+    await click('.wanba-catalog-edit');
+    await click('[data-tab="my"]');await wait(80);
+    assert.equal(await evaluate('document.querySelector(".wanba-catalog-title").textContent'),catalog.strings['我的收藏']);
+    assert.equal(await evaluate('document.querySelectorAll("[data-game]").length'),1);
+    await click('[data-catalog-favorite="freecell"]');await wait(80);
+    assert.equal(await evaluate('document.querySelector(".wanba-catalog-empty h3").textContent'),catalog.strings['还没有收藏的游戏']);
+    assert.equal(await evaluate('document.querySelector(".wanba-catalog-browse").textContent'),catalog.strings['去看看游戏']);
+    assert.equal(await evaluate('document.documentElement.scrollWidth<=innerWidth+1'),true,locale+' empty My width');
+    const myShot=await send('Page.captureScreenshot',{format:'png'});writeFileSync(out+'/'+locale+'-my.png',Buffer.from(myShot.data,'base64'));
+    await click('.wanba-catalog-browse');await wait(80);
     const shot=await send('Page.captureScreenshot',{format:'png'});writeFileSync(out+'/'+locale+'-catalog.png',Buffer.from(shot.data,'base64'));
     await click('[data-game="freecell"]');await click('#wb-game-rules');await wait(80);
     assert.equal(await evaluate('document.querySelector("[data-i18n-rules]").textContent'),catalog.games.freecell.rules);
     assert.equal(await evaluate('document.querySelector("#wb-rules-close").textContent'),catalog.strings['关闭']);
     await click('#wb-rules-close');await evaluate('wanbaApp.back()');
-    results.push({locale,title:catalog.brand,catalog:true,settings:true,rules:true,width:360});console.log('PASS '+locale);
+    results.push({locale,title:catalog.brand,catalog:true,settings:true,rules:true,favorites:true,sortLabels:true,navigation:true,width:360});console.log('PASS '+locale);
   }
-  const reloaded=await markNextDocument();await send('Page.reload');await until(`window.__wanbaI18nQa===${JSON.stringify(reloaded)}&&!!window.wanbaApp&&document.documentElement.lang==="ko"`);
+  const reloaded=await markNextDocument();await send('Page.reload',{ignoreCache:true});await until(`window.__wanbaI18nQa===${JSON.stringify(reloaded)}&&!!window.wanbaApp&&document.documentElement.lang==="ko"`);
   assert.equal(await evaluate('document.title'),'눅케이드');
   await evaluate('(()=>{const input=document.createElement("textarea");input.id="qa-user-input";input.value="开始游戏 <img src=x onerror=alert(1)>";document.body.append(input);const pre=document.createElement("pre");pre.id="qa-license";pre.textContent="开始游戏";document.body.append(pre);})()');
   await evaluate('i18nQA=await import("./i18n.js");await i18nQA.setLocale("en")');await wait(80);

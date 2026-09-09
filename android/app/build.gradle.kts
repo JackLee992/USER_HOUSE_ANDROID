@@ -29,9 +29,10 @@ android {
     defaultConfig {
         applicationId = "io.github.jacklee992.wanba"
         minSdk = 26
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         targetSdk = 36
-        versionCode = providers.gradleProperty("wanbaVersionCode").orElse("6").get().toInt().also { require(it > 0) }
-        versionName = providers.gradleProperty("wanbaVersionName").orElse("1.2.2").get().also { require(it.matches(Regex("[0-9]+\\.[0-9]+\\.[0-9]+(?:-[A-Za-z0-9.]+)?"))) }
+        versionCode = providers.gradleProperty("wanbaVersionCode").orElse("7").get().toInt().also { require(it > 0) }
+        versionName = providers.gradleProperty("wanbaVersionName").orElse("1.3.0").get().also { require(it.matches(Regex("[0-9]+\\.[0-9]+\\.[0-9]+(?:-[A-Za-z0-9.]+)?"))) }
         buildConfigField("boolean", "WANBA_GAME_UPDATES", providers.gradleProperty("wanbaGameUpdates").orElse("true").get().toBooleanStrict().toString())
         buildConfigField("boolean", "WANBA_APP_UPDATER", providers.gradleProperty("wanbaAppUpdater").orElse("false").get().toBooleanStrict().toString())
     }
@@ -75,6 +76,11 @@ android {
 }
 
 dependencies {
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test:runner:1.6.2")
+    androidTestImplementation("junit:junit:4.13.2")
+    implementation("androidx.recyclerview:recyclerview:1.4.0")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     if (providers.gradleProperty("wanbaAppUpdater").orElse("false").get().toBooleanStrict()) {
         implementation(project(":app-updater"))
     }

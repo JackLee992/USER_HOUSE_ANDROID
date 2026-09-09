@@ -57,7 +57,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public final class MainActivity extends Activity {
     private static final int PICK_FILES = 4101;
     private static final int CREATE_BACKUP = 4102;
-    private static final int MAX_BACKUP_BYTES = 8 * 1024 * 1024;
+    private static final int MAX_BACKUP_BYTES = 16 * 1024 * 1024;
     private static final long MAX_IMPORT_FILE_BYTES = 32L * 1024 * 1024;
     private static final long MAX_IMPORT_TOTAL_BYTES = 64L * 1024 * 1024;
     private static final int MAX_IMPORT_FILES = 64;
@@ -70,6 +70,9 @@ public final class MainActivity extends Activity {
     private final AtomicBoolean backupBusy = new AtomicBoolean(false);
     private WebView webView;
     private ContentUpdateManager contentUpdates;
+    private NativeShellController nativeShell;
+    private final Map<String, java.util.function.Consumer<JSONObject>> shellCallbacks = new HashMap<>();
+    private long nextShellCommand;
     private String contentEntryPath;
     private FrameLayout frame;
     private GameImmersiveController immersive;
@@ -90,15 +93,16 @@ public final class MainActivity extends Activity {
     @Override public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         frame = new FrameLayout(this);
-        frame.setBackgroundColor(Color.rgb(255, 247, 234));
+        frame.setBackgroundColor(Color.rgb(245, 246, 250));
         setContentView(frame);
         immersive = new GameImmersiveController(getWindow(), frame);
         contentUpdates = new ContentUpdateManager(this, BuildConfig.VERSION_CODE, new ContentUpdateManager.Listener() {
             @Override public void onLoad(String path) {
                 contentEntryPath = path;
-                if (!destroyed && webView != null) { immersive.reset(); trustedDocument = false; webView.loadUrl(LocalAssetPolicy.ORIGIN + path); }
+                if (!destroyed && webView != null) { if (nativeShell != null) nativeShell.loading(path); immersive.reset(); trustedDocument = false; webView.loadUrl(LocalAssetPolicy.ORIGIN + path); }
             }
             @Override public void onEvent(String event) {
+                if (nativeShell != null) nativeShell.refreshUpdates();
                 if (!destroyed && webView != null && trustedDocument)
                     webView.evaluateJavascript("window.wanbaApp?.onGameUpdate?.(" + JSONObject.quote(event) + ")", null);
             }
@@ -189,7 +193,7 @@ public final class MainActivity extends Activity {
         settings.setMediaPlaybackRequiresUserGesture(false);
         settings.setBuiltInZoomControls(false);
         settings.setDisplayZoomControls(false);
-        webView.setBackgroundColor(Color.rgb(255, 247, 234));
+        webView.setBackgroundColor(Color.rgb(245, 246, 250));
         webView.addJavascriptInterface(new NativeBridge(), "NativeBridge");
         webView.setWebViewClient(new LocalClient());
         webView.setWebChromeClient(new WebChromeClient() {
@@ -209,6 +213,12 @@ public final class MainActivity extends Activity {
             }
         });
         frame.addView(webView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        nativeShell = new NativeShellController(this, frame, webView, contentUpdates, new NativeShellController.Engine() {
+            @Override public void call(String operation, JSONArray arguments, java.util.function.Consumer<JSONObject> callback) { callShell(operation, arguments, callback); }
+            @Override public void downloads() { new NativeBridge().openDownloads(); }
+                @Override public void appUpdater() { new NativeBridge().openAppUpdater(); }
+        });
+        nativeShell.loading(contentEntryPath);
         if (contentEntryPath != null) webView.loadUrl(LocalAssetPolicy.ORIGIN + contentEntryPath);
     }
 
@@ -241,6 +251,7 @@ public final class MainActivity extends Activity {
 
         @Override public void onPageFinished(WebView view, String url) {
             trustedDocument = contentUpdates.isTrustedEntry(url);
+            if (trustedDocument) webView.evaluateJavascript(NativeShellCommands.PROBE, null);
             if (activityPaused && trustedDocument) pauseAndSave();
         }
     }
@@ -250,13 +261,21 @@ public final class MainActivity extends Activity {
                 new ByteArrayInputStream(reason.getBytes(StandardCharsets.UTF_8)));
     }
 
+    private void callShell(String operation, JSONArray arguments, java.util.function.Consumer<JSONObject> callback) {
+        if (!isTrustedForeground() || !NativeShellCommands.ALLOWED.contains(operation)) { callback.accept(null); return; }
+        String id = "shell-" + (++nextShellCommand);
+        shellCallbacks.put(id, callback);
+        main.postDelayed(() -> { java.util.function.Consumer<JSONObject> waiting = shellCallbacks.remove(id); if (waiting != null) waiting.accept(null); }, 10000);
+        webView.evaluateJavascript(NativeShellCommands.script(id, operation, arguments), null);
+    }
+
     private boolean isTrustedForeground() {
         return !destroyed && !activityPaused && trustedDocument && webView != null && contentUpdates.isTrustedEntry(webView.getUrl());
     }
 
     @Override protected void onPause() {
         super.onPause();
-        activityPaused = true;
+        activityPaused = true; if (nativeShell != null) nativeShell.foreground(false);
         if (immersive != null) immersive.foreground(false);
         if (contentUpdates != null) contentUpdates.onPause();
         pauseAndSave();
@@ -281,7 +300,7 @@ public final class MainActivity extends Activity {
 
     @Override protected void onResume() {
         super.onResume();
-        activityPaused = false;
+        activityPaused = false; if (nativeShell != null) nativeShell.foreground(true);
         if (immersive != null) immersive.foreground(true);
         if (contentUpdates != null) contentUpdates.onResume();
         if (pendingPause != null) main.removeCallbacks(pendingPause);
@@ -300,6 +319,7 @@ public final class MainActivity extends Activity {
 
     private void handleBack() {
         if (destroyed || backPending) return;
+        if (nativeShell != null && nativeShell.handleBack()) return;
         if (webView == null || !trustedDocument) { finish(); return; }
         backPending = true;
         webView.evaluateJavascript(BACK, handled -> {
@@ -328,6 +348,7 @@ public final class MainActivity extends Activity {
 
     @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (nativeShell != null && nativeShell.activityResult(requestCode, resultCode, data)) return;
         if (requestCode == PICK_FILES) {
             ValueCallback<Uri[]> callback = fileCallback;
             fileCallback = null;
@@ -354,7 +375,7 @@ public final class MainActivity extends Activity {
                         String extension = name == null ? "" : name.substring(name.lastIndexOf('.') + 1).toLowerCase(Locale.ROOT);
                         if (!accepted.contains(extension)) throw new IllegalArgumentException("仅支持所选类型的 JSON、DAT 或 WAV 文件");
                         long limit = extension.equals("json") ? MAX_BACKUP_BYTES : MAX_IMPORT_FILE_BYTES;
-                        if (declaredSize > limit) throw new IllegalArgumentException("文件过大：JSON 最大 8MB，其他文件最大 32MB");
+                        if (declaredSize > limit) throw new IllegalArgumentException("文件过大：JSON 最大 16MB，其他文件最大 32MB");
                         long size = 0;
                         try (InputStream input = getContentResolver().openInputStream(uri)) {
                             if (input == null) throw new IllegalArgumentException("无法读取选中的文件");
@@ -391,6 +412,12 @@ public final class MainActivity extends Activity {
     }
 
     public final class NativeBridge {
+        @JavascriptInterface public void onShellState(String json) { main.post(() -> { if (!destroyed && trustedDocument && nativeShell != null && contentUpdates.isTrustedEntry(webView.getUrl())) nativeShell.acceptState(json); }); }
+        @JavascriptInterface public void onShellUnavailable() { main.post(() -> { if (!destroyed && trustedDocument && nativeShell != null) nativeShell.unavailable(); }); }
+        @JavascriptInterface public void onShellReply(String id, String json) {
+            if (json == null || json.length() > 10 * 1024 * 1024) return;
+            main.post(() -> { if (!destroyed && trustedDocument) { java.util.function.Consumer<JSONObject> callback = shellCallbacks.remove(id); if (callback != null) { try { callback.accept(new JSONObject(json)); } catch (Exception error) { callback.accept(null); } } } });
+        }
         @JavascriptInterface public void setGameImmersive(boolean enabled) {
             main.post(() -> {
                 // A game may be destroyed after onPause; clearing its request
@@ -429,7 +456,7 @@ public final class MainActivity extends Activity {
                 try {
                     if (json == null || json.length() > MAX_BACKUP_BYTES) throw new IllegalArgumentException("备份内容过大");
                     byte[] bytes = json.getBytes(StandardCharsets.UTF_8);
-                    if (bytes.length > MAX_BACKUP_BYTES) throw new IllegalArgumentException("备份最大支持 8MB");
+                    if (bytes.length > MAX_BACKUP_BYTES) throw new IllegalArgumentException("备份最大支持 16MB");
                     JSONTokener tokener = new JSONTokener(json);
                     Object value = tokener.nextValue();
                     if (!(value instanceof JSONObject || value instanceof JSONArray) || tokener.nextClean() != 0) throw new IllegalArgumentException("备份必须是有效 JSON");
@@ -462,13 +489,14 @@ public final class MainActivity extends Activity {
         @JavascriptInterface public void openAppUpdater() {
             main.post(() -> {
                 if (!isTrustedForeground() || !BuildConfig.WANBA_APP_UPDATER) return;
-                try { startActivity(new Intent().setClassName(getPackageName(), "io.github.jacklee992.wanba.appupdater.AppUpdateActivity")); }
+                try { startActivity(new Intent().setClassName(getPackageName(), "io.github.jacklee992.wanba.appupdater.AppUpdateActivity").putExtra("wanba.locale",nativeShell==null?"zh-CN":nativeShell.locale())); }
                 catch (ActivityNotFoundException error) { toast("此版本未包含 App 更新模块"); }
             });
         }
     }
 
     private void notifyBackup(String status, String message) {
+        if (nativeShell != null) nativeShell.backupFinished();
         if (destroyed) return;
         toast(message);
         if (webView != null && trustedDocument) webView.evaluateJavascript(
@@ -480,6 +508,8 @@ public final class MainActivity extends Activity {
 
     @Override protected void onDestroy() {
         destroyed = true;
+        if (nativeShell != null) nativeShell.close();
+        shellCallbacks.clear();
         if (immersive != null) immersive.destroy();
         if (contentUpdates != null) contentUpdates.close();
         trustedDocument = false;

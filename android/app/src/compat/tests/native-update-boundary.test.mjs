@@ -46,15 +46,16 @@ final class ActivityNotFoundException extends RuntimeException {}
 final class Uri { static String parse(String value){return value;} }
 final class Intent {
  static final String ACTION_VIEW="VIEW",CATEGORY_BROWSABLE="BROWSABLE";
- String action,url,target;Intent(){} Intent(String action,String url){this.action=action;this.url=url;}
- Intent addCategory(String category){return this;} Intent setClassName(String host,String value){target=value;return this;}
+ final Map<String,String> extras=new HashMap<>();String action,url,target;Intent(){} Intent(String action,String url){this.action=action;this.url=url;}
+ Intent addCategory(String category){return this;} Intent setClassName(String host,String value){target=value;return this;} Intent putExtra(String key,String value){extras.put(key,value);return this;}
 }
+final class NativeShell {String locale(){return "ja";}}
 final class View {String url="trusted";String getUrl(){return url;}}
 final class Content {boolean isTrustedEntry(String url){return "trusted".equals(url);}}
 final class Queue {final List<Runnable> pending=new ArrayList<>();void post(Runnable task){pending.add(task);}void flush(){for(Runnable r:new ArrayList<>(pending))r.run();pending.clear();}}
 abstract class Host {
  boolean destroyed,activityPaused,trustedDocument=true;Object session=new Object(),bridgePort=new Object();View webView=new View();Content contentUpdates=new Content();
- final Queue main=new Queue();final List<Intent> started=new ArrayList<>();
+ NativeShell nativeShell=new NativeShell();final Queue main=new Queue();final List<Intent> started=new ArrayList<>();
  void startActivity(Intent intent){started.add(intent);}void toast(String text){}String getPackageName(){return "test.wanba";}
  abstract void invoke();
 }
@@ -75,7 +76,8 @@ public class NativeUpdateBoundary {
    Host valid=host(compat);valid.invoke();check(valid.started.isEmpty(),"UI starts only on main dispatch");valid.main.flush();
    check(valid.started.size()==((games||updater)?1:0)+(updater?1:0),"flags control both actual native actions");
    if(games||updater)check(LocalAssetPolicy.DOWNLOADS.equals(valid.started.get(0).url),"download URI is fixed");
-   if(updater)check("io.github.jacklee992.wanba.appupdater.AppUpdateActivity".equals(valid.started.get(valid.started.size()-1).target),"optional entry is fixed native activity");
+   if(updater){Intent entry=valid.started.get(valid.started.size()-1);check("io.github.jacklee992.wanba.appupdater.AppUpdateActivity".equals(entry.target),"optional entry is fixed native activity");check(entry.extras.size()==1&&"ja".equals(entry.extras.get("wanba.locale")),"only the native shell presentation locale is forwarded, never URL/channel/trust");
+    Host fallback=host(compat);fallback.nativeShell=null;fallback.invoke();fallback.main.flush();check("zh-CN".equals(fallback.started.get(fallback.started.size()-1).extras.get("wanba.locale")),"old cores safely default presentation locale");}
    for(int failure=0;failure<5;failure++){
     Host blocked=host(compat);if(failure==0)blocked.destroyed=true;if(failure==1)blocked.activityPaused=true;if(failure==2)blocked.trustedDocument=false;
     if(failure==3){if(compat)blocked.session=null;else blocked.webView=null;}

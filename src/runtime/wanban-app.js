@@ -1,9 +1,9 @@
 import { getRequestHeaders } from '../core/sillytavern.js';
-import { constrainStandaloneSettings, STANDALONE_THEMES } from '../../standalone/capabilities.js';
+import { constrainStandaloneSettings } from '../../standalone/capabilities.js';
 import { APP_VERSION, normalizeAppInfo, readWebCapabilities } from '../../standalone/app-info.js';
 import { standaloneLicenses } from '../../standalone/licenses.js';
-import { gameRules as localizedGameRules, mountLanguagePicker } from '../../standalone/i18n.js';
-import { mountPerformancePicker } from '../../standalone/performance.js';
+import { gameRules as localizedGameRules, mountLanguagePicker, getLocale, setLocale, gameTitle as localizedGameTitle, translateSource, getUILabels, LOCALES } from '../../standalone/i18n.js';
+import { mountPerformancePicker, getPerformanceMode, setPerformanceMode } from '../../standalone/performance.js';
 import { EXTENSION_VERSION } from '../core/metadata.js';
 import { DEFAULT_LINES, PROMPT_TEMPLATES } from './wanban-prompts.js';
 import { gamePlugin } from '../games/plugins/registry.js';
@@ -11,6 +11,9 @@ import { validCadetProgress } from '../games/space-cadet.js';
 import { validMatch3Progress } from '../games/match3.js';
 import { captureStorage, gameContentMetadata, requireCompatibleSave } from '../../standalone/content-state.js';
 import { gameArtworkIconHTML } from '../../standalone/game-art.js';
+import { GAME_ICON_ART_V2 } from '../../standalone/game-icons.js';
+import { mountCatalog } from '../../standalone/catalog-view.js';
+import { normalizeCatalogPreferences } from '../../standalone/catalog-preferences.js';
 
 // Runtime migrated from 益智小游戏/玩伴小屋V1.0.1.json.
 // Keep this file behavior-compatible with the original script; split new code into src/* modules when extending.
@@ -128,6 +131,8 @@ export async function initWanbanXiaowu(options = {}) {
   ];
 
   let currentTab = 'single';
+  let catalogCleanup = null;
+  let lastNativeNavigation = null;
   let currentGame = null;
   let activeGameController = null;
   let snakeTimer = null;
@@ -240,6 +245,7 @@ export async function initWanbanXiaowu(options = {}) {
   const DEFAULT_SETTINGS = {
     companion: false,
     theme: 'day',
+    catalog: { favorites: [], order: [] },
     avatarUrl: '',
     apiUrl: '',
     apiKey: '',
@@ -296,8 +302,8 @@ export async function initWanbanXiaowu(options = {}) {
 	  };
 
   const GAME_RULES = {
-    tetris: '控制方块左右移动、旋转和下落，凑满一整行即可消除得分。方块堆到顶部时游戏结束。',
-    snake: '用方向键或手机方向按钮控制蛇吃食物。每吃一次会变长，后期速度会更快；撞墙或撞到自己就结束。',
+    tetris: '移动、旋转方块并填满整行。支持落点投影、暂存、三块预览、软降和硬降。离线 AI 对战中，连续消行可以抵消或发送垃圾行；也可选择马拉松、40 行挑战，旧存档继续经典模式。',
+    snake: '竞技模式用左侧摇杆转向，右侧长按加速。吃彩点成长，让 AI 对手撞上你的身体；碰到其他蛇身或边界会淘汰。支持无尽和 3 分钟挑战，经典方格模式与旧存档保留。',
     game2048: '上下左右滑动数字块，相同数字相撞会合并。正常版为4×4，爽玩版为6×6且最终分数减半；数字可继续合成到65536。',
     watermelon: '选择落点投放水果，相同水果碰到会合成更大的水果。水果堆超过顶部警戒线时结束。',
     memory: '翻开两张牌，图案相同就配对成功。全部配对完成后按步数和分数结算。',
@@ -463,8 +469,8 @@ export async function initWanbanXiaowu(options = {}) {
   function isPlainObject(v) { return !!v && typeof v === 'object' && !Array.isArray(v); }
   function safeObject(v) { return isPlainObject(v) ? v : {}; }
   function safeArray(v) { return Array.isArray(v) ? v : []; }
-  function settings() { const loaded = Object.assign({}, DEFAULT_SETTINGS, safeObject(loadJSON(STORAGE_SETTINGS, {}))); return standalone ? constrainStandaloneSettings(loaded) : loaded; }
-  function setSettings(next) { const merged = Object.assign(settings(), next); saveJSON(STORAGE_SETTINGS, standalone ? constrainStandaloneSettings(merged) : merged); }
+  function settings() { const loaded = Object.assign({}, DEFAULT_SETTINGS, safeObject(loadJSON(STORAGE_SETTINGS, {}))); return standalone ? constrainStandaloneSettings({...loaded, catalog:normalizeCatalogPreferences(loaded.catalog, Object.keys(GAME_META))}) : loaded; }
+  function setSettings(next) { const merged = Object.assign(settings(), next); return saveJSON(STORAGE_SETTINGS, standalone ? constrainStandaloneSettings(merged) : merged); }
   function extensionUpdateHeaders() {
     try { return getRequestHeaders(); }
     catch(e) { return { 'Content-Type': 'application/json' }; }
@@ -668,8 +674,8 @@ export async function initWanbanXiaowu(options = {}) {
       currentGame = null;
       return;
     }
-    const tab = GAME_META[cfg.lastGame] ? GAME_META[cfg.lastGame].mode : cfg.lastTab;
-    currentTab = (tab === 'double' || (!standalone && tab === 'intimacy') || tab === 'settings' || tab === 'single') ? tab : 'single';
+    const tab = standalone && cfg.lastTab === 'my' ? 'my' : GAME_META[cfg.lastGame] ? GAME_META[cfg.lastGame].mode : cfg.lastTab;
+    currentTab = (tab === 'double' || (!standalone && tab === 'intimacy') || tab === 'settings' || tab === 'single' || (standalone && tab === 'my')) ? tab : 'single';
     currentGame = GAME_META[cfg.lastGame] ? cfg.lastGame : null;
   }
   function scores() {
@@ -7421,8 +7427,16 @@ export async function initWanbanXiaowu(options = {}) {
 	    const theme = themeClass();
 	    p.className = theme + (currentGame ? ' wb-playing' : '') + ' wb-tab-' + (currentTab || 'single');
 	    applyTavernThemeVars(p);
+        if (standalone) {
+          const navigation = JSON.stringify({tab:currentTab,game:currentGame});
+          if (navigation !== lastNativeNavigation) {
+            lastNativeNavigation = navigation;
+            queueMicrotask(() => getHostWindow().dispatchEvent(new CustomEvent('wanba:navigation', {detail:{tab:currentTab,game:currentGame}})));
+          }
+        }
 	  }
   function render() {
+    catalogCleanup?.(); catalogCleanup = null;
     const cfg = settings(); const p = qs('#' + POPUP_ID); syncPopupModeClass();
     // Only the embedded plugin needs to shield its host page from these events.
     // Standalone scrolling must not wait on non-passive popup listeners.
@@ -7433,12 +7447,19 @@ export async function initWanbanXiaowu(options = {}) {
     const intimacyCount = 1;
     const countBadge = n => '<span class="wb-tab-count">' + esc(n) + '</span>';
     if (standalone) {
-      p.innerHTML = '<div class="wb-head"><div class="wb-title"><img src="' + new URL('../../assets/app-brand/app-icon.png', import.meta.url).href + '" alt="" width="28" height="28">玩吧</div><div class="wb-tabs"><button class="wb-tab" data-tab="single">单人游戏' + countBadge(singleCount) + '</button><button class="wb-tab" data-tab="double">人机挑战' + countBadge(doubleCount) + '</button><button class="wb-tab" data-tab="settings">设置</button></div></div><div class="wb-body" id="wb-body"></div>';
+      const navIcons = {
+        single:'M7 7h10a4 4 0 0 1 4 4v5a3 3 0 0 1-5 2l-2-2h-4l-2 2a3 3 0 0 1-5-2v-5a4 4 0 0 1 4-4ZM7 10v4m-2-2h4m7-1h.01m2 2h.01',
+        double:'M8 4h8v5a4 4 0 0 1-8 0V4ZM8 6H4v2a4 4 0 0 0 4 4m8-6h4v2a4 4 0 0 1-4 4m-4 1v5m-4 2h8',
+        my:'M6 4h12v17l-6-4-6 4V4Z',
+        settings:'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm-2-5h4l1 3 3 1 3 3v4l-3 1-1 3-3 3h-4l-1-3-3-1-3-3v-4l3-1 1-3 3-3Z',
+      };
+      const destinations = [['single','单人游戏'],['double','人机挑战'],['my','我的'],['settings','设置']];
+      p.innerHTML = '<header class="wb-head wanba-app-header"><div class="wb-title"><img src="' + new URL('../../assets/app-brand/app-icon.png', import.meta.url).href + '" alt="" width="36" height="36"><span>玩吧</span></div><span class="wanba-header-caption">随时开一局</span></header><main class="wb-body" id="wb-body"></main><nav class="wb-tabs wanba-bottom-nav" aria-label="主导航">' + destinations.map(([id,label]) => '<button type="button" class="wb-tab" data-tab="' + id + '"><span class="wanba-nav-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="' + navIcons[id] + '"/></svg></span><span>' + label + '</span></button>').join('') + '</nav>';
     } else {
     p.innerHTML = '<div class="wb-head"><div class="wb-title">玩伴小屋</div><div class="wb-tabs"><button class="wb-tab" data-tab="single">单人游戏' + countBadge(singleCount) + '</button><button class="wb-tab" data-tab="double">双人游戏' + countBadge(doubleCount) + '</button><button class="wb-tab" data-tab="intimacy">亲密互动' + countBadge(intimacyCount) + '</button><button class="wb-tab" data-tab="settings">设置</button></div><div class="wb-head-meta" aria-label="当前版本 V' + esc(EXTENSION_VERSION) + '，本游戏发布者 Gloria"><span><i>当前版本</i>V' + esc(EXTENSION_VERSION) + '</span><span><i>发布者</i>Gloria</span></div><button class="wb-iconbtn" id="wb-close" title="关闭">×</button></div><div class="wb-body" id="wb-body"></div>';
     }
     syncUpdateNoticeClass();
-    qsa('.wb-tab', p).forEach(b => { b.classList.toggle('active', b.dataset.tab === currentTab); b.onclick = () => { flushSettingsProgress(); stopGame(); currentGame = null; currentTab = b.dataset.tab; saveWindowState(currentTab, ''); render(); }; });
+    qsa('.wb-tab', p).forEach(b => { b.classList.toggle('active', b.dataset.tab === currentTab); if (standalone) b.setAttribute('aria-current', b.dataset.tab === currentTab ? 'page' : 'false'); b.onclick = () => { flushSettingsProgress(); stopGame(); currentGame = null; currentTab = b.dataset.tab; saveWindowState(currentTab, ''); render(); }; });
     const closeButton = qs('#wb-close', p); if (closeButton) closeButton.onclick = () => { flushSettingsProgress(); saveWindowState(currentTab, currentGame); stopGame(); closePopupShell(); };
     try {
       if (currentGame) renderGame(currentGame); else if (currentTab === 'settings') renderSettings(); else if (currentTab === 'intimacy') renderIntimacy(); else renderSelect(currentTab);
@@ -7473,7 +7494,7 @@ export async function initWanbanXiaowu(options = {}) {
     if (!body) return;
     body._wanbaSwipeCleanup?.();
     body._wanbaSwipeCleanup = null;
-    if (currentGame || body.classList.contains('wb-game-mode')) {
+    if (standalone || currentGame || body.classList.contains('wb-game-mode')) {
       body.ontouchstart = null;
       body.ontouchend = null;
       return;
@@ -9730,8 +9751,25 @@ export async function initWanbanXiaowu(options = {}) {
 
 
   function renderSelect(mode) {
+    catalogCleanup?.(); catalogCleanup = null;
     syncPopupModeClass();
-    const body = qs('#wb-body'); body.className = 'wb-body'; const ids = Object.values(GAME_META).filter(g => g.mode === mode).map(g => g.id);
+    const body = qs('#wb-body');
+    if (standalone) {
+      body.className = 'wb-body'; body.replaceChildren();
+      catalogCleanup = mountCatalog({container:body, games:Object.values(GAME_META), mode,
+        preferences:settings().catalog, iconHTML:gameIconHTML, scoreLabel:cardScoreDisplay,
+        onPreferencesChange:next => {
+          const saved = setSettings({catalog:normalizeCatalogPreferences(next, Object.keys(GAME_META))});
+          if (!saved) toast('收藏和排序未能保存，请检查设备存储空间');
+          else nativeNotifyNavigation();
+          return saved;
+        },
+        onLaunch:id => { currentGame = id; saveWindowState(currentTab, id); renderGame(id); },
+        onBrowseGames:() => { currentTab = 'single'; saveWindowState(currentTab, ''); render(); },
+      });
+      return;
+    }
+    body.className = 'wb-body'; const ids = Object.values(GAME_META).filter(g => g.mode === mode).map(g => g.id);
     body.innerHTML = '<div class="wb-cardgrid">' + ids.map(id => { const g = GAME_META[id]; return '<div class="wb-game-card" data-game="' + id + '">' + gameIconHTML(g) + '<div class="wb-game-info"><div class="wb-game-name">' + esc(g.name) + '</div><div class="wb-muted">' + esc(cardScoreDisplay(id)) + '</div></div></div>'; }).join('') + '</div>';
     qsa('.wb-game-card', body).forEach(c => c.onclick = () => { currentGame = c.dataset.game; if (GAME_META[currentGame]) currentTab = GAME_META[currentGame].mode; saveWindowState(currentTab, currentGame); renderGame(currentGame); });
   }
@@ -9764,16 +9802,14 @@ export async function initWanbanXiaowu(options = {}) {
     syncPopupModeClass();
     body.className = 'wb-body wb-settings-mode';
     body.innerHTML = '<div class="wanba-settings">'
-      + '<section class="wb-panel"><div class="wb-section-title">外观与进度</div><div class="wb-field"><label for="wb-theme">界面主题</label><select class="wb-select" id="wb-theme">' + STANDALONE_THEMES.map(([id,name]) => '<option value="' + id + '">' + name + '</option>').join('') + '</select></div>'
+      + '<section class="wb-panel"><div class="wb-section-title">偏好设置</div>'
       + '<div class="wb-field"><label><input type="checkbox" id="wb-remember-window">下次打开时回到上次游戏</label><p class="wb-muted">游戏进度会自动保存到本机。返回游戏时可选择继续；此开关只控制打开应用后的页面。</p></div></section>'
-      + '<section class="wb-panel"><div class="wb-section-title">游戏备份</div><p>备份包含游戏进度、历史记录和主题设置。换机前请先导出；导入也支持玩伴小屋的旧版游戏备份。</p><div class="wb-actions"><button class="wb-btn primary" id="wb-export-data">导出备份</button><button class="wb-btn" id="wb-import-data">导入备份</button><input type="file" id="wb-import-file" accept="application/json,.json" hidden></div><p class="wb-muted" id="wb-import-export-status" role="status">数据保存在当前设备，卸载应用会删除本机存档。</p></section>'
+      + '<section class="wb-panel"><div class="wb-section-title">游戏备份</div><p>备份包含游戏进度、历史记录、收藏和排序。换机前请先导出；导入也支持玩伴小屋的旧版游戏备份。</p><div class="wb-actions"><button class="wb-btn primary" id="wb-export-data">导出备份</button><button class="wb-btn" id="wb-import-data">导入备份</button><input type="file" id="wb-import-file" accept="application/json,.json" hidden></div><p class="wb-muted" id="wb-import-export-status" role="status">数据保存在当前设备，卸载应用会删除本机存档。</p></section>'
       + '<section class="wb-panel"><div class="wb-section-title">关于玩吧</div><p id="wanba-version">版本 ' + esc(standaloneAppInfo.appVersion) + ' · ' + esc(standaloneAppInfo.flavorLabel) + '</p><p id="wanba-engine">内核：' + esc(standaloneAppInfo.engineLabel) + (standaloneAppInfo.engineVersion ? ' ' + esc(standaloneAppInfo.engineVersion) : '') + (standaloneAppInfo.source === 'native' ? '' : '（浏览器检测）') + '</p>' + '<p>游戏基线 ' + esc(EXTENSION_VERSION) + ' · ' + Object.keys(GAME_META).length + ' 款游戏</p><p>单人游戏与人机挑战均可离线游玩。</p><div class="wb-actions">' + (allowDownloads ? '<button class="wb-btn" id="wanba-downloads">下载更新</button>' : '') + (allowAppUpdater ? '<button class="wb-btn" id="wanba-app-update">检查更新</button>' : '') + '<button class="wb-btn" id="wanba-credits">开源致谢</button></div>' + (allowDownloads ? '<p class="wb-muted">从下载页安装新版本即可保留存档。请使用同一来源的更新包，无需卸载。</p>' : '') + '</section></div>';
-    qs('#wb-theme').value = cfg.theme;
     mountLanguagePicker(qs('.wanba-settings', body));
     mountPerformancePicker(qs('.wanba-settings', body));
     qs('#wb-remember-window').checked = cfg.rememberWindow;
-    qs('#wb-theme').onchange = () => { setSettings({theme:qs('#wb-theme').value}); syncPopupModeClass(); toast('主题已保存'); };
-    qs('#wb-remember-window').onchange = () => setSettings({rememberWindow:qs('#wb-remember-window').checked});
+    qs('#wb-remember-window').onchange = () => { setSettings({rememberWindow:qs('#wb-remember-window').checked}); nativeNotifyNavigation(); };
     qs('#wb-export-data').onclick = exportAllData;
     qs('#wb-import-data').onclick = () => qs('#wb-import-file').click();
     qs('#wb-import-file').onchange = importAllDataFromFile;
@@ -10153,6 +10189,7 @@ export async function initWanbanXiaowu(options = {}) {
     return out;
   }
   function sanitizeImportValue(key, value, currentApi) {
+    if (standalone && key === STORAGE_SUDOKU_STATE && value === null) return null;
     if (key === STORAGE_SETTINGS) {
       const raw = safeObject(value);
       const clean = {};
@@ -10165,7 +10202,7 @@ export async function initWanbanXiaowu(options = {}) {
       delete clean.apiKey;
       delete clean.apiModel;
       const merged = Object.assign({}, DEFAULT_SETTINGS, clean, currentApi || {});
-      return standalone ? constrainStandaloneSettings(merged) : merged;
+      return standalone ? constrainStandaloneSettings({...merged, catalog:normalizeCatalogPreferences(merged.catalog, Object.keys(GAME_META))}) : merged;
     }
     if (key === STORAGE_WORLD_PRESETS || key === STORAGE_SUMMARIES) return safeArray(value).filter(x => x && typeof x === 'object');
     if (key === STORAGE_SETTINGS || key === STORAGE_SCORES || key === STORAGE_LINES || key === STORAGE_ROLE_LINES || key === STORAGE_THEATERS || key === STORAGE_LINE_PRESET_SELECTION || key === STORAGE_PROGRESS || key === STORAGE_RECORDS || key === STORAGE_SUDOKU_STATE) return safeObject(value);
@@ -10190,8 +10227,9 @@ export async function initWanbanXiaowu(options = {}) {
     Object.keys(plan).forEach(key => { originals[key] = localStorage.getItem(key); });
     try {
       Object.keys(plan).forEach(key => {
-        if (key === STORAGE_SUMMARY_REQ) localStorage.setItem(key, String(plan[key] || ''));
-        else localStorage.setItem(key, JSON.stringify(plan[key]));
+        const raw = plan[key] === null ? null : key === STORAGE_SUMMARY_REQ ? String(plan[key] || '') : JSON.stringify(plan[key]);
+        if (raw === null) localStorage.removeItem(key); else localStorage.setItem(key, raw);
+        if (localStorage.getItem(key) !== raw) throw Error('存档写入未完成');
       });
     } catch(e) {
       Object.keys(originals).forEach(key => {
@@ -10204,7 +10242,7 @@ export async function initWanbanXiaowu(options = {}) {
       throw new Error(quota ? '手机端本地存储空间不足，已放弃导入并保留原数据。' : ('写入失败，已放弃导入并保留原数据：' + (e && e.message ? e.message : e)));
     }
   }
-  function exportAllData() {
+  function buildStandaloneBackup() {
     saveStandaloneState();
     const data = { app:standalone ? '玩吧' : '玩伴小屋', scriptId:SCRIPT_ID, version:standalone ? standaloneAppInfo.appVersion : EXTENSION_VERSION, gameBaseline:EXTENSION_VERSION, exportedAt:new Date().toISOString(), items:{} };
     if (standalone) data.content = {snapshotId:contentState?.activeSnapshotId || 'builtin',games:Object.fromEntries(Object.keys(GAME_META).map(id => [id,contentForGame(id)]))};
@@ -10213,7 +10251,10 @@ export async function initWanbanXiaowu(options = {}) {
       else if (key === STORAGE_SUMMARY_REQ) data.items[key] = localStorage.getItem(key) || '';
       else data.items[key] = loadJSON(key, null);
     });
-    const text = JSON.stringify(data, null, 2);
+    return data;
+  }
+  function exportAllData() {
+    const text = JSON.stringify(buildStandaloneBackup(), null, 2);
     const filename = (standalone ? '玩吧' : '玩伴小屋') + '-备份-' + new Date().toISOString().slice(0,10) + '.json';
     if (standalone && typeof window.NativeBridge?.saveBackup === 'function') {
       try { window.NativeBridge.saveBackup(filename, text); } catch (error) { toast('无法导出备份：' + error.message); }
@@ -10227,7 +10268,7 @@ export async function initWanbanXiaowu(options = {}) {
     getHostDocument().body.appendChild(a);
     a.click();
     setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 800);
-    const st = qs('#wb-import-export-status'); if (st) st.textContent = standalone ? '已导出游戏进度、记录和主题设置。' : '已导出备份：不包含 API 配置和 API 预设。';
+    const st = qs('#wb-import-export-status'); if (st) st.textContent = standalone ? '已导出游戏进度、记录、收藏和排序。' : '已导出备份：不包含 API 配置和 API 预设。';
     toast('已导出备份');
   }
   function importAllDataFromFile(e) {
@@ -10240,7 +10281,7 @@ export async function initWanbanXiaowu(options = {}) {
         const items = data.items || data;
         const plan = buildImportPlan(items);
         const st = qs('#wb-import-export-status'); if (st) st.textContent = '已读取备份：' + (file.name || '备份文件') + '，等待确认导入。';
-        showConfirm('导入备份', standalone ? '备份中包含的游戏进度、记录和主题将覆盖对应的当前数据。写入失败会保留原数据。确定导入吗？' : '导入前会先校验并修复可恢复的数据；如果手机存储空间不足或写入失败，会放弃导入并保留当前数据。当前 API 配置和 API 预设会保留，不会被覆盖。确定要继续导入吗？', () => {
+        showConfirm('导入备份', standalone ? '备份中包含的游戏进度、记录、收藏和排序将覆盖对应的当前数据。写入失败会保留原数据。确定导入吗？' : '导入前会先校验并修复可恢复的数据；如果手机存储空间不足或写入失败，会放弃导入并保留当前数据。当前 API 配置和 API 预设会保留，不会被覆盖。确定要继续导入吗？', () => {
           try {
             commitImportPlan(plan);
           } catch(importErr) {
@@ -11642,11 +11683,12 @@ export async function initWanbanXiaowu(options = {}) {
   function deleteWorldPresetFromUI() { const idx=parseInt(qs('#wb-world-preset').value,10); const arr=worldPresets(); if(!arr[idx]) return; showConfirm('删除角色和世界观','确定删除这个角色和世界观预设吗？',()=>{ arr.splice(idx,1); saveWorldPresets(arr); renderSettings(); }); }
 
   function renderGame(id) {
+    catalogCleanup?.(); catalogCleanup = null;
     stopGame();
     currentGame = id;
     currentRoundLineEvents = [];
     currentRoundTheaterInfo = null;
-    if (GAME_META[id]) currentTab = GAME_META[id].mode;
+    if (GAME_META[id] && !(standalone && currentTab === 'my')) currentTab = GAME_META[id].mode;
     saveWindowState(currentTab, id);
     syncPopupModeClass();
     const g = GAME_META[id]; const cfg = settings(); const body = qs('#wb-body'); body.className = 'wb-body wb-game-mode';
@@ -11659,7 +11701,7 @@ export async function initWanbanXiaowu(options = {}) {
     body.innerHTML = '<div class="wb-layout ' + layoutClass + '"><div class="wb-panel wb-game-main"><div class="wb-toolbar"><button class="wb-btn" id="wb-back">返回</button><div class="wb-stat"><span class="wb-pill wb-title-row"><span class="wb-game-title-text">' + esc(g.name) + '</span><button class="wb-rule-btn" id="wb-game-rules" title="游戏介绍" aria-label="游戏介绍" type="button">💡</button></span><span class="wb-pill" id="wb-score">本局：0</span><span class="wb-pill" id="wb-high">' + esc(scoreDisplay(id)) + '</span></div><div class="wb-actions">' + wordBankTools + lineTools + '<button class="wb-btn" id="wb-game-records">记录</button>' + pauseBtn + '<button class="wb-btn" id="wb-restart">重开</button></div></div><div class="wb-board-wrap wb-gamebox-' + esc(id) + '" id="wb-gamebox"><div class="wb-start-cover"><div>准备开始</div><button class="wb-btn primary" id="wb-start-cover-btn">开始游戏</button></div></div></div>' + companionPanel + '</div>';
     if (!standalone) primeMessageNotifyBaseline();
     gameStarted = false; gamePaused = true;
-    qs('#wb-back').onclick = () => { stopGame(); currentGame = null; saveWindowState(currentTab, ''); syncPopupModeClass(); renderSelect(currentTab); };
+    qs('#wb-back').onclick = () => { stopGame(); currentGame = null; saveWindowState(currentTab, ''); syncPopupModeClass(); if (standalone) render(); else renderSelect(currentTab); };
     qs('#wb-start-cover-btn').onclick = () => startCurrentGame(id);
     qs('#wb-game-rules').onclick = e => { e.stopPropagation(); showGameRules(id); };
     qs('#wb-game-records').onclick = () => showGameRecords(id);
@@ -12118,7 +12160,7 @@ function showGameRecords(game, page) {
     appendModalMask(mask);
     qs('#wb-progress-continue', mask).onclick = () => { startContinueCountdown(mask, game, state); };
     qs('#wb-progress-new', mask).onclick = () => { mask.remove(); clearProgress(game); renderGame(game); };
-    qs('#wb-progress-back', mask).onclick = () => { mask.remove(); currentGame = null; saveWindowState(currentTab, ''); syncPopupModeClass(); renderSelect(currentTab); };
+    qs('#wb-progress-back', mask).onclick = () => { mask.remove(); currentGame = null; saveWindowState(currentTab, ''); syncPopupModeClass(); if (standalone) render(); else renderSelect(currentTab); };
   }
 
 	  function doubleTheaterFallback(game, outcome, special, roleName) {
@@ -12756,14 +12798,71 @@ function showGameRecords(game, page) {
       return true;
     }
     if (currentGame) { saveStandaloneState(); stopGame(); currentGame = null; saveWindowState(currentTab, ''); render(); return true; }
-    if (currentTab === 'settings') { currentTab = 'single'; saveWindowState(currentTab, ''); render(); return true; }
+    if (currentTab === 'settings' || currentTab === 'my' || currentTab === 'double') { currentTab = 'single'; saveWindowState(currentTab, ''); render(); return true; }
     return false;
+  }
+
+  // One data contract for both native launchers and the older web shell.
+  // It never accepts executable code, arbitrary URLs, or new storage keys.
+  function nativeCatalog() {
+    const cfg = settings();
+    const labels = ['收藏和排序未能保存，请检查设备存储空间','玩吧','随时开一局','单人游戏','人机挑战','我的','我的收藏','设置','主导航','款游戏','完成排序','自定义排序','完成','取消收藏','收藏游戏','长按拖动排序','上移','下移','还没有收藏的游戏','暂无游戏','在游戏列表点收藏，即可在这里找到。','去看看游戏','界面语言','偏好设置','下次打开时回到上次游戏','游戏进度会自动保存到本机。返回游戏时可选择继续；此开关只控制打开应用后的页面。','游戏备份','备份包含游戏进度、历史记录、收藏和排序。换机前请先导出；导入也支持玩伴小屋的旧版游戏备份。','导出备份','导入备份','数据保存在当前设备，卸载应用会删除本机存档。','关于玩吧','性能与画质','省电','普通','游戏','检查更新','游戏内容','下载游戏更新','安装并刷新','回退内容版本','确认回退','取消','返回','重新打开','开源致谢','查看许可证','下载更新','关闭'];
+    return {schema:1, games:Object.values(GAME_META).map(g => {
+      const art=GAME_ICON_ART_V2[g.id];
+      return {id:g.id,name:localizedGameTitle(g.id,g.name),mode:g.mode,score:translateSource(cardScoreDisplay(g.id)),
+        icon:art ? {path:art.path,url:new URL('../../'+art.path,import.meta.url).href,sourceSize:[...art.sourceSize],sourceRect:[...art.sourceRect]} : null};
+    }), preferences:cfg.catalog, tab:currentTab, game:currentGame, locale:getLocale(),
+      locales:LOCALES.map(value=>({...value})), performance:getPerformanceMode(), rememberWindow:cfg.rememberWindow,
+      appInfo:standaloneAppInfo, labels:{...getUILabels(),...Object.fromEntries(labels.map(label=>[label,translateSource(label)]))}};
+  }
+  function nativeNotifyNavigation() {
+    getHostWindow().dispatchEvent(new CustomEvent('wanba:navigation',{detail:{tab:currentTab,game:currentGame}}));
+  }
+  function nativeSetCatalog(value) {
+    if (!isPlainObject(value) || !Array.isArray(value.favorites) || !Array.isArray(value.order)) return {ok:false,error:'Invalid catalog preferences'};
+    const ok=setSettings({catalog:normalizeCatalogPreferences(value,Object.keys(GAME_META))});
+    if (ok && !currentGame && ['single','double','my'].includes(currentTab)) renderSelect(currentTab);
+    nativeNotifyNavigation(); return {ok};
+  }
+  function nativeOpenShellTab(tab) {
+    if (!['single','double','my','settings'].includes(tab)) return {ok:false,error:'Invalid tab'};
+    saveStandaloneState(); stopGame(); currentGame=null; currentTab=tab; saveWindowState(tab,''); render(); nativeNotifyNavigation(); return {ok:true};
+  }
+  function nativeLaunch(id, fromTab='single') {
+    if (!Object.prototype.hasOwnProperty.call(GAME_META,id) || !['single','double','my'].includes(fromTab)) return {ok:false,error:'Unknown game or tab'};
+    if (startupBlocked) return {ok:false,error:'Game content is not ready'};
+    saveStandaloneState(); currentTab=fromTab; renderGame(id); nativeNotifyNavigation(); return {ok:true};
+  }
+  function nativeBackupPlan(text) {
+    if (currentGame) throw Error('请先返回游戏列表再导入备份');
+    if (typeof text !== 'string' || text.length > 16*1024*1024) throw Error('Invalid backup size');
+    const data=JSON.parse(text); return buildImportPlan(data?.items || data);
+  }
+  function nativeValidateBackup(text) {
+    try { const plan=nativeBackupPlan(text); return {ok:true,count:Object.keys(plan).length}; }
+    catch(error) { return {ok:false,error:error.message}; }
+  }
+  function nativeImportBackup(text,confirmed=false) {
+    if (confirmed !== true) return {ok:false,error:'Confirmation required'};
+    try { const plan=nativeBackupPlan(text); commitImportPlan(plan); currentTab='settings'; currentGame=null; render(); nativeNotifyNavigation(); return {ok:true}; }
+    catch(error) { return {ok:false,error:error.message}; }
   }
   if (standalone) {
     getHostDocument().body.classList.add('wanba-standalone');
     setSettings({});
     buildPopup();
     runtimeApi = Object.freeze({
+      catalog:nativeCatalog,
+      setCatalog:nativeSetCatalog,
+      launch:nativeLaunch,
+      openShellTab:nativeOpenShellTab,
+      setLocale:async code => { if (!['zh-CN','zh-TW','en','ja','ko'].includes(code)) return {ok:false}; const ok=await setLocale(code); nativeNotifyNavigation(); return {ok}; },
+      setPerformance:mode => { if (!['eco','normal','game'].includes(mode)) return {ok:false}; setPerformanceMode(mode); nativeNotifyNavigation(); return {ok:true}; },
+      setRememberWindow:value => { if (typeof value !== 'boolean') return {ok:false}; const ok=setSettings({rememberWindow:value}); nativeNotifyNavigation(); return {ok}; },
+      exportBackup:exportAllData,
+      backupData:() => JSON.stringify(buildStandaloneBackup()),
+      validateBackup:nativeValidateBackup,
+      importBackup:nativeImportBackup,
       pause:pauseStandalone,
       save:saveStandaloneState,
       checkpoint:contentCheckpoint,

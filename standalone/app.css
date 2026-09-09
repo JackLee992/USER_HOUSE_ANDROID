@@ -5,7 +5,7 @@ button,input,select,textarea { font:inherit; }
 #wanba-boot { position:fixed; inset:0; z-index:2147483646; background:#fff1f5; min-height:85vh; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#665078; text-align:center; padding:20px; }
 #wanba-boot img { border-radius:22px; }
 #wanba-boot h1 { margin:12px 0 0; font-size:30px; }
-body.wanba-standalone #wanbanXiaowu-shell { position:fixed; inset:0; padding:0!important; border:0; background:transparent; width:100%; max-width:100%; overscroll-behavior:none; }
+body.wanba-standalone #wanbanXiaowu-shell { box-sizing:border-box!important; position:fixed; inset:0; padding:0!important; border:0; background:transparent; width:100%; max-width:100%; overscroll-behavior:none; }
 /* The app has no host page behind this shell to blur. */
 body.wanba-standalone #wanbanXiaowu-shell {backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 body.wanba-standalone #wanbanXiaowu-popup:not(.wb-playing):is(.wb-tab-single,.wb-tab-double) #wb-body {contain:layout paint;overflow-x:hidden;overscroll-behavior-y:contain;touch-action:pan-y pinch-zoom}
@@ -71,3 +71,134 @@ body.wanba-standalone .wanba-settings .wb-select { width:100%; min-height:44px; 
   body.wanba-standalone #wanbanXiaowu-popup #wb-back {min-height:34px;padding:4px 8px;font-size:12px;letter-spacing:0}
   body.wanba-standalone #wanbanXiaowu-popup .wb-rule-btn {width:28px;min-width:28px;height:28px;min-height:28px}
 }
+
+/* One native app design. Legacy themes remain isolated to the tavern plugin. */
+html, body, #wanba-boot {background:#f5f6fa;color:#202636}
+body.wanba-standalone :is(#wanbanXiaowu-popup,.wb-modal-mask) {
+  --wb-bg:#f5f6fa;--wb-panel:#fff;--wb-soft:#eef0f7;--wb-text:#202636;
+  --wb-sub:#647087;--wb-border:#e2e6ef;--wb-accent:#4b5ecb;--wb-accent2:#6879df;
+  --wb-danger:#bd3546;--wb-shadow:none;
+  color:var(--wb-text);font-family:system-ui,-apple-system,"Noto Sans CJK SC",sans-serif!important;
+}
+body.wanba-standalone #wanbanXiaowu-popup {
+  height:100%!important;min-height:0!important;max-height:100%!important;
+  display:grid!important;grid-template-rows:auto minmax(0,1fr) auto!important;
+  background:#f5f6fa!important;color:#202636!important;overflow:hidden!important;
+}
+body.wanba-standalone #wanbanXiaowu-popup::before,
+body.wanba-standalone #wanbanXiaowu-popup::after,
+body.wanba-standalone #wanbanXiaowu-popup :is(.wb-head,.wb-title,.wb-tabs,.wb-cardgrid,.wb-game-card,.wb-panel,.wb-section-title,.wb-tab)::before,
+body.wanba-standalone #wanbanXiaowu-popup :is(.wb-head,.wb-title,.wb-tabs,.wb-cardgrid,.wb-game-card,.wb-panel,.wb-section-title,.wb-tab)::after {display:none!important;content:none!important}
+body.wanba-standalone #wanbanXiaowu-popup .wanba-app-header {
+  display:flex!important;align-items:center;justify-content:space-between;flex-wrap:nowrap;
+  padding:calc(12px + env(safe-area-inset-top)) max(20px,env(safe-area-inset-right)) 12px max(20px,env(safe-area-inset-left));
+  min-height:60px;box-sizing:border-box;background:#f5f6fa!important;border:0!important;box-shadow:none!important;gap:12px;
+}
+body.wanba-standalone #wanbanXiaowu-popup .wb-title {font-size:24px!important;line-height:1.2;letter-spacing:-.6px!important;color:#202636!important;text-shadow:none!important;transform:none!important;gap:10px;padding:0!important}
+body.wanba-standalone #wanbanXiaowu-popup .wb-title img {width:36px;height:36px;border-radius:10px}
+.wanba-header-caption {color:#647087;font-size:13px;line-height:1.4}
+body.wanba-standalone #wanbanXiaowu-popup #wb-body:not(.wb-game-mode) {
+  min-height:0;height:auto!important;max-height:none!important;overflow-y:auto;overflow-x:hidden;
+  padding:12px max(16px,env(safe-area-inset-right)) 24px max(16px,env(safe-area-inset-left));
+  background:#f5f6fa!important;overscroll-behavior-y:contain;touch-action:pan-y pinch-zoom;
+  scrollbar-width:thin;contain:layout paint;
+}
+body.wanba-standalone #wanbanXiaowu-popup .wanba-bottom-nav {
+  display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;width:100%!important;
+  padding:8px max(8px,env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));
+  background:#fff!important;border:0!important;border-top:1px solid #e8ebf2!important;
+  border-radius:0!important;box-shadow:none!important;box-sizing:border-box;flex:initial!important;
+}
+body.wanba-standalone #wanbanXiaowu-popup .wanba-bottom-nav .wb-tab {
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  min-width:0!important;width:100%;min-height:56px!important;margin:0!important;padding:0 4px!important;
+  border:0!important;border-radius:12px!important;background:transparent!important;color:#657087!important;
+  font-size:11px!important;font-weight:600;line-height:1.3;letter-spacing:0!important;
+  box-shadow:none!important;transform:none!important;white-space:normal!important;
+}
+.wanba-nav-icon {display:flex;align-items:center;justify-content:center;width:58px;height:30px;border-radius:18px}
+body.wanba-standalone #wanbanXiaowu-popup .wanba-bottom-nav .wb-tab.active {color:#384bad!important}
+.wanba-bottom-nav .active .wanba-nav-icon {background:#e9ecff}
+body.wanba-standalone #wanbanXiaowu-popup .wanba-catalog-toolbar {display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:960px;margin:4px auto 16px}
+.wanba-catalog-title {margin:0;color:#202636;font-size:22px;line-height:1.35;letter-spacing:-.4px}
+.wanba-catalog-count {display:flex;gap:4px;margin-top:4px;color:#647087;font-size:12px}
+.wanba-catalog-edit {display:flex;align-items:center;gap:6px;flex-shrink:0;font-size:12px!important}
+.wanba-catalog-edit svg {width:18px;height:18px}
+body.wanba-standalone #wanbanXiaowu-popup .wanba-catalog-grid {
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;
+  max-width:960px;margin:0 auto;padding:0!important;background:transparent!important;border:0!important;
+}
+body.wanba-standalone #wanbanXiaowu-popup article.wanba-catalog-card,
+body.wanba-standalone #wanbanXiaowu-popup article.wanba-catalog-card:hover {
+  display:block!important;position:relative;min-width:0;min-height:0!important;width:auto;height:auto;padding:0!important;
+  background:#fff!important;border:1px solid #e8ebf2!important;border-radius:20px!important;
+  box-shadow:none!important;transform:none!important;overflow:hidden;transition:none!important;
+}
+body.wanba-standalone #wanbanXiaowu-popup .wanba-catalog-launch {
+  display:flex;flex-direction:column;align-items:flex-start;gap:12px;width:100%;height:100%;min-height:174px;
+  padding:18px 16px 16px;border:0;background:transparent;color:#202636;text-align:left;
+  cursor:pointer;font:inherit;box-sizing:border-box;border-radius:20px;
+}
+body.wanba-standalone #wanbanXiaowu-popup .wanba-catalog-launch .wb-game-icon {position:static!important;width:68px!important;height:68px!important;min-width:68px;flex:0 0 68px;margin:0!important;box-shadow:none!important;transform:none!important}
+body.wanba-standalone #wanbanXiaowu-popup .wanba-catalog-launch .wb-game-info {display:flex;flex-direction:column;gap:4px;width:100%;min-width:0;padding:0!important;align-items:flex-start;transform:none!important}
+body.wanba-standalone #wanbanXiaowu-popup .wanba-catalog-launch .wb-game-name {color:#202636!important;font-size:15px!important;font-weight:650;line-height:1.4;text-align:left;letter-spacing:0;white-space:normal;word-break:normal;overflow-wrap:anywhere;text-shadow:none!important}
+body.wanba-standalone #wanbanXiaowu-popup .wanba-catalog-launch .wb-muted {color:#647087!important;font-size:12px;line-height:1.4;white-space:normal;overflow-wrap:anywhere}
+.wanba-catalog-favorite {position:absolute;top:5px;right:5px;display:grid;place-items:center;width:44px;height:44px;padding:10px;border:0;border-radius:14px;background:transparent;color:#818a9d;cursor:pointer}
+.wanba-catalog-favorite[aria-pressed="true"] {color:#4b5ecb;background:#f0f2ff}
+.wanba-catalog-favorite[aria-pressed="true"] svg {fill:#dde3ff}
+.wanba-catalog-sort-controls {display:flex;justify-content:space-around;gap:0;padding:2px 4px;border-top:1px solid #e8ebf2;background:#f8f9fd}
+.wanba-catalog-sort-controls button {display:grid;place-items:center;min-height:44px;min-width:40px;flex:1;background:transparent;color:#4b5ecb;border:0;border-radius:10px;cursor:pointer}
+.wanba-catalog-drag {-webkit-touch-callout:none;user-select:none;-webkit-user-select:none}
+body.wanba-standalone #wanbanXiaowu-popup [data-catalog-editing="true"] .wanba-catalog-launch {height:auto;min-height:174px;opacity:1}
+body.wanba-standalone #wanbanXiaowu-popup article.wanba-catalog-card.is-dragging {border:2px solid #4b5ecb!important;background:#edf0ff!important}
+.wanba-catalog-status {max-width:960px;margin:8px auto;font-size:12px;color:#647087}
+.wanba-catalog-status:empty {display:none}
+.wanba-catalog-empty {max-width:480px;margin:48px auto;padding:24px;text-align:center;color:#647087;line-height:1.7}
+.wanba-catalog-empty h3 {color:#202636;font-size:20px}
+body.wanba-standalone :is(#wanbanXiaowu-popup,.wb-modal-mask) :is(.wb-btn,.wb-select,.wb-input,.wb-textarea) {
+  border:1px solid #dfe4ee!important;border-radius:12px!important;background:#fff;color:#303c57;
+  box-shadow:none!important;transform:none!important;text-shadow:none!important;letter-spacing:0!important;font-family:inherit!important;
+}
+body.wanba-standalone :is(#wanbanXiaowu-popup,.wb-modal-mask) .wb-btn.primary {background:#4b5ecb!important;color:#fff!important;border-color:#4b5ecb!important}
+body.wanba-standalone :is(#wanbanXiaowu-popup,.wb-modal-mask) .wb-btn.danger {background:#fff0f1!important;color:#aa283c!important;border-color:#f2dce1!important}
+body.wanba-standalone #wanbanXiaowu-popup :is(.wanba-settings,.wanba-updates,.wanba-catalog-toolbar) .wb-btn,
+body.wanba-standalone .wb-modal-mask .wb-btn {min-height:44px;padding:10px 14px;line-height:1.4}
+body.wanba-standalone :is(#wanbanXiaowu-popup,.wb-modal-mask) :is(button,select,input):focus-visible {outline:3px solid #5369d9!important;outline-offset:2px}
+body.wanba-standalone :is(#wanbanXiaowu-popup,.wb-modal-mask) button:disabled {opacity:.42;cursor:default}
+body.wanba-standalone :is(#wanbanXiaowu-popup,.wb-modal-mask) :is(.wb-panel,.wb-modal) {background:#fff!important;border:1px solid #e4e8f0!important;border-radius:20px!important;box-shadow:none!important;color:#202636!important}
+body.wanba-standalone #wanbanXiaowu-popup .wb-section-title {font-size:17px;color:#202636!important;font-weight:650;line-height:1.4;padding:0!important;letter-spacing:0!important;border:0!important;text-shadow:none!important;transform:none!important}
+body.wanba-standalone #wanbanXiaowu-popup .wanba-settings {gap:16px;max-width:720px}
+body.wanba-standalone #wanbanXiaowu-popup .wanba-settings .wb-panel {padding:20px!important}
+body.wanba-standalone #wanbanXiaowu-popup .wanba-settings p {color:#647087;line-height:1.6;font-size:13px}
+body.wanba-standalone #wanbanXiaowu-popup .wanba-settings .wb-field {margin:16px 0 0}
+body.wanba-standalone #wanbanXiaowu-popup .wanba-settings select {min-height:48px;font-size:15px}
+body.wanba-standalone #wanbanXiaowu-popup .wanba-updates {max-width:960px;box-sizing:border-box;border-radius:16px;background:#eef0f8;border-color:transparent;padding:12px 14px;margin:0 auto 16px}
+body.wanba-standalone #wanbanXiaowu-popup .wanba-updates .wb-btn {font-size:12px}
+body.wanba-standalone #wanbanXiaowu-popup .wanba-updates p {font-size:12px;margin:4px 0;line-height:1.5}
+body.wanba-standalone #wanbanXiaowu-popup.wb-playing {display:block!important}
+body.wanba-standalone #wanbanXiaowu-popup.wb-playing :is(.wanba-app-header,.wanba-bottom-nav) {display:none!important}
+body.wanba-standalone #wanbanXiaowu-popup.wb-playing #wb-body {height:100%;box-sizing:border-box}
+body.wanba-standalone #wanbanXiaowu-popup .wb-game-main {border-radius:14px!important}
+body.wanba-standalone #wanbanXiaowu-popup .wb-toolbar {background:#f5f6fa!important;border-radius:12px!important;box-shadow:none!important;border-color:#e4e8f0!important}
+body.wanba-standalone #wanbanXiaowu-popup .wb-pill {background:transparent!important;color:#303c57!important;border:0!important;box-shadow:none!important}
+#wanba-toast {bottom:calc(88px + env(safe-area-inset-bottom));background:#252d40;box-shadow:none}
+@media(min-width:600px) {body.wanba-standalone #wanbanXiaowu-popup .wanba-catalog-grid {grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+@media(min-width:840px) {
+  body.wanba-standalone #wanbanXiaowu-popup:not(.wb-playing) {grid-template-columns:92px minmax(0,1fr)!important;grid-template-rows:auto minmax(0,1fr)!important}
+  body.wanba-standalone #wanbanXiaowu-popup .wanba-app-header {grid-column:2}
+  body.wanba-standalone #wanbanXiaowu-popup #wb-body:not(.wb-game-mode) {grid-column:2;grid-row:2;padding-left:24px;padding-right:24px}
+  body.wanba-standalone #wanbanXiaowu-popup .wanba-bottom-nav {grid-column:1;grid-row:1 / -1;display:flex!important;flex-direction:column;justify-content:center;gap:20px;border-top:0!important;border-right:1px solid #e8ebf2!important}
+  body.wanba-standalone #wanbanXiaowu-popup .wanba-catalog-grid {grid-template-columns:repeat(4,minmax(0,1fr))!important}
+}
+@media(prefers-reduced-motion:reduce) {body.wanba-standalone :is(.wb-tab,.wb-game-card,.wb-btn,.wb-body) {animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+/* Reset the legacy popup's implicit two-column placement before compact layout. */
+@media(max-width:839px) {
+  body.wanba-standalone #wanbanXiaowu-popup:not(.wb-playing) {grid-template-columns:minmax(0,1fr)!important}
+  body.wanba-standalone #wanbanXiaowu-popup .wanba-app-header {grid-column:1!important;grid-row:1!important}
+  body.wanba-standalone #wanbanXiaowu-popup #wb-body:not(.wb-game-mode) {grid-column:1!important;grid-row:2!important}
+  body.wanba-standalone #wanbanXiaowu-popup .wanba-bottom-nav {grid-column:1!important;grid-row:3!important}
+}
+
+body.wanba-standalone #wanbanXiaowu-popup {box-sizing:border-box!important;padding:0!important}
+@media(min-width:840px){body.wanba-standalone #wanbanXiaowu-popup .wanba-bottom-nav .wb-tab{flex:0 0 64px!important}body.wanba-standalone #wanbanXiaowu-popup .wanba-app-header{grid-row:1!important}}
+body.wanba-standalone #wanbanXiaowu-popup {left:0!important;top:0!important;right:auto!important;bottom:auto!important;transform:none!important}

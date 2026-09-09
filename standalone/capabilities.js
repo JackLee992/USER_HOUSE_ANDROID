@@ -1,8 +1,6 @@
 // Capability restrictions are applied on every settings read, including old backups.
-export const STANDALONE_THEMES = Object.freeze([
-  ['day', '梦幻掌机'], ['arcade', '晴日信箱'], ['spring', '春野物语'],
-  ['mono', '黑白像素'], ['night', '霓虹游戏舱'], ['cyber', '赛博街机'], ['card', '红黑牌剧场'],
-]);
+// Legacy theme ids in old backups normalize to the single app design.
+export const STANDALONE_THEMES = Object.freeze([['day', '玩吧']]);
 
 export function constrainStandaloneSettings(raw = {}) {
   const next = { ...raw };
@@ -17,8 +15,8 @@ export function constrainStandaloneSettings(raw = {}) {
     manualCharPersona:'', charDescriptionSnapshot:'', summaryId:'', summarySnapshot:null,
     specialLanguageEnabled:false, breakLimitPrompt:'',
   });
-  if (!STANDALONE_THEMES.some(([id]) => id === next.theme)) next.theme = 'day';
-  if (!['single', 'double', 'settings'].includes(next.lastTab)) next.lastTab = 'single';
+  next.theme = 'day';
+  if (!['single', 'double', 'my', 'settings'].includes(next.lastTab)) next.lastTab = 'single';
   next.rememberWindow = next.rememberWindow !== false;
   return next;
 }

@@ -11,9 +11,13 @@
   const deferred = [];
   let nextId = 0;
   let connected = true;
+  let shellRequested = false;
   const bridge = new page.Object();
+  exportFunction(value => {
+    if (connected && typeof value === 'string' && value.length <= 512 * 1024) port.postMessage({op:'shellState',value});
+  }, bridge, {defineAs:'onShellState'});
   exportFunction((filename, json) => {
-    if (connected && typeof filename === 'string' && typeof json === 'string' && json.length <= 8 * 1024 * 1024)
+    if (connected && typeof filename === 'string' && typeof json === 'string' && json.length <= 16 * 1024 * 1024)
       port.postMessage({op: 'backup', filename, json});
   }, bridge, {defineAs: 'saveBackup'});
   exportFunction(() => { if (connected) port.postMessage({op: 'downloads'}); }, bridge, {defineAs: 'openDownloads'});
@@ -55,6 +59,26 @@
       return;
     }
     const app = page.wanbaApp;
+    if (message.op === 'shellProbe') {
+      shellRequested = true;
+      if (app) port.postMessage({op:'shellAvailable',available:typeof app.catalog==='function'});
+      return;
+    }
+    if (message.op === 'shellCommand') {
+      const allowed = new Set(['catalog','setCatalog','launch','openShellTab','setLocale','setPerformance','setRememberWindow','exportBackup','backupData','validateBackup','importBackup','checkpoint']);
+      if (typeof message.id !== 'string' || !allowed.has(message.method) || !Array.isArray(message.arguments)) return;
+      const reply = result => { if (connected) port.postMessage({op:'ack',id:message.id,...result}); };
+      if (!app || typeof app[message.method] !== 'function') { reply({ok:false,error:'Native shell API unavailable'}); return; }
+      try {
+        // Objects must enter the page realm as data, so plain-object validation and prototypes stay correct.
+        const args = page.JSON.parse(JSON.stringify(message.arguments));
+        const fulfilled = exportFunction(value => reply({ok:true,value:JSON.parse(JSON.stringify(value ?? null))}), page);
+        const rejected = exportFunction(error => reply({ok:false,error:String(error?.message || error)}), page);
+        const result = app[message.method](...args);
+        new page.Promise(exportFunction(resolve => resolve(result), page)).then(fulfilled,rejected);
+      } catch (error) { reply({ok:false,error:String(error?.message || error)}); }
+      return;
+    }
     // Startup may finish after Android has already moved the session to the background.
     // Keep pause/save requests until the real application exists; never acknowledge a no-op save.
     if (!app && (message.op === 'pause' || message.op === 'save')) { deferred.push(message); return; }
@@ -79,6 +103,7 @@
   port.onMessage.addListener(receive);
   window.addEventListener('wanba-app-ready', () => {
     if (connected && page.wanbaApp) for (const message of deferred.splice(0)) receive(message);
+    if (connected && page.wanbaApp && shellRequested) port.postMessage({op:'shellAvailable',available:typeof page.wanbaApp.catalog==='function'});
   });
   port.onDisconnect.addListener(() => { connected = false; pending.clear(); deferred.length = 0; });
   port.postMessage({op: 'ready'});

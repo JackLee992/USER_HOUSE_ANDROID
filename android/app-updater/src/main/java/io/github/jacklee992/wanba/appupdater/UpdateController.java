@@ -48,6 +48,7 @@ final class UpdateController implements AutoCloseable {
         catch (Exception e) { removeTransaction(directory); synchronized(ACTIVE_DIRECTORIES) { ACTIVE_DIRECTORIES.remove(directory.getAbsolutePath()); } worker.shutdown(); throw e; }
     }
     boolean isReady() { return ready; }
+    org.json.JSONObject availableSummary(){org.json.JSONObject result=new org.json.JSONObject();try{if(checked!=null)result.put("versionCode",checked.entry.versionCode).put("version",checked.entry.versionName).put("size",checked.entry.full.size);}catch(Exception ignored){}return result;}
     void check() { submit(() -> {
         ready = false; checked = null; fullFile.delete(); emit("checking", "正在检查 App 版本…");
         http.download(UpdateProtocol.CHANNEL, manifestFile, -1, UpdateProtocol.MAX_MANIFEST, cancelled, (d,t) -> {});

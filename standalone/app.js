@@ -15,6 +15,12 @@ try {
   const runtime = await initWanbanXiaowu({ standalone:true, appInfo:await readAppInfo(window), contentState, startupBlocked:true });
   let updates;
   const app = Object.freeze({
+    checkpoint:runtime.checkpoint,
+    catalog:runtime.catalog, setCatalog:runtime.setCatalog, launch:runtime.launch,
+    openShellTab:runtime.openShellTab, setLocale:runtime.setLocale,
+    setPerformance:runtime.setPerformance, setRememberWindow:runtime.setRememberWindow,
+    exportBackup:runtime.exportBackup, backupData:runtime.backupData,
+    validateBackup:runtime.validateBackup, importBackup:runtime.importBackup,
     pause:runtime.pause,
     save:runtime.save,
     back:runtime.back,
@@ -30,6 +36,14 @@ try {
   await confirmContentReady(window,contentState?.activeSnapshotId);
   runtime.ready();
   window.wanbaApp = app;
+  const notifyNativeShell = () => {
+    try { Promise.resolve(window.NativeBridge?.onShellState?.(JSON.stringify(app.catalog()))).catch(error => console.warn('[玩吧] native shell update failed',error)); }
+    catch(error) { console.warn('[玩吧] native shell update failed',error); }
+  };
+  window.addEventListener('wanba:navigation',notifyNativeShell);
+  window.addEventListener('wanba-language-change',notifyNativeShell);
+  window.addEventListener('wanba-performance-change',notifyNativeShell);
+  notifyNativeShell();
   // A native ready event can arrive before the bridge can see wanbaApp.
   // Read the committed state after registration so the update panel cannot
   // remain stuck on its initial "activating" state until a later focus event.
