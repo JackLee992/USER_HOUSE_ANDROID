@@ -1,0 +1,192 @@
+[
+  {
+    "locale": "zh-CN",
+    "native": true,
+    "settings": true,
+    "my": true,
+    "games": true,
+    "double": true,
+    "coldRestore": true,
+    "geometry": [
+      {
+        "label": "玩吧",
+        "bounds": [
+          157,
+          2143,
+          412,
+          2311
+        ]
+      },
+      {
+        "label": "我的",
+        "bounds": [
+          412,
+          2143,
+          667,
+          2311
+        ]
+      },
+      {
+        "label": "设置",
+        "bounds": [
+          667,
+          2143,
+          922,
+          2311
+        ]
+      }
+    ]
+  },
+  {
+    "locale": "zh-TW",
+    "native": true,
+    "settings": true,
+    "my": true,
+    "games": true,
+    "double": true,
+    "coldRestore": true,
+    "geometry": [
+      {
+        "label": "玩吧",
+        "bounds": [
+          157,
+          2143,
+          412,
+          2311
+        ]
+      },
+      {
+        "label": "我的",
+        "bounds": [
+          412,
+          2143,
+          667,
+          2311
+        ]
+      },
+      {
+        "label": "設定",
+        "bounds": [
+          667,
+          2143,
+          922,
+          2311
+        ]
+      }
+    ]
+  },
+  {
+    "locale": "en",
+    "native": true,
+    "settings": true,
+    "my": true,
+    "games": true,
+    "double": true,
+    "coldRestore": true,
+    "geometry": [
+      {
+        "label": "Nookcade",
+        "bounds": [
+          157,
+          2143,
+          412,
+          2311
+        ]
+      },
+      {
+        "label": "My games",
+        "bounds": [
+          412,
+          2143,
+          667,
+          2311
+        ]
+      },
+      {
+        "label": "Settings",
+        "bounds": [
+          667,
+          2143,
+          922,
+          2311
+        ]
+      }
+    ]
+  },
+  {
+    "locale": "ja",
+    "native": true,
+    "settings": true,
+    "my": true,
+    "games": true,
+    "double": true,
+    "coldRestore": true,
+    "geometry": [
+      {
+        "label": "ヌックケード",
+        "bounds": [
+          157,
+          2143,
+          412,
+          2311
+        ]
+      },
+      {
+        "label": "マイゲーム",
+        "bounds": [
+          412,
+          2143,
+          667,
+          2311
+        ]
+      },
+      {
+        "label": "設定",
+        "bounds": [
+          667,
+          2143,
+          922,
+          2311
+        ]
+      }
+    ]
+  },
+  {
+    "locale": "ko",
+    "native": true,
+    "settings": true,
+    "my": true,
+    "games": true,
+    "double": true,
+    "coldRestore": true,
+    "geometry": [
+      {
+        "label": "눅케이드",
+        "bounds": [
+          157,
+          2143,
+          412,
+          2311
+        ]
+      },
+      {
+        "label": "내 게임",
+        "bounds": [
+          412,
+          2143,
+          667,
+          2311
+        ]
+      },
+      {
+        "label": "설정",
+        "bounds": [
+          667,
+          2143,
+          922,
+          2311
+        ]
+      }
+    ]
+  }
+]

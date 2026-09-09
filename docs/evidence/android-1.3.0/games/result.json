@@ -1,0 +1,48 @@
+{
+  "date": "2026-09-09",
+  "surface": "Android Emulator, native SystemDebug / System WebView 124",
+  "apkSha256": "d1291853b0526571bd3e9c640a1103f62e1a741a93195b51962da28a64ebc517",
+  "fix": {
+    "snakeLongPressMs": 1600,
+    "tetrisSoftDropLongPressMs": 1800,
+    "noSelectionMenuInHeldScreenshots": true,
+    "pauseWorks": true
+  },
+  "snake": {
+    "mode": "timed",
+    "ticks": 161,
+    "length": 198.8000000000011,
+    "best": 201.20000000000073,
+    "eaten": 12,
+    "boostReleased": true,
+    "alive": true
+  },
+  "tetris": {
+    "mode": "duel",
+    "ticks": 172,
+    "score": 27,
+    "locks": 1,
+    "aiLocks": 1
+  },
+  "backup": {
+    "itemCount": 5,
+    "progressCount": 37,
+    "changedGames": [
+      "snake",
+      "tetris"
+    ],
+    "other35ProgressUnchanged": true
+  },
+  "screenshots": [
+    "snake-longpress-fixed-held.png",
+    "snake-longpress-fixed-paused.png",
+    "tetris-longpress-fixed-held.png",
+    "tetris-longpress-fixed-paused.png",
+    "handoff-native-home.png"
+  ],
+  "limitations": [
+    "SystemDebug gameUpdates=false; final release APK verification is a separate parent task",
+    "No measured FPS claim",
+    "Original data restoration pending Android agent handback"
+  ]
+}

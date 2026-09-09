@@ -1,0 +1,21 @@
+{
+  "sequence": 10,
+  "packages": 81,
+  "games": 37,
+  "files": 239,
+  "changed": [
+    "core",
+    "game.snake",
+    "game.tetris",
+    "i18n.en",
+    "i18n.ja",
+    "i18n.ko",
+    "i18n.zh-CN",
+    "i18n.zh-TW"
+  ],
+  "reused": 73,
+  "archivesCrcAndMemberSha": true,
+  "allStagedFilesSha": true,
+  "sourceCommit": "8d0d40f2387c3a062a697b93f4026562fc8ee02e",
+  "signature": true
+}

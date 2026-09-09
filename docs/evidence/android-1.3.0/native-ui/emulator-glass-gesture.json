@@ -1,0 +1,49 @@
+{
+  "native": true,
+  "tabs": [
+    {
+      "label": "玩吧",
+      "bounds": [
+        157,
+        2143,
+        412,
+        2311
+      ]
+    },
+    {
+      "label": "我的",
+      "bounds": [
+        412,
+        2143,
+        667,
+        2311
+      ]
+    },
+    {
+      "label": "设置",
+      "bounds": [
+        667,
+        2143,
+        922,
+        2311
+      ]
+    }
+  ],
+  "drag": {
+    "from": [
+      284,
+      2227
+    ],
+    "to": [
+      794,
+      2227
+    ],
+    "durationMs": 3000,
+    "committed": "settings"
+  },
+  "cancel": {
+    "verticalExitPixels": 350,
+    "retained": "settings"
+  },
+  "javascriptCalledOnlyOnUp": "NativeCatalogView source invariant; no bridge call in ACTION_MOVE"
+}

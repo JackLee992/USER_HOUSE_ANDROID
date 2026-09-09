@@ -1,0 +1,17 @@
+{
+  "deviceClass": "HONOR Android 12 physical phone",
+  "screen": "native Android game catalog",
+  "warmupSwipes": 4,
+  "measuredSwipes": 12,
+  "totalFrames": 386,
+  "jankyFrames": 0,
+  "jankyFramesLegacy": 1,
+  "frameTimeMs": {
+    "p50": 6,
+    "p90": 7,
+    "p95": 7,
+    "p99": 9
+  },
+  "missedVsync": 0,
+  "scope": "Native catalog rendering only; not game FPS or a browser comparison."
+}

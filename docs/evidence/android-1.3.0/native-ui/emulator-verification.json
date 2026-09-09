@@ -1,0 +1,36 @@
+{
+  "apk": {
+    "flavor": "system",
+    "version": "1.3.0",
+    "code": 7,
+    "sha256": "a041848cd6c1e12e714657c0294c339c48ece65857b4f3f5e8ebf1d6f913d43e",
+    "installedWithReplace": true
+  },
+  "contentVersion": "1.4.0",
+  "releaseInstallPreservedAllFiveItems": true,
+  "originalRestore": {
+    "scores": true,
+    "progress": true,
+    "records": true,
+    "sudoku": true,
+    "gameCount": 37,
+    "settingsDifference": "Expected migration only: fixed light theme and default catalog preferences (empty favorites/default game order)."
+  },
+  "nativePullRefresh": {
+    "gesture": true,
+    "visibleIndicatorDuringPull": true,
+    "settledAfterRelease": true
+  },
+  "controlledUpdateDialog": {
+    "passed": true,
+    "fixtureVersionsOnly": true,
+    "gameSafBackgroundDeferred": true,
+    "mergedTwoTypes": true,
+    "backgroundDismissDoesNotAcknowledge": true,
+    "laterDeduplicates": true,
+    "newVersionPrompts": true,
+    "contentChoiceOpensSettings": true,
+    "nativeUpdaterActivityOpens": true
+  },
+  "compat": "pending"
+}
