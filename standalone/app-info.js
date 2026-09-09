@@ -1,6 +1,6 @@
 import { EXTENSION_VERSION } from '../src/core/metadata.js';
 
-export const APP_VERSION = '1.2.1';
+export const APP_VERSION = '1.2.2';
 export const GAME_BASELINE = EXTENSION_VERSION;
 const VERSION = /^\d+\.\d+(?:\.[\dA-Za-z-]+)*$/;
 const cleanVersion = value => typeof value === 'string' && value.length <= 80 && VERSION.test(value) ? value : '';
@@ -23,6 +23,9 @@ export function normalizeAppInfo(raw, userAgent = '') {
       engineVersion,
       providerVersion:typeof native.providerVersion === 'string' && native.providerVersion.length <= 120 && !/[\x00-\x1f]/.test(native.providerVersion) ? native.providerVersion : '',
       source:'native', versionMatches:appVersion === APP_VERSION,
+      gameUpdatesEnabled:native.gameUpdatesEnabled !== false,
+      nativeSelfUpdateEnabled:native.nativeSelfUpdateEnabled !== false,
+      appUpdaterEnabled:native.appUpdaterEnabled === true,
     });
   }
   const firefox = /Firefox\/([\d.]+)/.exec(userAgent);
@@ -34,6 +37,7 @@ export function normalizeAppInfo(raw, userAgent = '') {
     engine:firefox ? 'Gecko' : chrome ? (webview ? 'Android System WebView' : 'Chromium') : 'unknown',
     engineLabel:firefox ? 'Firefox / Gecko' : chrome ? (webview ? '系统 Android WebView' : 'Chromium') : '未知内核',
     engineVersion:firefox?.[1] || chrome?.[1] || '', source:'user-agent', versionMatches:null,
+    gameUpdatesEnabled:true, nativeSelfUpdateEnabled:true, appUpdaterEnabled:false,
   });
 }
 

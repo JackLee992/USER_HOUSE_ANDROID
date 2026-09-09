@@ -2,13 +2,13 @@
 
 <img src="assets/app-brand/app-icon.png" width="120" alt="玩吧应用图标">
 
-37 款小游戏装进一个可离线运行的 Android App。当前版本 **1.2.1** 基于玩伴小屋游戏代码 **3.10.0**，保留单人游戏、人机挑战、7 套主题、本地进度和记录。
+37 款小游戏装进一个可离线运行的 Android App。当前版本 **1.2.2** 基于玩伴小屋游戏代码 **3.10.0**，保留单人游戏、人机挑战、7 套主题、本地进度和记录。
 
 **[下载可安装 APK](https://github.com/JackLee992/USER_HOUSE_ANDROID/releases/latest)** · **[37 款游戏体验审计（待审核）](docs/game-ux-audit-v1.md)** · **[双内核与真机验证](docs/android-flavors.md)**
 
 ## 安装与更新
 
-1. Android 8.0 及以上设备，从 Release 选择安装包：系统内核较新的设备用 `wanba-system-1.2.1.apk`；系统内核较旧、无法更新 WebView 的手机用 `wanba-compat-1.2.1.apk`（内置 GeckoView，支持 ARM 64/32 位）。
+1. Android 8.0 及以上设备，从 Release 选择安装包：系统内核较新的设备用 `wanba-system-1.2.2.apk`；系统内核较旧、无法更新 WebView 的手机用 `wanba-compat-1.2.2.apk`（内置 GeckoView，支持 ARM 64/32 位）。
 2. 如果系统提示，允许你用于下载 APK 的浏览器或文件管理器安装此文件。
 3. 打开桌面上的“玩吧”或“玩吧·兼容版”，无需酒馆、Via、账号或游戏资源下载。
 
@@ -16,7 +16,9 @@
 
 游戏与美术更新：在首页下拉刷新或点击「检查更新」，查看变化包后下载；回到游戏列表安装，存档继续保留。37 款游戏代码、美术与五语言各自维护版本，发布在 [USER_HOUSE_GAME_PACKS](https://github.com/JackLee992/USER_HOUSE_GAME_PACKS)。应用只拉取变化包，并在完整校验后切换。
 
-App / 内核更新：在「设置 → 下载更新」打开本仓库最新 Release，下载同 flavor 的 APK 覆盖安装，**无需卸载**。APK 保持包名与签名并递增版本号；安装由 Android 系统确认。
+App / 内核更新：GitHub 版 1.2.2 新增独立的「设置 → 检查更新」入口，优先下载匹配的 APK 差分，重建并校验完整签名 APK 后交给 Android 确认安装。没有匹配差分时下载完整包；也可通过「下载更新」打开 Release。1.2.0/1.2.1 首次获得此模块需手动覆盖安装一次，**无需卸载**。
+
+整包更新模块默认不参与源码构建；用 `-PwanbaAppUpdater=true` 启用。无动态更新的商店候选可同时指定 `-PwanbaAppUpdater=false -PwanbaGameUpdates=false`，移除安装权限、模块组件与线上游戏更新入口，保留内置游戏。[模块方案与构建说明](docs/android-incremental-update-proposal.md)
 
 更新前可在设置导出备份。不要卸载或清除应用数据后再更新，否则 Android 会清除其本地存档。酒馆与独立 App 的存储空间相互独立：从旧插件导出 JSON，再在玩吧设置中导入即可迁移受支持的游戏进度与记录；角色、API、聊天、宠物等设置不在独立版范围。
 
@@ -48,7 +50,7 @@ App / 内核更新：在「设置 → 下载更新」打开本仓库最新 Relea
 | system 轻量版 | 系统 WebView，Chromium 124+ | 系统内核可更新的 Android 8+ 设备 | `io.github.jacklee992.wanba` |
 | compat 兼容版 | APK 内置 GeckoView 155.0.1 | 系统 WebView 较旧或无法更新的 Android 8+ ARM 设备 | `io.github.jacklee992.wanba.compat` |
 
-所有小游戏、图片、题库、WASM 都打包进 APK，首次运行不用下载内核或游戏。轻量版使用固定本地 HTTPS origin 和原生资源拦截，WebView 本身禁止联网；原生更新器仅访问固定 GitHub 内容仓库。兼容版通过仅绑定 `127.0.0.1` 的本地资源服务连接内置 Gecko。两版声明 INTERNET 权限，用于经过验证的资源下载（兼容版也用于本机套接字）；没有账号服务，无广泛存储权限。
+所有小游戏、图片、题库、WASM 都打包进 APK，首次运行不用下载内核或游戏。轻量版使用固定本地 HTTPS origin 和原生资源拦截，WebView 本身禁止联网；原生更新器仅访问固定 GitHub App/内容仓库。兼容版通过仅绑定 `127.0.0.1` 的本地资源服务连接内置 Gecko。两版声明 INTERNET 权限，用于经过验证的更新下载（兼容版也用于本机套接字）；GitHub 版可选模块另声明安装 APK 权限，没有账号服务或广泛存储权限。
 
 兼容版体积更大，内核随玩吧 APK 一起更新。它不会安装或替换手机系统 WebView，不需要 Google Play 服务。它能避开系统 WebView 版本差异，仍有 Android 版本、CPU 架构和设备图形驱动的兼容边界。两种版本的实现、测试与维护说明见 [双内核文档](docs/android-flavors.md)。
 

@@ -13,3 +13,7 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Wanba"
 include(":app")
+// Distribution-only installer code is absent, including its manifest permissions, by default.
+if (providers.gradleProperty("wanbaAppUpdater").orElse("false").get().toBooleanStrict()) {
+    include(":app-updater")
+}

@@ -31,7 +31,7 @@ public final class ContentResourceStore {
     public ContentResourceStore(Context context, int versionCode) throws Exception {
         assets = context.getAssets(); appVersionCode = versionCode;
         directory = new File(context.getNoBackupFilesDir(), "content-update");
-        mkdir(directory); mkdir(new File(directory, "objects")); mkdir(new File(directory, "snapshots"));
+        if (BuildConfig.WANBA_GAME_UPDATES) { mkdir(directory); mkdir(new File(directory, "objects")); mkdir(new File(directory, "snapshots")); }
         try (InputStream input = assets.open("content-update/public-key.der")) { publicKey = read(input, 1024); }
         ContentManifest bundled = null;
         try (InputStream input = assets.open("content-update/builtin-channel.json")) {
@@ -47,6 +47,7 @@ public final class ContentResourceStore {
 
     public ContentManifest loadInstalled(String id) throws Exception {
         if (id.equals(builtinId())) return builtin;
+        requireUpdatesEnabled();
         if (!id.matches("[0-9a-f]{64}")) throw new IOException("无效的快照标识");
         File folder = new File(directory, "snapshots/" + id);
         if (!new File(folder, "ready").isFile()) throw new IOException("更新快照尚未安装");
@@ -59,7 +60,7 @@ public final class ContentResourceStore {
 
     public boolean hasPack(ContentManifest.Pack pack) {
         if (isBuiltinPack(pack)) return true;
-        return hasStoredPack(pack);
+        return BuildConfig.WANBA_GAME_UPDATES && hasStoredPack(pack);
     }
 
     private boolean hasStoredPack(ContentManifest.Pack pack) {
@@ -85,6 +86,7 @@ public final class ContentResourceStore {
     }
 
     public void unpack(ContentManifest.Pack pack, File archive) throws Exception {
+        requireUpdatesEnabled();
         if (archive.length() != pack.size || !digest(archive).equals(pack.sha256)) throw new IOException("下载包校验失败");
         File objects = new File(directory, "objects");
         File temporary = Files.createTempDirectory(objects.toPath(), ".install-").toFile();
@@ -131,6 +133,7 @@ public final class ContentResourceStore {
     }
 
     public void installSnapshot(ContentManifest manifest) throws Exception {
+        requireUpdatesEnabled();
         // APK assets are replaced by an app upgrade. Retain the exact verified
         // bytes used by an installed snapshot so its unchanged packages remain
         // available for offline rollback after a newer APK is installed.
@@ -182,6 +185,7 @@ public final class ContentResourceStore {
     }
 
     public void collect(Set<String> keep) {
+        if (!BuildConfig.WANBA_GAME_UPDATES) return;
         Set<String> packages = new HashSet<>();
         for (String id : keep) {
             ContentManifest manifest = snapshots.get(id);
@@ -193,10 +197,11 @@ public final class ContentResourceStore {
         if (objects != null) for (File object : objects) if (!packages.contains(object.getName())) remove(object);
     }
 
-    public String entryPath(String id) { return id.equals(builtinId()) ? "/assets/www/standalone/index.html" : "/assets/updates/" + id + "/www/standalone/index.html"; }
+    public String entryPath(String id) { return !BuildConfig.WANBA_GAME_UPDATES || id.equals(builtinId()) ? "/assets/www/standalone/index.html" : "/assets/updates/" + id + "/www/standalone/index.html"; }
 
     public InputStream openPath(String path) throws IOException {
         if (path.startsWith("www/")) return assets.open(path);
+        requireUpdatesEnabled();
         String[] parts = path.split("/", 4);
         if (parts.length != 4 || !parts[0].equals("updates") || !parts[2].equals("www")) throw new IOException("资源路径无效");
         ContentManifest manifest = snapshots.get(parts[1]);
@@ -208,6 +213,10 @@ public final class ContentResourceStore {
 
     private InputStream openPackageFile(ContentManifest.Pack pack, String path) throws IOException {
         return isBuiltinPack(pack) ? assets.open("www/" + path) : new FileInputStream(new File(directory, "objects/" + pack.sha256 + "/" + path));
+    }
+
+    private static void requireUpdatesEnabled() throws IOException {
+        if (!BuildConfig.WANBA_GAME_UPDATES) throw new IOException("游戏内容更新已停用");
     }
 
     public static byte[] read(InputStream input, int limit) throws IOException {

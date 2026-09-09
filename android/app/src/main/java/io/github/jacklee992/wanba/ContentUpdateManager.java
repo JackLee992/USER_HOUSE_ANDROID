@@ -47,6 +47,13 @@ public final class ContentUpdateManager implements AutoCloseable {
         work.execute(() -> {
             try {
                 store = new ContentResourceStore(this.context, versionCode);
+                if (!BuildConfig.WANBA_GAME_UPDATES) {
+                    // A non-dynamic build must never select an earlier downloaded
+                    // snapshot or restore its checkpoint over current user saves.
+                    activeId = store.builtinId();
+                    persisted = object("active", activeId);
+                    refresh(); loadCurrent(); return;
+                }
                 try { persisted = new JSONObject(new String(ContentResourceStore.readAtomic(new File(store.directory, "active.json"), 32768), StandardCharsets.UTF_8)); }
                 catch (IOException absent) { persisted = object("active", store.builtinId()); }
                 String current = persisted.optString("active", store.builtinId());
@@ -155,6 +162,7 @@ public final class ContentUpdateManager implements AutoCloseable {
 
     public String reportGameContentReady(String snapshotId) {
         if (!activeId.equals(snapshotId) || closed) return object("error", "当前入口与快照不符").toString();
+        if (!BuildConfig.WANBA_GAME_UPDATES) return object("accepted", true).toString();
         work.execute(() -> {
             try {
                 if (!activeId.equals(snapshotId)) return;
@@ -186,6 +194,7 @@ public final class ContentUpdateManager implements AutoCloseable {
     }
 
     private String submit(String action, Work operation) {
+        if (!BuildConfig.WANBA_GAME_UPDATES) return object("error", "游戏内容更新已停用", "code", "GAME_UPDATES_DISABLED").toString();
         if (closed || store == null) return object("error", "更新器尚未就绪").toString();
         if (!busy.compareAndSet(false, true)) return object("error", "已有更新操作正在进行").toString();
         String id = "update-" + System.currentTimeMillis() + "-" + ids.incrementAndGet();
@@ -229,6 +238,7 @@ public final class ContentUpdateManager implements AutoCloseable {
     }
 
     private static HttpURLConnection connect(String start) throws Exception {
+        if (!BuildConfig.WANBA_GAME_UPDATES) throw new IOException("游戏内容更新已停用");
         if (!(start.equals(CHANNEL) || ContentManifest.validArchiveUrl(start, Integer.MAX_VALUE))) throw new IOException("下载来源无效");
         URI current = new URI(start);
         for (int redirects = 0; redirects <= 5; redirects++) {
@@ -268,7 +278,10 @@ public final class ContentUpdateManager implements AutoCloseable {
         return storage;
     }
 
-    public InputStream openResource(String path) throws IOException { return store == null ? context.getAssets().open(path) : store.openPath(path); }
+    public InputStream openResource(String path) throws IOException {
+        if (!BuildConfig.WANBA_GAME_UPDATES && path.startsWith("updates/")) throw new IOException("游戏内容更新已停用");
+        return store == null ? context.getAssets().open(path) : store.openPath(path);
+    }
     public boolean isTrustedEntry(String url) {
         String path = LocalAssetPolicy.assetPath(url);
         return path != null && ("/assets/" + path).equals(store == null ? "/assets/www/standalone/index.html" : store.entryPath(activeId));
@@ -305,6 +318,7 @@ public final class ContentUpdateManager implements AutoCloseable {
         try {
             ContentManifest active = store == null ? null : store.get(activeId);
             JSONObject state = object("hostApi", ContentManifest.HOST_API, "appVersionCode", appVersionCode, "repository", ContentManifest.REPOSITORY,
+                    "gameUpdatesEnabled", BuildConfig.WANBA_GAME_UPDATES,
                     "activeSnapshotId", activeId, "active", active == null ? JSONObject.NULL : active.summary(),
                     "candidate", candidate == null || candidate.id.equals(activeId) ? JSONObject.NULL : candidate.summary(),
                     "candidateReady", candidate != null && store != null && store.installed(candidate.id),
@@ -312,7 +326,7 @@ public final class ContentUpdateManager implements AutoCloseable {
                     "previousSnapshotId", persisted.opt("previous"), "job", job, "restoreStorage", JSONObject.NULL);
             if (store != null && persisted.optBoolean("restore")) state.put("restoreStorage", new JSONObject(new String(ContentResourceStore.readAtomic(new File(store.directory, "checkpoint.json"), 8 * 1024 * 1024), StandardCharsets.UTF_8)));
             stateJson = state.toString();
-        } catch (Exception error) { stateJson = object("hostApi", ContentManifest.HOST_API, "activeSnapshotId", activeId, "bootHealthy", false, "error", message(error)).toString(); }
+        } catch (Exception error) { stateJson = object("hostApi", ContentManifest.HOST_API, "gameUpdatesEnabled", BuildConfig.WANBA_GAME_UPDATES, "activeSnapshotId", activeId, "bootHealthy", false, "error", message(error)).toString(); }
     }
     private static JSONObject object(Object... values) { JSONObject result = new JSONObject(); try { for (int i = 0; i < values.length; i += 2) result.put((String) values[i], values[i + 1] == null ? JSONObject.NULL : values[i + 1]); } catch (Exception impossible) { throw new IllegalArgumentException(impossible); } return result; }
     private static String message(Exception error) { String value = error.getMessage(); return value == null || value.length() > 200 ? "操作未完成，请重试" : value; }

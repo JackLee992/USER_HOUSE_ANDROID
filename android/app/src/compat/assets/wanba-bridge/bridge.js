@@ -17,6 +17,7 @@
       port.postMessage({op: 'backup', filename, json});
   }, bridge, {defineAs: 'saveBackup'});
   exportFunction(() => { if (connected) port.postMessage({op: 'downloads'}); }, bridge, {defineAs: 'openDownloads'});
+  exportFunction(() => { if (connected) port.postMessage({op: 'appUpdater'}); }, bridge, {defineAs: 'openAppUpdater'});
   exportFunction(enabled => {
     if (connected && typeof enabled === 'boolean') port.postMessage({op: 'immersive', enabled});
   }, bridge, {defineAs: 'setGameImmersive'});

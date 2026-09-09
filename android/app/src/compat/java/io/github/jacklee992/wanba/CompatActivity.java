@@ -220,6 +220,7 @@ public final class CompatActivity extends Activity {
                         }
                         break;
                     case "downloads": if (isTrustedForeground()) nativeBridge.openDownloads(); break;
+                    case "appUpdater": if (isTrustedForeground()) nativeBridge.openAppUpdater(); break;
                     case "info":
                         send(json("op", "infoResult", "id", message.optString("id"), "value", nativeBridge.getAppInfo()));
                         break;
@@ -412,6 +413,9 @@ public final class CompatActivity extends Activity {
             try {
                 info.put("appVersion", BuildConfig.VERSION_NAME);
                 info.put("versionCode", BuildConfig.VERSION_CODE);
+                info.put("gameUpdatesEnabled", BuildConfig.WANBA_GAME_UPDATES);
+                info.put("appUpdaterEnabled", BuildConfig.WANBA_APP_UPDATER);
+                info.put("nativeSelfUpdateEnabled", BuildConfig.WANBA_GAME_UPDATES || BuildConfig.WANBA_APP_UPDATER);
                 info.put("flavor", "compat");
                 info.put("engine", "GeckoView");
                 info.put("engineVersion", org.mozilla.geckoview.BuildConfig.MOZ_APP_VERSION);
@@ -451,9 +455,17 @@ public final class CompatActivity extends Activity {
 
         public void openDownloads() {
             main.post(() -> {
-                if (!isTrustedForeground()) return;
+                if (!isTrustedForeground() || !(BuildConfig.WANBA_GAME_UPDATES || BuildConfig.WANBA_APP_UPDATER)) return;
                 try { startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(LocalAssetPolicy.DOWNLOADS)).addCategory(Intent.CATEGORY_BROWSABLE)); }
                 catch (ActivityNotFoundException error) { toast("未找到可打开下载页的浏览器"); }
+            });
+        }
+
+        public void openAppUpdater() {
+            main.post(() -> {
+                if (!isTrustedForeground() || !BuildConfig.WANBA_APP_UPDATER) return;
+                try { startActivity(new Intent().setClassName(getPackageName(), "io.github.jacklee992.wanba.appupdater.AppUpdateActivity")); }
+                catch (ActivityNotFoundException error) { toast("此版本未包含 App 更新模块"); }
             });
         }
     }

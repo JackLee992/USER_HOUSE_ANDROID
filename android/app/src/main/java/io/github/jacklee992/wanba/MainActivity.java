@@ -140,7 +140,8 @@ public final class MainActivity extends Activity {
         title.setTextSize(24);
         title.setGravity(Gravity.CENTER);
         TextView explanation = new TextView(this);
-        explanation.setText("轻量版需要 Chromium 124 或更新内核。\n可安装自带内核的「玩吧·兼容版」，或更新系统 WebView 后重试。\n实际内核：" + (engineVersion == null ? "无法识别" : "Chromium " + engineVersion)
+        boolean allowDownloads = BuildConfig.WANBA_GAME_UPDATES || BuildConfig.WANBA_APP_UPDATER;
+        explanation.setText("轻量版需要 Chromium 124 或更新内核。\n" + (allowDownloads ? "可安装自带内核的「玩吧·兼容版」，或更新系统 WebView 后重试。" : "请更新或启用系统 WebView 后重试。") + "\n实际内核：" + (engineVersion == null ? "无法识别" : "Chromium " + engineVersion)
                 + "\n系统组件：" + (provider == null ? "未检测到" : provider.packageName + " " + provider.versionName));
         explanation.setTextSize(16);
         explanation.setGravity(Gravity.CENTER);
@@ -156,13 +157,18 @@ public final class MainActivity extends Activity {
         Button retry = new Button(this);
         retry.setText("更新后重试");
         retry.setOnClickListener(ignored -> openCompatibleWebView());
-        Button compatibility = new Button(this);
-        compatibility.setText("下载玩吧·兼容版");
-        compatibility.setOnClickListener(ignored -> {
-            try { startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(LocalAssetPolicy.DOWNLOADS))); }
-            catch (ActivityNotFoundException error) { toast("请使用浏览器打开 GitHub 版本下载页"); }
-        });
-        prompt.addView(title); prompt.addView(explanation); prompt.addView(compatibility); prompt.addView(settings); prompt.addView(retry);
+        prompt.addView(title); prompt.addView(explanation);
+        if (allowDownloads) {
+            Button compatibility = new Button(this);
+            compatibility.setText("下载玩吧·兼容版");
+            compatibility.setOnClickListener(ignored -> {
+                if (!(BuildConfig.WANBA_GAME_UPDATES || BuildConfig.WANBA_APP_UPDATER)) return;
+                try { startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(LocalAssetPolicy.DOWNLOADS))); }
+                catch (ActivityNotFoundException error) { toast("请使用浏览器打开 GitHub 版本下载页"); }
+            });
+            prompt.addView(compatibility);
+        }
+        prompt.addView(settings); prompt.addView(retry);
         frame.addView(prompt, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
     }
 
@@ -406,6 +412,9 @@ public final class MainActivity extends Activity {
             try {
                 info.put("appVersion", BuildConfig.VERSION_NAME);
                 info.put("versionCode", BuildConfig.VERSION_CODE);
+                info.put("gameUpdatesEnabled", BuildConfig.WANBA_GAME_UPDATES);
+                info.put("appUpdaterEnabled", BuildConfig.WANBA_APP_UPDATER);
+                info.put("nativeSelfUpdateEnabled", BuildConfig.WANBA_GAME_UPDATES || BuildConfig.WANBA_APP_UPDATER);
                 info.put("flavor", "system");
                 info.put("engine", "Chromium / Android System WebView");
                 info.put("engineVersion", engineVersion == null ? "unknown" : engineVersion);
@@ -444,9 +453,17 @@ public final class MainActivity extends Activity {
 
         @JavascriptInterface public void openDownloads() {
             main.post(() -> {
-                if (!isTrustedForeground()) return;
+                if (!isTrustedForeground() || !(BuildConfig.WANBA_GAME_UPDATES || BuildConfig.WANBA_APP_UPDATER)) return;
                 try { startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(LocalAssetPolicy.DOWNLOADS)).addCategory(Intent.CATEGORY_BROWSABLE)); }
                 catch (ActivityNotFoundException error) { toast("未找到可打开下载页的浏览器"); }
+            });
+        }
+
+        @JavascriptInterface public void openAppUpdater() {
+            main.post(() -> {
+                if (!isTrustedForeground() || !BuildConfig.WANBA_APP_UPDATER) return;
+                try { startActivity(new Intent().setClassName(getPackageName(), "io.github.jacklee992.wanba.appupdater.AppUpdateActivity")); }
+                catch (ActivityNotFoundException error) { toast("此版本未包含 App 更新模块"); }
             });
         }
     }

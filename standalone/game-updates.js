@@ -5,19 +5,26 @@ const mb=n=>n<1024*1024?Math.ceil(n/1024)+' KB':(n/1024/1024).toFixed(1)+' MB';
 export function changedPackages(state) {
   return (state?.candidate?.packages||[]).filter(pack=>state.active?.packages?.find(old=>old.id===pack.id)?.sha256!==pack.sha256);
 }
+export function gameUpdatesAvailable(state,host=globalThis) {
+  return state?.gameUpdatesEnabled!==false&&typeof host.NativeBridge?.checkGameUpdates==='function';
+}
 
 export function installGameUpdates({host=window,document:doc=document,runtime,initialState=null}) {
   let state=initialState,panel=null,busy=false,pull=null,refreshGeneration=0;
+  // Native build capability is authoritative; do not mount a disabled control
+  // or register a pull gesture that would interfere with ordinary scrolling.
+  if(state?.gameUpdatesEnabled===false)return Object.freeze({onEvent:()=>{},refresh:async()=>state,getState:()=>state});
   const el=(tag,text,className)=>{const node=doc.createElement(tag);if(text)node.textContent=text;if(className)node.className=className;return node;};
   const isHome=()=>!runtime.inspect().game&&!!doc.querySelector('#wb-body > .wb-cardgrid');
   const refresh=async()=>{const generation=++refreshGeneration;try{const next=await readContentState(host);if(generation===refreshGeneration)state=next;}catch(error){runtime.notify(error.message);}render();};
-  const invoke=async(method,...args)=>{if(busy)return;busy=true;render();try{const response=parseNative(await host.NativeBridge[method](...args));if(response?.error)throw Error(response.error);await refresh();}catch(error){runtime.notify(error.message||'更新暂不可用，请稍后重试');}finally{busy=false;render();}};
+  const invoke=async(method,...args)=>{if(busy||!gameUpdatesAvailable(state,host))return;busy=true;render();try{const response=parseNative(await host.NativeBridge[method](...args));if(response?.error)throw Error(response.error);await refresh();}catch(error){runtime.notify(error.message||'更新暂不可用，请稍后重试');}finally{busy=false;render();}};
   function button(label,handler){const node=el('button',label,'wb-btn');node.type='button';node.onclick=handler;return node;}
   function render() {
+    if(state?.gameUpdatesEnabled===false){releasePull(true);panel?.remove();panel=null;return;}
     // Keep the touched node alive while the browser tracks this gesture. A
     // focus/native status refresh must not detach the touchstart target.
     if(!panel?.isConnected||pull)return;
-    const canUpdate=typeof host.NativeBridge?.checkGameUpdates==='function',job=state?.job,working=busy||busyStates.has(job?.state);
+    const canUpdate=gameUpdatesAvailable(state,host),job=state?.job,working=busy||busyStates.has(job?.state);
     panel.replaceChildren();
     const row=el('div',null,'wanba-update-row'),title=el('div');
     title.append(el('strong','游戏内容'),el('small',state?.active?'资源版本 '+state.active.snapshotVersion:'离线游戏已就绪'));
@@ -39,6 +46,7 @@ export function installGameUpdates({host=window,document:doc=document,runtime,in
     }
   }
   function mount() {
+    if(state?.gameUpdatesEnabled===false)return;
     const body=doc.querySelector('#wb-body'),grid=body?.querySelector(':scope > .wb-cardgrid');
     if(!grid)return;if(!panel?.isConnected){panel=el('section',null,'wanba-updates');panel.id='wanba-game-updates';body.insertBefore(panel,grid);render();}
   }
@@ -61,6 +69,7 @@ export function installGameUpdates({host=window,document:doc=document,runtime,in
     }
   }
   doc.addEventListener('touchstart',event=>{
+    if(!gameUpdatesAvailable(state,host))return;
     releasePull(true);const body=doc.querySelector('#wb-body');
     if(event.touches.length!==1||!isHome()||body.scrollTop>0||!body.contains(event.target)||event.target.closest('button,input,select,summary'))return;
     const status=panel?.querySelector('.wanba-update-status');
@@ -72,7 +81,7 @@ export function installGameUpdates({host=window,document:doc=document,runtime,in
   // A button tap must retain its original target until the synthesized click.
   // Rebuilding the panel here used to remove the rollback confirmation and let
   // the tap activate a game card beneath it on Android.
-  doc.addEventListener('touchend',()=>{if(!pull)return;const should=releasePull().dy>70;if(should&&typeof host.NativeBridge?.checkGameUpdates==='function')invoke('checkGameUpdates');else render();},{passive:true,capture:true});
+  doc.addEventListener('touchend',()=>{if(!pull)return;const should=releasePull().dy>70;if(should&&gameUpdatesAvailable(state,host))invoke('checkGameUpdates');else render();},{passive:true,capture:true});
   doc.addEventListener('touchcancel',()=>{if(!pull)return;releasePull();render();},{passive:true,capture:true});
   host.addEventListener('focus',refresh);doc.addEventListener('visibilitychange',()=>{if(!doc.hidden)refresh();});
   return Object.freeze({onEvent:()=>refresh(),refresh,getState:()=>state});

@@ -9758,13 +9758,15 @@ export async function initWanbanXiaowu(options = {}) {
 
   function renderStandaloneSettings() {
     const cfg = settings(), body = qs('#wb-body');
+    const allowDownloads = standaloneAppInfo.nativeSelfUpdateEnabled !== false;
+    const allowAppUpdater = standaloneAppInfo.appUpdaterEnabled === true;
     syncPopupModeClass();
     body.className = 'wb-body wb-settings-mode';
     body.innerHTML = '<div class="wanba-settings">'
       + '<section class="wb-panel"><div class="wb-section-title">外观与进度</div><div class="wb-field"><label for="wb-theme">界面主题</label><select class="wb-select" id="wb-theme">' + STANDALONE_THEMES.map(([id,name]) => '<option value="' + id + '">' + name + '</option>').join('') + '</select></div>'
       + '<div class="wb-field"><label><input type="checkbox" id="wb-remember-window">下次打开时回到上次游戏</label><p class="wb-muted">游戏进度会自动保存到本机。返回游戏时可选择继续；此开关只控制打开应用后的页面。</p></div></section>'
       + '<section class="wb-panel"><div class="wb-section-title">游戏备份</div><p>备份包含游戏进度、历史记录和主题设置。换机前请先导出；导入也支持玩伴小屋的旧版游戏备份。</p><div class="wb-actions"><button class="wb-btn primary" id="wb-export-data">导出备份</button><button class="wb-btn" id="wb-import-data">导入备份</button><input type="file" id="wb-import-file" accept="application/json,.json" hidden></div><p class="wb-muted" id="wb-import-export-status" role="status">数据保存在当前设备，卸载应用会删除本机存档。</p></section>'
-      + '<section class="wb-panel"><div class="wb-section-title">关于玩吧</div><p id="wanba-version">版本 ' + esc(standaloneAppInfo.appVersion) + ' · ' + esc(standaloneAppInfo.flavorLabel) + '</p><p id="wanba-engine">内核：' + esc(standaloneAppInfo.engineLabel) + (standaloneAppInfo.engineVersion ? ' ' + esc(standaloneAppInfo.engineVersion) : '') + (standaloneAppInfo.source === 'native' ? '' : '（浏览器检测）') + '</p>' + '<p>游戏基线 ' + esc(EXTENSION_VERSION) + ' · ' + Object.keys(GAME_META).length + ' 款游戏</p><p>单人游戏与人机挑战均可离线游玩。</p><div class="wb-actions"><button class="wb-btn" id="wanba-downloads">下载更新</button><button class="wb-btn" id="wanba-credits">开源致谢</button></div><p class="wb-muted">从下载页安装新版本即可保留存档。请使用同一来源的更新包，无需卸载。</p></section></div>';
+      + '<section class="wb-panel"><div class="wb-section-title">关于玩吧</div><p id="wanba-version">版本 ' + esc(standaloneAppInfo.appVersion) + ' · ' + esc(standaloneAppInfo.flavorLabel) + '</p><p id="wanba-engine">内核：' + esc(standaloneAppInfo.engineLabel) + (standaloneAppInfo.engineVersion ? ' ' + esc(standaloneAppInfo.engineVersion) : '') + (standaloneAppInfo.source === 'native' ? '' : '（浏览器检测）') + '</p>' + '<p>游戏基线 ' + esc(EXTENSION_VERSION) + ' · ' + Object.keys(GAME_META).length + ' 款游戏</p><p>单人游戏与人机挑战均可离线游玩。</p><div class="wb-actions">' + (allowDownloads ? '<button class="wb-btn" id="wanba-downloads">下载更新</button>' : '') + (allowAppUpdater ? '<button class="wb-btn" id="wanba-app-update">检查更新</button>' : '') + '<button class="wb-btn" id="wanba-credits">开源致谢</button></div>' + (allowDownloads ? '<p class="wb-muted">从下载页安装新版本即可保留存档。请使用同一来源的更新包，无需卸载。</p>' : '') + '</section></div>';
     qs('#wb-theme').value = cfg.theme;
     mountLanguagePicker(qs('.wanba-settings', body));
     mountPerformancePicker(qs('.wanba-settings', body));
@@ -9774,9 +9776,15 @@ export async function initWanbanXiaowu(options = {}) {
     qs('#wb-export-data').onclick = exportAllData;
     qs('#wb-import-data').onclick = () => qs('#wb-import-file').click();
     qs('#wb-import-file').onchange = importAllDataFromFile;
-    qs('#wanba-downloads').onclick = () => {
+    if (allowDownloads) qs('#wanba-downloads').onclick = () => {
       if (typeof window.NativeBridge?.openDownloads === 'function') window.NativeBridge.openDownloads();
       else window.open('https://github.com/JackLee992/USER_HOUSE_ANDROID/releases', '_blank', 'noopener,noreferrer');
+    };
+    if (allowAppUpdater) qs('#wanba-app-update').onclick = () => {
+      try {
+        const result = window.NativeBridge?.openAppUpdater?.();
+        result?.catch?.(error => toast(error.message || '更新暂不可用，请稍后重试'));
+      } catch (error) { toast(error.message || '更新暂不可用，请稍后重试'); }
     };
     qs('#wanba-credits').onclick = () => {
       const mask = getHostDocument().createElement('div'); mask.className = modalMaskClass(); mask.id = 'wanba-credits-mask';

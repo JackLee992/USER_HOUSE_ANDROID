@@ -67,7 +67,7 @@ export function createZumaGame(saved,env) {
     if(kind==='gameOver')add(text.finish,finish);
     if(kind==='pause'){add(muted?text.muted:text.sound,()=>{muted=!muted;try{win.localStorage.setItem('wanba_zuma_muted_v1',muted?'1':'0');}catch{}dialog('pause');},true);}
     if(kind!=='gameOver')add(text.exit,exit,true);
-    q('.zc-mask').hidden=false;dirty=true;
+    q('.zc-mask').hidden=false;skinUI();dirty=true;
   }
   function resumeRound(){q('.zc-mask').hidden=true;dialogKind='';lastUI='';pause(false);resize();save();}
   function exit(){save();env.exit?.();if(!destroyed)destroy();}

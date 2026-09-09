@@ -30,8 +30,10 @@ android {
         applicationId = "io.github.jacklee992.wanba"
         minSdk = 26
         targetSdk = 36
-        versionCode = 4
-        versionName = "1.2.1"
+        versionCode = providers.gradleProperty("wanbaVersionCode").orElse("6").get().toInt().also { require(it > 0) }
+        versionName = providers.gradleProperty("wanbaVersionName").orElse("1.2.2").get().also { require(it.matches(Regex("[0-9]+\\.[0-9]+\\.[0-9]+(?:-[A-Za-z0-9.]+)?"))) }
+        buildConfigField("boolean", "WANBA_GAME_UPDATES", providers.gradleProperty("wanbaGameUpdates").orElse("true").get().toBooleanStrict().toString())
+        buildConfigField("boolean", "WANBA_APP_UPDATER", providers.gradleProperty("wanbaAppUpdater").orElse("false").get().toBooleanStrict().toString())
     }
     flavorDimensions += "engine"
     productFlavors {
@@ -73,6 +75,9 @@ android {
 }
 
 dependencies {
+    if (providers.gradleProperty("wanbaAppUpdater").orElse("false").get().toBooleanStrict()) {
+        implementation(project(":app-updater"))
+    }
     "compatImplementation"("org.mozilla.geckoview:geckoview:155.0.20260903215306")
 }
 
