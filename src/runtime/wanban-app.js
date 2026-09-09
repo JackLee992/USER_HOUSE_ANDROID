@@ -303,7 +303,7 @@ export async function initWanbanXiaowu(options = {}) {
     memory: '翻开两张牌，图案相同就配对成功。全部配对完成后按步数和分数结算。',
     jump: '按住蓄力，松开跳跃。落到下一个平台得分，越靠近中心越好；没落上平台就结束。',
     plank: '长按屏幕或空格生成木板，松开后木板会倒下成为桥。木板必须刚好搭到下一根柱子上，太短或太长都会掉下去。',
-    sudoku: '每局会先选择难度。简单空30-35格；中等空43-48格；困难空53-58格。点击空格后输入1-9，可擦除、求助；填满但不正确时会高亮错误。',
+    sudoku: '四档难度的新题均检查唯一解。点击格子再填1-9，也可开启数字优先。笔记模式可标记候选数；支持自动清理、整步撤销与重做。提示先解释推理，再确认应用。暂停、退出和后台都会保存进度。',
     minesweeper: '每局会先选择难度：简单9×9、10雷；中等12×12、25雷；困难16×16、50雷。下方按钮可在“翻开”和“插旗”之间切换；数字格周围旗数等于数字时会按正式扫雷规则翻开周围未插旗格，旗插错会直接失败。',
     shuerte: '每局会先选择难度：简单4×4、中等5×5、困难6×6，并可选择“盲点”模式。数字会随机打散在方格里，点击1开始计时，并按1、2、3……一路点到最后一个数字。普通模式点对后数字会变淡；盲点模式点对后不变色，难度更高且有少量倍率加成。点错会扣分并出现红色反馈；下方道具可以提示下一个数字、短暂聚焦目标所在行列或重排未点击数字。完成全部数字后按难度基础分、连击、速度和道具使用结算。',
     uyangle: '三消叠牌小游戏。普通模式可通关；无尽模式会在剩余牌较少时自动追加下一批牌层，失败时统计已消除数量。点击没有被上层遮挡的卡牌放入下方7格槽，同图标凑满3张会消除；槽位超过7格且没有消除时失败。',
@@ -364,7 +364,8 @@ export async function initWanbanXiaowu(options = {}) {
     sudoku: [
       { id:'easy', title:'简单', sub:'空30-35个', multiplier:1, blanks:[30,35] },
       { id:'medium', title:'中等', sub:'空43-48个', multiplier:1.25, blanks:[43,48] },
-      { id:'hard', title:'困难', sub:'空53-58个', multiplier:1.55, blanks:[53,58] }
+      { id:'hard', title:'困难', sub:'空53-58个', multiplier:1.55, blanks:[53,58] },
+      { id:'expert', title:'专家', sub:'空59-61个', multiplier:1.8, blanks:[59,61] }
     ],
     game2048: [
       { id:'normal', title:'正常版', sub:'4×4，标准计分', multiplier:1, size:4 },
@@ -1150,9 +1151,9 @@ export async function initWanbanXiaowu(options = {}) {
     return (m ? parseInt(m[1], 10) : 0) + '分';
   }
   function sudokuRecordPoints(r) {
-    const resultScore = r?.result && typeof r.result === 'object' && r.result.outcome === 'score' ? Number(r.result.score || 0) : 0;
-    if (resultScore) return resultScore + '分';
-    const hints = extractNumber(r?.scoreText || '', /求助\s*(\d+)\s*次/, 0);
+    const resultScore = r?.result && typeof r.result === 'object' && r.result.outcome === 'score' ? Number(r.result.score) : NaN;
+    if (Number.isFinite(resultScore)) return Math.max(0,resultScore) + '分';
+    const hints = r?.details?.hints ?? extractNumber(r?.scoreText || '', /求助\s*(\d+)\s*次/, 0);
     return sudokuScore(Number(r?.durationMs || 0), hints) + '分';
   }
   function userOutcomeText(result) {
@@ -1208,7 +1209,7 @@ export async function initWanbanXiaowu(options = {}) {
     if (game === 'territory') return base.concat([userOutcomeText(r.result), recordRoundCount(r), territoryUserCells(r), recordCompanionDisplay(r)]);
     if (game === 'reversi') return base.concat([userOutcomeText(r.result), recordRoundCount(r), territoryUserCells(r), recordCompanionDisplay(r)]);
     if (game === 'guessnumber') return base.concat([userOutcomeText(r.result), guessNumberTries(r), recordCompanionDisplay(r)]);
-    if (game === 'sudoku') return base.concat([sudokuRecordPoints(r), String(extractNumber(r?.scoreText || '', /求助\s*(\d+)\s*次/, 0)), recordCompanionDisplay(r)]);
+    if (game === 'sudoku') return base.concat([sudokuRecordPoints(r), String(r?.details?.hints ?? extractNumber(r?.scoreText || '', /求助\s*(\d+)\s*次/, 0)), recordCompanionDisplay(r)]);
     if (game === 'minesweeper') return base.concat([minesweeperOutcomeText(r), singleRecordPoints(r), String(extractNumber(r?.scoreText || '', /排对\s*(\d+)\s*个雷/, 0)), recordCompanionDisplay(r)]);
     if (game === 'shuerte') return base.concat([singleRecordPoints(r), String(r?.details?.size || extractNumber(r?.scoreText || '', /(\d+)×\d+/, 0)), String(r?.details?.wrong || extractNumber(r?.scoreText || '', /错误\s*(\d+)\s*次/, 0)), String(r?.details?.maxCombo || 0), recordCompanionDisplay(r)]);
     if (game === 'uyangle') return base.concat([singleRecordPoints(r), String(extractNumber(r?.scoreText || '', /打乱\s*(\d+)\s*次/, 0)), String(extractNumber(r?.scoreText || '', /移出\s*(\d+)\s*次/, 0)), recordCompanionDisplay(r)]);

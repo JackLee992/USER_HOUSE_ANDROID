@@ -15,18 +15,18 @@ function gpu({failCompile=0,failLink=0}={}) {
     VERTEX_SHADER:1,FRAGMENT_SHADER:2,COMPILE_STATUS:3,LINK_STATUS:4,ARRAY_BUFFER:5,FLOAT:6,
     DYNAMIC_DRAW:7,TRIANGLES:8,ONE:9,ONE_MINUS_SRC_ALPHA:10,TEXTURE_2D:11,TEXTURE_MIN_FILTER:12,
     TEXTURE_MAG_FILTER:13,TEXTURE_WRAP_S:14,TEXTURE_WRAP_T:15,LINEAR:16,CLAMP_TO_EDGE:17,
-    BLEND:18,COLOR_BUFFER_BIT:19,UNPACK_PREMULTIPLY_ALPHA_WEBGL:20,RGBA:21,UNSIGNED_BYTE:22,NO_ERROR:0,
+    BLEND:18,COLOR_BUFFER_BIT:19,UNPACK_PREMULTIPLY_ALPHA_WEBGL:20,RGBA:21,UNSIGNED_BYTE:22,TEXTURE0:23,NO_ERROR:0,
     createShader:()=>make('shader'),shaderSource(){},compileShader(s){s.ok=++compileCount!==failCompile;},
     getShaderParameter:s=>s.ok,deleteShader:remove,
     createProgram:()=>make('program'),attachShader(){},linkProgram(p){p.ok=++linkCount!==failLink;},
     getProgramParameter:p=>p.ok,deleteProgram:remove,
     createBuffer:()=>make('buffer'),deleteBuffer:remove,bindBuffer(_target,value){buffer=value;},
     bufferData(_target,data){assert.ok(buffer);uploads.push({buffer,data:Array.from(data)});},
-    createTexture:()=>make('texture'),deleteTexture:remove,bindTexture(){},texParameteri(){},
+    createTexture:()=>make('texture'),deleteTexture:remove,activeTexture(){},bindTexture(){},texParameteri(){},
     enable(){},clearColor(){},getUniformLocation(p,name){
       assert.ok(live.has(p)&&p.ok,'uniform lookup must not use a failed or deleted program');return {p,name};
     },pixelStorei(){},texImage2D(){},getError:()=>0,
-    viewport(){},clear(){clears++;},useProgram(value){program=value;},uniform2f(){},uniform1f(){},
+    viewport(){},clear(){clears++;},useProgram(value){program=value;},uniform2f(){},uniform1f(){},uniform1i(){},
     getAttribLocation:(_p,name)=>({aPosition:0,aLocal:1,aRect:2,aColor:2,aSpin:3,aParams:3}[name]),
     enableVertexAttribArray(){},disableVertexAttribArray(){},vertexAttribPointer(){},
     blendFunc(...value){blend=value;},drawArrays(_mode,first,count){draws.push({program,buffer,first,count,blend});},
@@ -73,7 +73,7 @@ test('large batches reuse GPU objects and a later effect-free frame clears old e
 test('context loss hides the GPU layer, notifies the host and stops subsequent GL drawing',()=>{
   const g=gpu();g.renderer.setAtlas({});let prevented=false;
   g.listeners.get('webglcontextlost')({preventDefault(){prevented=true;}});
-  assert.equal(prevented,true);assert.equal(g.fallbacks,1);assert.equal(g.canvas.hidden,true);assert.equal(g.renderer.ready,false);
+  assert.equal(prevented,false,'permanent fallback does not permit context restoration');assert.equal(g.fallbacks,1);assert.equal(g.canvas.hidden,true);assert.equal(g.renderer.ready,false);
   g.renderer.setAtlas({});assert.equal(g.renderer.draw([ball],900,1100,1,1024,1024,[effect]),false);
   assert.equal(g.draws.length,0);g.renderer.destroy();assert.equal(g.listeners.size,0);
 });

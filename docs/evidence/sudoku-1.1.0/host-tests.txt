@@ -1,0 +1,10 @@
+ cannot take precedence (0.429291ms)
+✔ a mid-consumption death preserves full animation state while its legacy projection stays safe (2.931709ms)
+ℹ tests 311
+ℹ suites 0
+ℹ pass 311
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2669.590667

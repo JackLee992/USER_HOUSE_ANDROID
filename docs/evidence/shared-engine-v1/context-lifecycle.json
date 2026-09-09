@@ -1,0 +1,94 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "mode": "normal",
+      "dimensions": {
+        "mode": "normal",
+        "portalMode": "normal",
+        "nativeDpr": 3,
+        "width": 780,
+        "height": 953,
+        "cssWidth": 390,
+        "cssHeight": 476.65625,
+        "hidden": false
+      },
+      "renderer": "webgl",
+      "gpu": {
+        "created": {
+          "Shader": 4,
+          "Program": 2,
+          "Buffer": 2,
+          "Texture": 1
+        },
+        "deleted": {
+          "Shader": 4
+        },
+        "draws": 51,
+        "alphaDraws": 39,
+        "additiveDraws": 12,
+        "lastFrameBallImages": 2,
+        "glErrors": [],
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)"
+      },
+      "shots": 1,
+      "contextLoss": {
+        "passed": true,
+        "renderer": "canvas2d",
+        "shotsBefore": 1,
+        "shotsAfter": 2,
+        "gpuDrawsStoppedAt": 51,
+        "cachedBallImagesBefore": 2,
+        "cachedBallImagesAfter": 31,
+        "lossDefaultPrevented": false,
+        "contextRemainsLost": true
+      }
+    },
+    {
+      "mode": "game",
+      "dimensions": {
+        "mode": "game",
+        "portalMode": "game",
+        "nativeDpr": 3,
+        "width": 1170,
+        "height": 1430,
+        "cssWidth": 390,
+        "cssHeight": 476.65625,
+        "hidden": false
+      },
+      "renderer": "webgl",
+      "gpu": {
+        "created": {
+          "Shader": 4,
+          "Program": 2,
+          "Buffer": 2,
+          "Texture": 1
+        },
+        "deleted": {
+          "Shader": 4
+        },
+        "draws": 56,
+        "alphaDraws": 43,
+        "additiveDraws": 13,
+        "lastFrameBallImages": 2,
+        "glErrors": [],
+        "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M5 Pro, Unspecified Version)"
+      },
+      "shots": 1,
+      "contextLoss": {
+        "passed": true,
+        "renderer": "canvas2d",
+        "shotsBefore": 1,
+        "shotsAfter": 2,
+        "gpuDrawsStoppedAt": 56,
+        "cachedBallImagesBefore": 2,
+        "cachedBallImagesAfter": 31,
+        "lossDefaultPrevented": false,
+        "contextRemainsLost": true
+      }
+    }
+  ],
+  "errors": [],
+  "browserLog": [],
+  "limitation": "Headless desktop Chrome API and rendering verification; no device battery/FPS claim. GPU counters are draw-call counts, not presented frames."
+}

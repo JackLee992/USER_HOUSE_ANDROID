@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "version": "1.0.2",
+  "version": "1.0.3",
   "locale": "en",
   "brand": "Nookcade",
   "strings": {
@@ -354,7 +354,9 @@
     "已缓存资源校验失败": "Cached resource verification failed.",
     "安装已停止": "Installation stopped.",
     "内容超过大小限制": "Content exceeds the size limit.",
-    "继续下拉以刷新": "Pull down to refresh"
+    "继续下拉以刷新": "Pull down to refresh",
+    "专家": "Expert",
+    "空59-61个": "59–61 empty cells"
   },
   "templates": {
     "score": "Round: {value}",
@@ -445,7 +447,7 @@
     },
     "sudoku": {
       "title": "Sudoku",
-      "rules": "Choose a difficulty, select an empty square, and enter 1–9. Each row, column and 3×3 box needs each number once. Erase and hint tools are available; mistakes are highlighted when you fill the board."
+      "rules": "Use 1–9 once in each row, column and 3×3 box. Choose a cell or a number first. Keep 3×3 pencil notes and undo or redo edits. Read a hint before applying it. Options include candidate filling, note cleanup and solution checking. New puzzles have a unique solution; four difficulty levels are based on blank counts. Pause and keyboard controls are available."
     },
     "minesweeper": {
       "title": "Minesweeper",

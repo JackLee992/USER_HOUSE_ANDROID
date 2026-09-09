@@ -1,7 +1,9 @@
 // Analytic 3D spheres + batched additive effects, without a framework or postprocessing targets.
 // Two draw calls for the entire chain, projectile, trails, sparks and shockwaves.
+import { createWebGLSurface } from '../../shared/webgl-surface.js';
+
 export function createMarbleGL(canvas,onFallback=()=>{}) {
-  let gl,ballProgram,fxProgram,ballBuffer,fxBuffer,texture,lost=false,ready=false;
+  let ready=false;
   const vertex=`attribute vec2 aPosition;attribute vec2 aLocal;attribute vec4 aRect;attribute float aSpin;
     uniform vec2 uSize;varying vec2 vLocal;varying vec4 vRect;varying float vSpin;
     void main(){vLocal=aLocal;vRect=aRect;vSpin=aSpin;gl_Position=vec4(aPosition/uSize*vec2(2.,-2.)+vec2(-1.,1.),0.,1.);}`;
@@ -28,34 +30,30 @@ export function createMarbleGL(canvas,onFallback=()=>{}) {
       else if(vParams.x>1.5){float rays=pow(abs(cos(atan(vLocal.y,vLocal.x)*4.+vParams.y*3.)),12.);light=exp(-d*d*15.)+rays*.2*(1.-d);}
       else{light=exp(-d*d*8.)+.55*exp(-d*d*60.);}
       float a=light*vColor.a;gl_FragColor=vec4(vColor.rgb*a,a*.58);}`;
-  const onLost=event=>{event.preventDefault();lost=true;ready=false;canvas.hidden=true;onFallback();};canvas.addEventListener('webglcontextlost',onLost);
-  function program(vsSource,fsSource){
-    const compile=(type,source)=>{const s=gl.createShader(type);gl.shaderSource(s,source);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS)){gl.deleteShader(s);throw Error('Shader unavailable');}return s;};
-    let vs,fs,p;try{vs=compile(gl.VERTEX_SHADER,vsSource);fs=compile(gl.FRAGMENT_SHADER,fsSource);p=gl.createProgram();gl.attachShader(p,vs);gl.attachShader(p,fs);gl.linkProgram(p);if(!gl.getProgramParameter(p,gl.LINK_STATUS))throw Error('WebGL link unavailable');return p;}catch(error){if(p)gl.deleteProgram(p);throw error;}finally{if(vs)gl.deleteShader(vs);if(fs)gl.deleteShader(fs);}
-  }
-  try{
-    gl=canvas.getContext('webgl',{alpha:true,premultipliedAlpha:true,antialias:false,depth:false,stencil:false,preserveDrawingBuffer:false,powerPreference:'low-power'});if(!gl)throw Error('WebGL unavailable');
-    ballProgram=program(vertex,fragment);fxProgram=program(fxVertex,fxFragment);ballBuffer=gl.createBuffer();fxBuffer=gl.createBuffer();
-    texture=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,texture);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);gl.enable(gl.BLEND);gl.clearColor(0,0,0,0);
-  }catch{if(gl){if(texture)gl.deleteTexture(texture);if(ballBuffer)gl.deleteBuffer(ballBuffer);if(fxBuffer)gl.deleteBuffer(fxBuffer);if(ballProgram)gl.deleteProgram(ballProgram);if(fxProgram)gl.deleteProgram(fxProgram);gl.getExtension('WEBGL_lose_context')?.loseContext();}lost=true;canvas.hidden=true;onFallback();}
-  const loc=(p,n)=>!lost&&p&&gl.getUniformLocation(p,n),ballSize=loc(ballProgram,'uSize'),ballTime=loc(ballProgram,'uTime'),fxSize=loc(fxProgram,'uSize');
+  const surface=createWebGLSurface(canvas,{onFallback:()=>{ready=false;onFallback();}});
+  const ballBatch=surface.createBatch({vertex,fragment,
+    attributes:[['aPosition',2],['aLocal',2],['aRect',4],['aSpin',1]],
+    uniforms:{uSize:'vec2',uTime:'float',uAtlas:'sampler2D'},blend:'alpha'});
+  const fxBatch=surface.createBatch({vertex:fxVertex,fragment:fxFragment,
+    attributes:[['aPosition',2],['aLocal',2],['aColor',4],['aParams',2]],
+    uniforms:{uSize:'vec2'},blend:'additive'});
+  const texture=surface.createTexture();
   let ballVertices=new Float32Array(128*54),fxVertices=new Float32Array(220*60);
   const corners=[[-1,-1],[1,-1],[-1,1],[-1,1],[1,-1],[1,1]];
-  function attributes(p,fields,stride){let offset=0;for(const [name,size]of fields){const a=gl.getAttribLocation(p,name);if(a>=0){gl.enableVertexAttribArray(a);gl.vertexAttribPointer(a,size,gl.FLOAT,false,stride*4,offset*4);}offset+=size;}}
   return {
-    get ready(){return ready&&!lost;},
-    setAtlas(image){if(lost||!image)return;try{gl.bindTexture(gl.TEXTURE_2D,texture);gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL,false);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,image);ready=gl.getError()===gl.NO_ERROR;canvas.hidden=!ready;}catch{ready=false;canvas.hidden=true;onFallback();}},
+    get ready(){return ready&&surface.available;},
+    setAtlas(image){if(!surface.available||!image)return;ready=surface.uploadTexture(texture,image);canvas.hidden=!ready;},
     draw(balls,width,height,time,atlasWidth,atlasHeight,effects=[]){
-      if(!ready||lost)return false;const required=balls.length*54;if(ballVertices.length<required)ballVertices=new Float32Array(required*2);let p=0;
+      if(!ready||!surface.available)return false;const required=balls.length*54;if(ballVertices.length<required)ballVertices=new Float32Array(required*2);let p=0;
       for(const {x,y,r,rect,spin=0}of balls){for(const [dx,dy]of corners){ballVertices[p++]=x+dx*r;ballVertices[p++]=y+dy*r;ballVertices[p++]=dx;ballVertices[p++]=dy;ballVertices[p++]=rect[0]/atlasWidth;ballVertices[p++]=rect[1]/atlasHeight;ballVertices[p++]=rect[2]/atlasWidth;ballVertices[p++]=rect[3]/atlasHeight;ballVertices[p++]=spin;}}
-      gl.viewport(0,0,canvas.width,canvas.height);gl.clear(gl.COLOR_BUFFER_BIT);gl.useProgram(ballProgram);gl.uniform2f(ballSize,width,height);gl.uniform1f(ballTime,time);gl.bindBuffer(gl.ARRAY_BUFFER,ballBuffer);attributes(ballProgram,[['aPosition',2],['aLocal',2],['aRect',4],['aSpin',1]],9);gl.bufferData(gl.ARRAY_BUFFER,ballVertices.subarray(0,p),gl.DYNAMIC_DRAW);gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);gl.drawArrays(gl.TRIANGLES,0,balls.length*6);
+      if(!surface.beginFrame()||!surface.drawBatch(ballBatch,{vertices:ballVertices.subarray(0,p),count:balls.length*6,uniforms:{uSize:[width,height],uTime:time},textures:{uAtlas:texture}}))return false;
       if(effects.length){
         if(fxVertices.length<effects.length*60)fxVertices=new Float32Array(effects.length*120);p=0;
         for(const {x,y,r,kind=0,alpha=1,color=[1,.8,.4],stretch=1,angle=0,phase=0}of effects){const c=Math.cos(angle),s=Math.sin(angle);for(const [dx,dy]of corners){fxVertices[p++]=x+(dx*c*stretch-dy*s)*r;fxVertices[p++]=y+(dx*s*stretch+dy*c)*r;fxVertices[p++]=dx;fxVertices[p++]=dy;fxVertices[p++]=color[0];fxVertices[p++]=color[1];fxVertices[p++]=color[2];fxVertices[p++]=alpha;fxVertices[p++]=kind;fxVertices[p++]=phase;}}
-        gl.useProgram(fxProgram);gl.uniform2f(fxSize,width,height);gl.bindBuffer(gl.ARRAY_BUFFER,fxBuffer);attributes(fxProgram,[['aPosition',2],['aLocal',2],['aColor',4],['aParams',2]],10);gl.bufferData(gl.ARRAY_BUFFER,fxVertices.subarray(0,p),gl.DYNAMIC_DRAW);gl.blendFunc(gl.ONE,gl.ONE);gl.drawArrays(gl.TRIANGLES,0,effects.length*6);
+        if(!surface.drawBatch(fxBatch,{vertices:fxVertices.subarray(0,p),count:effects.length*6,uniforms:{uSize:[width,height]}}))return false;
       }
       return true;
     },
-    destroy(){canvas.removeEventListener('webglcontextlost',onLost);if(gl&&!lost){gl.deleteTexture(texture);gl.deleteBuffer(ballBuffer);gl.deleteBuffer(fxBuffer);gl.deleteProgram(ballProgram);gl.deleteProgram(fxProgram);gl.getExtension('WEBGL_lose_context')?.loseContext();}ready=false;lost=true;},
+    destroy(){ready=false;surface.destroy();},
   };
 }

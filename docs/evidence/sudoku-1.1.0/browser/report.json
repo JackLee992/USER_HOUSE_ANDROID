@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "checks": [
+    "Given cells immutable; 3x3 notes, fill, erase and atomic undo/redo use real touch input",
+    "Auto candidates one undo step; explained hint preview charges once, repeated preview/apply do not double charge",
+    "Board DOM nodes retained; idle board renders zero frames while clock advances",
+    "Pause hides board, freezes time and blocks keyboard; settings and number-first input work; errors have non-color indicators",
+    "Cold page reload restores puzzle, grid, notes, settings and undo/redo history",
+    "Portrait390x844, narrow320x640 and landscape844x390 controls fully visible; rotation preserves state",
+    {
+      "check": "Natural completed board records exactly once with nonzero structured score and hint count",
+      "score": 2687,
+      "hints": 1
+    },
+    "All five languages, expert unique puzzles and night theme render without overflow"
+  ],
+  "errors": []
+}

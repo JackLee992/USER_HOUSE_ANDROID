@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "packages": {
-    "core": "1.1.2",
+    "core": "1.2.0",
     "art.shared": "1.0.1",
     "art.blackjack": "1.0.1",
     "art.bombnumber": "1.0.1",
@@ -40,11 +40,11 @@
     "art.westernchess": "1.0.1",
     "art.wordguess": "1.0.1",
     "art.zuma": "1.1.0",
-    "i18n.zh-CN": "1.0.2",
-    "i18n.zh-TW": "1.0.2",
-    "i18n.en": "1.0.2",
-    "i18n.ja": "1.0.2",
-    "i18n.ko": "1.0.2"
+    "i18n.zh-CN": "1.0.3",
+    "i18n.zh-TW": "1.0.3",
+    "i18n.en": "1.0.3",
+    "i18n.ja": "1.0.3",
+    "i18n.ko": "1.0.3"
   },
   "saveSchemas": {
     "blackjack": 1,
