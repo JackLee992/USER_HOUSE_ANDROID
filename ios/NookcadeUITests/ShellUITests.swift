@@ -4,6 +4,12 @@ final class ShellUITests: XCTestCase {
     func capture(_ name: String, app: XCUIApplication) {
         let image = XCTAttachment(screenshot: XCUIScreen.main.screenshot()); image.name = name; image.lifetime = .keepAlways; add(image)
     }
+    func assertNoTextSelectionMenu(_ app: XCUIApplication) {
+        XCTAssertEqual(app.menus.count, 0, "Gameplay long presses must not open an edit menu")
+        for title in ["Copy", "Select All", "Look Up", "Translate", "复制", "拷贝", "全选", "查询", "翻译"] {
+            XCTAssertFalse(app.buttons[title].exists, "Unexpected selection action: " + title)
+        }
+    }
     func assertTabGeometry(_ app: XCUIApplication) {
         let buttons = ["native-games-tab", "native-my-tab", "native-settings-tab"].map { app.buttons[$0] }
         let frames = buttons.map(\.frame)
@@ -101,7 +107,8 @@ final class ShellUITests: XCTestCase {
         XCTAssertTrue(endless.waitForExistence(timeout: 15)); capture("snake-mode-select", app: app); endless.tap()
         let boost = app.webViews.buttons["按住加速"]
         XCTAssertTrue(boost.waitForExistence(timeout: 15)); capture("snake-arena-start", app: app)
-        boost.press(forDuration: 1)
+        boost.press(forDuration: 1.2)
+        assertNoTextSelectionMenu(app); capture("snake-boost-long-press-no-menu", app: app)
         let stick = app.webViews.otherElements["方向摇杆"]
         XCTAssertTrue(stick.exists)
         let origin = stick.coordinate(withNormalizedOffset: CGVector(dx: 0.35, dy: 0.75))
@@ -118,7 +125,11 @@ final class ShellUITests: XCTestCase {
         XCTAssertTrue(duel.waitForExistence(timeout: 15)); capture("tetris-mode-select", app: app); duel.tap()
         let hard = app.webViews.buttons["直接落下"]
         XCTAssertTrue(hard.waitForExistence(timeout: 15))
-        app.webViews.buttons["左移"].tap(); app.webViews.buttons["旋转"].tap(); app.webViews.buttons["暂存"].tap(); hard.tap()
+        app.webViews.buttons["左移"].press(forDuration: 1.2)
+        assertNoTextSelectionMenu(app); capture("tetris-left-long-press-no-menu", app: app)
+        app.webViews.buttons["软降"].press(forDuration: 1.2)
+        assertNoTextSelectionMenu(app); capture("tetris-soft-long-press-no-menu", app: app)
+        app.webViews.buttons["旋转"].tap(); app.webViews.buttons["暂存"].tap(); hard.tap()
         capture("tetris-duel-controls", app: app)
         XCUIDevice.shared.orientation = .landscapeLeft; sleep(1); capture("tetris-duel-landscape", app: app)
         app.webViews.buttons["暂停"].tap(); capture("tetris-duel-paused", app: app)
@@ -191,5 +202,24 @@ final class ShellUITests: XCTestCase {
         XCTAssertTrue(save.waitForExistence(timeout: 10)); save.tap()
         XCTAssertTrue(app.cells["setting-1-0"].waitForExistence(timeout: 10)); capture("backup-restored-and-exported", app: app)
         app.buttons["native-games-tab"].tap(); capture("final-native-home", app: app)
+    }
+    func testBubbleBackgroundAndColdContinue() throws {
+        continueAfterFailure = false
+        let app = XCUIApplication(); app.launch()
+        XCTAssertTrue(app.buttons["native-games-tab"].waitForExistence(timeout: 30))
+        startGame("paopao", app: app)
+        XCTAssertTrue(app.webViews.buttons["切换当前泡泡和下一个泡泡"].waitForExistence(timeout: 15))
+        app.webViews.firstMatch.coordinate(withNormalizedOffset: CGVector(dx: 0.48, dy: 0.43)).tap(); sleep(1)
+        XCUIDevice.shared.press(.home); sleep(2); app.activate()
+        XCTAssertTrue(app.webViews.buttons["继续"].waitForExistence(timeout: 10)); capture("bubble-background-paused", app: app)
+        app.webViews.buttons["返回"].tap(); app.terminate(); app.launch()
+        XCTAssertTrue(app.buttons["native-games-tab"].waitForExistence(timeout: 30)); app.buttons["native-games-tab"].tap()
+        let launch = app.buttons["launch-paopao"]
+        for _ in 0..<10 { if launch.exists && launch.isHittable { break }; app.collectionViews["native-catalog"].swipeUp() }
+        launch.tap()
+        let resume = app.webViews.buttons["继续上次"]
+        XCTAssertTrue(resume.waitForExistence(timeout: 10)); capture("bubble-cold-continue-prompt", app: app); resume.tap()
+        XCTAssertTrue(app.webViews.buttons["切换当前泡泡和下一个泡泡"].waitForExistence(timeout: 15)); sleep(1)
+        app.webViews.buttons["暂停"].tap(); capture("bubble-cold-continued", app: app); app.webViews.buttons["返回"].tap()
     }
 }

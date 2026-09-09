@@ -16,6 +16,8 @@ xcrun simctl list devices available
 IOS_DESTINATION='platform=iOS Simulator,id=<本机模拟器 UUID>' scripts/build-ios.sh test
 ```
 
+UI 用例会真实收藏、排序和玩游戏；请在专用测试模拟器运行，先经设置 → 导出备份保存基线。恢复用例 `testRestoreChosenBackupAndExport` 仅在指定 `TEST_RUNNER_IOS_QA_BACKUP_NAME`（原始导出文件名的唯一部分）时执行，通过系统 Files 选择该文件并确认导入，不直接写游戏存档。
+
 Debug Simulator 应用输出为 `ios/DerivedData/Build/Products/Debug-iphonesimulator/Nookcade.app`。模拟器构建使用 `CODE_SIGNING_ALLOWED=NO`，不需要付费开发者账号。这是模拟器 `.app`，不是可安装到普通 iPhone 的 IPA；正式签名、TestFlight 和 App Store 需要另走分发流程。
 
 `scripts/prepare-ios-assets.mjs` 复用已有资源收集器，拷贝游戏、ES modules、语言包、图册、WASM/Worker、完整弹球数据和许可证至 `ios/build/www`，生成 iOS 内置版本元数据。它不改变原始 Web 源，也不从网络拉取游戏。`scripts/prepare-ios-icon.swift` 验证既有 imagegen 品牌源每个像素均不透明，再用 Apple 图像框架生成 1024×1024 RGB AppIcon；不重绘、覆盖原图或保留透明通道。
@@ -54,6 +56,17 @@ iOS 的 `gameUpdatesEnabled`、`appUpdaterEnabled`、`nativeSelfUpdateEnabled` �
 - Simulator Debug 完整构建、安装、启动已经成功；9 项 JS app-info 回归通过。
 - `LoopbackTests` 已通过合法请求、模块/WASM MIME、Range 边界、跨来源、路径穿越与符号链接拒绝检查。
 - `OfflineGamesTests` 在实际 WKWebView 内启动全部 37 款游戏并暂停/保存通过，弹球 iframe 的完整 WASM 引擎报告 ready；`isSecureContext`、WebAssembly 与 WebGL context 创建均为 true，捕获的未处理 JS error 为空。此项是模拟器内程序驱动的集成检查，不等同每款游戏都有真人触控或性能实测。
-- 原生 TabBar 的冷启动未点击截图已实际查看，三个标题恢复同基线与居中；五语、横竖屏、拖动/收藏、正常 Files 往返和代表游戏真实触控仍在补充验收，未完成项不能写成通过。
+- 原生 TabBar 冷启动未点击、逐项点击、五种语言、横竖屏均经 XCTest 和实际截图核对。Games → My → Settings 真实长按横拖成功，保留系统透明玻璃效果；首页原生下拉刷新、收藏两项、卡片拖动排序及冷启动持久化通过。横屏证据使用 `XCUIScreen` 截取整个屏幕，避免 `XCUIApplication.screenshot()` 在旋转时错误裁剪。
+- 新贪吃蛇竞技场实际长按加速、摇杆拖动、暂停通过；另一次试跑发生真实碰撞结算。新俄罗斯方块 AI 对战实际左移、旋转、暂存、硬降、横屏和暂停通过。此项不代表所有新玩法都已逐项完成 iOS 通关验收。
+- 最后加入限定游戏区域的文字选择/触摸菜单修复后，重新编译并复跑代表项：Snake 加速、Tetris 左移和软降各真实长按 1.2 秒，原生菜单断言通过，实际截图没有选择菜单。Snake 首次该轮长按后碰撞结算，另一次复跑捕获仍在运行的画面并正常暂停；未用结算页替代持续游戏画面的视觉核对。
+- 泡泡龙换球、一次发射、暂停；祖玛换球、一次发射、暂停、保存退出；完整弹球蓄力和左右挡板触控、暂停均已实际执行并截图。弹球完整 WASM ready 由独立 WK 集成测试确认；未测实体设备 FPS、耗电、长时间稳定性，也未声称三款完整通关。
+- 泡泡另完成真实 HOME 后台 → 回前台自动保持暂停、保存退出 → 结束进程 → 冷启动 → “继续上次” → 棋盘恢复，再暂停保存；整个流程没有通过 DOM click 或直接写存档代替触控。
+- 正常系统 Files 导出、选择文件后取消导入、再次确认导入通过。所有测试结束后正常导入原始备份再导出，`settings / scores / progress / records / sudokuState` 五项解析后逐项完全一致；公开证据仅含校验摘要，原始 JSON 仅留 `.local`。随后返回中文竖屏首页；该导航允许更新 `lastTab`。
 
-Swift/XCTest 源码和构建命令留在 `ios`；`.xcresult`、原始日志及私有备份在 `.local`。最后打包前必须重新执行资源收集器，纳入并行开发完成后的最终游戏源，并记录新的摘要。
+最后一次资源收集与 Simulator 编译包含模式选择页布局和长按菜单修复，共 240 文件、61,570,566 字节；资源 SHA-256 为 `a3aefab1fef0db71ca2d1d9f6ffc47c1102992117eda3f55a7e66b5d66be123d`，实际 `.app` 内摘要已核对一致。37 款冒烟在最后模式页 CSS 调整前通过，最后包又完成 Snake/Tetris 长按代表项、Files 原始备份恢复与五项导出深比较、首页启动；不把两者写成一次未发生的全量运行。实际截图、37 款结果及恢复摘要见 [iOS 验收证据](../ios/evidence/README.md)。
+
+## 隐私声明核对
+
+本版 `PrivacyInfo.xcprivacy` 声明不跟踪、不收集用户数据，required-reason API 数组为空。2026-09-09 对照 Apple [NSPrivacyAccessedAPIType 官方列表](https://developer.apple.com/documentation/bundleresources/app-privacy-configuration/nsprivacyaccessedapitypes/nsprivacyaccessedapitype)：当前宿主只使用 `URL.resourceValues` 的 `fileSizeKey` / `isRegularFileKey` 做大小与普通文件检查，没有文件时间键、`stat/getattrlist` 族、磁盘容量、系统启动时间或 `UserDefaults` 调用；实际 Debug dylib 未导入上述敏感 POSIX/启动时间符号。因此不为尚未使用的 API 伪填理由。系统 WebKit 的持久存储不等于宿主调用 UserDefaults。后续增加 SDK、文件元数据、磁盘空间或启动计时功能时应重新核对；仍需对正式签名归档做 Xcode 隐私报告和 App Store Connect 校验，本轮未完成商店验证。
+
+Swift/XCTest 源码和构建命令留在 `ios`；`.xcresult`、原始日志及私有备份在 `.local`。未来打包前仍须重新执行资源收集器，并记录新的摘要。未做实体 iPhone、iPad、iOS 17/18 runtime、TestFlight 或 App Store 实测。

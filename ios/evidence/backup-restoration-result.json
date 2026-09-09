@@ -1,0 +1,32 @@
+{
+  "normalFilesExport": true,
+  "normalFilesImport": true,
+  "afterFinalLongPressRegression": true,
+  "items": [
+    {
+      "key": "wanbanXiaowu_settings_v1",
+      "unchanged": true,
+      "sha256": "0e165ee5ae881f9d4e70532a78d001d3b9cf3b8dec5f43b634f660fb4e59af77"
+    },
+    {
+      "key": "wanbanXiaowu_scores_v1",
+      "unchanged": true,
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "key": "wanbanXiaowu_progress_v1",
+      "unchanged": true,
+      "sha256": "b425b58abc92ecfb496fa703ab08ef7a8978c1bf0e2cb1aeee9c0e47225cf808"
+    },
+    {
+      "key": "wanbanXiaowu_records_v1",
+      "unchanged": true,
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "key": "wanbanXiaowu_sudokuState_v1",
+      "unchanged": true,
+      "sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    }
+  ]
+}
