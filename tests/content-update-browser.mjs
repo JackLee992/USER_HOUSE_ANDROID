@@ -13,21 +13,28 @@ const evaluate=async expression=>{const r=await send('Runtime.evaluate',{express
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 const until=async expression=>{for(let i=0;i<150;i++){if(await evaluate(expression))return;await wait(100);}throw Error('Timeout '+expression);};
 const click=s=>evaluate(`document.querySelector(${JSON.stringify(s)}).click()`);
-const out='docs/evidence/android-1.2/update-web';mkdirSync(out,{recursive:true});
+const out=process.env.QA_OUT||'docs/evidence/android-1.2/update-web';mkdirSync(out,{recursive:true});
 const bridge=`(()=>{
 localStorage.setItem('wanba_locale_v1','zh-CN');
 window.qaCalls=[];
+window.qaAppReady=false;window.qaFocusCount=0;window.addEventListener('wanba-app-ready',()=>{qaAppReady=true;});window.addEventListener('focus',()=>{qaFocusCount++;});
 const active={snapshotId:'old',snapshotVersion:'1.0.0',runtimeApi:1,packages:[{id:'core',version:'1.0.0',sha256:'core'},{id:'game.match3',version:'1.0.0',sha256:'old-game',size:100}],games:{match3:{version:'1.0.0',saveSchema:3,art:[]}}};
 const candidate={...active,snapshotId:'new',snapshotVersion:'1.0.1',packages:[active.packages[0],{id:'game.match3',version:'1.0.1',sha256:'new-game',size:250}],games:{match3:{version:'1.0.1',saveSchema:3,art:[]}}};
-window.qaState={activeSnapshotId:'old',active,candidate:null,previousSnapshotId:null,job:null,bootHealthy:false};
+window.qaState={activeSnapshotId:'old',active,candidate:null,previousSnapshotId:null,job:{state:'activating',message:'正在激活游戏内容'},bootHealthy:false};
 const notify=()=>window.wanbaApp?.onGameUpdate('{}');
-window.NativeBridge={getContentState:()=>JSON.stringify(qaState),reportGameContentReady:()=>{qaCalls.push('health-request');setTimeout(()=>{qaState.bootHealthy=true;notify();},150);return JSON.stringify({accepted:true});},checkGameUpdates:()=>{qaCalls.push('check');qaState.candidate=candidate;qaState.job={state:'available',message:'发现可用的游戏内容更新'};notify();return '{"jobId":"check"}';},downloadGameUpdate:id=>{qaCalls.push(['download',id]);qaState.candidateReady=true;qaState.job={state:'ready',message:'下载完成，回到首页后可安装'};notify();return '{"jobId":"download"}';},activateGameUpdate:(id,checkpoint)=>{qaCalls.push(['activate',id,JSON.parse(checkpoint)]);return '{"jobId":"activate"}';},rollbackGameUpdate:()=>{qaCalls.push('rollback');return '{"jobId":"rollback"}';}};
+window.NativeBridge={getContentState:()=>JSON.stringify(qaState),reportGameContentReady:()=>{qaCalls.push('health-request');setTimeout(()=>{qaCalls.push(['early-active-event',!!window.wanbaApp]);qaState.bootHealthy=true;qaState.job={state:'active',message:'游戏内容已就绪'};qaState.healthFocusCount=qaFocusCount;notify();},150);return JSON.stringify({accepted:true});},checkGameUpdates:()=>{qaCalls.push('check');qaState.candidate=candidate;qaState.job={state:'available',message:'发现可用的游戏内容更新'};notify();return '{"jobId":"check"}';},downloadGameUpdate:id=>{qaCalls.push(['download',id]);qaState.candidateReady=true;qaState.job={state:'ready',message:'下载完成，回到首页后可安装'};notify();return '{"jobId":"download"}';},activateGameUpdate:(id,checkpoint)=>{qaCalls.push(['activate',id,JSON.parse(checkpoint)]);return '{"jobId":"activate"}';},rollbackGameUpdate:()=>{qaCalls.push('rollback');return '{"jobId":"rollback"}';}};
 })();`;
 try{
  await send('Runtime.enable');await send('Page.enable');await send('Emulation.setDeviceMetricsOverride',{width:360,height:780,deviceScaleFactor:3,mobile:true});await send('Emulation.setTouchEmulationEnabled',{enabled:true,maxTouchPoints:5});
- await send('Page.addScriptToEvaluateOnNewDocument',{source:bridge});await send('Page.navigate',{url:origin+'/standalone/index.html'});await until('!!window.wanbaApp');
+ await send('Page.addScriptToEvaluateOnNewDocument',{source:bridge});await send('Page.navigate',{url:origin+'/standalone/index.html'});await until('window.qaAppReady===true');
  assert.equal(await evaluate('qaState.bootHealthy'),true);assert.equal(await evaluate('!!document.querySelector("#wanba-boot")'),false);checks.push('boot stays locked until the asynchronous health marker commits');
  await evaluate('wanbaApp.back()');await click('[data-tab="single"]');await until('!!document.querySelector("#wanba-check-games")');
+ assert.deepEqual(await evaluate('qaCalls.find(call=>Array.isArray(call)&&call[0]==="early-active-event")'),['early-active-event',false]);
+ assert.equal(await evaluate('qaFocusCount===qaState.healthFocusCount'),true,'no foreground event is needed after health confirmation');
+ assert.equal(await evaluate('document.querySelector("#wanba-check-games").disabled'),false,'initial update check recovers from activating before any focus');
+ assert.equal(await evaluate('document.querySelector("#wanba-update-status").textContent'),'游戏内容已就绪');
+ const readyShot=await send('Page.captureScreenshot',{format:'png'});writeFileSync(out+'/initial-ready-panel.png',Buffer.from(readyShot.data,'base64'));
+ checks.push('early native active event arrives before the app API; first ready panel is enabled and current without a focus refresh');
  await click('#wanba-check-games');await until('!!document.querySelector("#wanba-install-games")');
  assert.match(await evaluate('document.querySelector(".wanba-updates summary").textContent'),/1 个资源包/);await click('.wanba-updates summary');
  assert.equal(await evaluate('document.querySelectorAll(".wanba-updates li").length'),1);await click('#wanba-install-games');await until('document.querySelector("#wanba-install-games").textContent.includes("安装")');

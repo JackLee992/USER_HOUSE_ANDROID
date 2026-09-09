@@ -30,6 +30,10 @@ try {
   await confirmContentReady(window,contentState?.activeSnapshotId);
   runtime.ready();
   window.wanbaApp = app;
+  // A native ready event can arrive before the bridge can see wanbaApp.
+  // Read the committed state after registration so the update panel cannot
+  // remain stuck on its initial "activating" state until a later focus event.
+  await updates.refresh();
   document.addEventListener('visibilitychange', () => { if (document.hidden) window.wanbaApp.pause(); });
   window.addEventListener('pagehide', () => window.wanbaApp.pause());
   window.addEventListener('beforeunload', () => window.wanbaApp.save());

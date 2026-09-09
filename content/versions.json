@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "packages": {
-    "core": "1.2.0",
+    "core": "1.2.1",
     "art.shared": "1.0.1",
     "art.blackjack": "1.0.1",
     "art.bombnumber": "1.0.1",
