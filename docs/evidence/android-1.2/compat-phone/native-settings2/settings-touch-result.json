@@ -1,7 +1,7 @@
 {
   "passed": false,
   "engine": "compat",
-  "serial": "AKRSVB1A09000369",
+  "serial": "test-phone",
   "results": [
     {
       "selector": "#wanba-language",
