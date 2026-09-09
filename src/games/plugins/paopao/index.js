@@ -1,8 +1,9 @@
 import { drawGameSprite, drawGameMaterial } from '../../../../standalone/game-art.js';
 import { getCanvasPixelRatio } from '../../../../standalone/performance.js';
+import { createBubbleArt, BUBBLE_PALETTE } from './bubble-art.js';
 // Independently versioned game plugin. Keep imports relative to this immutable snapshot.
 export const GAME_ID = 'paopao';
-export const GAME_VERSION = '1.0.1';
+export const GAME_VERSION = '1.0.2';
 export const HOST_API_VERSION = 1;
 export const REQUIRED_ENV = Object.freeze(["activeGameController","clearProgress","currentGame","gamePaused","getHostDocument","getHostWindow","qs","saveProgress","setScore","showGameOver","speak","toast"]);
 
@@ -13,7 +14,7 @@ export function createGame(env, state) {
     box.innerHTML = '<div class="wb-paopao-shell" style="position:relative;width:100%;height:100%;min-height:0;display:grid;place-items:center;touch-action:none;overflow:hidden;"><canvas class="wb-paopao-canvas" id="wb-paopao-canvas" style="display:block;border:0;background:transparent;touch-action:none;user-select:none;box-sizing:border-box;border-radius:0;box-shadow:0 12px 30px rgba(87,128,150,.18);"></canvas><button type="button" class="wb-btn primary" id="wb-paopao-bomb" style="position:absolute;left:12px;bottom:12px;min-width:54px;height:34px;padding:0 10px;border-radius:999px;z-index:5;" title="炸弹">💣 <span id="wb-paopao-bombs">5</span></button><button type="button" id="wb-paopao-swap" style="position:absolute;width:28px;height:28px;padding:0;border-radius:999px;border:1px solid rgba(51,78,92,.38);background:transparent;box-shadow:none;color:rgba(51,78,92,.72);font-size:22px;line-height:1;z-index:5;cursor:pointer;" title="切换当前泡泡和下一个泡泡" aria-label="切换当前泡泡和下一个泡泡">⇄</button></div>';
     const c = env.qs('#wb-paopao-canvas'), ctx = c.getContext('2d');
     const colors = ['red','yellow','blue','green','purple','orange'];
-    const palette = { red:'#f28b94', yellow:'#f3d878', blue:'#8fc7ee', green:'#96d7a7', purple:'#b9a4e8', orange:'#efb37e', bomb:'#6f7f91' };
+    const palette = BUBBLE_PALETTE;
     const N = 12, ROWS_INIT = 7, VISIBLE_ROWS = 16;
     let W = 360, H = 560, D = 32, R = 16, rowH = 27.7, lineY = 470, boardPad = 9, launch = { x:180, y:520 };
     let bubbles = Array.isArray(state?.bubbles) ? state.bubbles.map(b => Object.assign({}, b)) : [];
@@ -22,6 +23,9 @@ export function createGame(env, state) {
     let score = Number(state?.score || 0), shots = Number(state?.shots || 0), pushes = Number(state?.pushes || 0), shotsSincePush = Number(state?.shotsSincePush ?? (Number(state?.shots || 0) % Math.max(5, 10 - Math.floor(Number(state?.pushes || 0) / 2)))), bombs = Math.max(0, Math.min(5, Number(state?.bombs == null ? 5 : state.bombs)));
     let current = state?.current || '', next = state?.next || '', armedBomb = !!state?.armedBomb;
     let flying = null, aiming = false, resolving = false, aimAngle = 0, over = false, raf = 0, lastT = null, destroyed = false, turnTimer = null;
+    const bubbleArt = createBubbleArt({window:env.getHostWindow(),document:env.getHostDocument(),onReady:()=>{
+      if(!destroyed&&!over&&env.currentGame==='paopao')draw();
+    }});
     let seen = Object.assign({ aim:false, dangerTick:0, scoreMilestone:Math.floor(score/1000) }, state?.seen || {});
     let details = Object.assign({ shots:0, pushes:0, cleared:0, dropTotal:0, dangerCount:0, bombUsed:0, bombBad:false, highStreak:0, maxHighStreak:0, amazingClear:false, clearAllCount:0 }, state?.details || {});
     const cap = row => N;
@@ -205,7 +209,7 @@ export function createGame(env, state) {
     function roundRectPaopao(ctx,x,y,w,h,r){ if(ctx.roundRect){ ctx.beginPath(); ctx.roundRect(x,y,w,h,r); } else { ctx.beginPath(); ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y); ctx.quadraticCurveTo(x+w,y,x+w,y+r); ctx.lineTo(x+w,y+h-r); ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h); ctx.lineTo(x+r,y+h); ctx.quadraticCurveTo(x,y+h,x,y+h-r); ctx.lineTo(x,y+r); ctx.quadraticCurveTo(x,y,x+r,y); } }
     function drawBubble(x,y,color,scale) {
       scale = scale || 1; const rr = R * scale;
-      if(color!=='bomb'&&drawGameSprite(ctx,'bubbles',({red:0,blue:1,green:2,yellow:3,purple:4,orange:5})[color],x-rr,y-rr,rr*2,rr*2))return;
+      if(color!=='bomb'&&bubbleArt.draw(ctx,color,x,y,rr*2))return;
       if(color==='bomb'&&drawGameSprite(ctx,'candy-bubbles',14,x-rr,y-rr,rr*2,rr*2))return;
       const base = color === 'bomb' ? palette.bomb : palette[color];
       const grad = ctx.createRadialGradient(x-rr*.28,y-rr*.32,rr*.18,x,y,rr*.98);
@@ -261,9 +265,9 @@ export function createGame(env, state) {
       const arcR = R * 2.45;
       ctx.strokeStyle='rgba(111,141,154,.34)'; ctx.lineWidth=Math.max(3, R*.22); ctx.lineCap='round';
       ctx.beginPath(); ctx.arc(launch.x, launch.y, arcR, Math.PI * .25, Math.PI * .75, true); ctx.stroke(); ctx.lineCap='butt';
-      drawBubble(launch.x, launch.y, armedBomb ? 'bomb' : current, .88);
+      drawBubble(launch.x, launch.y, armedBomb ? 'bomb' : current, .98);
       const nextX = launch.x + arcR * .88, nextY = launch.y - arcR * .32;
-      drawBubble(nextX, nextY, next, .52);
+      drawBubble(nextX, nextY, next, .80);
       if (flying) drawBubble(flying.x, flying.y, flying.bomb ? 'bomb' : flying.color, 1);
     }
     function update(dt) {
@@ -338,6 +342,7 @@ export function createGame(env, state) {
       save:() => { if (!destroyed && !over) save(); },
       destroy:() => {
         destroyed = true;
+        bubbleArt.destroy();
         cancelAnimationFrame(raf);
         clearTimeout(turnTimer);
         env.getHostWindow().removeEventListener('resize', onResize);
