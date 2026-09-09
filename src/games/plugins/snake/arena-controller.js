@@ -5,7 +5,7 @@ import {arenaProgress} from './arena-save.js';
 export function createArenaGame(env,saved,mode='endless'){
   const host=env.getHostWindow(),doc=env.getHostDocument(),box=env.qs('#wb-gamebox');
   const arena=createArena({mode,state:saved?.arena});let joystick=saved?.joystick==='fixed'?'fixed':'floating';
-  box.innerHTML=`<section class="snake-arena" style="position:relative;width:100%;height:100%;min-height:300px;overflow:hidden;border-radius:18px;background:#f1f6f7;touch-action:none;color:#203b45;font-family:inherit">
+  box.innerHTML=`<style>.snake-arena *{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}</style><section class="snake-arena" style="position:relative;width:100%;height:100%;min-height:300px;overflow:hidden;border-radius:18px;background:#f1f6f7;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;color:#203b45;font-family:inherit">
     <canvas class="snake-arena-canvas" aria-label="离线 AI 贪吃蛇竞技场" style="display:block;touch-action:none"></canvas>
     <div style="position:absolute;top:12px;left:12px;pointer-events:none;display:grid;gap:5px"><strong style="font-size:12px;letter-spacing:.03em;color:#347268">离线 AI</strong><span style="font-size:13px"><span>长度</span> <b data-arena-length style="font-size:23px">170</b></span><span data-arena-clock style="font-size:13px"></span></div>
     <div style="position:absolute;right:12px;top:12px;pointer-events:none;border-radius:12px;padding:9px 11px;background:#ffffffe0;font-size:11px;min-width:76px"><strong>长度榜</strong><div data-arena-ranking style="display:grid;gap:3px;margin-top:6px"></div></div>
@@ -44,6 +44,7 @@ export function createArenaGame(env,saved,mode='endless'){
   listen(host,'blur',clear);listen(doc,'visibilitychange',()=>{clear();if(frame)host.cancelAnimationFrame(frame);if(wake)host.clearTimeout(wake);frame=wake=0;if(doc.hidden)save();else schedule();});
   listen(host,'resize',resize);listen(host,'wanba-performance-change',resize);
   const observer=host.ResizeObserver?new host.ResizeObserver(resize):null;observer?.observe(root);
+  listen(root,'contextmenu',event=>event.preventDefault());
   syncControl();resize();hud();save();schedule();
   return {save,getState:()=>({mode:arena.state.mode,elapsed:arena.elapsed,remaining:arena.remaining,length:Math.round(arena.state.snakes[0].length),boost:arena.state.snakes[0].boost,alive:arena.state.snakes[0].alive,ended:arena.state.ended,render:renderer.getStats()}),destroy(){if(destroyed)return;destroyed=true;if(frame)host.cancelAnimationFrame(frame);if(wake)host.clearTimeout(wake);frame=wake=0;clear();listeners.forEach(remove=>remove());observer?.disconnect();renderer.destroy();}};
 }

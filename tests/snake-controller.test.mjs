@@ -56,3 +56,12 @@ test('an old classic save resumes unchanged and arena projection remains playabl
 test('mode selection performs no simulation until a choice and cleans up the selected child',()=>{
   const h=harness({start:createGame});assert.equal(h.controller.getState().mode,'select');assert.equal(h.frames.size+h.timers.size,0);h.query('mode-timed').onclick();assert.equal(h.controller.getState().mode,'timed');assert.equal(h.frames.size,1);h.controller.destroy();assert.equal(h.frames.size+h.timers.size,0);
 });
+
+
+test('game long-press suppresses its context menu only until disposal',()=>{
+  const h=harness(),root=h.query('.snake-arena');
+  assert.equal(h.event(root,'contextmenu').defaultPrevented,true);
+  assert.equal(h.event(h.doc,'contextmenu').defaultPrevented,false,'other application pages keep native text actions');
+  h.controller.destroy();
+  assert.equal(h.event(root,'contextmenu').defaultPrevented,false,'destroy releases the scoped listener');
+});

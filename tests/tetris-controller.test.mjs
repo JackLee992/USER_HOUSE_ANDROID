@@ -60,3 +60,12 @@ test('held soft drop produces identical logical state at 10, 30, 60 and 120 rend
 test('a keyboard activation on a focused button is not also treated as a game shortcut',()=>{
   const h=harness();h.frame(0);const hold=h.query('action-hold');hold.tagName='BUTTON';const key=new Event('keydown',{cancelable:true});Object.defineProperty(key,'target',{value:hold});Object.assign(key,{key:' '});h.doc.dispatchEvent(key);assert.equal(h.controller.getState().locks,0);h.event(hold,'click',{detail:0});assert.equal(h.controller.getState().holdUsed,true);h.controller.destroy();
 });
+
+
+test('game long-press suppresses its context menu only until disposal',()=>{
+  const h=harness(),root=h.query('.tetris-battle');
+  assert.equal(h.event(root,'contextmenu').defaultPrevented,true);
+  assert.equal(h.event(h.doc,'contextmenu').defaultPrevented,false,'other application pages keep native text actions');
+  h.controller.destroy();
+  assert.equal(h.event(root,'contextmenu').defaultPrevented,false,'destroy releases the scoped listener');
+});

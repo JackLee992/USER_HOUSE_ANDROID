@@ -46,7 +46,12 @@ def file_digest(path):
 
 
 def write_json(path, value):
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n')
+    path.write_text(public_text(json.dumps(value, ensure_ascii=False, indent=2)) + '\n')
+
+
+def public_text(value):
+    # Keep diagnostics intact while making published locations repository-relative.
+    return value.replace(str(ROOT) + '/', '').replace(str(Path.home()) + '/', '~/')
 
 
 def execute(command, env=None):
@@ -81,7 +86,7 @@ def inspect_lint(path, evidence):
                        'locations': [dict(location.attrib) for location in issue.findall('location')]})
     counts = collections.Counter(issue['severity'] for issue in issues)
     require(not counts['Error'] and not counts['Fatal'], f'Release lint errors: {path}')
-    shutil.copy2(path, evidence / path.name)
+    (evidence / path.name).write_text(public_text(path.read_text()))
     return {'errors': counts['Error'] + counts['Fatal'], 'warnings': counts['Warning'], 'issues': issues}
 
 
@@ -322,7 +327,7 @@ process.stdout.write('P-256 updater trust root verified');
         write_json(directory/'apk-integrity.json', report)
         (directory/'SHA256SUMS').write_text(sums)
     if args.build_log:
-        shutil.copy2(args.build_log, args.evidence_dir/'build.log')
+        (args.evidence_dir/'build.log').write_text(public_text(args.build_log.read_text()))
     write_document(args, report)
     print(json.dumps({'passed': True, 'sequence': report['sequence'], 'packages': report['packages'],
                       'filesPerApk': report['filesPerApk'], 'apks': [{key: entry[key] for key in
