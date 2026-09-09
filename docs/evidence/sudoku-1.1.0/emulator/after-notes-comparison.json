@@ -1,0 +1,62 @@
+{
+  "before": "before",
+  "after": "after-notes",
+  "apkVersions": [
+    "1.2.2",
+    "1.2.2"
+  ],
+  "snapshots": [
+    "60dd78b5b5006de9e0488dba2848e60572346f473512e3de8f1354b543c8161c",
+    "088db53ba4c180842817e9df02117dc63c3ec527eedb1d198368194d6a0d67d2"
+  ],
+  "sudokuGameVersions": [
+    "1.0.0",
+    "1.1.0"
+  ],
+  "itemComparison": {
+    "wanbanXiaowu_settings_v1": {
+      "unchanged": true,
+      "beforeHash": "076ccec4ffd8365d9f8f0503a27997678883d88224a6b6228c556d90c837247d",
+      "afterHash": "076ccec4ffd8365d9f8f0503a27997678883d88224a6b6228c556d90c837247d"
+    },
+    "wanbanXiaowu_scores_v1": {
+      "unchanged": true,
+      "beforeHash": "bcede6ab4aa2aadaaf999f7e625d696dda499a89e597e559f5cc06a07ffd22cd",
+      "afterHash": "bcede6ab4aa2aadaaf999f7e625d696dda499a89e597e559f5cc06a07ffd22cd"
+    },
+    "wanbanXiaowu_progress_v1": {
+      "unchanged": false,
+      "beforeHash": "142c71a19fe84a2de29151913d2b401f990c4299a591739239b39782665fee12",
+      "afterHash": "496a23ac44448ad8c6b74902590cf7fa3793b9510053727fb7b69ef6187f3d12"
+    },
+    "wanbanXiaowu_records_v1": {
+      "unchanged": true,
+      "beforeHash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "afterHash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    "wanbanXiaowu_sudokuState_v1": {
+      "unchanged": true,
+      "beforeHash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "afterHash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    }
+  },
+  "progressCounts": [
+    37,
+    37
+  ],
+  "changedProgress": [
+    "sudoku"
+  ],
+  "changedSettings": [],
+  "sudoku": {
+    "puzzlePreserved": true,
+    "solutionPreserved": true,
+    "gridPreserved": true,
+    "hints": [
+      0,
+      0
+    ],
+    "historyLength": 2,
+    "notesCount": 1
+  }
+}

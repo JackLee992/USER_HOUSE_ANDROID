@@ -1,0 +1,53 @@
+{
+  "repository": "JackLee992/USER_HOUSE_GAME_PACKS",
+  "releaseTag": "content-6",
+  "snapshotId": "088db53ba4c180842817e9df02117dc63c3ec527eedb1d198368194d6a0d67d2",
+  "sequence": 6,
+  "snapshotVersion": "1.3.0",
+  "sourceCommit": "d4719699225269f96fd3f96adb71bc2915ddc734",
+  "gameCount": 37,
+  "packageCount": 81,
+  "changed": [
+    {
+      "id": "core",
+      "filename": "core-1.2.0.zip",
+      "size": 426105
+    },
+    {
+      "id": "game.sudoku",
+      "filename": "game.sudoku-1.1.0.zip",
+      "size": 23459
+    },
+    {
+      "id": "game.zuma",
+      "filename": "game.zuma-1.1.2.zip",
+      "size": 30071
+    },
+    {
+      "id": "i18n.en",
+      "filename": "i18n.en-1.0.3.zip",
+      "size": 12092
+    },
+    {
+      "id": "i18n.ja",
+      "filename": "i18n.ja-1.0.3.zip",
+      "size": 12378
+    },
+    {
+      "id": "i18n.ko",
+      "filename": "i18n.ko-1.0.3.zip",
+      "size": 12516
+    },
+    {
+      "id": "i18n.zh-CN",
+      "filename": "i18n.zh-CN-1.0.3.zip",
+      "size": 11912
+    },
+    {
+      "id": "i18n.zh-TW",
+      "filename": "i18n.zh-TW-1.0.3.zip",
+      "size": 13299
+    }
+  ],
+  "totalDownloadBytes": 541832
+}

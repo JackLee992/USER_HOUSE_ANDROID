@@ -1,0 +1,382 @@
+{
+  "scope": "emulator-5554 system app only; ordinary ADB UI and SAF; no APK install, no data clearing, no CDP or run-as",
+  "baseline": {
+    "serial": "emulator-5554",
+    "package": "io.github.jacklee992.wanba",
+    "packageVersion": [
+      "versionCode=6 minSdk=26 targetSdk=36",
+      "versionName=1.2.2",
+      "flags=[ HAS_CODE ALLOW_CLEAR_USER_DATA ]",
+      "lastUpdateTime=2026-09-09 13:41:09",
+      "android.permission.REQUEST_INSTALL_PACKAGES: granted=false, flags=[ USER_SET]"
+    ],
+    "proxy": "null",
+    "accelerometerRotation": "1",
+    "userRotation": "0",
+    "size": "Physical size: 1080x2400",
+    "density": "Physical density: 420"
+  },
+  "backupHashes": {
+    "before.json": "2a3d8e6103a5573b3bbc9d05064ee906b7041dbf32f36f2ab3a1d04737a9ac73",
+    "after-update.json": "9165d69086a514525322bfe589f2a105390035cc7580a0e36d2dfe8d4118ad91",
+    "after-notes.json": "fc83ef3025d304e3a609b419ce3d1bab0baa2400cc50a1fcf45d52a05ee1bc9d",
+    "after-play.json": "8bfc1bce9ba8b48149f7db75e3a7e9abffa03844e13f061a9c200b33ce32d5f4",
+    "after-content7.json": "3d0020e47a67098a22db9218e750ac124917c9c3dcb0a8294ef5a660d1bfcdd2"
+  },
+  "nativeSteps": [
+    {
+      "step": "resumed",
+      "gridHash": "f90146eea5c8ea54040a4b96b07843b38efa192b276986bbd2ed3ed26ddfce1b",
+      "cell1": "第1行，第1列 · 空格",
+      "undoRedo": [
+        {
+          "text": "撤销",
+          "rect": [
+            34,
+            1899,
+            194,
+            2041
+          ],
+          "checked": "false",
+          "enabled": "false"
+        },
+        {
+          "text": "重做",
+          "rect": [
+            204,
+            1899,
+            367,
+            2041
+          ],
+          "checked": "false",
+          "enabled": "false"
+        }
+      ]
+    },
+    {
+      "step": "notes-15",
+      "gridHash": "f90146eea5c8ea54040a4b96b07843b38efa192b276986bbd2ed3ed26ddfce1b",
+      "cell1": "第1行，第1列 · 空格 · 笔记：1, 5",
+      "undoRedo": [
+        {
+          "text": "撤销",
+          "rect": [
+            34,
+            1899,
+            194,
+            2041
+          ],
+          "checked": "false",
+          "enabled": "true"
+        },
+        {
+          "text": "重做",
+          "rect": [
+            204,
+            1899,
+            367,
+            2041
+          ],
+          "checked": "false",
+          "enabled": "false"
+        }
+      ]
+    },
+    {
+      "step": "undo",
+      "gridHash": "f90146eea5c8ea54040a4b96b07843b38efa192b276986bbd2ed3ed26ddfce1b",
+      "cell1": "第1行，第1列 · 空格 · 笔记：1",
+      "undoRedo": [
+        {
+          "text": "撤销",
+          "rect": [
+            34,
+            1899,
+            194,
+            2041
+          ],
+          "checked": "false",
+          "enabled": "true"
+        },
+        {
+          "text": "重做",
+          "rect": [
+            204,
+            1899,
+            367,
+            2041
+          ],
+          "checked": "false",
+          "enabled": "true"
+        }
+      ]
+    },
+    {
+      "step": "redo",
+      "gridHash": "f90146eea5c8ea54040a4b96b07843b38efa192b276986bbd2ed3ed26ddfce1b",
+      "cell1": "第1行，第1列 · 空格 · 笔记：1, 5",
+      "undoRedo": [
+        {
+          "text": "撤销",
+          "rect": [
+            34,
+            1899,
+            194,
+            2041
+          ],
+          "checked": "false",
+          "enabled": "true"
+        },
+        {
+          "text": "重做",
+          "rect": [
+            204,
+            1899,
+            367,
+            2041
+          ],
+          "checked": "false",
+          "enabled": "false"
+        }
+      ]
+    },
+    {
+      "step": "landscape",
+      "gridHash": "f90146eea5c8ea54040a4b96b07843b38efa192b276986bbd2ed3ed26ddfce1b",
+      "cell1": "第1行，第1列 · 空格 · 笔记：1, 5",
+      "undoRedo": [
+        {
+          "text": "撤销",
+          "rect": [
+            1479,
+            338,
+            1619,
+            475
+          ],
+          "checked": "false",
+          "enabled": "true"
+        },
+        {
+          "text": "重做",
+          "rect": [
+            1624,
+            338,
+            1763,
+            475
+          ],
+          "checked": "false",
+          "enabled": "false"
+        }
+      ]
+    },
+    {
+      "step": "after-pause",
+      "gridHash": "f90146eea5c8ea54040a4b96b07843b38efa192b276986bbd2ed3ed26ddfce1b",
+      "cell1": "第1行，第1列 · 空格 · 笔记：1, 5",
+      "undoRedo": [
+        {
+          "text": "撤销",
+          "rect": [
+            1479,
+            338,
+            1619,
+            475
+          ],
+          "checked": "false",
+          "enabled": "true"
+        },
+        {
+          "text": "重做",
+          "rect": [
+            1624,
+            338,
+            1763,
+            475
+          ],
+          "checked": "false",
+          "enabled": "false"
+        }
+      ]
+    },
+    {
+      "step": "notes-portrait-return",
+      "gridHash": "f90146eea5c8ea54040a4b96b07843b38efa192b276986bbd2ed3ed26ddfce1b",
+      "cell1": "第1行，第1列 · 空格 · 笔记：1, 5",
+      "undoRedo": [
+        {
+          "text": "撤销",
+          "rect": [
+            34,
+            1899,
+            194,
+            2041
+          ],
+          "checked": "false",
+          "enabled": "true"
+        },
+        {
+          "text": "重做",
+          "rect": [
+            204,
+            1899,
+            367,
+            2041
+          ],
+          "checked": "false",
+          "enabled": "false"
+        }
+      ]
+    },
+    {
+      "step": "cold-resumed",
+      "gridHash": "f90146eea5c8ea54040a4b96b07843b38efa192b276986bbd2ed3ed26ddfce1b",
+      "cell1": "第1行，第1列 · 空格 · 笔记：1, 5",
+      "undoRedo": [
+        {
+          "text": "撤销",
+          "rect": [
+            34,
+            1899,
+            194,
+            2041
+          ],
+          "checked": "false",
+          "enabled": "true"
+        },
+        {
+          "text": "重做",
+          "rect": [
+            204,
+            1899,
+            367,
+            2041
+          ],
+          "checked": "false",
+          "enabled": "false"
+        }
+      ]
+    },
+    {
+      "step": "cold-undo",
+      "gridHash": "f90146eea5c8ea54040a4b96b07843b38efa192b276986bbd2ed3ed26ddfce1b",
+      "cell1": "第1行，第1列 · 空格 · 笔记：1",
+      "undoRedo": [
+        {
+          "text": "撤销",
+          "rect": [
+            34,
+            1899,
+            194,
+            2041
+          ],
+          "checked": "false",
+          "enabled": "true"
+        },
+        {
+          "text": "重做",
+          "rect": [
+            204,
+            1899,
+            367,
+            2041
+          ],
+          "checked": "false",
+          "enabled": "true"
+        }
+      ]
+    },
+    {
+      "step": "cold-redo",
+      "gridHash": "f90146eea5c8ea54040a4b96b07843b38efa192b276986bbd2ed3ed26ddfce1b",
+      "cell1": "第1行，第1列 · 空格 · 笔记：1, 5",
+      "undoRedo": [
+        {
+          "text": "撤销",
+          "rect": [
+            34,
+            1899,
+            194,
+            2041
+          ],
+          "checked": "false",
+          "enabled": "true"
+        },
+        {
+          "text": "重做",
+          "rect": [
+            204,
+            1899,
+            367,
+            2041
+          ],
+          "checked": "false",
+          "enabled": "false"
+        }
+      ]
+    },
+    {
+      "step": "restored-original",
+      "gridHash": "f90146eea5c8ea54040a4b96b07843b38efa192b276986bbd2ed3ed26ddfce1b",
+      "cell1": "第1行，第1列 · 空格",
+      "undoRedo": [
+        {
+          "text": "撤销",
+          "rect": [
+            34,
+            1899,
+            194,
+            2041
+          ],
+          "checked": "false",
+          "enabled": "true"
+        },
+        {
+          "text": "重做",
+          "rect": [
+            204,
+            1899,
+            367,
+            2041
+          ],
+          "checked": "false",
+          "enabled": "false"
+        }
+      ]
+    }
+  ],
+  "pause": {
+    "displayedTimeBefore": "04:16",
+    "displayedTimeAfter": "04:16",
+    "screenshotsSecondsApart": 192.51,
+    "inputWhilePaused": "KEYCODE_1; notes remained 1,5 after resume"
+  },
+  "finalContent6": {
+    "originalGridRestored": true,
+    "notesCount": 0,
+    "hints": 0,
+    "inputMode": "pen",
+    "settingsUnchanged": true,
+    "otherGamesProgressUnchanged": 36
+  },
+  "content7": {
+    "result": "passed",
+    "snapshotId": "04a98d3a460a3a4a663002303797eae93af4c9dea5c770c8e7a9f3a81a695b88",
+    "snapshotVersion": "1.3.1",
+    "firstNativeObservationMs": 2193,
+    "firstObservationReady": true,
+    "checkButtonEnabled": true,
+    "focusChanged": false,
+    "allFiveSavedDataItemsIdenticalToAfterPlay": true,
+    "progressCount": 37,
+    "networkRetry": "First check and first download timed out on the emulator network; ordinary retry succeeded before activation."
+  },
+  "environmentRestoration": {
+    "result": "passed",
+    "apkVersionAndInstallTimeUnchanged": true,
+    "proxy": "null",
+    "accelerometerRotation": "1",
+    "userRotation": "0",
+    "finalPage": "single player home",
+    "latestContentRetained": true
+  }
+}

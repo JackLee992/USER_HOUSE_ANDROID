@@ -1,9 +1,9 @@
 node --test tests/*.test.mjs android/app/src/compat/tests/*.test.mjs
-ℹ tests 311
+ℹ tests 312
 ℹ suites 0
-ℹ pass 311
+ℹ pass 312
 ℹ fail 0
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 2669.590667
+ℹ duration_ms 2469.257625

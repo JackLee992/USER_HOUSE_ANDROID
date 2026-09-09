@@ -1,0 +1,231 @@
+{
+  "testedAt": "2026-09-09T07:09:44.606Z",
+  "device": "HONOR physical",
+  "serialRedacted": true,
+  "content6": {
+    "passed": true,
+    "apk": {
+      "versionName": "1.2.2",
+      "versionCode": 6,
+      "debuggable": false,
+      "sha256": "23ebea8f4382a5c356770423020dff19414afe4d307b5f5bc875cab7e1f94bdd",
+      "signatureScheme": "2",
+      "certificateSha256": "806ede7461091d6b9668ad32b656d6e20f47d00eb4e11341e04f551377ced777",
+      "certificateEvidence": "Installed APK hash equals independently verified signed release"
+    },
+    "snapshotBefore": "60dd78b5b5006de9e0488dba2848e60572346f473512e3de8f1354b543c8161c",
+    "snapshotAfter": "088db53ba4c180842817e9df02117dc63c3ec527eedb1d198368194d6a0d67d2",
+    "sudokuBefore": "1.0.0",
+    "sudokuAfter": "1.1.0",
+    "normalSafItemCount": 5,
+    "savedGameCount": 37,
+    "allFiveItemsEqualAcrossUpdate": true,
+    "beforeItemHashes": {
+      "wanbanXiaowu_settings_v1": "01b93b688690087d9e641584e3b504597b4817022627540822e73ca6b0b27b42",
+      "wanbanXiaowu_scores_v1": "24d2ed616a81b0e01d447be533bc619d3edabb21361ee6b7dfdad6fe44c00c26",
+      "wanbanXiaowu_progress_v1": "cf268995138a0f9ce3f103387be46a1fcf646d706745bc11e9edf72e2db9c3b2",
+      "wanbanXiaowu_records_v1": "6e202ddd4244d0ea0b5e9e9ed64b97ef6e2c770995e50cee1f473494f8102fcf",
+      "wanbanXiaowu_sudokuState_v1": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    "afterItemHashes": {
+      "wanbanXiaowu_settings_v1": "01b93b688690087d9e641584e3b504597b4817022627540822e73ca6b0b27b42",
+      "wanbanXiaowu_scores_v1": "24d2ed616a81b0e01d447be533bc619d3edabb21361ee6b7dfdad6fe44c00c26",
+      "wanbanXiaowu_progress_v1": "cf268995138a0f9ce3f103387be46a1fcf646d706745bc11e9edf72e2db9c3b2",
+      "wanbanXiaowu_records_v1": "6e202ddd4244d0ea0b5e9e9ed64b97ef6e2c770995e50cee1f473494f8102fcf",
+      "wanbanXiaowu_sudokuState_v1": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    "coldStart": {
+      "passed": true,
+      "snapshotId": "088db53ba4c180842817e9df02117dc63c3ec527eedb1d198368194d6a0d67d2",
+      "allFiveItemsUnchanged": true,
+      "checkButtonEnabled": "true"
+    },
+    "originalSudoku": {
+      "clues": 50,
+      "filled": 50,
+      "hints": 0
+    },
+    "notes": {
+      "realTouch": true,
+      "digits": [
+        1,
+        5
+      ],
+      "savedMask": 17,
+      "resume": true,
+      "undo": true,
+      "redo": true,
+      "restoredOriginalGridAndNotes": true
+    },
+    "pause": {
+      "realNativeInputWhilePaused": true,
+      "waitMs": 4000,
+      "visibleClockBefore": "01:52",
+      "visibleClockAfter": "01:52",
+      "screenshotByteIdentical": true,
+      "boardHidden": true
+    },
+    "layouts": {
+      "portrait": [
+        1080,
+        2340
+      ],
+      "landscape": [
+        2340,
+        1080
+      ],
+      "visuallyReviewed": true
+    },
+    "other36ProgressUnchanged": true,
+    "scoresAndRecordsUnchanged": true,
+    "rotation": {
+      "mode": "free",
+      "accelerometer": "1",
+      "rotation": "0"
+    },
+    "knownIssue": "Initial content6 activation left the updater display activating until cold start. Fixed in content7: its first ready page showed the ready message and enabled check button without focus or relaunch, verified on this same device."
+  },
+  "finalContent7": {
+    "passed": true,
+    "snapshotVersion": "1.3.1",
+    "snapshotId": "04a98d3a460a3a4a663002303797eae93af4c9dea5c770c8e7a9f3a81a695b88",
+    "sourceSnapshot": "088db53ba4c180842817e9df02117dc63c3ec527eedb1d198368194d6a0d67d2",
+    "firstReady": {
+      "checkEnabled": true,
+      "withoutFocusOrRelaunch": true,
+      "visibleContentText": [
+        "资源版本 1.3.1",
+        "游戏内容已就绪"
+      ]
+    },
+    "allFiveItemsExactlyPreserved": true,
+    "all37ProgressExactlyPreserved": true,
+    "itemHashes": {
+      "wanbanXiaowu_settings_v1": "01b93b688690087d9e641584e3b504597b4817022627540822e73ca6b0b27b42",
+      "wanbanXiaowu_scores_v1": "24d2ed616a81b0e01d447be533bc619d3edabb21361ee6b7dfdad6fe44c00c26",
+      "wanbanXiaowu_progress_v1": "4e3896df020c08a134d50cdc04cd05d3428679d9babe26e11217220e1f2163e2",
+      "wanbanXiaowu_records_v1": "6e202ddd4244d0ea0b5e9e9ed64b97ef6e2c770995e50cee1f473494f8102fcf",
+      "wanbanXiaowu_sudokuState_v1": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    "installedApkUnchanged": true
+  },
+  "screenshots": [
+    {
+      "name": "sudoku-legacy-open.png",
+      "width": 1080,
+      "height": 2340,
+      "sha256": "d12d84e20120622100111bdf40334a633a9a91f6f08ea4dc1f23a2f35aa55147"
+    },
+    {
+      "name": "sudoku-notes-portrait.png",
+      "width": 1080,
+      "height": 2340,
+      "sha256": "5d625034afdd740116dba0e1ab502ab7d2dcd8ad62fc99fc39decaaecb12d4e0"
+    },
+    {
+      "name": "sudoku-notes-resumed.png",
+      "width": 1080,
+      "height": 2340,
+      "sha256": "e15dacaa0e1d3fa935142f42f2cc1be334116f2678663e72a5e8f826103c7a99"
+    },
+    {
+      "name": "sudoku-undo-restored.png",
+      "width": 1080,
+      "height": 2340,
+      "sha256": "448c3b48270c2f5eb35aeb3e04035143ad38d86680203ea9e2d0ede02684d84a"
+    },
+    {
+      "name": "sudoku-landscape.png",
+      "width": 2340,
+      "height": 1080,
+      "sha256": "d8061202b1a92a1b34e63fa24e1570dca7c2ed0e935d2f4764e8e6f7a308e208"
+    },
+    {
+      "name": "sudoku-portrait-final.png",
+      "width": 1080,
+      "height": 2340,
+      "sha256": "ca7b184f38066d276fec8860a97ac26bba6128c66a76dee1caa7ea70bb202973"
+    },
+    {
+      "name": "pause-timer-before.png",
+      "width": 1080,
+      "height": 2340,
+      "sha256": "a831c2cae9157ff3ce61838c99ef163b10fe0adf991a55bd65bd12abf7a1da58"
+    },
+    {
+      "name": "pause-timer-after.png",
+      "width": 1080,
+      "height": 2340,
+      "sha256": "a831c2cae9157ff3ce61838c99ef163b10fe0adf991a55bd65bd12abf7a1da58"
+    },
+    {
+      "name": "zuma-content7-visible.png",
+      "width": 1080,
+      "height": 2340,
+      "sha256": "2c8c1ad081b17ced35452aea318d64679fef39a904c29e34e4d3f281d7244088"
+    },
+    {
+      "name": "zuma-content7-paused.png",
+      "width": 1080,
+      "height": 2340,
+      "sha256": "edb8f7e157c7bc31fc7c17c24cc8a1dad471c39274eb53ecf46413d6299f95e0"
+    }
+  ],
+  "privacy": "Only app fullscreen screenshots published; normal SAF JSON and raw native details remain private in .local. No APK installation or debug transport.",
+  "scope": "Normal SAF exposes five managed items; this evidence does not enumerate arbitrary unexported localStorage keys. Visual Android rendering is not a GL-backend/FPS measurement.",
+  "driverCorrections": [
+    "Android wm physical size did not reflect landscape viewport; actual native bounds now drive scrolling.",
+    "Accessibility clock name is not its number; paused time verified from two real screenshots instead."
+  ],
+  "zumaAfterContent7": {
+    "testedAt": "2026-09-09T07:08:18.801Z",
+    "passed": true,
+    "scope": "Native visible rendering only, no GL backend or FPS measurement. No shots, no restart.",
+    "before": {
+      "score": 250,
+      "lives": 3,
+      "levelIndex": 0,
+      "shots": 11,
+      "durationMs": 28998
+    },
+    "after": {
+      "score": 250,
+      "lives": 3,
+      "levelIndex": 0,
+      "shots": 11,
+      "durationMs": 33779
+    },
+    "finalSnapshot": "04a98d3a460a3a4a663002303797eae93af4c9dea5c770c8e7a9f3a81a695b88",
+    "other36ProgressExactlyPreserved": true,
+    "otherFourSafItemsExactlyPreserved": true,
+    "all37ProgressPresent": true,
+    "rotation": {
+      "mode": "free",
+      "accelerometer": "1",
+      "rotation": "0"
+    },
+    "app": {
+      "versionName": "1.2.2",
+      "versionCode": 6,
+      "debuggable": false,
+      "sha256": "23ebea8f4382a5c356770423020dff19414afe4d307b5f5bc875cab7e1f94bdd",
+      "signatureScheme": "2",
+      "certificateSha256": "806ede7461091d6b9668ad32b656d6e20f47d00eb4e11341e04f551377ced777",
+      "certificateEvidence": "Installed APK hash equals independently verified signed release"
+    },
+    "returnedHome": true,
+    "visuallyReviewed": true,
+    "visualFinding": "Native fullscreen shows complete temple background, spherical colored marbles, frog, skull, HUD and pause/save-exit UI. No GL backend or FPS claim."
+  },
+  "finalState": {
+    "snapshotId": "04a98d3a460a3a4a663002303797eae93af4c9dea5c770c8e7a9f3a81a695b88",
+    "apkUnchanged": true,
+    "returnedHome": true,
+    "rotation": {
+      "mode": "free",
+      "accelerometer": "1",
+      "rotation": "0"
+    },
+    "sudokuGridAndNotesRestored": true
+  }
+}

@@ -1,6 +1,6 @@
 # 数独 1.1.0：产品升级与竞品对标
 
-2026-09-09。主要竞品之一为 [Easybrain Sudoku.com](https://easybrain.com/sudoku)。本轮重做游戏界面和完整解题交互，保留现有离线宿主、用户存档与计分体系，通过独立游戏包分发。
+2026-09-09。主要竞品之一为 [Easybrain Sudoku.com](https://easybrain.com/sudoku)。本轮重做游戏界面和完整解题交互，保留现有离线宿主、用户存档与计分体系，通过独立游戏包分发。最新资源为 [1.3.1 / content-7](https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/tag/content-7)，数独包版本 1.1.0；已安装 App 1.2.0 或更新版本可在首页更新，APK 无需变化。
 
 ## 一手参考与取舍
 
@@ -61,10 +61,33 @@ Easybrain 的每日挑战、季节活动和锦标赛暂未纳入本轮。四档�
 
 ## 验证入口与证据
 
-- 完整宿主、内容发布和兼容内核回归：311/311 通过。
+- 完整宿主、内容发布和兼容内核最终回归：312/312 通过（content6 初始基线为311/311）。
 - [模型测试](../tests/sudoku-model.test.mjs)：25/25 通过，含唯一解、候选、历史、旧局和提示计数。
 - [控制器测试](../tests/sudoku-controller.test.mjs)：8/8 通过，含旧多解判错、完成恢复、暂停和清理。
 - [实际浏览器触控脚本](../tests/sudoku-browser.mjs)及[完整结果](evidence/sudoku-1.1.0/browser/report.json)：候选/提示/设置/冷重载/自然完成/横竖屏/五语通过，运行时异常为 0。
 - [深色设置](evidence/sudoku-1.1.0/browser/en-settings.png)、[窄屏](evidence/sudoku-1.1.0/browser/narrow.png)、[提示](evidence/sudoku-1.1.0/browser/logical-hint.png)、[完成记录](evidence/sudoku-1.1.0/browser/complete.png)。
 
-Android 游戏包更新及原生触控验收正在进行，结果会在发布证据中追加。
+## Android 原生验证
+
+使用已安装、非调试的正式 APK 1.2.2 / code 6，全程采用普通 ADB 触控与系统文件选择器导出，不重新安装 APK、不清除数据。
+
+| 设备 | 独立游戏更新及数独实测 |
+| --- | --- |
+| HONOR 真机，Android 12，兼容版 | content5→6 后正常备份的五项管理数据逐项全等、37 局保留；原局笔记 1/5 保存后恢复，撤销/重做通过；1080×2340 竖屏及2340×1080横屏完整可见；暂停输入及等待后两张截图均01:52且字节完全相同 |
+| Android 15 模拟器，系统版 / WebView 124 | content5→6 五项全等；原局笔记、撤销/重做、冷启动续局均通过；暂停相隔约192秒的截图均04:16；横竖屏保持棋盘内容 |
+
+测试最后清除测试候选，保留原题面、原填写与提示数；分数、记录和其余36局不变。游戏内正常测试会累计游玩时间和可撤销历史。正式APK哈希未变化。
+
+[真机验证与截图](evidence/sudoku-1.1.0/phone/result.json) · [模拟器验证](evidence/sudoku-1.1.0/emulator/native-verification.json) · [真机横屏](evidence/sudoku-1.1.0/phone/sudoku-landscape.png) · [真机候选](evidence/sudoku-1.1.0/phone/sudoku-notes-portrait.png)。正常原始备份保留在私有 `.local`，公开证据使用哈希、结果与游戏截图。
+
+## 内容更新状态修订
+
+真机发现内容6已经正确激活，但首页可能仍显示“正在切换”并禁用检查按钮。原因是原生 `active` 通知到达时应用的事件入口尚未注册，更新面板保留了启动时的旧状态。
+
+内容7在持久化健康确认通过、事件入口注册之后主动读取最新状态。保留健康确认之前的启动锁；仅 core 1.2.0→1.2.1 变化（426,229字节），其余80包逐字段复用内容6。
+
+新增测试在旧启动代码上复现首个就绪页面仍禁用，在修复后通过。完整套件312/312通过；[真实浏览器更新回归](evidence/sudoku-1.1.0/content7-ready/result.json)还验证了无需切换焦点就显示就绪、下载与检查点、游戏中禁用更新、下拉刷新及回退触控。浏览器验证禁用旧缓存，并保留第一次旧执行源的诊断证据。
+
+两台设备均通过 content6→7 的正常下载、安装与首次就绪页面验证：不切后台、不额外刷新焦点，直接显示资源1.3.1、游戏内容已就绪，检查按钮可用。正常导出的五项管理数据与各自更新前精确相等，全部37局保留；模拟器代理与两台设备旋转设置已恢复，均回到首页。具体哈希见上方原生报告。
+
+真机另验证祖玛在最新资源中可见渲染正常：继续旧局、立即暂停、保存退出，分数250、生命3、已发射11次均保持，只有游玩时间正常增加。[祖玛真机画面](evidence/sudoku-1.1.0/phone/zuma-content7-visible.png)。此处是原生画面与进度验证，WebGL后台/FPS没有通过非调试APK测量。

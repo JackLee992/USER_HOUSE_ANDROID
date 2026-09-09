@@ -1,0 +1,14 @@
+{
+  "serial": "emulator-5554",
+  "package": "io.github.jacklee992.wanba",
+  "packageVersion": [
+    "versionCode=6 minSdk=26 targetSdk=36",
+    "versionName=1.2.2",
+    "flags=[ HAS_CODE ALLOW_CLEAR_USER_DATA ]",
+    "lastUpdateTime=2026-09-09 13:41:09",
+    "android.permission.REQUEST_INSTALL_PACKAGES: granted=false, flags=[ USER_SET]"
+  ],
+  "proxy": "null",
+  "accelerometerRotation": "1",
+  "userRotation": "0"
+}

@@ -1,0 +1,34 @@
+{
+  "releaseUrl": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/tag/content-7",
+  "sourceCommit": "d6365b8d436dc99e26093d35e5e491c1ab802cfd",
+  "snapshotId": "04a98d3a460a3a4a663002303797eae93af4c9dea5c770c8e7a9f3a81a695b88",
+  "remoteDraftAssets": 3,
+  "remoteAssetSizesAndSha256Verified": true,
+  "changedZipMemberHashesVerified": true,
+  "sharedModulesOwnedByCore": true,
+  "ciRun": 34322023592,
+  "ciUrl": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/actions/runs/34322023592",
+  "ciConclusion": "success",
+  "appReinstalledForUpdate": false,
+  "content6": {
+    "releaseUrl": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/tag/content-6",
+    "sourceCommit": "d4719699225269f96fd3f96adb71bc2915ddc734",
+    "snapshotId": "088db53ba4c180842817e9df02117dc63c3ec527eedb1d198368194d6a0d67d2",
+    "remoteDraftAssets": 10,
+    "ciRun": 34320102422,
+    "ciUrl": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/actions/runs/34320102422",
+    "ciConclusion": "success"
+  },
+  "unchangedPackagesReused": 80,
+  "changedPackages": [
+    "core"
+  ],
+  "nativeContent7": {
+    "honorCompat": true,
+    "emulatorSystem": true,
+    "apkVersionUnchanged": "1.2.2 / code6",
+    "normalSafAllFiveItemsPreserved": true,
+    "all37SavedGamesPreserved": true,
+    "firstReadyWithoutFocusWorkaround": true
+  }
+}
