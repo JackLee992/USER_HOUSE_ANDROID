@@ -1,38 +1,19 @@
-# 泡泡龙 1.0.2：辨色素材与手机预览优化
+# 泡泡龙 1.0.3：简洁纯色球
 
-2026-09-09。针对用户反馈的颜色区分度不足，重新生成并替换泡泡龙六色球素材。玩法与旧局颜色身份保持一致，游戏和美术包各自升到 1.0.2。
+2026-09-09。按用户最终要求去掉全部中心符号，仅以六种差异化颜色和简洁圆球进行辨认。红、蓝、绿、黄、紫、橙各自保留稳定颜色身份，黄更浅、紫偏浅紫，降低与橙、蓝的混淆；取消厚玻璃圈与大面积强反光，保留轻微立体明暗。
 
-## 改动
+当前球和下一颗保持较大预览；棋盘、飞行、掉落、预览和图片加载失败的替代绘制都不含符号。射击、计分、物理时序与存档 schema 保持。
 
-旧球只有色相差异，玻璃反光的轮廓与亮度结构相似；实际格距只有 19–30 CSS 像素，下一颗球还会缩到格距的 52%。新版保持饱和色主体，在球心增加稳定的形状线索：
+![原版与新版实际尺寸](evidence/bubbles-v4/size-comparison.png)
 
-| 颜色身份 | 球心标记 |
-| --- | --- |
-| red | 白色爱心 |
-| blue | 白色菱形 |
-| green | 白色三角 |
-| yellow | 深色五角星 |
-| purple | 白色月牙 |
-| orange | 深色十字 |
+## 素材与包
 
-棋盘、飞行、掉落、当前球与下一颗使用同一映射。下一颗预览由原直径的 52% 提高到 80%，当前球由 88% 提高到 98%。图片不可用时也显示对应的颜色与图形。
+内置 imagegen 生成的最终原图：[bubbles-v4.png](../assets/game-art/paopao/bubbles-v4.png)，1536×1024 RGBA、1,529,063 字节。[完整最终提示词](art-prompts/bubbles-v4.txt)；原图未作离线编辑。[透明度与完整边缘](evidence/bubbles-v4/source-alpha.json)逐格验证；渲染使用完整400×400源区域，无附加圆形裁剪。
 
-![实际尺寸与灰度对比](evidence/bubbles-v3/size-comparison.png)
+泡泡龙游戏与专属美术版本均为1.0.3。旧版符号图仅保留在历史证据中，不进入新版游戏资源包。缓存保留48项/2MiB上限，按实际DPR和尺寸缓存；静态棋盘不重复绘制，加载后刷新，退出后不接受迟到回调。
 
-灰度图用于检查非颜色线索，不等同于完整色觉障碍仿真或用户研究。
+## 验收
 
-## 素材与性能
+前置检查：[自动检查324/324](evidence/bubbles-v4/host-tests.txt)；[浏览器真实触控](evidence/bubbles-v4/browser/result.json)验证三档性能模式、换球发射、暂停、冷启动保存、窄屏和图片失败回退。浏览器结果不代替 Android 真机与模拟器验收，最终原生结果随正式发行补齐。
 
-- 使用 **内置 imagegen** 生成，[完整提示词](art-prompts/bubbles-v3.txt)。
-- 最终原图：[assets/game-art/paopao/bubbles-v3.png](../assets/game-art/paopao/bubbles-v3.png)，1536×1024 RGBA，1,720,036 字节；保留生成结果，没有离线裁切或调色。
-- [源图透明度与边缘检查](evidence/bubbles-v3/source-alpha.json)：六个正方形源区域都包含完整球体，四角透明，不额外套圆形裁剪。
-- 独立加载器按实际显示尺寸与 DPR 缓存小图，静态棋盘不逐帧重绘；图片解码后刷新当前棋盘，退出后停止该回调。
-- 新图属于 `art.paopao`，新绘制代码属于 `game.paopao`。共享美术、核心、其他游戏包和 APK 不因本次替换改变。
-
-## 验收与发布
-
-- [完整自动检查](evidence/bubbles-v3/host-tests.txt)：323/323 通过，涵盖新素材加载/缓存/失败回退与原有帧率无关运动。
-- [真实浏览器触控](evidence/bubbles-v3/browser/result.json)：三档性能模式、换球与发射、静止/暂停零新增绘制、保存冷启动、320 窄屏及图片加载失败仍可玩通过，运行时异常为 0。
-- [实际普通模式棋盘](evidence/bubbles-v3/browser/normal-board.png)及[图片不可用时的替代绘制](evidence/bubbles-v3/browser/asset-failure-fallback.png)已目视检查。
-
-Android 正式 APK 的原生更新验收结果随发行归档于 [evidence/bubbles-v3](evidence/bubbles-v3)。最终发行信息和设备结果在发布后补齐。
+历史content8的[符号版资料](bubble-visibility-v3-history.md)仅用于追溯；用户最终选择本页的无符号纯色版。

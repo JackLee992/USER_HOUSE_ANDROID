@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 import {inflateSync} from 'node:zlib';
 import {
   BUBBLE_ART_URL, BUBBLE_SOURCE_RECTS, BUBBLE_COLOR_ORDER,
-  BUBBLE_SHAPES, BUBBLE_CACHE_LIMITS, createBubbleArt,
+  BUBBLE_PALETTE, BUBBLE_CACHE_LIMITS, createBubbleArt,
 } from '../src/games/plugins/paopao/bubble-art.js';
 import {createPaopaoHarness} from './helpers/paopao-harness.mjs';
 
@@ -81,12 +81,12 @@ function drawingHost({dpr=1, imageAvailable=true}={}) {
 }
 
 test('dedicated art stays in the paopao package and all six padded sphere cells are whole', () => {
-  assert.match(new URL(BUBBLE_ART_URL).pathname,/\/assets\/game-art\/paopao\/[^/]+\.png$/);
+  assert.match(new URL(BUBBLE_ART_URL).pathname,/\/assets\/game-art\/paopao\/bubbles-v4\.png$/);
   assert.deepEqual(BUBBLE_COLOR_ORDER,colors);
-  assert.deepEqual(BUBBLE_SHAPES,{red:'heart',blue:'diamond',green:'triangle',yellow:'star',purple:'crescent',orange:'plus'});
+  assert.deepEqual(colors.map(color=>BUBBLE_PALETTE[color]),['#dc4052','#237ec4','#299b67','#f2d65c','#9765bd','#ee913f']);
   assert.equal(BUBBLE_SOURCE_RECTS.length,6);
   for(const [x,y,width,height] of BUBBLE_SOURCE_RECTS){
-    assert.equal(width,448);assert.equal(height,448);
+    assert.equal(width,400);assert.equal(height,400);
     assert.ok(x>=0&&y>=0&&x+width<=1536&&y+height<=1024);
   }
 });
@@ -110,6 +110,7 @@ test('loaded six-color sprites use the corresponding full source cell without ci
   assert.equal(h.art.ready,true);assert.equal(h.readyCalls(),1);
   for(const color of colors) assert.equal(h.art.draw(h.ctx,color,100,80,28),true);
   assert.equal(h.canvases.length,6);
+  assert.equal(h.main.dataset.paopaoArt,'v4');assert.equal(h.main.dataset.gameArt,'bubbles-v4');
   const sourceDraws=h.canvases.flatMap(canvas=>canvas.operations.filter(op=>op[0]==='drawImage'&&op[1]===h.images[0]));
   assert.equal(sourceDraws.length,6);
   sourceDraws.forEach((op,index)=>assert.deepEqual(op.slice(2,6),BUBBLE_SOURCE_RECTS[index]));
@@ -119,26 +120,38 @@ test('loaded six-color sprites use the corresponding full source cell without ci
   h.art.destroy();assert.ok(h.canvases.every(canvas=>canvas.width===0&&canvas.height===0));
 });
 
-test('pending and failed art retain six distinct fallback symbols and reuse the same cached fallback', async () => {
+function assertPlainFallbacks(canvases) {
+  const pathNames=new Set(['arc','ellipse','rect','moveTo','lineTo','quadraticCurveTo','bezierCurveTo','closePath']);
+  const paths=canvases.map(canvas=>JSON.stringify(canvas.operations.filter(op=>pathNames.has(op[0]))));
+  assert.equal(new Set(paths).size,1,'all six colors use the same plain sphere geometry');
+  for(const [index,canvas] of canvases.entries()){
+    assert.ok(canvas.operations.some(op=>op[0]==='arc'),'a fallback sphere must still be visible');
+    assert.ok(canvas.operations.some(op=>op[0]==='addColorStop'&&op[2]===BUBBLE_PALETTE[colors[index]]),'each sphere uses its own color');
+    assert.equal(canvas.operations.some(op=>['fillText','strokeText','rect','moveTo','lineTo','quadraticCurveTo','bezierCurveTo'].includes(op[0])),false,'fallback must not add a center glyph');
+    for(const ellipse of canvas.operations.filter(op=>op[0]==='ellipse')){
+      assert.ok(ellipse[2]+Math.max(ellipse[3],ellipse[4])<canvas.height/2,'small highlights stay above the sphere center');
+    }
+  }
+}
+
+test('pending and failed art retain six plain colored fallbacks and reuse their cached rasters', async () => {
   const h=drawingHost();
   assert.equal(h.art.ready,false);
   for(const color of colors) assert.equal(h.art.draw(h.ctx,color,20,20,28),true);
   assert.equal(h.canvases.length,6);
-  const pathNames=new Set(['arc','ellipse','rect','moveTo','lineTo','quadraticCurveTo','bezierCurveTo','closePath']);
-  const paths=h.canvases.map(canvas=>JSON.stringify(canvas.operations.filter(op=>pathNames.has(op[0]))));
-  assert.equal(new Set(paths).size,6,'color alone must not be the only fallback identity');
-  assert.ok(h.canvases.every(canvas=>canvas.operations.some(op=>pathNames.has(op[0]))));
+  assertPlainFallbacks(h.canvases);
+  assert.equal(h.main.dataset.paopaoArt,'fallback');
   h.fail();await flush();
   for(const color of colors) assert.equal(h.art.draw(h.ctx,color,20,20,28),true);
   assert.equal(h.canvases.length,6);assert.equal(h.art.ready,false);assert.equal(h.readyCalls(),0);
   h.art.destroy();
 });
 
-test('missing Image support still draws all six fallback symbols', () => {
+test('missing Image support still draws all six plain colored fallbacks', () => {
   const h=drawingHost({imageAvailable:false});
   for(const color of colors) assert.equal(h.art.draw(h.ctx,color,0,0,28),true);
   assert.equal(h.art.ready,false);assert.equal(h.readyCalls(),0);
-  assert.equal(h.canvases.length,6);h.art.destroy();
+  assert.equal(h.canvases.length,6);assertPlainFallbacks(h.canvases);h.art.destroy();
 });
 
 test('one successful load replaces cached fallback artwork and notifies readiness once', async () => {

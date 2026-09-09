@@ -7,4 +7,4 @@ Command: node --test tests/*.test.mjs android/app/src/compat/tests/*.test.mjs
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 2489.192833
+ℹ duration_ms 2605.194666

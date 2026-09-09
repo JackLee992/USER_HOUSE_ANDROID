@@ -1,0 +1,71 @@
+{
+  "before": "before",
+  "after": "after-restored",
+  "apkVersions": [
+    "1.2.2",
+    "1.2.2"
+  ],
+  "snapshotIds": [
+    "04a98d3a460a3a4a663002303797eae93af4c9dea5c770c8e7a9f3a81a695b88",
+    "5beaba8e7a4498dea68dd9dddad4f2c4b07fd1968cea03fad84febf0542b4c22"
+  ],
+  "paopaoGameVersions": [
+    "1.0.1",
+    "1.0.2"
+  ],
+  "progressCounts": [
+    37,
+    37
+  ],
+  "itemComparison": {
+    "wanbanXiaowu_settings_v1": {
+      "unchanged": true,
+      "beforeHash": "076ccec4ffd8365d9f8f0503a27997678883d88224a6b6228c556d90c837247d",
+      "afterHash": "076ccec4ffd8365d9f8f0503a27997678883d88224a6b6228c556d90c837247d"
+    },
+    "wanbanXiaowu_scores_v1": {
+      "unchanged": true,
+      "beforeHash": "bcede6ab4aa2aadaaf999f7e625d696dda499a89e597e559f5cc06a07ffd22cd",
+      "afterHash": "bcede6ab4aa2aadaaf999f7e625d696dda499a89e597e559f5cc06a07ffd22cd"
+    },
+    "wanbanXiaowu_progress_v1": {
+      "unchanged": true,
+      "beforeHash": "74a0a8ed257919a1316073ba4a851e4f761581daee639b1a4e3fccd625c5903e",
+      "afterHash": "74a0a8ed257919a1316073ba4a851e4f761581daee639b1a4e3fccd625c5903e"
+    },
+    "wanbanXiaowu_records_v1": {
+      "unchanged": true,
+      "beforeHash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "afterHash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    "wanbanXiaowu_sudokuState_v1": {
+      "unchanged": true,
+      "beforeHash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+      "afterHash": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    }
+  },
+  "allSavedDataIdentical": true,
+  "changedProgress": [],
+  "paopao": {
+    "preservedFields": {
+      "bubbles": true,
+      "falling": true,
+      "score": true,
+      "shots": true,
+      "pushes": true,
+      "shotsSincePush": true,
+      "bombs": true,
+      "current": true,
+      "next": true,
+      "armedBomb": true,
+      "seen": true,
+      "details": true,
+      "_content": true
+    },
+    "changedFields": [],
+    "boardHashes": [
+      "c07e5a70ef2b57e66a74c53371a914db8969fa3da4020fa3ccb2538175a4ad64",
+      "c07e5a70ef2b57e66a74c53371a914db8969fa3da4020fa3ccb2538175a4ad64"
+    ]
+  }
+}

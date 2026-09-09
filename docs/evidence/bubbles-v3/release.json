@@ -1,0 +1,23 @@
+{
+  "repository": "JackLee992/USER_HOUSE_GAME_PACKS",
+  "releaseTag": "content-8",
+  "snapshotId": "5beaba8e7a4498dea68dd9dddad4f2c4b07fd1968cea03fad84febf0542b4c22",
+  "sequence": 8,
+  "snapshotVersion": "1.3.2",
+  "sourceCommit": "869f3c52f85f66920c40c59e66e4d2eb4cface0c",
+  "gameCount": 37,
+  "packageCount": 81,
+  "changed": [
+    {
+      "id": "art.paopao",
+      "filename": "art.paopao-1.0.2.zip",
+      "size": 1866865
+    },
+    {
+      "id": "game.paopao",
+      "filename": "game.paopao-1.0.2.zip",
+      "size": 10557
+    }
+  ],
+  "totalDownloadBytes": 1877422
+}

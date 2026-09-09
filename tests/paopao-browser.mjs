@@ -2,7 +2,7 @@
 import assert from 'node:assert/strict';
 import {mkdirSync,writeFileSync} from 'node:fs';
 const port=Number(process.env.CDP_PORT||9357),origin=process.env.QA_ORIGIN||'http://127.0.0.1:8877';
-const out=process.env.QA_OUT||'.local/qa-bubbles-v3/browser';mkdirSync(out,{recursive:true});
+const out=process.env.QA_OUT||'.local/qa-bubbles-v4/browser';mkdirSync(out,{recursive:true});
 const tabs=await(await fetch(`http://127.0.0.1:${port}/json`)).json();
 const tab=tabs.find(t=>t.type==='page'&&t.url.startsWith(origin+'/'));if(!tab)throw Error('Isolated local tab unavailable');
 const ws=new WebSocket(tab.webSocketDebuggerUrl);await new Promise((resolve,reject)=>{ws.onopen=resolve;ws.onerror=reject;});
@@ -26,7 +26,7 @@ try{
  await evaluate(`wanbaApp.back();localStorage.clear();localStorage.setItem('wanba_locale_v1','zh-CN');localStorage.setItem('wanbanXiaowu_settings_v1',JSON.stringify({theme:'day',companion:false}));`);
  for(const mode of ['eco','normal','game']){
   await evaluate(`localStorage.setItem('wanba_performance_v1',${JSON.stringify(mode)});localStorage.removeItem('wanbanXiaowu_progress_v1');`);await navigate();await begin();
-  await until(`document.querySelector('#wb-paopao-canvas')?.dataset.paopaoArt==='v3'`);await wait(180);
+  await until(`document.querySelector('#wb-paopao-canvas')?.dataset.paopaoArt==='v4'`);await wait(180);
   const b=await bounds();assert.equal(b.width,Math.floor(b.cssWidth*({eco:1,normal:2,game:3}[mode])));assert(b.inside,JSON.stringify(b));
   for(const r of b.controls)assert(r.left>=0&&r.top>=0&&r.right<=b.viewport.w&&r.bottom<=b.viewport.h);
   await shot(mode+'-board');
@@ -47,8 +47,8 @@ try{
  // Validate production renderer pixels independently of the game's random board.
  const pixels=await evaluate(`(async()=>{const m=await import('../src/games/plugins/paopao/bubble-art.js');const art=m.createBubbleArt({window,document,onReady(){}});for(let i=0;i<100&&!art.ready;i++)await new Promise(r=>setTimeout(r,30));if(!art.ready)throw Error('New art did not decode');const rows=[];for(const size of [19,24,30,48])for(const color of m.BUBBLE_COLOR_ORDER){const c=document.createElement('canvas');c.width=c.height=size*2;const ctx=c.getContext('2d');ctx.scale(2,2);art.draw(ctx,color,size/2,size/2,size);const p=ctx.getImageData(0,0,c.width,c.height).data;rows.push({size,color,corners:[3,(c.width-1)*4+3,((c.height-1)*c.width)*4+3,p.length-1].map(i=>p[i]),centerAlpha:p[(Math.floor(c.height/2)*c.width+Math.floor(c.width/2))*4+3]});}art.destroy();return rows})()`);
  for(const r of pixels){assert.deepEqual(r.corners,[0,0,0,0]);assert(r.centerAlpha>220);}checks.push({productionSpritePixels:pixels});
- // Image failure must still be playable with all matching non-color shape cues.
- await send('Network.setBlockedURLs',{urls:['*assets/game-art/paopao/bubbles-v3.png*']});await navigate();await begin();await wait(250);assert.equal(await evaluate('document.querySelector("#wb-paopao-canvas").dataset.paopaoArt'),'fallback');await shot('asset-failure-fallback');
+ // Image failure must still be playable with all matching simple colored spheres.
+ await send('Network.setBlockedURLs',{urls:['*assets/game-art/paopao/bubbles-v4.png*']});await navigate();await begin();await wait(250);assert.equal(await evaluate('document.querySelector("#wb-paopao-canvas").dataset.paopaoArt'),'fallback');await shot('asset-failure-fallback');
  const s=await saved(),p=await evaluate(`(()=>{const r=document.querySelector('#wb-paopao-canvas').getBoundingClientRect();return{x:r.x+r.width/2,y:r.y+r.height*.3}})()`);await touch(p.x,p.y);await until(`(()=>{wanbaApp.save();return JSON.parse(localStorage.getItem('wanbanXiaowu_progress_v1')).paopao.shots>${s.shots}})()`);
  checks.push({failedImageFallbackShot:true});await evaluate('wanbaApp.pause();wanbaApp.back()');await send('Network.setBlockedURLs',{urls:[]});assert.deepEqual(errors,[]);
  console.log(JSON.stringify({passed:true,checks,errors},null,2));

@@ -1,0 +1,106 @@
+{
+  "mode": "RGBA",
+  "width": 1536,
+  "height": 1024,
+  "sha256": "d3c0e10acdc59ec2d5d510e66ed692db61bb47e8d9315a62d8c3cb5de3979850",
+  "bytes": 1529063,
+  "alphaExtrema": [
+    0,
+    254
+  ],
+  "fullyTransparentFraction": 0.55236,
+  "cells": [
+    {
+      "rect": [
+        76,
+        73,
+        400,
+        400
+      ],
+      "alphaAbove10Bounds": [
+        9,
+        10,
+        392,
+        389
+      ],
+      "cornersTransparent": true
+    },
+    {
+      "rect": [
+        568,
+        73,
+        400,
+        400
+      ],
+      "alphaAbove10Bounds": [
+        8,
+        10,
+        392,
+        389
+      ],
+      "cornersTransparent": true
+    },
+    {
+      "rect": [
+        1060,
+        73,
+        400,
+        400
+      ],
+      "alphaAbove10Bounds": [
+        8,
+        9,
+        392,
+        389
+      ],
+      "cornersTransparent": true
+    },
+    {
+      "rect": [
+        76,
+        549,
+        400,
+        400
+      ],
+      "alphaAbove10Bounds": [
+        7,
+        9,
+        392,
+        391
+      ],
+      "cornersTransparent": true
+    },
+    {
+      "rect": [
+        568,
+        549,
+        400,
+        400
+      ],
+      "alphaAbove10Bounds": [
+        7,
+        9,
+        392,
+        391
+      ],
+      "cornersTransparent": true
+    },
+    {
+      "rect": [
+        1060,
+        549,
+        400,
+        400
+      ],
+      "alphaAbove10Bounds": [
+        8,
+        9,
+        392,
+        391
+      ],
+      "cornersTransparent": true
+    }
+  ],
+  "unchangedImagegenOriginal": true,
+  "centerSymbols": false
+}

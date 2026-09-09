@@ -1,0 +1,25 @@
+{
+  "draftAssetsVerified": true,
+  "assets": [
+    {
+      "name": "art.paopao-1.0.2.zip",
+      "bytes": 1866865,
+      "sha256": "963a79c981cb109aad3a5e6ece49aa7fada40b5a4cc7b40ff2826bf50fab30ac"
+    },
+    {
+      "name": "channel.json",
+      "bytes": 74345,
+      "sha256": "ef6529ff4b7ac3160b735ba541e4ba2701acb620e8c71f3ea16b8d53c503a1e6"
+    },
+    {
+      "name": "game.paopao-1.0.2.zip",
+      "bytes": 10557,
+      "sha256": "c87026cd7bd9d591e8f76ad9cf553ba2df4344604845b26de0d7e54f8899e8b6"
+    },
+    {
+      "name": "manifest.json",
+      "bytes": 76488,
+      "sha256": "ff56165136d18df5192a8a8fb4eda1ebc7f89f7406de3c3bf91b818c41b3e9b3"
+    }
+  ]
+}

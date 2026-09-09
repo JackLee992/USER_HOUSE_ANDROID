@@ -1,13 +1,13 @@
 <!doctype html><meta charset="utf-8"><title>泡泡龙辨色素材验收</title>
 <style>body{margin:24px;background:#edf3f6;color:#193044;font:16px system-ui}h1{font-size:24px}section{background:white;border-radius:16px;padding:20px;margin:14px 0;width:860px}h2{margin:0 0 14px;font-size:18px}.row{display:flex;align-items:center;gap:16px;margin:14px 0;min-height:48px}.label{width:160px}.samples{display:flex;gap:16px;align-items:center;padding:8px 20px;border-radius:8px;background:#f2fbf8}.dark{background:#142530}.gray{filter:grayscale(1)}canvas{display:block}small{color:#425c6c}</style>
-<h1>泡泡龙 · 颜色 + 形状辨识</h1><small>实际 CSS 尺寸；灰度为诊断视图，不代表完整色觉障碍模拟。原始素材未进行离线裁切或调色。</small>
+<h1>泡泡龙 · 简洁纯色球</h1><small>实际 CSS 尺寸；去除中心符号，降低高光与轮廓层次。原始素材未进行离线裁切或调色。</small>
 <section id="rows"></section>
 <script type="module">
 import{drawGameSprite,preloadGameArt}from'../../../standalone/game-art.js';
-const img=new Image();img.src='./bubbles-v3-original.png';await img.decode();await preloadGameArt(window);
-const rects=[[32,28,448,448],[544,28,448,448],[1056,28,448,448],[32,528,448,448],[544,528,448,448],[1056,528,448,448]];
+const img=new Image();img.src='../../../assets/game-art/paopao/bubbles-v4.png';await img.decode();await preloadGameArt(window);
+const rects=[[76,73,400,400],[568,73,400,400],[1060,73,400,400],[76,549,400,400],[568,549,400,400],[1060,549,400,400]];
 const rows=document.querySelector('#rows');
-for(const [name,size,old,style]of[['旧版 · 24px',24,true,''],['新版 · 19px',19,false,''],['新版 · 24px',24,false,''],['新版 · 30px',30,false,''],['新版 · 48px',48,false,''],['新版 · 灰度 24px',24,false,'gray'],['新版 · 深色 24px',24,false,'dark']]){
+for(const [name,size,old,style]of[['旧版 · 24px',24,true,''],['新版 · 19px',19,false,''],['新版 · 24px',24,false,''],['新版 · 30px',30,false,''],['新版 · 48px',48,false,''],['新版 · 深色 24px',24,false,'dark']]){
 const row=document.createElement('div');row.className='row';row.innerHTML='<span class="label">'+name+'</span><div class="samples '+style+'"></div>';rows.append(row);
 for(let i=0;i<6;i++){const c=document.createElement('canvas');c.width=c.height=size*2;c.style.width=c.style.height=size+'px';row.lastElementChild.append(c);const ctx=c.getContext('2d');ctx.scale(2,2);if(old)drawGameSprite(ctx,'bubbles',i,0,0,size,size);else ctx.drawImage(img,...rects[i],0,0,size,size);}}
 window.previewReady=true;
