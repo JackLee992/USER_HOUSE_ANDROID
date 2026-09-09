@@ -1,0 +1,39 @@
+{
+  "old": {
+    "packageName": "io.github.jacklee992.wanba",
+    "versionCode": 3,
+    "versionName": "1.2.0",
+    "minSdk": 26,
+    "signerSha256": "806ede7461091d6b9668ad32b656d6e20f47d00eb4e11341e04f551377ced777",
+    "bytes": 48618552,
+    "sha256": "617966114639edcb67e3f224d832d8db46752b24bf1756ff4521dd77e62febb8"
+  },
+  "target": {
+    "packageName": "io.github.jacklee992.wanba",
+    "versionCode": 4,
+    "versionName": "1.2.1",
+    "minSdk": 26,
+    "signerSha256": "806ede7461091d6b9668ad32b656d6e20f47d00eb4e11341e04f551377ced777",
+    "bytes": 59043376,
+    "sha256": "2c9974f81766d273d762c8cc18875e482809079a6b9c8c129d297222d3a7f6b7"
+  },
+  "patch": {
+    "bytes": 11456254,
+    "sha256": "a7e1767458e909a62561582c4fac7be0906ae77dfb846fd835dacba69ef2b33e",
+    "operations": 437,
+    "copiedBytes": 47591068,
+    "downloadRatio": 0.19403114754142783
+  },
+  "javaReconstruction": {
+    "sha256": "2c9974f81766d273d762c8cc18875e482809079a6b9c8c129d297222d3a7f6b7",
+    "apkSignatureVerified": true,
+    "metadata": {
+      "packageName": "io.github.jacklee992.wanba",
+      "versionCode": 4,
+      "versionName": "1.2.1",
+      "minSdk": 26,
+      "signerSha256": "806ede7461091d6b9668ad32b656d6e20f47d00eb4e11341e04f551377ced777"
+    }
+  },
+  "scope": "Offline algorithm evidence; old APK does not gain an updater entry point. Frozen input APKs are read only."
+}

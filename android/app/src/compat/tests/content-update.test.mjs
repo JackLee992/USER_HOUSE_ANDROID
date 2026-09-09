@@ -18,6 +18,7 @@ test('real Java signature, package verification and update recovery behavior', {
   const root = await mkdtemp(join(tmpdir(), 'wanba-update-java-'));
   try {
     const adapters = {
+      'io/github/jacklee992/wanba/BuildConfig.java': 'package io.github.jacklee992.wanba; public final class BuildConfig { public static final boolean WANBA_GAME_UPDATES = true; }',
       'android/content/Context.java': `package android.content;
         public class Context {
           private final java.io.File root;
@@ -62,5 +63,13 @@ test('real Java signature, package verification and update recovery behavior', {
     const output = execFileSync(join(jdk,'bin/java'), ['-cp',`${classes}:${jsonJar}`,'io.github.jacklee992.wanba.ContentUpdateBehavior',root], {encoding:'utf8',timeout:45000});
     assert.match(output,/PASS \d+ real Java assertions/);
     process.stdout.write(output);
+    // Compile again with the actual constant OFF, rather than changing a
+    // runtime preference or merely hiding the JavaScript update controls.
+    await writeFile(join(root,'io/github/jacklee992/wanba/BuildConfig.java'),adapters['io/github/jacklee992/wanba/BuildConfig.java'].replace('= true','= false'));
+    const disabledClasses=join(root,'disabled-classes');await mkdir(disabledClasses);
+    execFileSync(join(jdk,'bin/javac'), ['-cp',jsonJar,'-d',disabledClasses,...Object.keys(adapters).map(path=>join(root,path)),
+      ...['ContentManifest','ContentResourceStore','ContentUpdateManager','LocalAssetPolicy'].map(name=>join(javaRoot,`${name}.java`)),fixtures], {encoding:'utf8'});
+    const disabled=execFileSync(join(jdk,'bin/java'), ['-cp',`${disabledClasses}:${jsonJar}`,'io.github.jacklee992.wanba.ContentUpdateBehavior',root], {encoding:'utf8',timeout:15000});
+    assert.match(disabled,/PASS \d+ disabled-update Java assertions/);process.stdout.write(disabled);
   } finally { await rm(root,{recursive:true,force:true}); }
 });

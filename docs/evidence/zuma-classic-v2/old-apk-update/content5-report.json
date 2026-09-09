@@ -1,0 +1,49 @@
+{
+  "passed": true,
+  "testedAt": "2026-09-09T05:23:15.084Z",
+  "scope": "Original public compat APK 1.2.0 unchanged; native UI game-only update content4 to content5",
+  "apkVersion": "1.2.0",
+  "apkVersionCode": 3,
+  "apkSha256": "9a0c79e397dcf248f49b6d0a980889f926d4f866cd7b59402a1332e67e148ace",
+  "changedPackages": 2,
+  "downloadBytes": 453398,
+  "beforeSnapshot": "7a122cbdc1df7cafba30cfb98269303b91da3f1089c81f028467cd9a4bd4e630",
+  "afterSnapshot": "60dd78b5b5006de9e0488dba2848e60572346f473512e3de8f1354b543c8161c",
+  "zuma": {
+    "gameVersion": "1.1.1",
+    "runtimeApi": 1,
+    "saveSchema": 1,
+    "snapshotId": "60dd78b5b5006de9e0488dba2848e60572346f473512e3de8f1354b543c8161c",
+    "artVersions": {
+      "art.zuma": "1.1.0",
+      "art.shared": "1.0.1"
+    }
+  },
+  "dataChecks": [
+    {
+      "key": "wanbanXiaowu_settings_v1",
+      "equal": true,
+      "sha256": "01b93b688690087d9e641584e3b504597b4817022627540822e73ca6b0b27b42"
+    },
+    {
+      "key": "wanbanXiaowu_scores_v1",
+      "equal": true,
+      "sha256": "2af51b82a033dce12228cc5ecde063cd65f6ec73a35780d0284473fb9aeabc63"
+    },
+    {
+      "key": "wanbanXiaowu_progress_v1",
+      "equal": true,
+      "sha256": "ad73a4c06bcb536c99a9ff37dc1c4004873b19bf8f1554ac12273196eac49226"
+    },
+    {
+      "key": "wanbanXiaowu_records_v1",
+      "equal": true,
+      "sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "key": "wanbanXiaowu_sudokuState_v1",
+      "equal": true,
+      "sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    }
+  ]
+}

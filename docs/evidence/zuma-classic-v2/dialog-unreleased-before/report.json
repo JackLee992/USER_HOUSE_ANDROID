@@ -1,0 +1,10 @@
+{
+  "passed": false,
+  "checks": [
+    "Independent full viewport, dedicated artwork loaded, no clipped page",
+    "Thumb swap exchanges loaded and preview marble",
+    "Hold, drag and release produces one shot"
+  ],
+  "error": "AssertionError [ERR_ASSERTION]: .zc-dialog image skin paints on first opening without resize\n    at file:///Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/tests/zuma-browser.mjs:44:203",
+  "errors": []
+}

@@ -1,0 +1,37 @@
+{
+  "snapshotId": "7a122cbdc1df7cafba30cfb98269303b91da3f1089c81f028467cd9a4bd4e630",
+  "zuma": {
+    "gameVersion": "1.1.0",
+    "runtimeApi": 1,
+    "saveSchema": 1,
+    "snapshotId": "7a122cbdc1df7cafba30cfb98269303b91da3f1089c81f028467cd9a4bd4e630",
+    "artVersions": {
+      "art.zuma": "1.1.0",
+      "art.shared": "1.0.1"
+    }
+  },
+  "allFiveParsedItemsEqual": true,
+  "items": [
+    {
+      "key": "wanbanXiaowu_settings_v1",
+      "sha256": "01b93b688690087d9e641584e3b504597b4817022627540822e73ca6b0b27b42"
+    },
+    {
+      "key": "wanbanXiaowu_scores_v1",
+      "sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "key": "wanbanXiaowu_progress_v1",
+      "sha256": "65a1c6ee6615e7efcfaf9eba19c30b542f8c6eacd5b71a0a4be52f234a0073a8"
+    },
+    {
+      "key": "wanbanXiaowu_records_v1",
+      "sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "key": "wanbanXiaowu_sudokuState_v1",
+      "sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    }
+  ],
+  "note": "Normal SAF exports; parsed JSON equality, not raw localStorage byte equality. No debug transport or injected game state."
+}

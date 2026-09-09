@@ -1,0 +1,98 @@
+{
+  "sourceRects": {
+    "balls": [
+      [
+        24,
+        23,
+        387,
+        387
+      ],
+      [
+        1355,
+        22,
+        390,
+        390
+      ],
+      [
+        910,
+        20,
+        393,
+        393
+      ],
+      [
+        466,
+        22,
+        388,
+        388
+      ],
+      [
+        28,
+        458,
+        387,
+        387
+      ],
+      [
+        467,
+        458,
+        387,
+        387
+      ]
+    ],
+    "frog": [
+      892,
+      416,
+      433,
+      433
+    ],
+    "skull": [
+      1371,
+      415,
+      363,
+      445
+    ]
+  },
+  "ui": {
+    "panel": [
+      134,
+      220,
+      536,
+      173
+    ],
+    "meter": [
+      909,
+      259,
+      505,
+      96
+    ],
+    "button": [
+      116,
+      612,
+      566,
+      214
+    ],
+    "plaque": [
+      914,
+      617,
+      496,
+      211
+    ]
+  },
+  "spriteSize": [
+    1774,
+    887
+  ],
+  "ballOrder": [
+    "RED",
+    "YELLOW",
+    "GREEN",
+    "BLUE",
+    "PURPLE",
+    "ORANGE"
+  ],
+  "renderedSizes": [
+    24,
+    36,
+    48
+  ],
+  "note": "UI uses only the opaque interior source rectangles. The RGB atlas exterior is never sampled."
+}

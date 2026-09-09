@@ -1,0 +1,74 @@
+{
+  "sequence": 1,
+  "tag": "v1.2.2",
+  "manifestSha256": "15d2d7d7b3fadc669282ec6b1fdbb0e88aa8e5e4b8906f8852b63da364bb8817",
+  "payloadSha256": "b936f8507005fdabaf9594af5b5d3a1fe53460e7f553d8b79c9eb7b9a11af5fc",
+  "signatureVerified": true,
+  "reports": [
+    {
+      "flavor": "system",
+      "baseVersionCode": 4,
+      "patchBytes": 1158068,
+      "patchSha256": "3567242dbc849025a3abbc4c37f321b07bf505436234f4b4293ddca5ee71654a",
+      "fullBytes": 59222579,
+      "javaReconstructedSha256": "d1706b1ecc8c601f30bf5f546ac025c3d0ef31685701b50f4223941fac01f892",
+      "apkSignatureVerified": true,
+      "metadata": {
+        "packageName": "io.github.jacklee992.wanba",
+        "versionCode": 6,
+        "versionName": "1.2.2",
+        "minSdk": 26,
+        "signerSha256": "806ede7461091d6b9668ad32b656d6e20f47d00eb4e11341e04f551377ced777"
+      }
+    },
+    {
+      "flavor": "system",
+      "baseVersionCode": 5,
+      "patchBytes": 884176,
+      "patchSha256": "a2d18b93ca01438e31089c50e8b06faa5a93d09f4769284b41e59dbd384fa1a4",
+      "fullBytes": 59222579,
+      "javaReconstructedSha256": "d1706b1ecc8c601f30bf5f546ac025c3d0ef31685701b50f4223941fac01f892",
+      "apkSignatureVerified": true,
+      "metadata": {
+        "packageName": "io.github.jacklee992.wanba",
+        "versionCode": 6,
+        "versionName": "1.2.2",
+        "minSdk": 26,
+        "signerSha256": "806ede7461091d6b9668ad32b656d6e20f47d00eb4e11341e04f551377ced777"
+      }
+    },
+    {
+      "flavor": "compat",
+      "baseVersionCode": 4,
+      "patchBytes": 5880751,
+      "patchSha256": "719b9609112f501f8941cae406c7ea909e01fe63ba225e908e82cd1de9aa1dae",
+      "fullBytes": 224569378,
+      "javaReconstructedSha256": "23ebea8f4382a5c356770423020dff19414afe4d307b5f5bc875cab7e1f94bdd",
+      "apkSignatureVerified": true,
+      "metadata": {
+        "packageName": "io.github.jacklee992.wanba.compat",
+        "versionCode": 6,
+        "versionName": "1.2.2",
+        "minSdk": 26,
+        "signerSha256": "806ede7461091d6b9668ad32b656d6e20f47d00eb4e11341e04f551377ced777"
+      }
+    },
+    {
+      "flavor": "compat",
+      "baseVersionCode": 5,
+      "patchBytes": 1969930,
+      "patchSha256": "4129daa6ea72d9cf2af30039b925fe505e7ee3615d00afb80d3dba28e6c68f9f",
+      "fullBytes": 224569378,
+      "javaReconstructedSha256": "23ebea8f4382a5c356770423020dff19414afe4d307b5f5bc875cab7e1f94bdd",
+      "apkSignatureVerified": true,
+      "metadata": {
+        "packageName": "io.github.jacklee992.wanba.compat",
+        "versionCode": 6,
+        "versionName": "1.2.2",
+        "minSdk": 26,
+        "signerSha256": "806ede7461091d6b9668ad32b656d6e20f47d00eb4e11341e04f551377ced777"
+      }
+    }
+  ],
+  "scope": "Local signed artifact generation and verification only; no upload or publication."
+}

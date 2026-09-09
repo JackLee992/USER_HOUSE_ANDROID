@@ -1,0 +1,126 @@
+{
+  "images": [
+    {
+      "file": "temple-background.png",
+      "width": 1536,
+      "height": 1024,
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPixels": 0,
+      "transparentFraction": 0,
+      "partialPixels": 0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ]
+    },
+    {
+      "file": "temple-sprites.png",
+      "width": 1774,
+      "height": 887,
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPixels": 661667,
+      "transparentFraction": 0.4204963591600584,
+      "partialPixels": 908891,
+      "corners": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "temple-ui.png",
+      "width": 1536,
+      "height": 1024,
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPixels": 0,
+      "transparentFraction": 0,
+      "partialPixels": 0,
+      "corners": [
+        255,
+        255,
+        255,
+        255
+      ]
+    }
+  ],
+  "spriteBounds": [
+    {
+      "index": 0,
+      "bounds": [
+        32,
+        33,
+        371,
+        368
+      ]
+    },
+    {
+      "index": 1,
+      "bounds": [
+        474,
+        32,
+        372,
+        368
+      ]
+    },
+    {
+      "index": 2,
+      "bounds": [
+        918,
+        30,
+        377,
+        373
+      ]
+    },
+    {
+      "index": 3,
+      "bounds": [
+        1363,
+        32,
+        374,
+        370
+      ]
+    },
+    {
+      "index": 4,
+      "bounds": [
+        36,
+        468,
+        371,
+        367
+      ]
+    },
+    {
+      "index": 5,
+      "bounds": [
+        475,
+        468,
+        371,
+        367
+      ]
+    },
+    {
+      "index": 6,
+      "bounds": [
+        900,
+        424,
+        417,
+        417
+      ]
+    },
+    {
+      "index": 7,
+      "bounds": [
+        1379,
+        423,
+        347,
+        429
+      ]
+    }
+  ]
+}

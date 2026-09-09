@@ -1,0 +1,805 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "index": 0,
+      "beforeShots": 152,
+      "samples": [
+        {
+          "ms": 1132,
+          "status": "playing",
+          "shots": 153,
+          "score": 4730,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0.42,
+              "swallowing": 0
+            }
+          }
+        },
+        {
+          "ms": 3116,
+          "status": "playing",
+          "shots": 153,
+          "score": 4730,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0,
+              "swallowing": 0
+            }
+          }
+        },
+        {
+          "ms": 3181,
+          "status": "playing",
+          "shots": 153,
+          "score": 4730,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0,
+              "swallowing": 0
+            }
+          }
+        },
+        {
+          "ms": 3244,
+          "status": "playing",
+          "shots": 153,
+          "score": 4730,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0,
+              "swallowing": 0
+            }
+          }
+        },
+        {
+          "ms": 5216,
+          "status": "playing",
+          "shots": 153,
+          "score": 4730,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0,
+              "swallowing": 0
+            }
+          }
+        },
+        {
+          "ms": 5283,
+          "status": "playing",
+          "shots": 153,
+          "score": 4730,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0,
+              "swallowing": 0
+            }
+          }
+        },
+        {
+          "ms": 5349,
+          "status": "playing",
+          "shots": 153,
+          "score": 4730,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0,
+              "swallowing": 0
+            }
+          }
+        },
+        {
+          "ms": 5416,
+          "status": "playing",
+          "shots": 153,
+          "score": 4730,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0,
+              "swallowing": 0
+            }
+          }
+        },
+        {
+          "ms": 5478,
+          "status": "playing",
+          "shots": 153,
+          "score": 4730,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0,
+              "swallowing": 0
+            }
+          }
+        },
+        {
+          "ms": 5541,
+          "status": "playing",
+          "shots": 153,
+          "score": 4730,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0,
+              "swallowing": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "beforeShots": 153,
+      "samples": [
+        {
+          "ms": 6507,
+          "status": "playing",
+          "shots": 154,
+          "score": 4730,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0.4032600000000093,
+              "swallowing": 0
+            }
+          }
+        },
+        {
+          "ms": 8438,
+          "status": "playing",
+          "shots": 154,
+          "score": 4730,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0,
+              "swallowing": 0
+            }
+          }
+        },
+        {
+          "ms": 8496,
+          "status": "playing",
+          "shots": 154,
+          "score": 4730,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0,
+              "swallowing": 0
+            }
+          }
+        },
+        {
+          "ms": 8558,
+          "status": "playing",
+          "shots": 154,
+          "score": 4730,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0,
+              "swallowing": 0
+            }
+          }
+        },
+        {
+          "ms": 10554,
+          "status": "playing",
+          "shots": 154,
+          "score": 4730,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0,
+              "swallowing": 0
+            }
+          }
+        },
+        {
+          "ms": 10619,
+          "status": "playing",
+          "shots": 154,
+          "score": 4730,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0,
+              "swallowing": 0
+            }
+          }
+        },
+        {
+          "ms": 10681,
+          "status": "playing",
+          "shots": 154,
+          "score": 4730,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0,
+              "swallowing": 0
+            }
+          }
+        },
+        {
+          "ms": 10741,
+          "status": "playing",
+          "shots": 154,
+          "score": 4730,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0,
+              "swallowing": 0
+            }
+          }
+        },
+        {
+          "ms": 10804,
+          "status": "playing",
+          "shots": 154,
+          "score": 4730,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0,
+              "swallowing": 0
+            }
+          }
+        },
+        {
+          "ms": 10861,
+          "status": "playing",
+          "shots": 154,
+          "score": 4730,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0,
+              "swallowing": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "beforeShots": 154,
+      "samples": [
+        {
+          "ms": 11819,
+          "status": "playing",
+          "shots": 155,
+          "score": 4730,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0.4032600000000093,
+              "swallowing": 0
+            }
+          }
+        },
+        {
+          "ms": 13899,
+          "status": "playing",
+          "shots": 155,
+          "score": 4760,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0,
+              "swallowing": 0
+            }
+          }
+        },
+        {
+          "ms": 13963,
+          "status": "playing",
+          "shots": 155,
+          "score": 4760,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0,
+              "swallowing": 0
+            }
+          }
+        },
+        {
+          "ms": 14028,
+          "status": "playing",
+          "shots": 155,
+          "score": 4760,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0,
+              "swallowing": 0
+            }
+          }
+        },
+        {
+          "ms": 15987,
+          "status": "playing",
+          "shots": 155,
+          "score": 4760,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0,
+              "swallowing": 0
+            }
+          }
+        },
+        {
+          "ms": 16049,
+          "status": "playing",
+          "shots": 155,
+          "score": 4760,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0,
+              "swallowing": 0
+            }
+          }
+        },
+        {
+          "ms": 16110,
+          "status": "playing",
+          "shots": 155,
+          "score": 4760,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0,
+              "swallowing": 0
+            }
+          }
+        },
+        {
+          "ms": 16169,
+          "status": "playing",
+          "shots": 155,
+          "score": 4760,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0,
+              "swallowing": 0
+            }
+          }
+        },
+        {
+          "ms": 16234,
+          "status": "playing",
+          "shots": 155,
+          "score": 4760,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0,
+              "swallowing": 0
+            }
+          }
+        },
+        {
+          "ms": 16291,
+          "status": "playing",
+          "shots": 155,
+          "score": 4760,
+          "view": {
+            "layout": "portrait",
+            "width": 900,
+            "height": 1100,
+            "ballRadius": 26,
+            "frog": {
+              "x": 450,
+              "y": 610
+            },
+            "renderer": "webgl",
+            "paused": false,
+            "assetsReady": true,
+            "motionReady": true,
+            "effects": {
+              "sparks": 0,
+              "waves": 0,
+              "loading": 0,
+              "swallowing": 0
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "error": null,
+  "note": "Real native screenshots around actual shots; OEM does not provide shell screenrecord. Sampling/capture overhead is excluded from the separate performance sample."
+}

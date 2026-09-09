@@ -1,0 +1,39 @@
+{
+  "passed": true,
+  "source": "real gameplay save retained through same-signature install; no injected engine state",
+  "before": {
+    "status": "draining",
+    "lives": 3,
+    "score": 1180,
+    "chainCount": 94
+  },
+  "after": {
+    "status": "lifeLost",
+    "lives": 2,
+    "score": 1180,
+    "chainCount": 0,
+    "view": {
+      "layout": "portrait",
+      "width": 900,
+      "height": 1100,
+      "ballRadius": 26,
+      "frog": {
+        "x": 450,
+        "y": 610
+      },
+      "renderer": "canvas2d",
+      "paused": true,
+      "assetsReady": true,
+      "motionReady": true,
+      "effects": {
+        "sparks": 0,
+        "waves": 0,
+        "loading": 0,
+        "swallowing": 0.16
+      }
+    }
+  },
+  "deviceFilesVerified": 13,
+  "apkSHA256": "68950a09ded94847404f0cf8645a0da417bca190e7f0163c86b46183f564fc92",
+  "fiveRawKeysSameAfterInstall": true
+}

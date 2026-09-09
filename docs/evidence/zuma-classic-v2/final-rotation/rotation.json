@@ -1,0 +1,243 @@
+{
+  "passed": true,
+  "testedAt": "2026-09-09T03:44:53.187Z",
+  "input": "adb physical-display rotation, not handheld or CDP emulation",
+  "original": {
+    "mode": "free",
+    "accelerometer": "1",
+    "rotation": "0"
+  },
+  "restored": {
+    "mode": "free",
+    "accelerometer": "1",
+    "rotation": "0"
+  },
+  "checks": [
+    {
+      "rotation": 0,
+      "name": "portrait",
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "orientation": "portrait-primary",
+        "view": {
+          "layout": "portrait",
+          "width": 900,
+          "height": 1100,
+          "ballRadius": 26,
+          "frog": {
+            "x": 450,
+            "y": 610
+          },
+          "renderer": "webgl",
+          "paused": true,
+          "assetsReady": true,
+          "motionReady": true,
+          "effects": {
+            "sparks": 0,
+            "waves": 0,
+            "loading": 0,
+            "swallowing": 0
+          }
+        },
+        "portal": {
+          "x": 0,
+          "y": 0,
+          "width": 360,
+          "height": 746,
+          "top": 0,
+          "right": 360,
+          "bottom": 746,
+          "left": 0
+        },
+        "controls": [
+          {
+            "x": 0,
+            "y": 0,
+            "width": 360,
+            "height": 94.66667175292969,
+            "top": 0,
+            "right": 360,
+            "bottom": 94.66667175292969,
+            "left": 0
+          },
+          {
+            "x": 0,
+            "y": 162.3333282470703,
+            "width": 360,
+            "height": 440,
+            "top": 162.3333282470703,
+            "right": 360,
+            "bottom": 602.3333282470703,
+            "left": 0
+          },
+          {
+            "x": 0,
+            "y": 670,
+            "width": 360,
+            "height": 76,
+            "top": 670,
+            "right": 360,
+            "bottom": 746,
+            "left": 0
+          }
+        ]
+      },
+      "score": 3540,
+      "lives": 2,
+      "shots": 131,
+      "chainCount": 9
+    },
+    {
+      "rotation": 1,
+      "name": "landscape",
+      "layout": {
+        "width": 746,
+        "height": 360,
+        "orientation": "landscape-primary",
+        "view": {
+          "layout": "landscape",
+          "width": 1280,
+          "height": 650,
+          "ballRadius": 29,
+          "frog": {
+            "x": 640,
+            "y": 360.45454545454544
+          },
+          "renderer": "webgl",
+          "paused": true,
+          "assetsReady": true,
+          "motionReady": true,
+          "effects": {
+            "sparks": 0,
+            "waves": 0,
+            "loading": 0,
+            "swallowing": 0
+          }
+        },
+        "portal": {
+          "x": 0,
+          "y": 0,
+          "width": 746,
+          "height": 360,
+          "top": 0,
+          "right": 746,
+          "bottom": 360,
+          "left": 0
+        },
+        "controls": [
+          {
+            "x": 0,
+            "y": 0,
+            "width": 746,
+            "height": 43,
+            "top": 0,
+            "right": 746,
+            "bottom": 43,
+            "left": 0
+          },
+          {
+            "x": 60.883331298828125,
+            "y": 43,
+            "width": 624.25,
+            "height": 317,
+            "top": 43,
+            "right": 685.1333312988281,
+            "bottom": 360,
+            "left": 60.883331298828125
+          },
+          {
+            "x": 0,
+            "y": 308,
+            "width": 746,
+            "height": 52,
+            "top": 308,
+            "right": 746,
+            "bottom": 360,
+            "left": 0
+          }
+        ]
+      },
+      "score": 3540,
+      "lives": 2,
+      "shots": 131,
+      "chainCount": 9
+    },
+    {
+      "rotation": 0,
+      "name": "portrait-restored",
+      "layout": {
+        "width": 360,
+        "height": 746,
+        "orientation": "portrait-primary",
+        "view": {
+          "layout": "portrait",
+          "width": 900,
+          "height": 1100,
+          "ballRadius": 26,
+          "frog": {
+            "x": 450,
+            "y": 610
+          },
+          "renderer": "webgl",
+          "paused": true,
+          "assetsReady": true,
+          "motionReady": true,
+          "effects": {
+            "sparks": 0,
+            "waves": 0,
+            "loading": 0,
+            "swallowing": 0
+          }
+        },
+        "portal": {
+          "x": 0,
+          "y": 0,
+          "width": 360,
+          "height": 746,
+          "top": 0,
+          "right": 360,
+          "bottom": 746,
+          "left": 0
+        },
+        "controls": [
+          {
+            "x": 0,
+            "y": 0,
+            "width": 360,
+            "height": 94.66667175292969,
+            "top": 0,
+            "right": 360,
+            "bottom": 94.66667175292969,
+            "left": 0
+          },
+          {
+            "x": 0,
+            "y": 162.3333282470703,
+            "width": 360,
+            "height": 440,
+            "top": 162.3333282470703,
+            "right": 360,
+            "bottom": 602.3333282470703,
+            "left": 0
+          },
+          {
+            "x": 0,
+            "y": 670,
+            "width": 360,
+            "height": 76,
+            "top": 670,
+            "right": 360,
+            "bottom": 746,
+            "left": 0
+          }
+        ]
+      },
+      "score": 3540,
+      "lives": 2,
+      "shots": 131,
+      "chainCount": 9
+    }
+  ],
+  "error": null
+}

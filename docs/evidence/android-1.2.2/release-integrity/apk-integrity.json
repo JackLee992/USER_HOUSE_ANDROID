@@ -1,0 +1,1487 @@
+{
+  "verifiedAtUtc": "2026-09-09T05:10:33.361097+00:00",
+  "versionName": "1.2.2",
+  "versionCode": 6,
+  "contentRelease": "content-5",
+  "sequence": 5,
+  "contentSnapshotVersion": "1.2.1",
+  "sourceCommit": "7ec8a6defde450b662fd491d27dc4c46d72cef62",
+  "snapshotId": "60dd78b5b5006de9e0488dba2848e60572346f473512e3de8f1354b543c8161c",
+  "contentSignatureVerified": true,
+  "manifestSha256": "f7735a7cd8a2f82e06352fea1e2a799b098db94e6fbedf9752ad7d7ced0a1bf9",
+  "builtinChannelSha256": "8f0836e6bc3369b32a777a2e511dc4fab63ead81914c9bdeefd561e695e67fba",
+  "publicKeySha256": "f358f6d45e02c636230bec0deec9cf2cf91fe27619a4d386f0ba51eacb9d13c9",
+  "packages": 81,
+  "packageVersions": {
+    "art.blackjack": "1.0.1",
+    "art.bombnumber": "1.0.1",
+    "art.chinesechess": "1.0.1",
+    "art.connect4d": "1.0.1",
+    "art.draughts": "1.0.1",
+    "art.freecell": "1.0.1",
+    "art.game1010": "1.0.1",
+    "art.game2048": "1.0.1",
+    "art.gomoku": "1.0.1",
+    "art.guessnumber": "1.0.1",
+    "art.jump": "1.0.1",
+    "art.linklink": "1.0.1",
+    "art.ludo": "1.0.1",
+    "art.match3": "1.0.1",
+    "art.memory": "1.0.1",
+    "art.minesweeper": "1.0.1",
+    "art.oldmaid": "1.0.1",
+    "art.paopao": "1.0.1",
+    "art.pinball": "1.0.1",
+    "art.plank": "1.0.1",
+    "art.popstar": "1.0.1",
+    "art.reversi": "1.0.1",
+    "art.screw": "1.0.1",
+    "art.shared": "1.0.1",
+    "art.shuerte": "1.0.1",
+    "art.snake": "1.0.1",
+    "art.spider": "1.0.1",
+    "art.sudoku": "1.0.1",
+    "art.territory": "1.0.1",
+    "art.tetris": "1.0.1",
+    "art.tictactoe": "1.0.1",
+    "art.turkey": "1.0.1",
+    "art.uyangle": "1.0.1",
+    "art.watermelon": "1.0.1",
+    "art.watersort": "1.0.1",
+    "art.westernchess": "1.0.1",
+    "art.wordguess": "1.0.1",
+    "art.zuma": "1.1.0",
+    "core": "1.1.2",
+    "game.blackjack": "1.0.0",
+    "game.bombnumber": "1.0.0",
+    "game.chinesechess": "1.0.0",
+    "game.connect4d": "1.0.0",
+    "game.draughts": "1.0.0",
+    "game.freecell": "1.0.0",
+    "game.game1010": "1.0.1",
+    "game.game2048": "1.0.0",
+    "game.gomoku": "1.0.0",
+    "game.guessnumber": "1.0.0",
+    "game.jump": "1.0.0",
+    "game.linklink": "1.0.0",
+    "game.ludo": "1.0.0",
+    "game.match3": "1.0.0",
+    "game.memory": "1.0.0",
+    "game.minesweeper": "1.0.0",
+    "game.oldmaid": "1.0.0",
+    "game.paopao": "1.0.1",
+    "game.pinball": "1.0.0",
+    "game.plank": "1.0.0",
+    "game.popstar": "1.0.0",
+    "game.reversi": "1.0.0",
+    "game.screw": "1.0.0",
+    "game.shuerte": "1.0.0",
+    "game.snake": "1.0.0",
+    "game.spider": "1.0.0",
+    "game.sudoku": "1.0.0",
+    "game.territory": "1.0.0",
+    "game.tetris": "1.0.0",
+    "game.tictactoe": "1.0.0",
+    "game.turkey": "1.0.0",
+    "game.uyangle": "1.0.0",
+    "game.watermelon": "1.0.0",
+    "game.watersort": "1.0.0",
+    "game.westernchess": "1.0.0",
+    "game.wordguess": "1.0.1",
+    "game.zuma": "1.1.1",
+    "i18n.en": "1.0.2",
+    "i18n.ja": "1.0.2",
+    "i18n.ko": "1.0.2",
+    "i18n.zh-CN": "1.0.2",
+    "i18n.zh-TW": "1.0.2"
+  },
+  "gameCount": 37,
+  "filesPerApk": 221,
+  "sourceFilesMatched": 221,
+  "apks": [
+    {
+      "flavor": "system",
+      "file": "wanba-system-1.2.2.apk",
+      "bytes": 59222579,
+      "sha256": "d1706b1ecc8c601f30bf5f546ac025c3d0ef31685701b50f4223941fac01f892",
+      "package": "io.github.jacklee992.wanba",
+      "versionName": "1.2.2",
+      "versionCode": 6,
+      "minSdk": 26,
+      "targetSdk": 36,
+      "debuggable": false,
+      "testOnly": false,
+      "certificateSha256": "806ede7461091d6b9668ad32b656d6e20f47d00eb4e11341e04f551377ced777",
+      "signatureScheme": "v2",
+      "wwwFilesMatched": 221,
+      "extraWwwFiles": 0,
+      "builtinChannelMatched": true,
+      "languages": {
+        "zh-CN": {
+          "version": "1.0.2",
+          "gameTitles": 37,
+          "brand": "玩吧"
+        },
+        "zh-TW": {
+          "version": "1.0.2",
+          "gameTitles": 37,
+          "brand": "玩吧"
+        },
+        "en": {
+          "version": "1.0.2",
+          "gameTitles": 37,
+          "brand": "Nookcade"
+        },
+        "ja": {
+          "version": "1.0.2",
+          "gameTitles": 37,
+          "brand": "ヌックケード"
+        },
+        "ko": {
+          "version": "1.0.2",
+          "gameTitles": 37,
+          "brand": "눅케이드"
+        }
+      },
+      "brandAssets": {
+        "assets/app-brand/app-icon.png": {
+          "bytes": 389745,
+          "sha256": "09357652a0722361e739ce7aa418218a58f9561086f20cad851d36220663cfaf"
+        },
+        "assets/app-brand/international/app-icon.png": {
+          "bytes": 148961,
+          "sha256": "abd7813bc43927a0b11d46a73c7920788eb163abd9c727172510ca60d7cc93ec"
+        }
+      },
+      "nativeLibraries": [],
+      "gecko": null,
+      "lint": {
+        "errors": 0,
+        "warnings": 17,
+        "issues": [
+          {
+            "id": "OldTargetApi",
+            "severity": "Warning",
+            "message": "Not targeting the latest versions of Android; compatibility modes apply. Consider testing and updating this version. Consult the `android.os.Build.VERSION_CODES` javadoc for details.",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/build.gradle.kts",
+                "line": "32",
+                "column": "9"
+              }
+            ]
+          },
+          {
+            "id": "UnusedAttribute",
+            "severity": "Warning",
+            "message": "Attribute `enableOnBackInvokedCallback` is only used in API level 33 and higher (current min is 26)",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/src/main/AndroidManifest.xml",
+                "line": "19",
+                "column": "13"
+              }
+            ]
+          },
+          {
+            "id": "AndroidGradlePluginVersion",
+            "severity": "Warning",
+            "message": "A newer version of Gradle than 9.4.1 is available: 9.7.1",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/gradle/wrapper/gradle-wrapper.properties",
+                "line": "4",
+                "column": "17"
+              }
+            ]
+          },
+          {
+            "id": "ChromeOsAbiSupport",
+            "severity": "Warning",
+            "message": "Missing x86_64 ABI support for ChromeOS",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/build.gradle.kts",
+                "line": "45",
+                "column": "33"
+              }
+            ]
+          },
+          {
+            "id": "SetJavaScriptEnabled",
+            "severity": "Warning",
+            "message": "Using `setJavaScriptEnabled` can introduce XSS vulnerabilities into your application, review carefully",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/src/main/java/io/github/jacklee992/wanba/MainActivity.java",
+                "line": "179",
+                "column": "9"
+              }
+            ]
+          },
+          {
+            "id": "DataExtractionRules",
+            "severity": "Warning",
+            "message": "The attribute `android:allowBackup` is deprecated from Android 12 and higher and may be removed in future versions. Consider adding the attribute `android:dataExtractionRules` specifying an `@xml` resource which configures cloud backups and device transfers on Android 12 and higher.",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/src/main/AndroidManifest.xml",
+                "line": "5",
+                "column": "30"
+              }
+            ]
+          },
+          {
+            "id": "ObsoleteSdkInt",
+            "severity": "Warning",
+            "message": "This folder configuration (`v26`) is unnecessary; `minSdkVersion` is 26. Merge all the resources in this folder into `mipmap-anydpi`.",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/src/main/res/mipmap-anydpi-v26"
+              }
+            ]
+          },
+          {
+            "id": "ObsoleteSdkInt",
+            "severity": "Warning",
+            "message": "This folder configuration (`v26`) is unnecessary; `minSdkVersion` is 26. Merge all the resources in this folder into `mipmap-en-anydpi`.",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/src/main/res/mipmap-en-anydpi-v26"
+              }
+            ]
+          },
+          {
+            "id": "ObsoleteSdkInt",
+            "severity": "Warning",
+            "message": "This folder configuration (`v26`) is unnecessary; `minSdkVersion` is 26. Merge all the resources in this folder into `mipmap-ja-anydpi`.",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/src/main/res/mipmap-ja-anydpi-v26"
+              }
+            ]
+          },
+          {
+            "id": "ObsoleteSdkInt",
+            "severity": "Warning",
+            "message": "This folder configuration (`v26`) is unnecessary; `minSdkVersion` is 26. Merge all the resources in this folder into `mipmap-ko-anydpi`.",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/src/main/res/mipmap-ko-anydpi-v26"
+              }
+            ]
+          },
+          {
+            "id": "UsableSpace",
+            "severity": "Warning",
+            "message": "Consider also using `StorageManager#getAllocatableBytes` and `allocateBytes` which will consider clearable cached data",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/src/main/java/io/github/jacklee992/wanba/ContentUpdateManager.java",
+                "line": "125",
+                "column": "33"
+              }
+            ]
+          },
+          {
+            "id": "MonochromeLauncherIcon",
+            "severity": "Warning",
+            "message": "The application adaptive icon is missing a monochrome tag",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml",
+                "line": "1",
+                "column": "1"
+              }
+            ]
+          },
+          {
+            "id": "MonochromeLauncherIcon",
+            "severity": "Warning",
+            "message": "The application adaptive icon is missing a monochrome tag",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/src/main/res/mipmap-en-anydpi-v26/ic_launcher.xml",
+                "line": "1",
+                "column": "1"
+              }
+            ]
+          },
+          {
+            "id": "MonochromeLauncherIcon",
+            "severity": "Warning",
+            "message": "The application adaptive icon is missing a monochrome tag",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/src/main/res/mipmap-ja-anydpi-v26/ic_launcher.xml",
+                "line": "1",
+                "column": "1"
+              }
+            ]
+          },
+          {
+            "id": "MonochromeLauncherIcon",
+            "severity": "Warning",
+            "message": "The application adaptive icon is missing a monochrome tag",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/src/main/res/mipmap-ko-anydpi-v26/ic_launcher.xml",
+                "line": "1",
+                "column": "1"
+              }
+            ]
+          },
+          {
+            "id": "SetTextI18n",
+            "severity": "Warning",
+            "message": "Do not concatenate text displayed with `setText`. Use resource string with placeholders.",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/src/main/java/io/github/jacklee992/wanba/MainActivity.java",
+                "line": "144",
+                "column": "29"
+              }
+            ]
+          },
+          {
+            "id": "SetTextI18n",
+            "severity": "Warning",
+            "message": "String literal in `setText` can not be translated. Use Android resources instead.",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/src/main/java/io/github/jacklee992/wanba/MainActivity.java",
+                "line": "150",
+                "column": "26"
+              }
+            ]
+          }
+        ]
+      },
+      "updateCapabilities": {
+        "checked": true,
+        "expectedAppUpdater": true,
+        "expectedGameUpdates": true,
+        "flags": {
+          "WANBA_APP_UPDATER": true,
+          "WANBA_GAME_UPDATES": true
+        },
+        "hostVersionCode": 6,
+        "hostVersionName": "1.2.2",
+        "installPackagesPermission": true,
+        "components": [
+          {
+            "type": "activity",
+            "name": "io.github.jacklee992.wanba.appupdater.AppUpdateActivity",
+            "exported": false
+          },
+          {
+            "type": "receiver",
+            "name": "io.github.jacklee992.wanba.appupdater.InstallResultReceiver",
+            "exported": false
+          }
+        ],
+        "updaterClasses": [
+          "Lio/github/jacklee992/wanba/appupdater/ApkChecks;",
+          "Lio/github/jacklee992/wanba/appupdater/AppUpdateActivity$$ExternalSyntheticLambda0;",
+          "Lio/github/jacklee992/wanba/appupdater/AppUpdateActivity$$ExternalSyntheticLambda1;",
+          "Lio/github/jacklee992/wanba/appupdater/AppUpdateActivity$$ExternalSyntheticLambda2;",
+          "Lio/github/jacklee992/wanba/appupdater/AppUpdateActivity$$ExternalSyntheticLambda3;",
+          "Lio/github/jacklee992/wanba/appupdater/AppUpdateActivity$$ExternalSyntheticLambda4;",
+          "Lio/github/jacklee992/wanba/appupdater/AppUpdateActivity$$ExternalSyntheticLambda5;",
+          "Lio/github/jacklee992/wanba/appupdater/AppUpdateActivity$$ExternalSyntheticLambda6;",
+          "Lio/github/jacklee992/wanba/appupdater/AppUpdateActivity$$ExternalSyntheticLambda7;",
+          "Lio/github/jacklee992/wanba/appupdater/AppUpdateActivity;",
+          "Lio/github/jacklee992/wanba/appupdater/DownloadAccounting;",
+          "Lio/github/jacklee992/wanba/appupdater/InstallResultReceiver;",
+          "Lio/github/jacklee992/wanba/appupdater/R;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateController$$ExternalSyntheticLambda0;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateController$$ExternalSyntheticLambda1;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateController$$ExternalSyntheticLambda2;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateController$$ExternalSyntheticLambda3;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateController$$ExternalSyntheticLambda4;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateController$$ExternalSyntheticLambda5;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateController$$ExternalSyntheticLambda6;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateController$$ExternalSyntheticLambda7;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateController$Listener;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateController$Work;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateController;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateFiles$Cancelled;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateFiles;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateHttp$Progress;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateHttp;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateProtocol$Asset;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateProtocol$Delta;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateProtocol$Entry;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateProtocol;"
+        ],
+        "apkSignatureVerifierClasses": [
+          "Lcom/android/apksig/ApkSigner$1;",
+          "Lcom/android/apksig/ApkSigner$Builder;",
+          "Lcom/android/apksig/ApkSigner$OutputSizeAndDataOffset;",
+          "Lcom/android/apksig/ApkSigner$SignerConfig$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/ApkSigner$SignerConfig$$ExternalSyntheticLambda1;",
+          "Lcom/android/apksig/ApkSigner$SignerConfig$Builder;",
+          "Lcom/android/apksig/ApkSigner$SignerConfig;",
+          "Lcom/android/apksig/ApkSigner;",
+          "Lcom/android/apksig/ApkSignerEngine$InputJarEntryInstructions$OutputPolicy;",
+          "Lcom/android/apksig/ApkSignerEngine$InputJarEntryInstructions;",
+          "Lcom/android/apksig/ApkSignerEngine$InspectJarEntryRequest;",
+          "Lcom/android/apksig/ApkSignerEngine$OutputApkSigningBlockRequest2;",
+          "Lcom/android/apksig/ApkSignerEngine$OutputApkSigningBlockRequest;",
+          "Lcom/android/apksig/ApkSignerEngine$OutputJarSignatureRequest$JarEntry;",
+          "Lcom/android/apksig/ApkSignerEngine$OutputJarSignatureRequest;",
+          "Lcom/android/apksig/ApkSignerEngine;",
+          "Lcom/android/apksig/ApkVerificationIssue;",
+          "Lcom/android/apksig/ApkVerifier$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/ApkVerifier$$ExternalSyntheticLambda1;",
+          "Lcom/android/apksig/ApkVerifier$$ExternalSyntheticLambda2;",
+          "Lcom/android/apksig/ApkVerifier$1;",
+          "Lcom/android/apksig/ApkVerifier$ApkVerificationIssueAdapter;",
+          "Lcom/android/apksig/ApkVerifier$Builder;",
+          "Lcom/android/apksig/ApkVerifier$ByteArray;",
+          "Lcom/android/apksig/ApkVerifier$Issue;",
+          "Lcom/android/apksig/ApkVerifier$IssueWithParams;",
+          "Lcom/android/apksig/ApkVerifier$Result$SourceStampInfo$SourceStampVerificationStatus;",
+          "Lcom/android/apksig/ApkVerifier$Result$SourceStampInfo;",
+          "Lcom/android/apksig/ApkVerifier$Result$V1SchemeSignerInfo;",
+          "Lcom/android/apksig/ApkVerifier$Result$V2SchemeSignerInfo;",
+          "Lcom/android/apksig/ApkVerifier$Result$V3SchemeSignerInfo$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/ApkVerifier$Result$V3SchemeSignerInfo$$ExternalSyntheticLambda1;",
+          "Lcom/android/apksig/ApkVerifier$Result$V3SchemeSignerInfo;",
+          "Lcom/android/apksig/ApkVerifier$Result$V4SchemeSignerInfo;",
+          "Lcom/android/apksig/ApkVerifier$Result;",
+          "Lcom/android/apksig/ApkVerifier;",
+          "Lcom/android/apksig/Constants;",
+          "Lcom/android/apksig/DefaultApkSignerEngine$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/DefaultApkSignerEngine$$ExternalSyntheticLambda1;",
+          "Lcom/android/apksig/DefaultApkSignerEngine$1;",
+          "Lcom/android/apksig/DefaultApkSignerEngine$Builder$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/DefaultApkSignerEngine$Builder;",
+          "Lcom/android/apksig/DefaultApkSignerEngine$CompoundInspectJarEntryRequest;",
+          "Lcom/android/apksig/DefaultApkSignerEngine$GetJarEntryDataDigestRequest;",
+          "Lcom/android/apksig/DefaultApkSignerEngine$GetJarEntryDataRequest;",
+          "Lcom/android/apksig/DefaultApkSignerEngine$OutputApkSigningBlockRequestImpl;",
+          "Lcom/android/apksig/DefaultApkSignerEngine$OutputJarSignatureRequestImpl;",
+          "Lcom/android/apksig/DefaultApkSignerEngine$SignerConfig$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/DefaultApkSignerEngine$SignerConfig$$ExternalSyntheticLambda1;",
+          "Lcom/android/apksig/DefaultApkSignerEngine$SignerConfig$Builder;",
+          "Lcom/android/apksig/DefaultApkSignerEngine$SignerConfig;",
+          "Lcom/android/apksig/DefaultApkSignerEngine;",
+          "Lcom/android/apksig/Hints$ByteRange;",
+          "Lcom/android/apksig/Hints$PatternWithRange;",
+          "Lcom/android/apksig/Hints;",
+          "Lcom/android/apksig/JcaSignerEngine;",
+          "Lcom/android/apksig/KeyConfig$1;",
+          "Lcom/android/apksig/KeyConfig$Jca;",
+          "Lcom/android/apksig/KeyConfig$Kms;",
+          "Lcom/android/apksig/KeyConfig;",
+          "Lcom/android/apksig/SignerEngine;",
+          "Lcom/android/apksig/SignerEngineFactory$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/SignerEngineFactory$$ExternalSyntheticLambda1;",
+          "Lcom/android/apksig/SignerEngineFactory;",
+          "Lcom/android/apksig/SigningCertificateLineage$1;",
+          "Lcom/android/apksig/SigningCertificateLineage$Builder;",
+          "Lcom/android/apksig/SigningCertificateLineage$SignerCapabilities$Builder;",
+          "Lcom/android/apksig/SigningCertificateLineage$SignerCapabilities;",
+          "Lcom/android/apksig/SigningCertificateLineage$SignerConfig$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/SigningCertificateLineage$SignerConfig$$ExternalSyntheticLambda1;",
+          "Lcom/android/apksig/SigningCertificateLineage$SignerConfig$Builder;",
+          "Lcom/android/apksig/SigningCertificateLineage$SignerConfig;",
+          "Lcom/android/apksig/SigningCertificateLineage;",
+          "Lcom/android/apksig/SourceStampVerifier$1;",
+          "Lcom/android/apksig/SourceStampVerifier$Builder;",
+          "Lcom/android/apksig/SourceStampVerifier$Result$SignerInfo;",
+          "Lcom/android/apksig/SourceStampVerifier$Result$SourceStampInfo;",
+          "Lcom/android/apksig/SourceStampVerifier$Result;",
+          "Lcom/android/apksig/SourceStampVerifier;",
+          "Lcom/android/apksig/apk/ApkFormatException;",
+          "Lcom/android/apksig/apk/ApkSigningBlockNotFoundException;",
+          "Lcom/android/apksig/apk/ApkUtils$1;",
+          "Lcom/android/apksig/apk/ApkUtils$ApkSigningBlock;",
+          "Lcom/android/apksig/apk/ApkUtils$CodenamesLazyInitializer$ByFirstComparator;",
+          "Lcom/android/apksig/apk/ApkUtils$CodenamesLazyInitializer;",
+          "Lcom/android/apksig/apk/ApkUtils$ZipSections;",
+          "Lcom/android/apksig/apk/ApkUtils;",
+          "Lcom/android/apksig/apk/ApkUtilsLite$ApkSigningBlock;",
+          "Lcom/android/apksig/apk/ApkUtilsLite;",
+          "Lcom/android/apksig/apk/CodenameMinSdkVersionException;",
+          "Lcom/android/apksig/apk/MinSdkVersionException;",
+          "Lcom/android/apksig/internal/apk/AndroidBinXmlParser$1;",
+          "Lcom/android/apksig/internal/apk/AndroidBinXmlParser$Attribute;",
+          "Lcom/android/apksig/internal/apk/AndroidBinXmlParser$Chunk;",
+          "Lcom/android/apksig/internal/apk/AndroidBinXmlParser$ResourceMap;",
+          "Lcom/android/apksig/internal/apk/AndroidBinXmlParser$StringPool;",
+          "Lcom/android/apksig/internal/apk/AndroidBinXmlParser$XmlParserException;",
+          "Lcom/android/apksig/internal/apk/AndroidBinXmlParser;",
+          "Lcom/android/apksig/internal/apk/ApkSigResult;",
+          "Lcom/android/apksig/internal/apk/ApkSignerInfo;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$1;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$ChunkDigester;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$ChunkDigests;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$ChunkSupplier$Chunk;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$ChunkSupplier;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$NoSupportedSignaturesException;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$Result$SignerInfo$AdditionalAttribute;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$Result$SignerInfo$ContentDigest;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$Result$SignerInfo$Signature;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$Result$SignerInfo;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$Result;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$SignatureNotFoundException;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$SignerConfig;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$SigningSchemeBlockAndDigests;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$SupportedSignature;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$VerityTreeAndDigest;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtilsLite$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtilsLite$1;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtilsLite;",
+          "Lcom/android/apksig/internal/apk/ApkSupportedSignature;",
+          "Lcom/android/apksig/internal/apk/ContentDigestAlgorithm;",
+          "Lcom/android/apksig/internal/apk/NoApkSupportedSignaturesException;",
+          "Lcom/android/apksig/internal/apk/SignatureAlgorithm;",
+          "Lcom/android/apksig/internal/apk/SignatureInfo;",
+          "Lcom/android/apksig/internal/apk/SignatureNotFoundException;",
+          "Lcom/android/apksig/internal/apk/stamp/SourceStampCertificateLineage$SigningCertificateNode;",
+          "Lcom/android/apksig/internal/apk/stamp/SourceStampCertificateLineage;",
+          "Lcom/android/apksig/internal/apk/stamp/SourceStampConstants;",
+          "Lcom/android/apksig/internal/apk/stamp/SourceStampVerifier;",
+          "Lcom/android/apksig/internal/apk/stamp/V1SourceStampSigner$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/internal/apk/stamp/V1SourceStampSigner$1;",
+          "Lcom/android/apksig/internal/apk/stamp/V1SourceStampSigner$SourceStampBlock;",
+          "Lcom/android/apksig/internal/apk/stamp/V1SourceStampSigner;",
+          "Lcom/android/apksig/internal/apk/stamp/V1SourceStampVerifier;",
+          "Lcom/android/apksig/internal/apk/stamp/V2SourceStampSigner$1;",
+          "Lcom/android/apksig/internal/apk/stamp/V2SourceStampSigner$Builder;",
+          "Lcom/android/apksig/internal/apk/stamp/V2SourceStampSigner$SourceStampBlock;",
+          "Lcom/android/apksig/internal/apk/stamp/V2SourceStampSigner;",
+          "Lcom/android/apksig/internal/apk/stamp/V2SourceStampVerifier$1;",
+          "Lcom/android/apksig/internal/apk/stamp/V2SourceStampVerifier;",
+          "Lcom/android/apksig/internal/apk/v1/DigestAlgorithm$1;",
+          "Lcom/android/apksig/internal/apk/v1/DigestAlgorithm$StrengthComparator;",
+          "Lcom/android/apksig/internal/apk/v1/DigestAlgorithm;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeConstants;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeSigner$1;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeSigner$OutputManifestFile;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeSigner$SignerConfig;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeSigner;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeVerifier$1;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeVerifier$NamedDigest;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeVerifier$ObjectIdentifierChoice;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeVerifier$OctetStringChoice;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeVerifier$Result$SignerInfo;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeVerifier$Result;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeVerifier$SignedAttributes;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeVerifier$Signer;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeVerifier$Signers;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeVerifier;",
+          "Lcom/android/apksig/internal/apk/v2/V2SchemeConstants;",
+          "Lcom/android/apksig/internal/apk/v2/V2SchemeSigner$1;",
+          "Lcom/android/apksig/internal/apk/v2/V2SchemeSigner$V2SignatureSchemeBlock$SignedData;",
+          "Lcom/android/apksig/internal/apk/v2/V2SchemeSigner$V2SignatureSchemeBlock$Signer;",
+          "Lcom/android/apksig/internal/apk/v2/V2SchemeSigner$V2SignatureSchemeBlock;",
+          "Lcom/android/apksig/internal/apk/v2/V2SchemeSigner;",
+          "Lcom/android/apksig/internal/apk/v2/V2SchemeVerifier;",
+          "Lcom/android/apksig/internal/apk/v3/V3SchemeConstants;",
+          "Lcom/android/apksig/internal/apk/v3/V3SchemeSigner$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/internal/apk/v3/V3SchemeSigner$1;",
+          "Lcom/android/apksig/internal/apk/v3/V3SchemeSigner$Builder;",
+          "Lcom/android/apksig/internal/apk/v3/V3SchemeSigner$V3SignatureSchemeBlock$SignedData;",
+          "Lcom/android/apksig/internal/apk/v3/V3SchemeSigner$V3SignatureSchemeBlock$Signer;",
+          "Lcom/android/apksig/internal/apk/v3/V3SchemeSigner$V3SignatureSchemeBlock;",
+          "Lcom/android/apksig/internal/apk/v3/V3SchemeSigner;",
+          "Lcom/android/apksig/internal/apk/v3/V3SchemeVerifier$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/internal/apk/v3/V3SchemeVerifier$$ExternalSyntheticLambda1;",
+          "Lcom/android/apksig/internal/apk/v3/V3SchemeVerifier$1;",
+          "Lcom/android/apksig/internal/apk/v3/V3SchemeVerifier$Builder;",
+          "Lcom/android/apksig/internal/apk/v3/V3SchemeVerifier;",
+          "Lcom/android/apksig/internal/apk/v3/V3SigningCertificateLineage$SigningCertificateNode;",
+          "Lcom/android/apksig/internal/apk/v3/V3SigningCertificateLineage;",
+          "Lcom/android/apksig/internal/apk/v4/V4SchemeSigner$1;",
+          "Lcom/android/apksig/internal/apk/v4/V4SchemeSigner$SignerConfig;",
+          "Lcom/android/apksig/internal/apk/v4/V4SchemeSigner;",
+          "Lcom/android/apksig/internal/apk/v4/V4SchemeVerifier;",
+          "Lcom/android/apksig/internal/apk/v4/V4Signature$HashingInfo;",
+          "Lcom/android/apksig/internal/apk/v4/V4Signature$SigningInfo;",
+          "Lcom/android/apksig/internal/apk/v4/V4Signature$SigningInfoBlock;",
+          "Lcom/android/apksig/internal/apk/v4/V4Signature$SigningInfos;",
+          "Lcom/android/apksig/internal/apk/v4/V4Signature;",
+          "Lcom/android/apksig/internal/asn1/Asn1BerParser$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/internal/asn1/Asn1BerParser$1;",
+          "Lcom/android/apksig/internal/asn1/Asn1BerParser$AnnotatedField;",
+          "Lcom/android/apksig/internal/asn1/Asn1BerParser$Asn1UnexpectedTagException;",
+          "Lcom/android/apksig/internal/asn1/Asn1BerParser$BerToJavaConverter;",
+          "Lcom/android/apksig/internal/asn1/Asn1BerParser;",
+          "Lcom/android/apksig/internal/asn1/Asn1Class;",
+          "Lcom/android/apksig/internal/asn1/Asn1DecodingException;",
+          "Lcom/android/apksig/internal/asn1/Asn1DerEncoder$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/internal/asn1/Asn1DerEncoder$1;",
+          "Lcom/android/apksig/internal/asn1/Asn1DerEncoder$AnnotatedField;",
+          "Lcom/android/apksig/internal/asn1/Asn1DerEncoder$ByteArrayLexicographicComparator;",
+          "Lcom/android/apksig/internal/asn1/Asn1DerEncoder$JavaToDerConverter;",
+          "Lcom/android/apksig/internal/asn1/Asn1DerEncoder;",
+          "Lcom/android/apksig/internal/asn1/Asn1EncodingException;",
+          "Lcom/android/apksig/internal/asn1/Asn1Field;",
+          "Lcom/android/apksig/internal/asn1/Asn1OpaqueObject;",
+          "Lcom/android/apksig/internal/asn1/Asn1TagClass;",
+          "Lcom/android/apksig/internal/asn1/Asn1Tagging;",
+          "Lcom/android/apksig/internal/asn1/Asn1Type;",
+          "Lcom/android/apksig/internal/asn1/ber/BerDataValue$ParsedValueReader;",
+          "Lcom/android/apksig/internal/asn1/ber/BerDataValue;",
+          "Lcom/android/apksig/internal/asn1/ber/BerDataValueFormatException;",
+          "Lcom/android/apksig/internal/asn1/ber/BerDataValueReader;",
+          "Lcom/android/apksig/internal/asn1/ber/BerEncoding$1;",
+          "Lcom/android/apksig/internal/asn1/ber/BerEncoding;",
+          "Lcom/android/apksig/internal/asn1/ber/ByteBufferBerDataValueReader;",
+          "Lcom/android/apksig/internal/asn1/ber/InputStreamBerDataValueReader$1;",
+          "Lcom/android/apksig/internal/asn1/ber/InputStreamBerDataValueReader$RecordingInputStream;",
+          "Lcom/android/apksig/internal/asn1/ber/InputStreamBerDataValueReader;",
+          "Lcom/android/apksig/internal/jar/ManifestParser$Attribute;",
+          "Lcom/android/apksig/internal/jar/ManifestParser$Section;",
+          "Lcom/android/apksig/internal/jar/ManifestParser;",
+          "Lcom/android/apksig/internal/jar/ManifestWriter;",
+          "Lcom/android/apksig/internal/jar/SignatureFileWriter;",
+          "Lcom/android/apksig/internal/oid/OidConstants$OidToUserFriendlyNameMapper;",
+          "Lcom/android/apksig/internal/oid/OidConstants;",
+          "Lcom/android/apksig/internal/pkcs7/AlgorithmIdentifier$1;",
+          "Lcom/android/apksig/internal/pkcs7/AlgorithmIdentifier;",
+          "Lcom/android/apksig/internal/pkcs7/Attribute;",
+          "Lcom/android/apksig/internal/pkcs7/ContentInfo;",
+          "Lcom/android/apksig/internal/pkcs7/EncapsulatedContentInfo;",
+          "Lcom/android/apksig/internal/pkcs7/IssuerAndSerialNumber;",
+          "Lcom/android/apksig/internal/pkcs7/Pkcs7Constants;",
+          "Lcom/android/apksig/internal/pkcs7/Pkcs7DecodingException;",
+          "Lcom/android/apksig/internal/pkcs7/SignedData;",
+          "Lcom/android/apksig/internal/pkcs7/SignerIdentifier;",
+          "Lcom/android/apksig/internal/pkcs7/SignerInfo;",
+          "Lcom/android/apksig/internal/util/AndroidSdkVersion;",
+          "Lcom/android/apksig/internal/util/ByteArrayDataSink$1;",
+          "Lcom/android/apksig/internal/util/ByteArrayDataSink$SliceDataSource;",
+          "Lcom/android/apksig/internal/util/ByteArrayDataSink;",
+          "Lcom/android/apksig/internal/util/ByteBufferDataSource;",
+          "Lcom/android/apksig/internal/util/ByteBufferSink;",
+          "Lcom/android/apksig/internal/util/ByteBufferUtils;",
+          "Lcom/android/apksig/internal/util/ByteStreams;",
+          "Lcom/android/apksig/internal/util/ChainedDataSource$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/internal/util/ChainedDataSource;",
+          "Lcom/android/apksig/internal/util/DelegatingX509Certificate;",
+          "Lcom/android/apksig/internal/util/FileChannelDataSource;",
+          "Lcom/android/apksig/internal/util/GuaranteedEncodedFormX509Certificate;",
+          "Lcom/android/apksig/internal/util/InclusiveIntRange;",
+          "Lcom/android/apksig/internal/util/MessageDigestSink;",
+          "Lcom/android/apksig/internal/util/OutputStreamDataSink;",
+          "Lcom/android/apksig/internal/util/Pair;",
+          "Lcom/android/apksig/internal/util/RandomAccessFileDataSink;",
+          "Lcom/android/apksig/internal/util/TeeDataSink;",
+          "Lcom/android/apksig/internal/util/VerityTreeBuilder$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/internal/util/VerityTreeBuilder;",
+          "Lcom/android/apksig/internal/util/X509CertificateUtils;",
+          "Lcom/android/apksig/internal/x509/AttributeTypeAndValue;",
+          "Lcom/android/apksig/internal/x509/Certificate;",
+          "Lcom/android/apksig/internal/x509/Extension;",
+          "Lcom/android/apksig/internal/x509/Name;",
+          "Lcom/android/apksig/internal/x509/RSAPublicKey;",
+          "Lcom/android/apksig/internal/x509/RelativeDistinguishedName;",
+          "Lcom/android/apksig/internal/x509/SubjectPublicKeyInfo;",
+          "Lcom/android/apksig/internal/x509/TBSCertificate;",
+          "Lcom/android/apksig/internal/x509/Time;",
+          "Lcom/android/apksig/internal/x509/Validity;",
+          "Lcom/android/apksig/internal/zip/CentralDirectoryRecord$1;",
+          "Lcom/android/apksig/internal/zip/CentralDirectoryRecord$ByLocalFileHeaderOffsetComparator;",
+          "Lcom/android/apksig/internal/zip/CentralDirectoryRecord;",
+          "Lcom/android/apksig/internal/zip/EocdRecord;",
+          "Lcom/android/apksig/internal/zip/LocalFileRecord$1;",
+          "Lcom/android/apksig/internal/zip/LocalFileRecord$InflateSinkAdapter;",
+          "Lcom/android/apksig/internal/zip/LocalFileRecord;",
+          "Lcom/android/apksig/internal/zip/ZipUtils$DeflateResult;",
+          "Lcom/android/apksig/internal/zip/ZipUtils;",
+          "Lcom/android/apksig/kms/KmsException;",
+          "Lcom/android/apksig/kms/KmsSignerEngineProvider;",
+          "Lcom/android/apksig/kms/KmsType;",
+          "Lcom/android/apksig/util/DataSink;",
+          "Lcom/android/apksig/util/DataSinks;",
+          "Lcom/android/apksig/util/DataSource;",
+          "Lcom/android/apksig/util/DataSources;",
+          "Lcom/android/apksig/util/ReadableDataSink;",
+          "Lcom/android/apksig/util/RunnablesExecutor$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/util/RunnablesExecutor$1$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/util/RunnablesExecutor$1;",
+          "Lcom/android/apksig/util/RunnablesExecutor;",
+          "Lcom/android/apksig/util/RunnablesProvider;",
+          "Lcom/android/apksig/zip/ZipFormatException;",
+          "Lcom/android/apksig/zip/ZipSections;"
+        ],
+        "assets": [
+          "assets/app-updater/public-key.der"
+        ],
+        "publicKeySha256": "f358f6d45e02c636230bec0deec9cf2cf91fe27619a4d386f0ba51eacb9d13c9",
+        "dex": [
+          {
+            "path": "classes.dex",
+            "size": 2575840,
+            "sha256": "15737cc288d84c1e1a46dd36dcbeb24a6b923c362fbcb98793fdb63979007d5f",
+            "classCount": 1466
+          }
+        ]
+      }
+    },
+    {
+      "flavor": "compat",
+      "file": "wanba-compat-1.2.2.apk",
+      "bytes": 224569378,
+      "sha256": "23ebea8f4382a5c356770423020dff19414afe4d307b5f5bc875cab7e1f94bdd",
+      "package": "io.github.jacklee992.wanba.compat",
+      "versionName": "1.2.2",
+      "versionCode": 6,
+      "minSdk": 26,
+      "targetSdk": 36,
+      "debuggable": false,
+      "testOnly": false,
+      "certificateSha256": "806ede7461091d6b9668ad32b656d6e20f47d00eb4e11341e04f551377ced777",
+      "signatureScheme": "v2",
+      "wwwFilesMatched": 221,
+      "extraWwwFiles": 0,
+      "builtinChannelMatched": true,
+      "languages": {
+        "zh-CN": {
+          "version": "1.0.2",
+          "gameTitles": 37,
+          "brand": "玩吧"
+        },
+        "zh-TW": {
+          "version": "1.0.2",
+          "gameTitles": 37,
+          "brand": "玩吧"
+        },
+        "en": {
+          "version": "1.0.2",
+          "gameTitles": 37,
+          "brand": "Nookcade"
+        },
+        "ja": {
+          "version": "1.0.2",
+          "gameTitles": 37,
+          "brand": "ヌックケード"
+        },
+        "ko": {
+          "version": "1.0.2",
+          "gameTitles": 37,
+          "brand": "눅케이드"
+        }
+      },
+      "brandAssets": {
+        "assets/app-brand/app-icon.png": {
+          "bytes": 389745,
+          "sha256": "09357652a0722361e739ce7aa418218a58f9561086f20cad851d36220663cfaf"
+        },
+        "assets/app-brand/international/app-icon.png": {
+          "bytes": 148961,
+          "sha256": "abd7813bc43927a0b11d46a73c7920788eb163abd9c727172510ca60d7cc93ec"
+        }
+      },
+      "nativeLibraries": [
+        {
+          "path": "lib/arm64-v8a/libclearkey.so",
+          "bytes": 134368,
+          "elfMachine": 183,
+          "sha256": "267348cd04ca75f6f0c0a590fb125beccc7246e16bf28a4f7924b6c5d62e430a"
+        },
+        {
+          "path": "lib/arm64-v8a/libcrashhelper.so",
+          "bytes": 3382496,
+          "elfMachine": 183,
+          "sha256": "b97fbaac2e4c4fbefaa47598bd6a54620d91186ab18205429abd53efa8e489ab"
+        },
+        {
+          "path": "lib/arm64-v8a/libcrashtools.so",
+          "bytes": 5942048,
+          "elfMachine": 183,
+          "sha256": "24df379913e60fccec67f92b12b397dd144554c3c81dc24e8bb4d5f7c8749511"
+        },
+        {
+          "path": "lib/arm64-v8a/libfreebl3.so",
+          "bytes": 752328,
+          "elfMachine": 183,
+          "sha256": "7002d8e58913f90793c37f9be6fec2f65b0b3c335fe7d1e8c46535e3bb17c066"
+        },
+        {
+          "path": "lib/arm64-v8a/libgkcodecs.so",
+          "bytes": 5122008,
+          "elfMachine": 183,
+          "sha256": "7494a5aa25342b26e808e8c2558a1ec284b03ee23ceeaf8edc764b5dd69499fb"
+        },
+        {
+          "path": "lib/arm64-v8a/liblgpllibs.so",
+          "bytes": 206640,
+          "elfMachine": 183,
+          "sha256": "d7939b53f69f11d247a416830948e1ce9a570c4ae54bec731b5b1e4b9f39e7dd"
+        },
+        {
+          "path": "lib/arm64-v8a/libmozavcodec.so",
+          "bytes": 2084488,
+          "elfMachine": 183,
+          "sha256": "793894ed6d7f1bee9eb3a983451c31671efdee534b56ca1411003f0cc4661aa5"
+        },
+        {
+          "path": "lib/arm64-v8a/libmozavutil.so",
+          "bytes": 455184,
+          "elfMachine": 183,
+          "sha256": "f70c1bb9085a5d763c00e23a58a7b1d64fa79f6d6ef54db77fb7150e62f6b1de"
+        },
+        {
+          "path": "lib/arm64-v8a/libmozglue.so",
+          "bytes": 1295856,
+          "elfMachine": 183,
+          "sha256": "f79cc2d593387cafb99e5cef94c69d4eb88722c4b03c3c3788b5d01f92ecaeae"
+        },
+        {
+          "path": "lib/arm64-v8a/libnss3.so",
+          "bytes": 2888680,
+          "elfMachine": 183,
+          "sha256": "f47186ffac019de9cddde3d79321d41591e7e6dea03758e7095237d7deca81c6"
+        },
+        {
+          "path": "lib/arm64-v8a/libplugin-container.so",
+          "bytes": 4800,
+          "elfMachine": 183,
+          "sha256": "8322ca7f2a9779a5f00087e91616095a8d36563f72234a89d69deb4c89551b32"
+        },
+        {
+          "path": "lib/arm64-v8a/libsoftokn3.so",
+          "bytes": 325496,
+          "elfMachine": 183,
+          "sha256": "acc6ae2ad43cf356eb1df7dc708308131ac3beda3be9de68ab7bd3ae55c754e9"
+        },
+        {
+          "path": "lib/arm64-v8a/libxul.so",
+          "bytes": 152310752,
+          "elfMachine": 183,
+          "sha256": "13e8418950f28728bd1ff345cf969e83d1ed69f51997f897795f34d20cdf83b7"
+        },
+        {
+          "path": "lib/armeabi-v7a/libclearkey.so",
+          "bytes": 87624,
+          "elfMachine": 40,
+          "sha256": "4a0c6142a8db84a439f61de7446615936ca1a8d9fdd99c13b900159a8f0f9393"
+        },
+        {
+          "path": "lib/armeabi-v7a/libcrashhelper.so",
+          "bytes": 2479780,
+          "elfMachine": 40,
+          "sha256": "c1eefe6d4ec25bffee88e852bc0638c1674d4938393a63fafc90addf343a3b16"
+        },
+        {
+          "path": "lib/armeabi-v7a/libcrashtools.so",
+          "bytes": 4556556,
+          "elfMachine": 40,
+          "sha256": "ac0de3842ececa7882d99cf8dc563222e752f3e72a8b0c535a528d08d565b796"
+        },
+        {
+          "path": "lib/armeabi-v7a/libfreebl3.so",
+          "bytes": 654476,
+          "elfMachine": 40,
+          "sha256": "6cb10be5a1ec7d4093a932b9dc0129aca2506d9841541e0c3d6bdb409f3083f9"
+        },
+        {
+          "path": "lib/armeabi-v7a/libgkcodecs.so",
+          "bytes": 6204420,
+          "elfMachine": 40,
+          "sha256": "463b2764661b960b6e0fc60bdaa8a56a29aa8df0712e56065e3d65a9d11b56fa"
+        },
+        {
+          "path": "lib/armeabi-v7a/liblgpllibs.so",
+          "bytes": 248912,
+          "elfMachine": 40,
+          "sha256": "a036ad109966a6d09bf63ce4458b75517bf4c605fd262f0a72c554f23356ade9"
+        },
+        {
+          "path": "lib/armeabi-v7a/libmozavcodec.so",
+          "bytes": 1800648,
+          "elfMachine": 40,
+          "sha256": "14ec7898eb73afb22c0b260c961acf35fe691bb653372ab505ae190bec05f992"
+        },
+        {
+          "path": "lib/armeabi-v7a/libmozavutil.so",
+          "bytes": 329020,
+          "elfMachine": 40,
+          "sha256": "303820be0d4c923fc1d77640fff4191db45eaa784fa350157a2067ebb464e938"
+        },
+        {
+          "path": "lib/armeabi-v7a/libmozglue.so",
+          "bytes": 908544,
+          "elfMachine": 40,
+          "sha256": "f6ccfaad11dfa3c03203f7c02f3fc92f222501bb4491422b42097839c67db31d"
+        },
+        {
+          "path": "lib/armeabi-v7a/libnss3.so",
+          "bytes": 2027696,
+          "elfMachine": 40,
+          "sha256": "cb0f1a74a7a2f475153bde49fcb3f2dce0f2128238af23fb5281fe955c736467"
+        },
+        {
+          "path": "lib/armeabi-v7a/libplugin-container.so",
+          "bytes": 3288,
+          "elfMachine": 40,
+          "sha256": "e36955837511ceeff7ed4ea0c50a6c4d514ca35be3912aa70e514716967fe787"
+        },
+        {
+          "path": "lib/armeabi-v7a/libsoftokn3.so",
+          "bytes": 207760,
+          "elfMachine": 40,
+          "sha256": "d1bbcedbb34bbab791bbb7df9f78f2451ba05388b4a022aa7e97d9cbc1de957c"
+        },
+        {
+          "path": "lib/armeabi-v7a/libxul.so",
+          "bytes": 116701944,
+          "elfMachine": 40,
+          "sha256": "bcd9a3213d16e012b03b653c2219f31bbeedcb5691de7b730cdb210d74651fe2"
+        }
+      ],
+      "gecko": {
+        "packagedVersion": "155.0.1",
+        "buildId": "20260903215306",
+        "mavenCoordinate": "org.mozilla.geckoview:geckoview:155.0.20260903215306"
+      },
+      "lint": {
+        "errors": 0,
+        "warnings": 14,
+        "issues": [
+          {
+            "id": "OldTargetApi",
+            "severity": "Warning",
+            "message": "Not targeting the latest versions of Android; compatibility modes apply. Consider testing and updating this version. Consult the `android.os.Build.VERSION_CODES` javadoc for details.",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/build.gradle.kts",
+                "line": "32",
+                "column": "9"
+              }
+            ]
+          },
+          {
+            "id": "UnusedAttribute",
+            "severity": "Warning",
+            "message": "Attribute `enableOnBackInvokedCallback` is only used in API level 33 and higher (current min is 26)",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/src/compat/AndroidManifest.xml",
+                "line": "12",
+                "column": "13"
+              }
+            ]
+          },
+          {
+            "id": "UnusedAttribute",
+            "severity": "Warning",
+            "message": "Attribute `enableOnBackInvokedCallback` is only used in API level 33 and higher (current min is 26)",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/src/main/AndroidManifest.xml",
+                "line": "19",
+                "column": "13"
+              }
+            ]
+          },
+          {
+            "id": "AndroidGradlePluginVersion",
+            "severity": "Warning",
+            "message": "A newer version of Gradle than 9.4.1 is available: 9.7.1",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/gradle/wrapper/gradle-wrapper.properties",
+                "line": "4",
+                "column": "17"
+              }
+            ]
+          },
+          {
+            "id": "ChromeOsAbiSupport",
+            "severity": "Warning",
+            "message": "Missing x86_64 ABI support for ChromeOS",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/build.gradle.kts",
+                "line": "45",
+                "column": "33"
+              }
+            ]
+          },
+          {
+            "id": "SetJavaScriptEnabled",
+            "severity": "Warning",
+            "message": "Using `setJavaScriptEnabled` can introduce XSS vulnerabilities into your application, review carefully",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/src/main/java/io/github/jacklee992/wanba/MainActivity.java",
+                "line": "179",
+                "column": "9"
+              }
+            ]
+          },
+          {
+            "id": "DataExtractionRules",
+            "severity": "Warning",
+            "message": "The attribute `android:allowBackup` is deprecated from Android 12 and higher and may be removed in future versions. Consider adding the attribute `android:dataExtractionRules` specifying an `@xml` resource which configures cloud backups and device transfers on Android 12 and higher.",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/src/main/AndroidManifest.xml",
+                "line": "5",
+                "column": "30"
+              }
+            ]
+          },
+          {
+            "id": "ObsoleteSdkInt",
+            "severity": "Warning",
+            "message": "This folder configuration (`v26`) is unnecessary; `minSdkVersion` is 26. Merge all the resources in this folder into `mipmap-anydpi`.",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/src/main/res/mipmap-anydpi-v26"
+              }
+            ]
+          },
+          {
+            "id": "ObsoleteSdkInt",
+            "severity": "Warning",
+            "message": "This folder configuration (`v26`) is unnecessary; `minSdkVersion` is 26. Merge all the resources in this folder into `mipmap-en-anydpi`.",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/src/main/res/mipmap-en-anydpi-v26"
+              }
+            ]
+          },
+          {
+            "id": "ObsoleteSdkInt",
+            "severity": "Warning",
+            "message": "This folder configuration (`v26`) is unnecessary; `minSdkVersion` is 26. Merge all the resources in this folder into `mipmap-ja-anydpi`.",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/src/main/res/mipmap-ja-anydpi-v26"
+              }
+            ]
+          },
+          {
+            "id": "ObsoleteSdkInt",
+            "severity": "Warning",
+            "message": "This folder configuration (`v26`) is unnecessary; `minSdkVersion` is 26. Merge all the resources in this folder into `mipmap-ko-anydpi`.",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/src/main/res/mipmap-ko-anydpi-v26"
+              }
+            ]
+          },
+          {
+            "id": "UsableSpace",
+            "severity": "Warning",
+            "message": "Consider also using `StorageManager#getAllocatableBytes` and `allocateBytes` which will consider clearable cached data",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/src/main/java/io/github/jacklee992/wanba/ContentUpdateManager.java",
+                "line": "125",
+                "column": "33"
+              }
+            ]
+          },
+          {
+            "id": "SetTextI18n",
+            "severity": "Warning",
+            "message": "Do not concatenate text displayed with `setText`. Use resource string with placeholders.",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/src/main/java/io/github/jacklee992/wanba/MainActivity.java",
+                "line": "144",
+                "column": "29"
+              }
+            ]
+          },
+          {
+            "id": "SetTextI18n",
+            "severity": "Warning",
+            "message": "String literal in `setText` can not be translated. Use Android resources instead.",
+            "locations": [
+              {
+                "file": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/src/main/java/io/github/jacklee992/wanba/MainActivity.java",
+                "line": "150",
+                "column": "26"
+              }
+            ]
+          }
+        ]
+      },
+      "updateCapabilities": {
+        "checked": true,
+        "expectedAppUpdater": true,
+        "expectedGameUpdates": true,
+        "flags": {
+          "WANBA_APP_UPDATER": true,
+          "WANBA_GAME_UPDATES": true
+        },
+        "hostVersionCode": 6,
+        "hostVersionName": "1.2.2",
+        "installPackagesPermission": true,
+        "components": [
+          {
+            "type": "activity",
+            "name": "io.github.jacklee992.wanba.appupdater.AppUpdateActivity",
+            "exported": false
+          },
+          {
+            "type": "receiver",
+            "name": "io.github.jacklee992.wanba.appupdater.InstallResultReceiver",
+            "exported": false
+          }
+        ],
+        "updaterClasses": [
+          "Lio/github/jacklee992/wanba/appupdater/ApkChecks;",
+          "Lio/github/jacklee992/wanba/appupdater/AppUpdateActivity$$ExternalSyntheticLambda0;",
+          "Lio/github/jacklee992/wanba/appupdater/AppUpdateActivity$$ExternalSyntheticLambda1;",
+          "Lio/github/jacklee992/wanba/appupdater/AppUpdateActivity$$ExternalSyntheticLambda2;",
+          "Lio/github/jacklee992/wanba/appupdater/AppUpdateActivity$$ExternalSyntheticLambda3;",
+          "Lio/github/jacklee992/wanba/appupdater/AppUpdateActivity$$ExternalSyntheticLambda4;",
+          "Lio/github/jacklee992/wanba/appupdater/AppUpdateActivity$$ExternalSyntheticLambda5;",
+          "Lio/github/jacklee992/wanba/appupdater/AppUpdateActivity$$ExternalSyntheticLambda6;",
+          "Lio/github/jacklee992/wanba/appupdater/AppUpdateActivity$$ExternalSyntheticLambda7;",
+          "Lio/github/jacklee992/wanba/appupdater/AppUpdateActivity;",
+          "Lio/github/jacklee992/wanba/appupdater/DownloadAccounting;",
+          "Lio/github/jacklee992/wanba/appupdater/InstallResultReceiver;",
+          "Lio/github/jacklee992/wanba/appupdater/R;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateController$$ExternalSyntheticLambda0;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateController$$ExternalSyntheticLambda1;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateController$$ExternalSyntheticLambda2;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateController$$ExternalSyntheticLambda3;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateController$$ExternalSyntheticLambda4;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateController$$ExternalSyntheticLambda5;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateController$$ExternalSyntheticLambda6;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateController$$ExternalSyntheticLambda7;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateController$Listener;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateController$Work;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateController;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateFiles$Cancelled;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateFiles;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateHttp$Progress;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateHttp;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateProtocol$Asset;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateProtocol$Delta;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateProtocol$Entry;",
+          "Lio/github/jacklee992/wanba/appupdater/UpdateProtocol;"
+        ],
+        "apkSignatureVerifierClasses": [
+          "Lcom/android/apksig/ApkSigner$1;",
+          "Lcom/android/apksig/ApkSigner$Builder;",
+          "Lcom/android/apksig/ApkSigner$OutputSizeAndDataOffset;",
+          "Lcom/android/apksig/ApkSigner$SignerConfig$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/ApkSigner$SignerConfig$$ExternalSyntheticLambda1;",
+          "Lcom/android/apksig/ApkSigner$SignerConfig$Builder;",
+          "Lcom/android/apksig/ApkSigner$SignerConfig;",
+          "Lcom/android/apksig/ApkSigner;",
+          "Lcom/android/apksig/ApkSignerEngine$InputJarEntryInstructions$OutputPolicy;",
+          "Lcom/android/apksig/ApkSignerEngine$InputJarEntryInstructions;",
+          "Lcom/android/apksig/ApkSignerEngine$InspectJarEntryRequest;",
+          "Lcom/android/apksig/ApkSignerEngine$OutputApkSigningBlockRequest2;",
+          "Lcom/android/apksig/ApkSignerEngine$OutputApkSigningBlockRequest;",
+          "Lcom/android/apksig/ApkSignerEngine$OutputJarSignatureRequest$JarEntry;",
+          "Lcom/android/apksig/ApkSignerEngine$OutputJarSignatureRequest;",
+          "Lcom/android/apksig/ApkSignerEngine;",
+          "Lcom/android/apksig/ApkVerificationIssue;",
+          "Lcom/android/apksig/ApkVerifier$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/ApkVerifier$$ExternalSyntheticLambda1;",
+          "Lcom/android/apksig/ApkVerifier$$ExternalSyntheticLambda2;",
+          "Lcom/android/apksig/ApkVerifier$1;",
+          "Lcom/android/apksig/ApkVerifier$ApkVerificationIssueAdapter;",
+          "Lcom/android/apksig/ApkVerifier$Builder;",
+          "Lcom/android/apksig/ApkVerifier$ByteArray;",
+          "Lcom/android/apksig/ApkVerifier$Issue;",
+          "Lcom/android/apksig/ApkVerifier$IssueWithParams;",
+          "Lcom/android/apksig/ApkVerifier$Result$SourceStampInfo$SourceStampVerificationStatus;",
+          "Lcom/android/apksig/ApkVerifier$Result$SourceStampInfo;",
+          "Lcom/android/apksig/ApkVerifier$Result$V1SchemeSignerInfo;",
+          "Lcom/android/apksig/ApkVerifier$Result$V2SchemeSignerInfo;",
+          "Lcom/android/apksig/ApkVerifier$Result$V3SchemeSignerInfo$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/ApkVerifier$Result$V3SchemeSignerInfo$$ExternalSyntheticLambda1;",
+          "Lcom/android/apksig/ApkVerifier$Result$V3SchemeSignerInfo;",
+          "Lcom/android/apksig/ApkVerifier$Result$V4SchemeSignerInfo;",
+          "Lcom/android/apksig/ApkVerifier$Result;",
+          "Lcom/android/apksig/ApkVerifier;",
+          "Lcom/android/apksig/Constants;",
+          "Lcom/android/apksig/DefaultApkSignerEngine$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/DefaultApkSignerEngine$$ExternalSyntheticLambda1;",
+          "Lcom/android/apksig/DefaultApkSignerEngine$1;",
+          "Lcom/android/apksig/DefaultApkSignerEngine$Builder$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/DefaultApkSignerEngine$Builder;",
+          "Lcom/android/apksig/DefaultApkSignerEngine$CompoundInspectJarEntryRequest;",
+          "Lcom/android/apksig/DefaultApkSignerEngine$GetJarEntryDataDigestRequest;",
+          "Lcom/android/apksig/DefaultApkSignerEngine$GetJarEntryDataRequest;",
+          "Lcom/android/apksig/DefaultApkSignerEngine$OutputApkSigningBlockRequestImpl;",
+          "Lcom/android/apksig/DefaultApkSignerEngine$OutputJarSignatureRequestImpl;",
+          "Lcom/android/apksig/DefaultApkSignerEngine$SignerConfig$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/DefaultApkSignerEngine$SignerConfig$$ExternalSyntheticLambda1;",
+          "Lcom/android/apksig/DefaultApkSignerEngine$SignerConfig$Builder;",
+          "Lcom/android/apksig/DefaultApkSignerEngine$SignerConfig;",
+          "Lcom/android/apksig/DefaultApkSignerEngine;",
+          "Lcom/android/apksig/Hints$ByteRange;",
+          "Lcom/android/apksig/Hints$PatternWithRange;",
+          "Lcom/android/apksig/Hints;",
+          "Lcom/android/apksig/JcaSignerEngine;",
+          "Lcom/android/apksig/KeyConfig$1;",
+          "Lcom/android/apksig/KeyConfig$Jca;",
+          "Lcom/android/apksig/KeyConfig$Kms;",
+          "Lcom/android/apksig/KeyConfig;",
+          "Lcom/android/apksig/SignerEngine;",
+          "Lcom/android/apksig/SignerEngineFactory$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/SignerEngineFactory$$ExternalSyntheticLambda1;",
+          "Lcom/android/apksig/SignerEngineFactory;",
+          "Lcom/android/apksig/SigningCertificateLineage$1;",
+          "Lcom/android/apksig/SigningCertificateLineage$Builder;",
+          "Lcom/android/apksig/SigningCertificateLineage$SignerCapabilities$Builder;",
+          "Lcom/android/apksig/SigningCertificateLineage$SignerCapabilities;",
+          "Lcom/android/apksig/SigningCertificateLineage$SignerConfig$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/SigningCertificateLineage$SignerConfig$$ExternalSyntheticLambda1;",
+          "Lcom/android/apksig/SigningCertificateLineage$SignerConfig$Builder;",
+          "Lcom/android/apksig/SigningCertificateLineage$SignerConfig;",
+          "Lcom/android/apksig/SigningCertificateLineage;",
+          "Lcom/android/apksig/SourceStampVerifier$1;",
+          "Lcom/android/apksig/SourceStampVerifier$Builder;",
+          "Lcom/android/apksig/SourceStampVerifier$Result$SignerInfo;",
+          "Lcom/android/apksig/SourceStampVerifier$Result$SourceStampInfo;",
+          "Lcom/android/apksig/SourceStampVerifier$Result;",
+          "Lcom/android/apksig/SourceStampVerifier;",
+          "Lcom/android/apksig/apk/ApkFormatException;",
+          "Lcom/android/apksig/apk/ApkSigningBlockNotFoundException;",
+          "Lcom/android/apksig/apk/ApkUtils$1;",
+          "Lcom/android/apksig/apk/ApkUtils$ApkSigningBlock;",
+          "Lcom/android/apksig/apk/ApkUtils$CodenamesLazyInitializer$ByFirstComparator;",
+          "Lcom/android/apksig/apk/ApkUtils$CodenamesLazyInitializer;",
+          "Lcom/android/apksig/apk/ApkUtils$ZipSections;",
+          "Lcom/android/apksig/apk/ApkUtils;",
+          "Lcom/android/apksig/apk/ApkUtilsLite$ApkSigningBlock;",
+          "Lcom/android/apksig/apk/ApkUtilsLite;",
+          "Lcom/android/apksig/apk/CodenameMinSdkVersionException;",
+          "Lcom/android/apksig/apk/MinSdkVersionException;",
+          "Lcom/android/apksig/internal/apk/AndroidBinXmlParser$1;",
+          "Lcom/android/apksig/internal/apk/AndroidBinXmlParser$Attribute;",
+          "Lcom/android/apksig/internal/apk/AndroidBinXmlParser$Chunk;",
+          "Lcom/android/apksig/internal/apk/AndroidBinXmlParser$ResourceMap;",
+          "Lcom/android/apksig/internal/apk/AndroidBinXmlParser$StringPool;",
+          "Lcom/android/apksig/internal/apk/AndroidBinXmlParser$XmlParserException;",
+          "Lcom/android/apksig/internal/apk/AndroidBinXmlParser;",
+          "Lcom/android/apksig/internal/apk/ApkSigResult;",
+          "Lcom/android/apksig/internal/apk/ApkSignerInfo;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$1;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$ChunkDigester;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$ChunkDigests;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$ChunkSupplier$Chunk;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$ChunkSupplier;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$NoSupportedSignaturesException;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$Result$SignerInfo$AdditionalAttribute;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$Result$SignerInfo$ContentDigest;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$Result$SignerInfo$Signature;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$Result$SignerInfo;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$Result;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$SignatureNotFoundException;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$SignerConfig;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$SigningSchemeBlockAndDigests;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$SupportedSignature;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils$VerityTreeAndDigest;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtils;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtilsLite$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtilsLite$1;",
+          "Lcom/android/apksig/internal/apk/ApkSigningBlockUtilsLite;",
+          "Lcom/android/apksig/internal/apk/ApkSupportedSignature;",
+          "Lcom/android/apksig/internal/apk/ContentDigestAlgorithm;",
+          "Lcom/android/apksig/internal/apk/NoApkSupportedSignaturesException;",
+          "Lcom/android/apksig/internal/apk/SignatureAlgorithm;",
+          "Lcom/android/apksig/internal/apk/SignatureInfo;",
+          "Lcom/android/apksig/internal/apk/SignatureNotFoundException;",
+          "Lcom/android/apksig/internal/apk/stamp/SourceStampCertificateLineage$SigningCertificateNode;",
+          "Lcom/android/apksig/internal/apk/stamp/SourceStampCertificateLineage;",
+          "Lcom/android/apksig/internal/apk/stamp/SourceStampConstants;",
+          "Lcom/android/apksig/internal/apk/stamp/SourceStampVerifier;",
+          "Lcom/android/apksig/internal/apk/stamp/V1SourceStampSigner$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/internal/apk/stamp/V1SourceStampSigner$1;",
+          "Lcom/android/apksig/internal/apk/stamp/V1SourceStampSigner$SourceStampBlock;",
+          "Lcom/android/apksig/internal/apk/stamp/V1SourceStampSigner;",
+          "Lcom/android/apksig/internal/apk/stamp/V1SourceStampVerifier;",
+          "Lcom/android/apksig/internal/apk/stamp/V2SourceStampSigner$1;",
+          "Lcom/android/apksig/internal/apk/stamp/V2SourceStampSigner$Builder;",
+          "Lcom/android/apksig/internal/apk/stamp/V2SourceStampSigner$SourceStampBlock;",
+          "Lcom/android/apksig/internal/apk/stamp/V2SourceStampSigner;",
+          "Lcom/android/apksig/internal/apk/stamp/V2SourceStampVerifier$1;",
+          "Lcom/android/apksig/internal/apk/stamp/V2SourceStampVerifier;",
+          "Lcom/android/apksig/internal/apk/v1/DigestAlgorithm$1;",
+          "Lcom/android/apksig/internal/apk/v1/DigestAlgorithm$StrengthComparator;",
+          "Lcom/android/apksig/internal/apk/v1/DigestAlgorithm;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeConstants;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeSigner$1;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeSigner$OutputManifestFile;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeSigner$SignerConfig;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeSigner;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeVerifier$1;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeVerifier$NamedDigest;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeVerifier$ObjectIdentifierChoice;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeVerifier$OctetStringChoice;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeVerifier$Result$SignerInfo;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeVerifier$Result;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeVerifier$SignedAttributes;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeVerifier$Signer;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeVerifier$Signers;",
+          "Lcom/android/apksig/internal/apk/v1/V1SchemeVerifier;",
+          "Lcom/android/apksig/internal/apk/v2/V2SchemeConstants;",
+          "Lcom/android/apksig/internal/apk/v2/V2SchemeSigner$1;",
+          "Lcom/android/apksig/internal/apk/v2/V2SchemeSigner$V2SignatureSchemeBlock$SignedData;",
+          "Lcom/android/apksig/internal/apk/v2/V2SchemeSigner$V2SignatureSchemeBlock$Signer;",
+          "Lcom/android/apksig/internal/apk/v2/V2SchemeSigner$V2SignatureSchemeBlock;",
+          "Lcom/android/apksig/internal/apk/v2/V2SchemeSigner;",
+          "Lcom/android/apksig/internal/apk/v2/V2SchemeVerifier;",
+          "Lcom/android/apksig/internal/apk/v3/V3SchemeConstants;",
+          "Lcom/android/apksig/internal/apk/v3/V3SchemeSigner$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/internal/apk/v3/V3SchemeSigner$1;",
+          "Lcom/android/apksig/internal/apk/v3/V3SchemeSigner$Builder;",
+          "Lcom/android/apksig/internal/apk/v3/V3SchemeSigner$V3SignatureSchemeBlock$SignedData;",
+          "Lcom/android/apksig/internal/apk/v3/V3SchemeSigner$V3SignatureSchemeBlock$Signer;",
+          "Lcom/android/apksig/internal/apk/v3/V3SchemeSigner$V3SignatureSchemeBlock;",
+          "Lcom/android/apksig/internal/apk/v3/V3SchemeSigner;",
+          "Lcom/android/apksig/internal/apk/v3/V3SchemeVerifier$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/internal/apk/v3/V3SchemeVerifier$$ExternalSyntheticLambda1;",
+          "Lcom/android/apksig/internal/apk/v3/V3SchemeVerifier$1;",
+          "Lcom/android/apksig/internal/apk/v3/V3SchemeVerifier$Builder;",
+          "Lcom/android/apksig/internal/apk/v3/V3SchemeVerifier;",
+          "Lcom/android/apksig/internal/apk/v3/V3SigningCertificateLineage$SigningCertificateNode;",
+          "Lcom/android/apksig/internal/apk/v3/V3SigningCertificateLineage;",
+          "Lcom/android/apksig/internal/apk/v4/V4SchemeSigner$1;",
+          "Lcom/android/apksig/internal/apk/v4/V4SchemeSigner$SignerConfig;",
+          "Lcom/android/apksig/internal/apk/v4/V4SchemeSigner;",
+          "Lcom/android/apksig/internal/apk/v4/V4SchemeVerifier;",
+          "Lcom/android/apksig/internal/apk/v4/V4Signature$HashingInfo;",
+          "Lcom/android/apksig/internal/apk/v4/V4Signature$SigningInfo;",
+          "Lcom/android/apksig/internal/apk/v4/V4Signature$SigningInfoBlock;",
+          "Lcom/android/apksig/internal/apk/v4/V4Signature$SigningInfos;",
+          "Lcom/android/apksig/internal/apk/v4/V4Signature;",
+          "Lcom/android/apksig/internal/asn1/Asn1BerParser$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/internal/asn1/Asn1BerParser$1;",
+          "Lcom/android/apksig/internal/asn1/Asn1BerParser$AnnotatedField;",
+          "Lcom/android/apksig/internal/asn1/Asn1BerParser$Asn1UnexpectedTagException;",
+          "Lcom/android/apksig/internal/asn1/Asn1BerParser$BerToJavaConverter;",
+          "Lcom/android/apksig/internal/asn1/Asn1BerParser;",
+          "Lcom/android/apksig/internal/asn1/Asn1Class;",
+          "Lcom/android/apksig/internal/asn1/Asn1DecodingException;",
+          "Lcom/android/apksig/internal/asn1/Asn1DerEncoder$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/internal/asn1/Asn1DerEncoder$1;",
+          "Lcom/android/apksig/internal/asn1/Asn1DerEncoder$AnnotatedField;",
+          "Lcom/android/apksig/internal/asn1/Asn1DerEncoder$ByteArrayLexicographicComparator;",
+          "Lcom/android/apksig/internal/asn1/Asn1DerEncoder$JavaToDerConverter;",
+          "Lcom/android/apksig/internal/asn1/Asn1DerEncoder;",
+          "Lcom/android/apksig/internal/asn1/Asn1EncodingException;",
+          "Lcom/android/apksig/internal/asn1/Asn1Field;",
+          "Lcom/android/apksig/internal/asn1/Asn1OpaqueObject;",
+          "Lcom/android/apksig/internal/asn1/Asn1TagClass;",
+          "Lcom/android/apksig/internal/asn1/Asn1Tagging;",
+          "Lcom/android/apksig/internal/asn1/Asn1Type;",
+          "Lcom/android/apksig/internal/asn1/ber/BerDataValue$ParsedValueReader;",
+          "Lcom/android/apksig/internal/asn1/ber/BerDataValue;",
+          "Lcom/android/apksig/internal/asn1/ber/BerDataValueFormatException;",
+          "Lcom/android/apksig/internal/asn1/ber/BerDataValueReader;",
+          "Lcom/android/apksig/internal/asn1/ber/BerEncoding$1;",
+          "Lcom/android/apksig/internal/asn1/ber/BerEncoding;",
+          "Lcom/android/apksig/internal/asn1/ber/ByteBufferBerDataValueReader;",
+          "Lcom/android/apksig/internal/asn1/ber/InputStreamBerDataValueReader$1;",
+          "Lcom/android/apksig/internal/asn1/ber/InputStreamBerDataValueReader$RecordingInputStream;",
+          "Lcom/android/apksig/internal/asn1/ber/InputStreamBerDataValueReader;",
+          "Lcom/android/apksig/internal/jar/ManifestParser$Attribute;",
+          "Lcom/android/apksig/internal/jar/ManifestParser$Section;",
+          "Lcom/android/apksig/internal/jar/ManifestParser;",
+          "Lcom/android/apksig/internal/jar/ManifestWriter;",
+          "Lcom/android/apksig/internal/jar/SignatureFileWriter;",
+          "Lcom/android/apksig/internal/oid/OidConstants$OidToUserFriendlyNameMapper;",
+          "Lcom/android/apksig/internal/oid/OidConstants;",
+          "Lcom/android/apksig/internal/pkcs7/AlgorithmIdentifier$1;",
+          "Lcom/android/apksig/internal/pkcs7/AlgorithmIdentifier;",
+          "Lcom/android/apksig/internal/pkcs7/Attribute;",
+          "Lcom/android/apksig/internal/pkcs7/ContentInfo;",
+          "Lcom/android/apksig/internal/pkcs7/EncapsulatedContentInfo;",
+          "Lcom/android/apksig/internal/pkcs7/IssuerAndSerialNumber;",
+          "Lcom/android/apksig/internal/pkcs7/Pkcs7Constants;",
+          "Lcom/android/apksig/internal/pkcs7/Pkcs7DecodingException;",
+          "Lcom/android/apksig/internal/pkcs7/SignedData;",
+          "Lcom/android/apksig/internal/pkcs7/SignerIdentifier;",
+          "Lcom/android/apksig/internal/pkcs7/SignerInfo;",
+          "Lcom/android/apksig/internal/util/AndroidSdkVersion;",
+          "Lcom/android/apksig/internal/util/ByteArrayDataSink$1;",
+          "Lcom/android/apksig/internal/util/ByteArrayDataSink$SliceDataSource;",
+          "Lcom/android/apksig/internal/util/ByteArrayDataSink;",
+          "Lcom/android/apksig/internal/util/ByteBufferDataSource;",
+          "Lcom/android/apksig/internal/util/ByteBufferSink;",
+          "Lcom/android/apksig/internal/util/ByteBufferUtils;",
+          "Lcom/android/apksig/internal/util/ByteStreams;",
+          "Lcom/android/apksig/internal/util/ChainedDataSource$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/internal/util/ChainedDataSource;",
+          "Lcom/android/apksig/internal/util/DelegatingX509Certificate;",
+          "Lcom/android/apksig/internal/util/FileChannelDataSource;",
+          "Lcom/android/apksig/internal/util/GuaranteedEncodedFormX509Certificate;",
+          "Lcom/android/apksig/internal/util/InclusiveIntRange;",
+          "Lcom/android/apksig/internal/util/MessageDigestSink;",
+          "Lcom/android/apksig/internal/util/OutputStreamDataSink;",
+          "Lcom/android/apksig/internal/util/Pair;",
+          "Lcom/android/apksig/internal/util/RandomAccessFileDataSink;",
+          "Lcom/android/apksig/internal/util/TeeDataSink;",
+          "Lcom/android/apksig/internal/util/VerityTreeBuilder$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/internal/util/VerityTreeBuilder;",
+          "Lcom/android/apksig/internal/util/X509CertificateUtils;",
+          "Lcom/android/apksig/internal/x509/AttributeTypeAndValue;",
+          "Lcom/android/apksig/internal/x509/Certificate;",
+          "Lcom/android/apksig/internal/x509/Extension;",
+          "Lcom/android/apksig/internal/x509/Name;",
+          "Lcom/android/apksig/internal/x509/RSAPublicKey;",
+          "Lcom/android/apksig/internal/x509/RelativeDistinguishedName;",
+          "Lcom/android/apksig/internal/x509/SubjectPublicKeyInfo;",
+          "Lcom/android/apksig/internal/x509/TBSCertificate;",
+          "Lcom/android/apksig/internal/x509/Time;",
+          "Lcom/android/apksig/internal/x509/Validity;",
+          "Lcom/android/apksig/internal/zip/CentralDirectoryRecord$1;",
+          "Lcom/android/apksig/internal/zip/CentralDirectoryRecord$ByLocalFileHeaderOffsetComparator;",
+          "Lcom/android/apksig/internal/zip/CentralDirectoryRecord;",
+          "Lcom/android/apksig/internal/zip/EocdRecord;",
+          "Lcom/android/apksig/internal/zip/LocalFileRecord$1;",
+          "Lcom/android/apksig/internal/zip/LocalFileRecord$InflateSinkAdapter;",
+          "Lcom/android/apksig/internal/zip/LocalFileRecord;",
+          "Lcom/android/apksig/internal/zip/ZipUtils$DeflateResult;",
+          "Lcom/android/apksig/internal/zip/ZipUtils;",
+          "Lcom/android/apksig/kms/KmsException;",
+          "Lcom/android/apksig/kms/KmsSignerEngineProvider;",
+          "Lcom/android/apksig/kms/KmsType;",
+          "Lcom/android/apksig/util/DataSink;",
+          "Lcom/android/apksig/util/DataSinks;",
+          "Lcom/android/apksig/util/DataSource;",
+          "Lcom/android/apksig/util/DataSources;",
+          "Lcom/android/apksig/util/ReadableDataSink;",
+          "Lcom/android/apksig/util/RunnablesExecutor$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/util/RunnablesExecutor$1$$ExternalSyntheticLambda0;",
+          "Lcom/android/apksig/util/RunnablesExecutor$1;",
+          "Lcom/android/apksig/util/RunnablesExecutor;",
+          "Lcom/android/apksig/util/RunnablesProvider;",
+          "Lcom/android/apksig/zip/ZipFormatException;",
+          "Lcom/android/apksig/zip/ZipSections;"
+        ],
+        "assets": [
+          "assets/app-updater/public-key.der"
+        ],
+        "publicKeySha256": "f358f6d45e02c636230bec0deec9cf2cf91fe27619a4d386f0ba51eacb9d13c9",
+        "dex": [
+          {
+            "path": "classes.dex",
+            "size": 9067484,
+            "sha256": "d59dd8b6180316d1a89fd4a81700982d5e18acfa6d0cb05b13b2c01a22eec002",
+            "classCount": 8508
+          },
+          {
+            "path": "classes2.dex",
+            "size": 5451776,
+            "sha256": "41c27587bd2738f16d26f3c8509f0b540b20e399cbe251b71f3a01107559459b",
+            "classCount": 4453
+          }
+        ]
+      }
+    }
+  ],
+  "passed": true
+}

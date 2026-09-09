@@ -29,6 +29,7 @@ public final class ContentUpdateBehavior {
     static File root;
     static final Map<String,byte[]> responses=new java.util.concurrent.ConcurrentHashMap<>();
     static final List<String> requested=Collections.synchronizedList(new ArrayList<>());
+    static final List<String> opened=Collections.synchronizedList(new ArrayList<>());
     static final String CHANNEL="https://github.com/"+ContentManifest.REPOSITORY+"/releases/latest/download/channel.json";
     static final String[] LOCALES = {"zh-CN","zh-TW","en","ja","ko"};
     static final String[] STORAGE = {"settings","scores","progress","records","sudokuState"};
@@ -61,6 +62,7 @@ public final class ContentUpdateBehavior {
         // URL allowlists, redirect checks, response codes and complete streaming/install flow.
         URL.setURLStreamHandlerFactory(protocol -> !protocol.equals("https") ? null : new URLStreamHandler() {
             @Override protected URLConnection openConnection(URL url) {
+                opened.add(url.toString());
                 return new HttpURLConnection(url) {
                     @Override public int getResponseCode() { requested.add(url.toString()); return responses.containsKey(url.toString()) ? 200 : 404; }
                     @Override public InputStream getInputStream() throws IOException { byte[] bytes=responses.get(url.toString()); if(bytes==null) throw new FileNotFoundException(url.toString()); return new ByteArrayInputStream(bytes); }
@@ -71,6 +73,10 @@ public final class ContentUpdateBehavior {
                 };
             }
         });
+        if (!BuildConfig.WANBA_GAME_UPDATES) {
+            disabledUpdateBehavior();
+            System.out.println("PASS "+assertions+" disabled-update Java assertions"); return;
+        }
         signatureAndSchema(); packageBehavior(); recoveryBehavior(); activationAndWatchdog(); downloadAndReplay(); apkUpgradeBehavior(); redirectAndRoutes();
         System.out.println("PASS "+assertions+" real Java assertions");
     }
@@ -315,6 +321,65 @@ public final class ContentUpdateBehavior {
         check(LocalAssetPolicy.assetPath(url).equals("updates/"+id+"/www/assets/space-cadet/space-cadet.wasm"),"same-origin snapshot WASM route");
         check(LocalAssetPolicy.assetPath(url.replace(id,"z".repeat(64)))==null,"invalid snapshot route rejected");
         check(LocalAssetPolicy.assetPath(url.replace("space-cadet.wasm","%2e%2e/private"))==null,"encoded traversal route rejected");
+    }
+    static void disabledUpdateBehavior() throws Exception {
+        Fixture base=fixture(1,"builtin game"),external=fixture(2,"external game");
+        Context context=context("non-dynamic",base);ContentManifest externalManifest=external.manifest();
+        File directory=new File(context.getNoBackupFilesDir(),"content-update");
+        // Simulate a previously enabled installation, including an unfinished
+        // activation and a checkpoint that must never overwrite current saves.
+        write(new File(directory,"active.json"),new JSONObject().put("active",externalManifest.id).put("previous",base.manifest().id)
+            .put("pending",true).put("restore",true).toString().getBytes(StandardCharsets.UTF_8));
+        write(new File(directory,"candidate.json"),external.channel());
+        write(new File(directory,"checkpoint.json"),storage().toString().getBytes(StandardCharsets.UTF_8));
+        write(new File(directory,"snapshots/"+externalManifest.id+"/channel.json"),external.channel());
+        write(new File(directory,"snapshots/"+externalManifest.id+"/ready"),new byte[]{1});
+        for(ContentManifest.Pack pack:externalManifest.packages.values()) {
+            for(ContentManifest.FileRef file:pack.files)write(new File(directory,"objects/"+pack.sha256+"/"+file.path),external.files.get(file.path));
+            write(new File(directory,"objects/"+pack.sha256+"/.ready"),pack.sha256.getBytes(StandardCharsets.UTF_8));
+        }
+        write(new File(context.getNoBackupFilesDir(),"player-prefs-and-save.json"),"{\"score\":999,\"theme\":\"night\"}".getBytes(StandardCharsets.UTF_8));
+        File archive=new File(directory,"existing-package.zip");write(archive,external.archives.get("game.match3"));
+        Map<String,String> before=treeDigest(context.getNoBackupFilesDir());
+        ContentResourceStore store=new ContentResourceStore(context,3);
+        check(store.installed(store.builtinId()),"builtin remains available without downloading");
+        check(!store.installed(externalManifest.id),"cached external snapshot is not registered");
+        check(!store.hasPack(externalManifest.packages.get("game.match3")),"external cached package is unavailable");
+        check(store.loadInstalled(store.builtinId()).id.equals(base.manifest().id),"signed builtin metadata stays readable");
+        rejects(()->store.loadInstalled(externalManifest.id),"disabled store cannot load signed external snapshot");
+        rejects(()->store.unpack(externalManifest.packages.get("game.match3"),archive),"disabled store cannot unpack game code");
+        rejects(()->store.installSnapshot(externalManifest),"disabled store cannot install snapshot");
+        rejects(()->store.openPath("updates/"+externalManifest.id+"/www/src/games/match3.js"),"disabled external resource route");
+        store.collect(Collections.emptySet());
+        check(before.equals(treeDigest(context.getNoBackupFilesDir())),"disabled store preserves existing update cache and player data");
+        Events events=new Events();ContentUpdateManager manager=new ContentUpdateManager(context,3,events);
+        try {
+            check(events.loaded().equals("/assets/www/standalone/index.html"),"non-dynamic launch always selects bundled entry");
+            JSONObject state=new JSONObject(manager.getContentState());
+            check(!state.getBoolean("gameUpdatesEnabled"),"native advertises updates disabled");
+            check(state.getString("activeSnapshotId").equals(base.manifest().id),"cached pending activation cannot override builtin");
+            check(state.getBoolean("bootHealthy")&&state.isNull("restoreStorage"),"disabled build never restores stale checkpoint");
+            check(state.isNull("candidate")&&state.isNull("previousSnapshotId"),"no external candidate or rollback exposed");
+            for(String result:Arrays.asList(manager.checkGameUpdates(),manager.downloadGameUpdate(externalManifest.id),
+                    manager.activateGameUpdate(externalManifest.id,"not a checkpoint"),manager.rollbackGameUpdate()))
+                check(new JSONObject(result).getString("code").equals("GAME_UPDATES_DISABLED"),"native update entry rejects before queuing work");
+            check(read(manager.openResource("www/src/games/match3.js")).equals("builtin game"),"only APK game bytes are served");
+            rejects(()->manager.openResource("updates/"+externalManifest.id+"/www/src/games/match3.js"),"manager blocks external game route");
+            check(manager.isTrustedEntry(LocalAssetPolicy.ORIGIN+"/assets/www/standalone/index.html"),"builtin keeps native bridge trust");
+            check(!manager.isTrustedEntry(LocalAssetPolicy.ORIGIN+"/assets/updates/"+externalManifest.id+"/www/standalone/index.html"),"external entry never receives native bridge trust");
+            check(new JSONObject(manager.reportGameContentReady(base.manifest().id)).getBoolean("accepted"),"ordinary app boot handshake succeeds");
+            manager.onPause();manager.onResume();Handler.fireTimers();awaitIdle(manager);
+            check(opened.isEmpty()&&requested.isEmpty(),"OFF issues no URL connection or HTTP request");
+            check(before.equals(treeDigest(context.getNoBackupFilesDir())),"boot/check/download/activate/rollback/ready preserve every existing private file");
+        } finally {manager.close();}
+        Context fresh=context("non-dynamic-fresh",base);Events freshEvents=new Events();ContentUpdateManager freshManager=new ContentUpdateManager(fresh,3,freshEvents);
+        try {freshEvents.loaded();check(!new File(fresh.getNoBackupFilesDir(),"content-update").exists(),"fresh offline installation needs no update cache directory");}
+        finally {freshManager.close();}
+    }
+    static Map<String,String> treeDigest(File folder) throws Exception {
+        Map<String,String> result=new TreeMap<>();
+        try(var files=Files.walk(folder.toPath())) {for(var path:files.filter(Files::isRegularFile).toList())result.put(folder.toPath().relativize(path).toString(),ContentManifest.sha256(Files.readAllBytes(path)));}
+        return result;
     }
     static void write(File file,byte[] bytes) throws Exception { file.getParentFile().mkdirs(); Files.write(file.toPath(),bytes); }
     static String read(InputStream input) throws Exception { try(InputStream in=input) { return new String(in.readAllBytes(),StandardCharsets.UTF_8); } }

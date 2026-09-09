@@ -12,7 +12,8 @@ const c=await connect(),checks=[];let failure=null;
 const core=()=>c.evaluate('(()=>{const s=wanbaApp.inspect().controller;return {schema:s.schema,score:s.score,levelScore:s.levelScore,lives:s.lives,levelIndex:s.levelIndex,status:s.status,details:s.details,current:s.current,next:s.next,chain:s.chain.map(b=>({id:b.id,color:b.color,powerup:b.powerup||null})),effects:s.effects,elapsed:s.elapsed,rng:s.rng,shotSeq:s.shotSeq,shot:s.shot?{id:s.shot.id,color:s.shot.color}:null}})()');
 const layout=()=>c.evaluate('(()=>{const p=document.querySelector("#wb-zuma-fullscreen");return{width:innerWidth,height:innerHeight,orientation:screen.orientation?.type,view:wanbaApp.inspect().controller.view,portal:p.getBoundingClientRect().toJSON(),controls:[...p.querySelectorAll(".zc-head,.zc-footer,.zc-canvas")].map(e=>e.getBoundingClientRect().toJSON())}})()');
 try {
- assert.match(adb('shell','wm','help'),/user-rotation/);assert(await c.evaluate('!!document.querySelector("#wb-zuma-fullscreen")'),'Open actual Zuma before rotating');
+ let help;try{help=adb('shell','wm','help')}catch(error){if(error.status!==255||!error.stdout)throw error;help=String(error.stdout)}
+ assert.match(help,/user-rotation/);assert(await c.evaluate('!!document.querySelector("#wb-zuma-fullscreen")'),'Open actual Zuma before rotating');
  if(!await c.evaluate('wanbaApp.inspect().controller.view.paused'))await touch(c,'#wb-zuma-pause');await c.wait(150);const before=await core();
  for(const [rotation,name]of[['0','portrait'],['1','landscape'],['0','portrait-restored']]){
   adb('shell','wm','user-rotation','lock',rotation);await c.until(rotation==='1'?'innerWidth>innerHeight':'innerHeight>innerWidth',12000);await c.wait(500);

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="io.github.jacklee992.wanba.appupdater.AppUpdaterJUnitTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-09-09T05:02:59.742Z" hostname="JackLeedeMacBook-Pro.local" time="0.148">
+  <properties/>
+  <testcase name="signaturesReplayAndStreamingDecoder" classname="io.github.jacklee992.wanba.appupdater.AppUpdaterJUnitTest" time="0.146"/>
+  <system-out><![CDATA[PASS 52 real Java APK-update assertions
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,199 @@
+WARNING: We recommend using a newer Android Gradle plugin to use compile SDK version 37.1
+
+This Android Gradle plugin (9.2.1) was tested up to compile SDK version 37.0.
+
+You are strongly encouraged to update your project to use a newer
+Android Gradle plugin that has been tested with compile SDK version 37.1.
+
+If you are already using the latest version of the Android Gradle plugin,
+you may need to wait until a newer version with support for compile SDK version 37.1 is available.
+
+For more information refer to the compatibility table:
+https://d.android.com/r/tools/api-level-support
+
+To suppress this warning, add/update
+    android.suppressUnsupportedCompileSdk=37.1
+to this project's gradle.properties.
+> Task :app:prepareWebAssets UP-TO-DATE
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preSystemReleaseBuild UP-TO-DATE
+> Task :app:mergeSystemReleaseJniLibFolders UP-TO-DATE
+> Task :app:mergeSystemReleaseNativeLibs NO-SOURCE
+> Task :app:stripSystemReleaseDebugSymbols NO-SOURCE
+> Task :app:extractSystemReleaseNativeSymbolTables NO-SOURCE
+> Task :app:mergeSystemReleaseNativeDebugMetadata NO-SOURCE
+> Task :app:checkSystemReleaseDuplicateClasses UP-TO-DATE
+> Task :app:generateSystemReleaseBuildConfig
+> Task :app:generateSystemReleaseResources UP-TO-DATE
+> Task :app:packageSystemReleaseResources UP-TO-DATE
+> Task :app:processSystemReleaseNavigationResources UP-TO-DATE
+> Task :app:parseSystemReleaseLocalResources UP-TO-DATE
+> Task :app:generateSystemReleaseRFile UP-TO-DATE
+> Task :app:compileSystemReleaseKotlin NO-SOURCE
+> Task :app:javaPreCompileSystemRelease UP-TO-DATE
+
+> Task :app:compileSystemReleaseJavaWithJavac
+Note: /Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/src/main/java/io/github/jacklee992/wanba/MainActivity.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+
+> Task :app:checkSystemReleaseAarMetadata UP-TO-DATE
+> Task :app:mapSystemReleaseSourceSetPaths UP-TO-DATE
+> Task :app:compileSystemReleaseNavigationResources UP-TO-DATE
+> Task :app:mergeSystemReleaseResources UP-TO-DATE
+> Task :app:createSystemReleaseCompatibleScreenManifests
+> Task :app:extractDeepLinksSystemRelease UP-TO-DATE
+> Task :app:processSystemReleaseMainManifest
+> Task :app:processSystemReleaseManifest
+> Task :app:desugarSystemReleaseFileDependencies UP-TO-DATE
+> Task :app:mergeSystemReleaseStartupProfile UP-TO-DATE
+> Task :app:mergeExtDexSystemRelease UP-TO-DATE
+> Task :app:mergeSystemReleaseArtProfile UP-TO-DATE
+> Task :app:generateSystemReleaseAssets UP-TO-DATE
+> Task :app:mergeSystemReleaseAssets
+> Task :app:extractSystemReleaseVersionControlInfo UP-TO-DATE
+> Task :app:extractProguardFiles UP-TO-DATE
+> Task :app:generateSystemReleaseLintVitalReportModel
+> Task :app:processSystemReleaseManifestForPackage
+> Task :app:compressSystemReleaseAssets
+> Task :app:processSystemReleaseJavaRes NO-SOURCE
+> Task :app:mergeSystemReleaseJavaResource UP-TO-DATE
+> Task :app:collectSystemReleaseDependencies UP-TO-DATE
+> Task :app:sdkSystemReleaseDependencyData UP-TO-DATE
+> Task :app:validateSigningSystemRelease UP-TO-DATE
+> Task :app:writeSystemReleaseAppMetadata UP-TO-DATE
+> Task :app:writeSystemReleaseSigningConfigVersions UP-TO-DATE
+> Task :app:preCompatReleaseBuild UP-TO-DATE
+> Task :app:mergeCompatReleaseJniLibFolders UP-TO-DATE
+> Task :app:mergeCompatReleaseNativeLibs UP-TO-DATE
+> Task :app:stripCompatReleaseDebugSymbols UP-TO-DATE
+> Task :app:extractCompatReleaseNativeSymbolTables UP-TO-DATE
+> Task :app:mergeCompatReleaseNativeDebugMetadata NO-SOURCE
+> Task :app:mergeCompatReleaseArtProfile UP-TO-DATE
+> Task :app:desugarCompatReleaseFileDependencies UP-TO-DATE
+> Task :app:generateCompatReleaseBuildConfig
+> Task :app:generateCompatReleaseResources UP-TO-DATE
+> Task :app:packageCompatReleaseResources UP-TO-DATE
+> Task :app:processCompatReleaseNavigationResources UP-TO-DATE
+> Task :app:parseCompatReleaseLocalResources UP-TO-DATE
+> Task :app:generateCompatReleaseRFile UP-TO-DATE
+> Task :app:compileCompatReleaseKotlin NO-SOURCE
+> Task :app:javaPreCompileCompatRelease UP-TO-DATE
+> Task :app:processSystemReleaseResources
+
+> Task :app:compileCompatReleaseJavaWithJavac
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+
+> Task :app:dexBuilderSystemRelease
+> Task :app:mergeSystemReleaseGlobalSynthetics UP-TO-DATE
+> Task :app:checkCompatReleaseAarMetadata UP-TO-DATE
+> Task :app:mapCompatReleaseSourceSetPaths UP-TO-DATE
+> Task :app:compileCompatReleaseNavigationResources UP-TO-DATE
+> Task :app:mergeCompatReleaseResources UP-TO-DATE
+> Task :app:createCompatReleaseCompatibleScreenManifests
+> Task :app:extractDeepLinksCompatRelease UP-TO-DATE
+> Task :app:processCompatReleaseMainManifest
+> Task :app:processCompatReleaseManifest
+> Task :app:checkCompatReleaseDuplicateClasses UP-TO-DATE
+> Task :app:mergeCompatReleaseStartupProfile UP-TO-DATE
+> Task :app:mergeExtDexCompatRelease UP-TO-DATE
+> Task :app:generateCompatReleaseAssets UP-TO-DATE
+> Task :app:mergeDexSystemRelease
+> Task :app:mergeCompatReleaseAssets
+> Task :app:compileSystemReleaseArtProfile
+> Task :app:extractCompatReleaseVersionControlInfo UP-TO-DATE
+> Task :app:generateCompatReleaseLintVitalReportModel
+> Task :app:optimizeSystemReleaseResources
+> Task :app:processCompatReleaseJavaRes NO-SOURCE
+> Task :app:compressCompatReleaseAssets
+> Task :app:mergeCompatReleaseJavaResource UP-TO-DATE
+> Task :app:collectCompatReleaseDependencies UP-TO-DATE
+> Task :app:sdkCompatReleaseDependencyData UP-TO-DATE
+> Task :app:validateSigningCompatRelease UP-TO-DATE
+> Task :app:writeCompatReleaseAppMetadata UP-TO-DATE
+> Task :app:writeCompatReleaseSigningConfigVersions UP-TO-DATE
+> Task :app:preSystemDebugBuild UP-TO-DATE
+> Task :app:mergeSystemDebugNativeDebugMetadata NO-SOURCE
+> Task :app:generateSystemDebugBuildConfig UP-TO-DATE
+> Task :app:generateSystemDebugResources UP-TO-DATE
+> Task :app:packageSystemDebugResources UP-TO-DATE
+> Task :app:processSystemDebugNavigationResources UP-TO-DATE
+> Task :app:parseSystemDebugLocalResources UP-TO-DATE
+> Task :app:generateSystemDebugRFile UP-TO-DATE
+> Task :app:compileSystemDebugKotlin NO-SOURCE
+> Task :app:javaPreCompileSystemDebug UP-TO-DATE
+
+> Task :app:compileSystemDebugJavaWithJavac
+Note: /Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/src/main/java/io/github/jacklee992/wanba/MainActivity.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+
+> Task :app:generateSystemDebugAssets UP-TO-DATE
+> Task :app:lintVitalAnalyzeSystemRelease
+> Task :app:mergeSystemDebugAssets
+> Task :app:lintVitalReportSystemRelease SKIPPED
+> Task :app:lintVitalSystemRelease SKIPPED
+> Task :app:generateSystemDebugGlobalSynthetics UP-TO-DATE
+> Task :app:checkSystemDebugDuplicateClasses UP-TO-DATE
+> Task :app:desugarSystemDebugFileDependencies UP-TO-DATE
+> Task :app:mergeExtDexSystemDebug UP-TO-DATE
+> Task :app:mergeLibDexSystemDebug UP-TO-DATE
+> Task :app:checkSystemDebugAarMetadata UP-TO-DATE
+> Task :app:mapSystemDebugSourceSetPaths UP-TO-DATE
+> Task :app:compileSystemDebugNavigationResources UP-TO-DATE
+> Task :app:mergeSystemDebugResources UP-TO-DATE
+> Task :app:createSystemDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksSystemDebug UP-TO-DATE
+> Task :app:processSystemDebugMainManifest UP-TO-DATE
+> Task :app:processSystemDebugManifest UP-TO-DATE
+> Task :app:processSystemDebugManifestForPackage UP-TO-DATE
+> Task :app:processSystemDebugResources UP-TO-DATE
+> Task :app:compressSystemDebugAssets
+> Task :app:dexBuilderSystemDebug
+> Task :app:processSystemDebugJavaRes NO-SOURCE
+> Task :app:mergeSystemDebugJavaResource UP-TO-DATE
+> Task :app:mergeSystemDebugJniLibFolders UP-TO-DATE
+> Task :app:mergeSystemDebugNativeLibs NO-SOURCE
+> Task :app:stripSystemDebugDebugSymbols NO-SOURCE
+> Task :app:validateSigningSystemDebug UP-TO-DATE
+> Task :app:writeSystemDebugAppMetadata UP-TO-DATE
+> Task :app:writeSystemDebugSigningConfigVersions UP-TO-DATE
+> Task :app:generateSystemReleaseLintReportModel
+> Task :app:mergeProjectDexSystemDebug
+> Task :app:generateCompatReleaseLintReportModel
+> Task :app:processCompatReleaseManifestForPackage
+> Task :app:packageSystemDebug
+> Task :app:createSystemDebugApkListingFileRedirect UP-TO-DATE
+> Task :app:assembleSystemDebug
+> Task :app:processCompatReleaseResources
+> Task :app:dexBuilderCompatRelease
+> Task :app:mergeCompatReleaseGlobalSynthetics UP-TO-DATE
+> Task :app:packageSystemRelease
+> Task :app:createSystemReleaseApkListingFileRedirect
+> Task :app:assembleSystemRelease
+> Task :app:optimizeCompatReleaseResources
+> Task :app:lintVitalAnalyzeCompatRelease
+> Task :app:lintVitalReportCompatRelease SKIPPED
+> Task :app:lintVitalCompatRelease SKIPPED
+> Task :app:mergeDexCompatRelease
+> Task :app:compileCompatReleaseArtProfile
+> Task :app:lintAnalyzeSystemRelease
+
+> Task :app:lintReportSystemRelease
+Wrote HTML report to file:///Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/build/reports/lint-results-systemRelease.html
+
+> Task :app:lintSystemRelease
+> Task :app:lintAnalyzeCompatRelease
+
+> Task :app:lintReportCompatRelease
+Wrote HTML report to file:///Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/build/reports/lint-results-compatRelease.html
+
+> Task :app:lintCompatRelease
+> Task :app:packageCompatRelease
+> Task :app:createCompatReleaseApkListingFileRedirect
+> Task :app:assembleCompatRelease
+
+[Incubating] Problems report is available at: file:///Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/build/reports/problems/problems-report.html
+
+BUILD SUCCESSFUL in 9s
+131 actionable tasks: 48 executed, 83 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.4.1/userguide/configuration_cache_enabling.html

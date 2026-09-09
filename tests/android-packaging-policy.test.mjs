@@ -37,6 +37,6 @@ test('the Android shell permits native content downloads without storage permiss
  const manifest=readFileSync(join(root,'android/app/src/main/AndroidManifest.xml'),'utf8');assert.deepEqual([...manifest.matchAll(/<uses-permission\s+android:name="([^"]+)"/g)].map(m=>m[1]),['android.permission.INTERNET']);assert.match(manifest,/android:allowBackup="false"/);
  const native=readFileSync(join(root,'android/app/src/main/java/io/github/jacklee992/wanba/MainActivity.java'),'utf8');assert.match(native,/setWebContentsDebuggingEnabled\(BuildConfig.DEBUG\)/);assert.match(native,/setBlockNetworkLoads\(true\)/);assert.doesNotMatch(native,/handler\.proceed\(|setAllowUniversalAccessFromFileURLs\(true\)/);
  const gradle=readFileSync(join(root,'android/app/build.gradle.kts'),'utf8');assert.match(gradle,/\.local\/signing.properties/);assert.match(gradle,/minorApiLevel = 1/);assert.match(gradle,/minSdk = 26/);
- assert.equal(/versionName\s*=\s*"([^"]+)"/.exec(gradle)?.[1],APP_VERSION,'native and web app versions agree');
- assert.equal(Number(/versionCode\s*=\s*(\d+)/.exec(gradle)?.[1]),4,'1.2.1 Android update uses code4');
+ assert.equal(/gradleProperty\("wanbaVersionName"\)\.orElse\("([^"]+)"\)/.exec(gradle)?.[1],APP_VERSION,'default native and web app versions agree');
+ assert.equal(Number(/gradleProperty\("wanbaVersionCode"\)\.orElse\("(\d+)"\)/.exec(gradle)?.[1]),6,'1.2.2 Android update uses code6 after internal code5 candidate');
 });

@@ -108,9 +108,9 @@ test('only the exact trusted origin and standalone top-level path can install th
   assert.deepEqual(h.sent, [{ op: 'ready' }]);
 });
 
-test('the page receives only the ten declared native operations on a fixed bridge property', () => {
+test('the page receives only the eleven declared native operations on a fixed bridge property', () => {
   const h = harness();
-  const names = ['activateGameUpdate', 'checkGameUpdates', 'downloadGameUpdate', 'getAppInfo', 'getContentState', 'openDownloads', 'reportGameContentReady', 'rollbackGameUpdate', 'saveBackup', 'setGameImmersive'];
+  const names = ['activateGameUpdate', 'checkGameUpdates', 'downloadGameUpdate', 'getAppInfo', 'getContentState', 'openAppUpdater', 'openDownloads', 'reportGameContentReady', 'rollbackGameUpdate', 'saveBackup', 'setGameImmersive'];
   assert.deepEqual(Object.getOwnPropertyNames(h.bridge).sort(), names);
   assert.deepEqual(h.exported.sort(), names);
   for (const name of names) assert.equal(typeof h.bridge[name], 'function');
@@ -122,6 +122,8 @@ test('the page receives only the ten declared native operations on a fixed bridg
   assert.equal(h.page.NativeBridge, h.bridge);
   h.bridge.openDownloads();
   assert.deepEqual(h.sent.at(-1), { op: 'downloads' });
+  h.bridge.openAppUpdater();
+  assert.deepEqual(h.sent.at(-1), { op: 'appUpdater' });
 });
 
 test('immersive requests accept only explicit booleans and stop after disconnect', () => {
@@ -372,11 +374,12 @@ test('missing app-info responses reject after 1200 ms and late responses are ign
   assert.equal(h.sent.length, 2);
 });
 
-test('disconnect disables backup/download writes and rejects new info requests', async () => {
+test('disconnect disables backup/download/app-updater writes and rejects new info requests', async () => {
   const h = harness();
   h.disconnect();
   h.bridge.saveBackup('save.json', '{}');
   h.bridge.openDownloads();
+  h.bridge.openAppUpdater();
   await assert.rejects(h.bridge.getAppInfo(), /Native bridge disconnected/);
   assert.deepEqual(h.sent, [{ op: 'ready' }]);
   assert.equal(h.timers.size, 0);

@@ -1,0 +1,279 @@
+{
+  "schema": 1,
+  "createdAt": "2026-09-09T04:44:54.489900+00:00",
+  "purpose": "Post-release source build candidates only; same version 1.2.1/code 4 is NOT a newly published release. No APK installed or uploaded.",
+  "verified": true,
+  "builds": [
+    {
+      "mode": "enabled",
+      "flavor": "system",
+      "buildType": "debug",
+      "source": ".local/qa-app-updater/enabled/wanba-system-debug.apk",
+      "artifact": ".local/qa-app-updater/enabled/wanba-system-debug.apk",
+      "bytes": 60687842,
+      "sha256": "da38310b6d5d50ecd6ad5a233905d406a2c3f26bafe10a4076985e7f9515f961",
+      "packageName": "io.github.jacklee992.wanba",
+      "versionName": "1.2.1",
+      "versionCode": 4,
+      "certificateSha256": "806ede7461091d6b9668ad32b656d6e20f47d00eb4e11341e04f551377ced777",
+      "debuggable": true,
+      "flags": {
+        "WANBA_GAME_UPDATES": true,
+        "WANBA_APP_UPDATER": true
+      },
+      "installPackagesPermission": true,
+      "updaterComponents": [
+        {
+          "type": "activity",
+          "name": "io.github.jacklee992.wanba.appupdater.AppUpdateActivity",
+          "exported": false
+        },
+        {
+          "type": "receiver",
+          "name": "io.github.jacklee992.wanba.appupdater.InstallResultReceiver",
+          "exported": false
+        }
+      ],
+      "updaterClassCount": 30,
+      "apkSignatureVerifierClassCount": 297,
+      "updaterAssets": [
+        "assets/app-updater/public-key.der"
+      ],
+      "updaterPublicKeySha256": "f358f6d45e02c636230bec0deec9cf2cf91fe27619a4d386f0ba51eacb9d13c9",
+      "builtinGameModuleCount": 37,
+      "builtinLocales": [
+        "assets/www/locales/en.json",
+        "assets/www/locales/ja.json",
+        "assets/www/locales/ko.json",
+        "assets/www/locales/zh-CN.json",
+        "assets/www/locales/zh-TW.json"
+      ],
+      "evidencePrefix": "docs/evidence/app-updater/build-matrix/enabled-system-debug"
+    },
+    {
+      "mode": "enabled",
+      "flavor": "compat",
+      "buildType": "debug",
+      "source": ".local/qa-app-updater/enabled/wanba-compat-debug.apk",
+      "artifact": ".local/qa-app-updater/enabled/wanba-compat-debug.apk",
+      "bytes": 240856560,
+      "sha256": "e48eb7af2f31b12c442136c85c89eda0eb105b24defe1c7b37474bbbaa73f1b7",
+      "packageName": "io.github.jacklee992.wanba.compat",
+      "versionName": "1.2.1",
+      "versionCode": 4,
+      "certificateSha256": "806ede7461091d6b9668ad32b656d6e20f47d00eb4e11341e04f551377ced777",
+      "debuggable": true,
+      "flags": {
+        "WANBA_GAME_UPDATES": true,
+        "WANBA_APP_UPDATER": true
+      },
+      "installPackagesPermission": true,
+      "updaterComponents": [
+        {
+          "type": "activity",
+          "name": "io.github.jacklee992.wanba.appupdater.AppUpdateActivity",
+          "exported": false
+        },
+        {
+          "type": "receiver",
+          "name": "io.github.jacklee992.wanba.appupdater.InstallResultReceiver",
+          "exported": false
+        }
+      ],
+      "updaterClassCount": 30,
+      "apkSignatureVerifierClassCount": 297,
+      "updaterAssets": [
+        "assets/app-updater/public-key.der"
+      ],
+      "updaterPublicKeySha256": "f358f6d45e02c636230bec0deec9cf2cf91fe27619a4d386f0ba51eacb9d13c9",
+      "builtinGameModuleCount": 37,
+      "builtinLocales": [
+        "assets/www/locales/en.json",
+        "assets/www/locales/ja.json",
+        "assets/www/locales/ko.json",
+        "assets/www/locales/zh-CN.json",
+        "assets/www/locales/zh-TW.json"
+      ],
+      "evidencePrefix": "docs/evidence/app-updater/build-matrix/enabled-compat-debug"
+    },
+    {
+      "mode": "disabled",
+      "flavor": "system",
+      "buildType": "release",
+      "source": "android/app/build/outputs/apk/system/release/app-system-release.apk",
+      "artifact": ".local/qa-app-updater/disabled/wanba-system-release.apk",
+      "bytes": 59042876,
+      "sha256": "4a62f41dea0c11580acafaa098e6fa0db41c97f4429cd197e7089964785f28f7",
+      "packageName": "io.github.jacklee992.wanba",
+      "versionName": "1.2.1",
+      "versionCode": 4,
+      "certificateSha256": "806ede7461091d6b9668ad32b656d6e20f47d00eb4e11341e04f551377ced777",
+      "debuggable": false,
+      "flags": {
+        "WANBA_GAME_UPDATES": false,
+        "WANBA_APP_UPDATER": false
+      },
+      "installPackagesPermission": false,
+      "updaterComponents": [],
+      "updaterClassCount": 0,
+      "apkSignatureVerifierClassCount": 0,
+      "updaterAssets": [],
+      "updaterPublicKeySha256": null,
+      "builtinGameModuleCount": 37,
+      "builtinLocales": [
+        "assets/www/locales/en.json",
+        "assets/www/locales/ja.json",
+        "assets/www/locales/ko.json",
+        "assets/www/locales/zh-CN.json",
+        "assets/www/locales/zh-TW.json"
+      ],
+      "evidencePrefix": "docs/evidence/app-updater/build-matrix/disabled-system-release"
+    },
+    {
+      "mode": "disabled",
+      "flavor": "compat",
+      "buildType": "release",
+      "source": "android/app/build/outputs/apk/compat/release/app-compat-release.apk",
+      "artifact": ".local/qa-app-updater/disabled/wanba-compat-release.apk",
+      "bytes": 224392815,
+      "sha256": "6ee024147937075937c9202fd6252aefd27607e3c7df27d42d3ff4f6836eb9b3",
+      "packageName": "io.github.jacklee992.wanba.compat",
+      "versionName": "1.2.1",
+      "versionCode": 4,
+      "certificateSha256": "806ede7461091d6b9668ad32b656d6e20f47d00eb4e11341e04f551377ced777",
+      "debuggable": false,
+      "flags": {
+        "WANBA_GAME_UPDATES": false,
+        "WANBA_APP_UPDATER": false
+      },
+      "installPackagesPermission": false,
+      "updaterComponents": [],
+      "updaterClassCount": 0,
+      "apkSignatureVerifierClassCount": 0,
+      "updaterAssets": [],
+      "updaterPublicKeySha256": null,
+      "builtinGameModuleCount": 37,
+      "builtinLocales": [
+        "assets/www/locales/en.json",
+        "assets/www/locales/ja.json",
+        "assets/www/locales/ko.json",
+        "assets/www/locales/zh-CN.json",
+        "assets/www/locales/zh-TW.json"
+      ],
+      "evidencePrefix": "docs/evidence/app-updater/build-matrix/disabled-compat-release"
+    },
+    {
+      "mode": "disabled",
+      "flavor": "system",
+      "buildType": "debug",
+      "source": "android/app/build/outputs/apk/system/debug/app-system-debug.apk",
+      "artifact": ".local/qa-app-updater/disabled/wanba-system-debug.apk",
+      "bytes": 60687705,
+      "sha256": "9aa70c46d5a1a5d615fe5c1dc11f8c4a7ba135e6655b1577473dc44a11d21a1a",
+      "packageName": "io.github.jacklee992.wanba",
+      "versionName": "1.2.1",
+      "versionCode": 4,
+      "certificateSha256": "806ede7461091d6b9668ad32b656d6e20f47d00eb4e11341e04f551377ced777",
+      "debuggable": true,
+      "flags": {
+        "WANBA_GAME_UPDATES": false,
+        "WANBA_APP_UPDATER": false
+      },
+      "installPackagesPermission": false,
+      "updaterComponents": [],
+      "updaterClassCount": 0,
+      "apkSignatureVerifierClassCount": 0,
+      "updaterAssets": [],
+      "updaterPublicKeySha256": null,
+      "builtinGameModuleCount": 37,
+      "builtinLocales": [
+        "assets/www/locales/en.json",
+        "assets/www/locales/ja.json",
+        "assets/www/locales/ko.json",
+        "assets/www/locales/zh-CN.json",
+        "assets/www/locales/zh-TW.json"
+      ],
+      "evidencePrefix": "docs/evidence/app-updater/build-matrix/disabled-system-debug"
+    }
+  ],
+  "lint": {
+    "system": {
+      "configuration": "disabled release",
+      "counts": {
+        "Warning": 17
+      },
+      "issues": {
+        "OldTargetApi": 1,
+        "UnusedAttribute": 1,
+        "AndroidGradlePluginVersion": 1,
+        "ChromeOsAbiSupport": 1,
+        "SetJavaScriptEnabled": 1,
+        "DataExtractionRules": 1,
+        "ObsoleteSdkInt": 4,
+        "UsableSpace": 1,
+        "MonochromeLauncherIcon": 4,
+        "SetTextI18n": 2
+      },
+      "evidence": "docs/evidence/app-updater/build-matrix/lint-results-systemRelease.xml"
+    },
+    "compat": {
+      "configuration": "disabled release",
+      "counts": {
+        "Warning": 14
+      },
+      "issues": {
+        "OldTargetApi": 1,
+        "UnusedAttribute": 2,
+        "AndroidGradlePluginVersion": 1,
+        "ChromeOsAbiSupport": 1,
+        "SetJavaScriptEnabled": 1,
+        "DataExtractionRules": 1,
+        "ObsoleteSdkInt": 4,
+        "UsableSpace": 1,
+        "SetTextI18n": 2
+      },
+      "evidence": "docs/evidence/app-updater/build-matrix/lint-results-compatRelease.xml"
+    }
+  },
+  "buildLogs": {
+    "enabled": {
+      "evidence": "docs/evidence/app-updater/build-matrix/build-enabled.log",
+      "sha256": "2a6d56c9d7f251cdefa1d548d6571caa50ede713e4df4c6ccbf1541b31b9834a",
+      "result": "BUILD SUCCESSFUL in 5s",
+      "lintTasks": []
+    },
+    "disabled": {
+      "evidence": "docs/evidence/app-updater/build-matrix/build-disabled.log",
+      "sha256": "356f0574efa87b1955eadc6a6e7294a59c91f4ae5e96bdd3b9d0f9bab7df514c",
+      "result": "BUILD SUCCESSFUL in 8s",
+      "lintTasks": [
+        ":app:generateSystemReleaseLintVitalReportModel",
+        ":app:generateCompatReleaseLintVitalReportModel",
+        ":app:generateSystemReleaseLintReportModel",
+        ":app:generateCompatReleaseLintReportModel",
+        ":app:lintVitalAnalyzeSystemRelease",
+        ":app:lintVitalReportSystemRelease",
+        ":app:lintVitalSystemRelease",
+        ":app:lintVitalAnalyzeCompatRelease",
+        ":app:lintVitalReportCompatRelease",
+        ":app:lintVitalCompatRelease",
+        ":app:lintAnalyzeSystemRelease",
+        ":app:lintReportSystemRelease",
+        ":app:lintSystemRelease",
+        ":app:lintAnalyzeCompatRelease",
+        ":app:lintReportCompatRelease",
+        ":app:lintCompatRelease"
+      ]
+    }
+  },
+  "publishedReleaseFilesUntouched": {
+    "wanba-system-1.2.1.apk": "2c9974f81766d273d762c8cc18875e482809079a6b9c8c129d297222d3a7f6b7",
+    "wanba-compat-1.2.1.apk": "8988136f202cc8529ced7c06bb45a1c64ab8bf2d00ee630445591697e489ebc6"
+  },
+  "limits": [
+    "ON variants are debug verification APKs; ON release/lint was not run by these build logs.",
+    "This inspection verifies packaged capabilities and removal; it does not replace on-device installer/lifecycle testing.",
+    "No claim of Google Play approval."
+  ],
+  "inspectionScript": "tools/verify-app-updater-matrix.py"
+}

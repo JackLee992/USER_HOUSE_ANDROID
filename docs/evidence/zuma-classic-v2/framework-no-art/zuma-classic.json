@@ -1,0 +1,31 @@
+{
+  "passed": false,
+  "testedAt": "2026-09-09T02:42:39.868Z",
+  "checks": [
+    {
+      "check": "trusted installed entry is healthy",
+      "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+      "gamePackage": {
+        "id": "game.zuma",
+        "kind": "game",
+        "version": "1.0.0",
+        "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.zuma-1.0.0.zip",
+        "sha256": "972144a5cd500d0554ee05d7977d0e59e6d630bb029f6e5e5501d0687cf1315a",
+        "size": 9424
+      }
+    },
+    {
+      "check": "development framework only: dedicated artwork is not a pass condition",
+      "artworkVerified": false,
+      "assetsReady": false
+    },
+    {
+      "check": "real swap control exchanges two balls",
+      "profile": "normal",
+      "current": 3,
+      "next": 0
+    }
+  ],
+  "error": "Error: {\"error\":\"move target out of bounds\",\"message\":\"Move target (-2, 222) is out of bounds of viewport dimensions (360, 746)\",\"stacktrace\":\"RemoteError@chrome://remote/content/shared/RemoteError.sys.mjs:8:8\\nWebDriverError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:169:5\\nMoveTargetOutOfBoundsError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:488:5\\nassertTargetInViewPort@chrome://remote/content/shared/webdriver/Actions.sys.mjs:3256:11\\n#assertInViewPort@chrome://remote/content/marionette/actors/MarionetteCommandsChild.sys.mjs:63:17\\nreceiveMessage@chrome://remote/content/marionette/actors/MarionetteCommandsChild.sys.mjs:182:42\\n\"}\n    at Socket.<anonymous> (file:///Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/tests/android-gecko.mjs:42:164)\n    at Socket.emit (node:events:509:28)\n    at addChunk (node:internal/streams/readable:563:12)\n    at readableAddChunkPushByteMode (node:internal/streams/readable:514:3)\n    at Readable.push (node:internal/streams/readable:394:5)\n    at TCP.onStreamRead (node:internal/stream_base_commons:189:23)",
+  "note": "rAF scheduling is not GPU presentation or power; no injected game state or artificial fixtures"
+}

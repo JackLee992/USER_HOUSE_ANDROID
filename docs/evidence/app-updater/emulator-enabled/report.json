@@ -1,0 +1,1070 @@
+{
+  "passed": true,
+  "mode": "enabled",
+  "scope": "Subsequent source candidate APK; not the published 1.2.1 artifact. No signed update channel or OS APK installation claimed.",
+  "testedAt": "2026-09-09T04:48:34.958Z",
+  "nativeInfo": {
+    "appVersion": "1.2.1",
+    "versionCode": 4,
+    "gameUpdatesEnabled": true,
+    "appUpdaterEnabled": true,
+    "nativeSelfUpdateEnabled": true,
+    "flavor": "system",
+    "engine": "Chromium / Android System WebView",
+    "engineVersion": "124.0.6367.219",
+    "providerVersion": "124.0.6367.219"
+  },
+  "contentState": {
+    "hostApi": 1,
+    "appVersionCode": 4,
+    "repository": "JackLee992/USER_HOUSE_GAME_PACKS",
+    "gameUpdatesEnabled": true,
+    "activeSnapshotId": "7a122cbdc1df7cafba30cfb98269303b91da3f1089c81f028467cd9a4bd4e630",
+    "active": {
+      "schema": 1,
+      "sequence": 4,
+      "snapshotVersion": "1.2.0",
+      "releaseTag": "content-4",
+      "minHostApi": 1,
+      "maxHostApi": 1,
+      "minAppVersionCode": 3,
+      "runtimeApi": 1,
+      "sourceCommit": "f917d5a79ff57921bd9a1085c7aad440b6b1ed80",
+      "entry": "standalone/index.html",
+      "packages": [
+        {
+          "id": "art.blackjack",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.blackjack-1.0.1.zip",
+          "sha256": "d9adc8bdd5ca687e61ba1ea7731e694abccb770360b7c3ccd5362208862a867b",
+          "size": 141421
+        },
+        {
+          "id": "art.bombnumber",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.bombnumber-1.0.1.zip",
+          "sha256": "83eb3f892ef1c35498e3ea6c648e01cdd7df4c82e606c1ebbc28887ec5b6c660",
+          "size": 17217
+        },
+        {
+          "id": "art.chinesechess",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.chinesechess-1.0.1.zip",
+          "sha256": "bee03f135042a67a5b3a860a7233830d5633c5c84c032bf32360e687375e7afe",
+          "size": 2040489
+        },
+        {
+          "id": "art.connect4d",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.connect4d-1.0.1.zip",
+          "sha256": "88b71a132b4726c40f8ecaf44bc568eee537bc033e152f0d95e254ec2e912ff2",
+          "size": 19616
+        },
+        {
+          "id": "art.draughts",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.draughts-1.0.1.zip",
+          "sha256": "6fce54be202405b0f3ab6ca0d7d9343c7aa0665121cd64dd14c142168a98f661",
+          "size": 2331760
+        },
+        {
+          "id": "art.freecell",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.freecell-1.0.1.zip",
+          "sha256": "2e3d8ea025e1251a174b65a33b69187b43d1cf74e6f9f40a84c2055ae3f90a15",
+          "size": 2275808
+        },
+        {
+          "id": "art.game1010",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.game1010-1.0.1.zip",
+          "sha256": "ed91f536b5dd35cb45d92a4a3383d4287cfa958b04ded7a747c61d1d69411d9b",
+          "size": 157945
+        },
+        {
+          "id": "art.game2048",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.game2048-1.0.1.zip",
+          "sha256": "31191e9dbec6a83ac34049dfb854a98beaf5ab341f4f5899efb2c58a4e3397f1",
+          "size": 110505
+        },
+        {
+          "id": "art.gomoku",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.gomoku-1.0.1.zip",
+          "sha256": "1620f0243f648359d28bce3c6a934b91b935fc6a7055b86a70085b4739ba2ba9",
+          "size": 16489
+        },
+        {
+          "id": "art.guessnumber",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.guessnumber-1.0.1.zip",
+          "sha256": "9f5ff051213e0b461c79a0f326e5e27bcb2ce4cddb3ba482d8f5ef8f2cea9183",
+          "size": 18151
+        },
+        {
+          "id": "art.jump",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.jump-1.0.1.zip",
+          "sha256": "7433e81fd476fcaaa46554c06a18df2a9c061422d17e66a61fcc59b34df8a52a",
+          "size": 17809
+        },
+        {
+          "id": "art.linklink",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.linklink-1.0.1.zip",
+          "sha256": "578bf122b867d293f88cf311e319212fd8834902e437aa5edf6504f7fd6e8cb7",
+          "size": 154117
+        },
+        {
+          "id": "art.ludo",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.ludo-1.0.1.zip",
+          "sha256": "a04485fb88af6f7b3e3c067471a267ee12514fc1cbaaf809bd6520c444b591a9",
+          "size": 19451
+        },
+        {
+          "id": "art.match3",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.match3-1.0.1.zip",
+          "sha256": "7bb8945b0bbefb9ca93164421051b29821afda4f064861053639d4190153ec42",
+          "size": 2011998
+        },
+        {
+          "id": "art.memory",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.memory-1.0.1.zip",
+          "sha256": "735bff6e5071481d2ed87d3ee06c7c8043156b46343a0a27ea8d3aaed86f8d4d",
+          "size": 110979
+        },
+        {
+          "id": "art.minesweeper",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.minesweeper-1.0.1.zip",
+          "sha256": "41e0fe07c50d7fb9e4a333d68d5d08bc8ba3b1992a74ee513667c515af6007af",
+          "size": 1995718
+        },
+        {
+          "id": "art.oldmaid",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.oldmaid-1.0.1.zip",
+          "sha256": "71afd6c8cdef3f3dd435ac3bf28489d42f3a53cdaceff5b2971db4d855d89642",
+          "size": 19199
+        },
+        {
+          "id": "art.paopao",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.paopao-1.0.1.zip",
+          "sha256": "fadaf175aa583b5ddfb92582bb84adb949887f83cee39f98b54edbdbcc867b7f",
+          "size": 159612
+        },
+        {
+          "id": "art.pinball",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.pinball-1.0.1.zip",
+          "sha256": "456aadc92d6060e5f9110cbf41eced45d0a8c284f170abbf3fff3d0b0e86ab6a",
+          "size": 4944121
+        },
+        {
+          "id": "art.plank",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.plank-1.0.1.zip",
+          "sha256": "6ee70dddf5a79e06d4be506ef103d923116a9380c418d8fdaee86a9464040576",
+          "size": 15611
+        },
+        {
+          "id": "art.popstar",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.popstar-1.0.1.zip",
+          "sha256": "96c05d9bcd7e1d4aa077fb2bdac6d4c3b0dab1da91457f912322de534b9389c3",
+          "size": 181416
+        },
+        {
+          "id": "art.reversi",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.reversi-1.0.1.zip",
+          "sha256": "d2cde103132fa5b7a82df0e7f36d502458564f4294627166815d54193bfea9c7",
+          "size": 16467
+        },
+        {
+          "id": "art.screw",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.screw-1.0.1.zip",
+          "sha256": "2e1aa7bf1a2a3993de82aa218f640708a85eab28a43154eeb50e567e347ba555",
+          "size": 169279
+        },
+        {
+          "id": "art.shared",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.shared-1.0.1.zip",
+          "sha256": "4ae792decd2d2a1b19e2c91298cccd2beff22b5766ecf2364c4ffcd22309e674",
+          "size": 21055891
+        },
+        {
+          "id": "art.shuerte",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.shuerte-1.0.1.zip",
+          "sha256": "0474fa6455167505eb2ca5d5793ab2dcff37b770b2c8244c2fa9eb65eb351896",
+          "size": 1974978
+        },
+        {
+          "id": "art.snake",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.snake-1.0.1.zip",
+          "sha256": "442fa69daee221d8841476361c870c0f2ce8a03465dfd2d6c91c75d377bbef7c",
+          "size": 16948
+        },
+        {
+          "id": "art.spider",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.spider-1.0.1.zip",
+          "sha256": "ba963344ca1ba248031c7f7cb05612e4729ce7b808c868d14e25af574020e878",
+          "size": 121788
+        },
+        {
+          "id": "art.sudoku",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.sudoku-1.0.1.zip",
+          "sha256": "47c87c293c05aa5c1d5f95aee5a678f1a844a65cc2848d79ed8077e6ca3fdc7d",
+          "size": 18739
+        },
+        {
+          "id": "art.territory",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.territory-1.0.1.zip",
+          "sha256": "b4f3b5aef95093f19436b7d20d14b24b05e692422173425da16aec16b3cb62d5",
+          "size": 17501
+        },
+        {
+          "id": "art.tetris",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.tetris-1.0.1.zip",
+          "sha256": "5f57a8d9b6661e796c548c71c7cf8f6926a8cf24c2485bde7cd7486ec37f20ec",
+          "size": 106363
+        },
+        {
+          "id": "art.tictactoe",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.tictactoe-1.0.1.zip",
+          "sha256": "916dfc31b1dfdf4a5ebeacdb705d197ea6ed70f01b0d66612338b5a7e8c01418",
+          "size": 16525
+        },
+        {
+          "id": "art.turkey",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.turkey-1.0.1.zip",
+          "sha256": "f8bcec99eebeaebf8b516c7532aa151bc94c41016ff05bb89cafd14960e47b33",
+          "size": 113103
+        },
+        {
+          "id": "art.uyangle",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.uyangle-1.0.1.zip",
+          "sha256": "99c37eb57183825c4d4f660367481b99768728f5b566fb3e7f94dd5790777a8a",
+          "size": 132144
+        },
+        {
+          "id": "art.watermelon",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.watermelon-1.0.1.zip",
+          "sha256": "ec44535bb4ad09143bdb9e97f5f9e1da548b5ff22792a344be0ae9059e8b5422",
+          "size": 124401
+        },
+        {
+          "id": "art.watersort",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.watersort-1.0.1.zip",
+          "sha256": "252e8b7f6dbac5d494ece0f713a2af95e4f85c8002bde8e5de948b80932b9b6b",
+          "size": 74389
+        },
+        {
+          "id": "art.westernchess",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.westernchess-1.0.1.zip",
+          "sha256": "c8692c8e6f6a4c7f9e84ec7373b02382a73ef07d4ac19b6f18573f7c33746bb7",
+          "size": 1966461
+        },
+        {
+          "id": "art.wordguess",
+          "kind": "art",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/art.wordguess-1.0.1.zip",
+          "sha256": "cf0e941cff8bd64092aa7c569895d6e86125cec8f879e28a06de3df19cbb392d",
+          "size": 17464
+        },
+        {
+          "id": "art.zuma",
+          "kind": "art",
+          "version": "1.1.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-4/art.zuma-1.1.0.zip",
+          "sha256": "7957b3aa9a9770bc2ef2464bbc6d0ff3e1a4bc401534a8c8ebb60269d8330a76",
+          "size": 10293598
+        },
+        {
+          "id": "core",
+          "kind": "core",
+          "version": "1.1.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-4/core-1.1.1.zip",
+          "sha256": "382aade9436d7f142e5e695a3e59330a3d620850e2c8b3faa0e35ac5d6cd543d",
+          "size": 421954
+        },
+        {
+          "id": "game.blackjack",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.blackjack-1.0.0.zip",
+          "sha256": "0f906739b293558c0a3295b7d68efd4b8488bda6f55765365b505c223acbd402",
+          "size": 7731
+        },
+        {
+          "id": "game.bombnumber",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.bombnumber-1.0.0.zip",
+          "sha256": "8471697c0d4b1ad84d33e381a9d25d2277dd393c7d1e7e6109f477bfb4c93b51",
+          "size": 2689
+        },
+        {
+          "id": "game.chinesechess",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.chinesechess-1.0.0.zip",
+          "sha256": "bf047943f316321c1d4942108819aa21b5212e394f635dce221b435ed544e3ab",
+          "size": 6205
+        },
+        {
+          "id": "game.connect4d",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.connect4d-1.0.0.zip",
+          "sha256": "6e29993e8bdded9682ee8029e047fd7da9a830d9d0c515f9bd0fff3dcc5cf47c",
+          "size": 4308
+        },
+        {
+          "id": "game.draughts",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.draughts-1.0.0.zip",
+          "sha256": "b12b0df936d9df93f50de8e2308de616fa52668111f2fc031796c4376a19c46e",
+          "size": 6624
+        },
+        {
+          "id": "game.freecell",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.freecell-1.0.0.zip",
+          "sha256": "4e9731dc4b718694715e114e3c7ea98d8242c2b2c30bdecd6287d916e0a8d636",
+          "size": 6814
+        },
+        {
+          "id": "game.game1010",
+          "kind": "game",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/game.game1010-1.0.1.zip",
+          "sha256": "dc69f126cadb71afc28d39bde6226d46f3508380a679777912c04b7096c05027",
+          "size": 6534
+        },
+        {
+          "id": "game.game2048",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.game2048-1.0.0.zip",
+          "sha256": "4934b1b73cd0ef6ab18329f54a0441d51716db75ed4598cccf4245526e532f5e",
+          "size": 3205
+        },
+        {
+          "id": "game.gomoku",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.gomoku-1.0.0.zip",
+          "sha256": "8694ce21602bbaafe8498169eacee4de85b01d0a1b5202a995335c7cfe4464e5",
+          "size": 5197
+        },
+        {
+          "id": "game.guessnumber",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.guessnumber-1.0.0.zip",
+          "sha256": "f75408e61ad1748f28d62dfc1d65dd8d7a94b7959cb4be1233e1eab91769bbd7",
+          "size": 1968
+        },
+        {
+          "id": "game.jump",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.jump-1.0.0.zip",
+          "sha256": "888a436cc52ffc4611148778909d31d05e045409301c734c3b232628551508e7",
+          "size": 6347
+        },
+        {
+          "id": "game.linklink",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.linklink-1.0.0.zip",
+          "sha256": "ea649c8227b7dbb486d4ffa9488d5ffffea5781d302e35d815bf10b0e1496276",
+          "size": 9175
+        },
+        {
+          "id": "game.ludo",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.ludo-1.0.0.zip",
+          "sha256": "9c4dfedcc5d2f0aa0f7ef753ab78c42e7849bc615eb22bab06ee08b44bd92349",
+          "size": 5629
+        },
+        {
+          "id": "game.match3",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.match3-1.0.0.zip",
+          "sha256": "59655c64f40d4359a78e13d692654dd84e1137a3f03e5e3056a4af42088a51e7",
+          "size": 13994
+        },
+        {
+          "id": "game.memory",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.memory-1.0.0.zip",
+          "sha256": "47ac04d4bd0879a6a1140e63b1915aa748593f59570c89f0480e046ef152c1ed",
+          "size": 1867
+        },
+        {
+          "id": "game.minesweeper",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.minesweeper-1.0.0.zip",
+          "sha256": "0c3ff55704d83ded14fbf59b4a721246f11a165aadf6101808722b7ff2aef388",
+          "size": 3604
+        },
+        {
+          "id": "game.oldmaid",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.oldmaid-1.0.0.zip",
+          "sha256": "9a49fc1d6af906276ad519b162e925ae06c82a72a866fad55d60e8e4bf32499e",
+          "size": 3348
+        },
+        {
+          "id": "game.paopao",
+          "kind": "game",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-3/game.paopao-1.0.1.zip",
+          "sha256": "2c6596aa684a882efb9bd8c80f01e81186b043d9977bec2f2faa52e244c7d6f5",
+          "size": 7756
+        },
+        {
+          "id": "game.pinball",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.pinball-1.0.0.zip",
+          "sha256": "8b561dfcefb6d13b0c7554d60628285ce0f96659120fda9bcdda74a93b1cc2d0",
+          "size": 1611587
+        },
+        {
+          "id": "game.plank",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.plank-1.0.0.zip",
+          "sha256": "8adcdd199a3a0683d99a480163dc972832bf7f5082ea07e9e5a0ea78a9865a27",
+          "size": 4847
+        },
+        {
+          "id": "game.popstar",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.popstar-1.0.0.zip",
+          "sha256": "dba7d11b7d814a3e2b8e2c5d39013d749d5a79dbcfa8eb6d3b33932eba2bd369",
+          "size": 6990
+        },
+        {
+          "id": "game.reversi",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.reversi-1.0.0.zip",
+          "sha256": "b45a92420085da0306bc7256fedcc824f071c75967f1ebcc871d7bcaeb0fe72c",
+          "size": 3609
+        },
+        {
+          "id": "game.screw",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.screw-1.0.0.zip",
+          "sha256": "4c8543ddbaff2147a65375f15821001fd9ae9acf31cfddb8fc210d7f9aebb039",
+          "size": 10207
+        },
+        {
+          "id": "game.shuerte",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.shuerte-1.0.0.zip",
+          "sha256": "4c2dfd1132a5f0d5bd6aab0e588f2a7a7518736e1873a9d8b3c8bdb36a65d822",
+          "size": 3563
+        },
+        {
+          "id": "game.snake",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.snake-1.0.0.zip",
+          "sha256": "ef2c0676009751e49d8cb1063c66b5edbe727a97408f3b8bbc61eeec3098d42e",
+          "size": 3521
+        },
+        {
+          "id": "game.spider",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.spider-1.0.0.zip",
+          "sha256": "67ac5d90a472ac7bda69d4207377104c8412187d8a6d630fa74ef2e733b4915b",
+          "size": 9005
+        },
+        {
+          "id": "game.sudoku",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.sudoku-1.0.0.zip",
+          "sha256": "efffdf72b6f02a1b67800c1d1c9a9eee0880949e422dd99ee5966791b6146348",
+          "size": 4498
+        },
+        {
+          "id": "game.territory",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.territory-1.0.0.zip",
+          "sha256": "01c65e49889f6fcc03fce3ba584f7b79a611ef9ce58ad27451b138c52ed7cf4f",
+          "size": 3534
+        },
+        {
+          "id": "game.tetris",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.tetris-1.0.0.zip",
+          "sha256": "0b0bca0823486cb2ccc783d094a2874fdc45149c2362faa5853ac2bdd3ad82b7",
+          "size": 3969
+        },
+        {
+          "id": "game.tictactoe",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.tictactoe-1.0.0.zip",
+          "sha256": "54636da28468f7c3bb4a8efaa2b6c3d54abadd056e98cc92dda1f395073708a8",
+          "size": 2250
+        },
+        {
+          "id": "game.turkey",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.turkey-1.0.0.zip",
+          "sha256": "7592bc7c78ba0bea220b77b066943b1773b3039b036fac54ede19574aa27522b",
+          "size": 5924
+        },
+        {
+          "id": "game.uyangle",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.uyangle-1.0.0.zip",
+          "sha256": "4f8f1d3c9a2f4bc1f07ef10a41d806941bd60ac00ba5dd8f0da287e9eadcc578",
+          "size": 6023
+        },
+        {
+          "id": "game.watermelon",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.watermelon-1.0.0.zip",
+          "sha256": "33e580de898e92b62aebe4fc5810c8506a08417ad31a9372bd928136e219d00c",
+          "size": 5923
+        },
+        {
+          "id": "game.watersort",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.watersort-1.0.0.zip",
+          "sha256": "bbee43d0b9842b1847f52656d1577145575c75e9dc68531e6d866e7ff30e32ab",
+          "size": 7448
+        },
+        {
+          "id": "game.westernchess",
+          "kind": "game",
+          "version": "1.0.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.westernchess-1.0.0.zip",
+          "sha256": "89dda5eb02895b89d62e6e5c2b8df919ccfd6de2bb3d2307caacc3265d8000b4",
+          "size": 6736
+        },
+        {
+          "id": "game.wordguess",
+          "kind": "game",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-2/game.wordguess-1.0.1.zip",
+          "sha256": "abf474c754c4a50ef2faa2cbf0ea650775668b0e3eef335191053f40296cc74c",
+          "size": 4865
+        },
+        {
+          "id": "game.zuma",
+          "kind": "game",
+          "version": "1.1.0",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-4/game.zuma-1.1.0.zip",
+          "sha256": "76598320e06742b319309a8c2c562b063050e94771e1da74013128989d116e18",
+          "size": 31029
+        },
+        {
+          "id": "i18n.en",
+          "kind": "i18n",
+          "version": "1.0.2",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-4/i18n.en-1.0.2.zip",
+          "sha256": "cd21b4bf02f86660dff611be8f3134286f6fdcf47463359a383c46444a2221b1",
+          "size": 11975
+        },
+        {
+          "id": "i18n.ja",
+          "kind": "i18n",
+          "version": "1.0.2",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-4/i18n.ja-1.0.2.zip",
+          "sha256": "beb625fd3b2f726cc4bfa53c7fa01b85481caac70e93b8c6e815d1b5ac7bd80d",
+          "size": 12185
+        },
+        {
+          "id": "i18n.ko",
+          "kind": "i18n",
+          "version": "1.0.2",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-4/i18n.ko-1.0.2.zip",
+          "sha256": "7255678d07dea2f221e1bd852f162c5289b08f6e41a76ce4967c08fdfb6d42bf",
+          "size": 12366
+        },
+        {
+          "id": "i18n.zh-CN",
+          "kind": "i18n",
+          "version": "1.0.2",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-4/i18n.zh-CN-1.0.2.zip",
+          "sha256": "bf5758836667eea9fc1be4349395251bf9da6115977856814ba62197ece83887",
+          "size": 11784
+        },
+        {
+          "id": "i18n.zh-TW",
+          "kind": "i18n",
+          "version": "1.0.2",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-4/i18n.zh-TW-1.0.2.zip",
+          "sha256": "5b09d4fc49f85859b3b10c1d737abbd44c12f58dd729d1a6bbede7a191fbfcd6",
+          "size": 13158
+        }
+      ],
+      "games": {
+        "blackjack": {
+          "version": "1.0.0",
+          "code": "game.blackjack",
+          "art": [
+            "art.blackjack",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "bombnumber": {
+          "version": "1.0.0",
+          "code": "game.bombnumber",
+          "art": [
+            "art.bombnumber",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "chinesechess": {
+          "version": "1.0.0",
+          "code": "game.chinesechess",
+          "art": [
+            "art.chinesechess",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "connect4d": {
+          "version": "1.0.0",
+          "code": "game.connect4d",
+          "art": [
+            "art.connect4d",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "draughts": {
+          "version": "1.0.0",
+          "code": "game.draughts",
+          "art": [
+            "art.draughts",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "freecell": {
+          "version": "1.0.0",
+          "code": "game.freecell",
+          "art": [
+            "art.freecell",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "game1010": {
+          "version": "1.0.1",
+          "code": "game.game1010",
+          "art": [
+            "art.game1010",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "game2048": {
+          "version": "1.0.0",
+          "code": "game.game2048",
+          "art": [
+            "art.game2048",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "gomoku": {
+          "version": "1.0.0",
+          "code": "game.gomoku",
+          "art": [
+            "art.gomoku",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "guessnumber": {
+          "version": "1.0.0",
+          "code": "game.guessnumber",
+          "art": [
+            "art.guessnumber",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "jump": {
+          "version": "1.0.0",
+          "code": "game.jump",
+          "art": [
+            "art.jump",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "linklink": {
+          "version": "1.0.0",
+          "code": "game.linklink",
+          "art": [
+            "art.linklink",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "ludo": {
+          "version": "1.0.0",
+          "code": "game.ludo",
+          "art": [
+            "art.ludo",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "match3": {
+          "version": "1.0.0",
+          "code": "game.match3",
+          "art": [
+            "art.match3",
+            "art.shared"
+          ],
+          "saveSchema": 3
+        },
+        "memory": {
+          "version": "1.0.0",
+          "code": "game.memory",
+          "art": [
+            "art.memory",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "minesweeper": {
+          "version": "1.0.0",
+          "code": "game.minesweeper",
+          "art": [
+            "art.minesweeper",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "oldmaid": {
+          "version": "1.0.0",
+          "code": "game.oldmaid",
+          "art": [
+            "art.oldmaid",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "paopao": {
+          "version": "1.0.1",
+          "code": "game.paopao",
+          "art": [
+            "art.paopao",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "pinball": {
+          "version": "1.0.0",
+          "code": "game.pinball",
+          "art": [
+            "art.pinball",
+            "art.shared"
+          ],
+          "saveSchema": 2
+        },
+        "plank": {
+          "version": "1.0.0",
+          "code": "game.plank",
+          "art": [
+            "art.plank",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "popstar": {
+          "version": "1.0.0",
+          "code": "game.popstar",
+          "art": [
+            "art.popstar",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "reversi": {
+          "version": "1.0.0",
+          "code": "game.reversi",
+          "art": [
+            "art.reversi",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "screw": {
+          "version": "1.0.0",
+          "code": "game.screw",
+          "art": [
+            "art.screw",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "shuerte": {
+          "version": "1.0.0",
+          "code": "game.shuerte",
+          "art": [
+            "art.shuerte",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "snake": {
+          "version": "1.0.0",
+          "code": "game.snake",
+          "art": [
+            "art.snake",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "spider": {
+          "version": "1.0.0",
+          "code": "game.spider",
+          "art": [
+            "art.spider",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "sudoku": {
+          "version": "1.0.0",
+          "code": "game.sudoku",
+          "art": [
+            "art.sudoku",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "territory": {
+          "version": "1.0.0",
+          "code": "game.territory",
+          "art": [
+            "art.territory",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "tetris": {
+          "version": "1.0.0",
+          "code": "game.tetris",
+          "art": [
+            "art.tetris",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "tictactoe": {
+          "version": "1.0.0",
+          "code": "game.tictactoe",
+          "art": [
+            "art.tictactoe",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "turkey": {
+          "version": "1.0.0",
+          "code": "game.turkey",
+          "art": [
+            "art.turkey",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "uyangle": {
+          "version": "1.0.0",
+          "code": "game.uyangle",
+          "art": [
+            "art.uyangle",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "watermelon": {
+          "version": "1.0.0",
+          "code": "game.watermelon",
+          "art": [
+            "art.watermelon",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "watersort": {
+          "version": "1.0.0",
+          "code": "game.watersort",
+          "art": [
+            "art.watersort",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "westernchess": {
+          "version": "1.0.0",
+          "code": "game.westernchess",
+          "art": [
+            "art.westernchess",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "wordguess": {
+          "version": "1.0.1",
+          "code": "game.wordguess",
+          "art": [
+            "art.wordguess",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        },
+        "zuma": {
+          "version": "1.1.0",
+          "code": "game.zuma",
+          "art": [
+            "art.zuma",
+            "art.shared"
+          ],
+          "saveSchema": 1
+        }
+      },
+      "locales": {
+        "zh-CN": "i18n.zh-CN",
+        "zh-TW": "i18n.zh-TW",
+        "en": "i18n.en",
+        "ja": "i18n.ja",
+        "ko": "i18n.ko"
+      },
+      "snapshotId": "7a122cbdc1df7cafba30cfb98269303b91da3f1089c81f028467cd9a4bd4e630"
+    },
+    "candidate": null,
+    "candidateReady": false,
+    "bootHealthy": true,
+    "previousSnapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+    "job": {
+      "jobId": "state",
+      "action": "state",
+      "state": "active",
+      "message": "游戏内容已就绪",
+      "downloadedBytes": 0,
+      "totalBytes": 0
+    },
+    "restoreStorage": null
+  },
+  "nativeOutcome": [
+    "App 更新",
+    "已取消，当前 App 保持不变。"
+  ],
+  "gameStorageUntouched": true,
+  "storage": [
+    {
+      "key": "wanbanXiaowu_settings_v1",
+      "sha256": "d2c31cfe46bbe0f787ce52ecf42c5c2c295f0bc07295c739c793609466434f73"
+    },
+    {
+      "key": "wanbanXiaowu_scores_v1",
+      "sha256": "c5abd99f8ae3ea82b422fdabf6f0596a1adf20f1437679b13b549de486fecaa7"
+    },
+    {
+      "key": "wanbanXiaowu_progress_v1",
+      "sha256": "130429200d9ba5496ede2c3854fc7017cf60ffab05be930738a8148c30f10d3b"
+    },
+    {
+      "key": "wanbanXiaowu_records_v1",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "key": "wanbanXiaowu_sudokuState_v1",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    }
+  ],
+  "noObservedJsExceptions": true
+}

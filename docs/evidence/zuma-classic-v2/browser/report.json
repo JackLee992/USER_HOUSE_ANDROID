@@ -1,0 +1,84 @@
+{
+  "passed": true,
+  "mode": "normal",
+  "checks": [
+    "Independent full viewport, dedicated artwork loaded, no clipped page",
+    "Thumb swap exchanges loaded and preview marble",
+    "Hold, drag and release produces one shot",
+    "Pause freezes exact engine state",
+    "Live portrait-to-landscape rotation retains score, lives and shots",
+    "Save-and-exit restores game progress"
+  ],
+  "state": {
+    "schema": 2,
+    "layout": "landscape",
+    "levelIndex": 0,
+    "lives": 3,
+    "score": 0,
+    "levelScore": 0,
+    "status": "playing",
+    "generating": true,
+    "gaps": [],
+    "shot": null,
+    "current": 1,
+    "next": 2,
+    "aim": -0.7318103566077069,
+    "combo": 0,
+    "chainDepth": 0,
+    "shotSeq": 1,
+    "nextId": 28,
+    "effects": {
+      "slow": 0,
+      "reverse": 0,
+      "accuracy": 0
+    },
+    "elapsed": 2.4916666666666605,
+    "accumulator": 0.008249333333332476,
+    "cooldown": 0,
+    "coin": null,
+    "coinTimer": 3.508333333333236,
+    "dangerActive": false,
+    "drainTime": 0,
+    "drainAcceleration": 1800,
+    "coinsCollected": 0,
+    "rng": 835279164,
+    "details": {
+      "shots": 1,
+      "misses": 0,
+      "cleared": 0,
+      "maxCombo": 0,
+      "maxChain": 0,
+      "totalBallsGenerated": 26,
+      "coins": 0,
+      "gapShots": 0,
+      "bombUsed": 0,
+      "slowUsed": 0,
+      "reverseUsed": 0,
+      "accuracyUsed": 0,
+      "levelsCompleted": 0,
+      "maxSpeed": 38,
+      "dangerCount": 0,
+      "clearAllCount": 0
+    },
+    "view": {
+      "layout": "landscape",
+      "width": 1280,
+      "height": 650,
+      "ballRadius": 29,
+      "frog": {
+        "x": 640,
+        "y": 360.45454545454544
+      },
+      "renderer": "webgl",
+      "paused": false,
+      "assetsReady": true,
+      "motionReady": true,
+      "effects": {
+        "sparks": 0,
+        "waves": 0,
+        "loading": 0,
+        "swallowing": 0
+      }
+    }
+  }
+}

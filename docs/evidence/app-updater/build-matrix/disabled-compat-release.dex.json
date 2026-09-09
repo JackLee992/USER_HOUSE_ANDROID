@@ -1,0 +1,29 @@
+{
+  "method": "DEX class_def table and host BuildConfig encoded static values, not text search",
+  "hostEncodedStaticValues": {
+    "APPLICATION_ID": "io.github.jacklee992.wanba.compat",
+    "BUILD_TYPE": "release",
+    "FLAVOR": "compat",
+    "VERSION_CODE": 4,
+    "VERSION_NAME": "1.2.1",
+    "WANBA_APP_UPDATER": false,
+    "WANBA_GAME_UPDATES": false
+  },
+  "debugFieldNote": "DEBUG is initialized by <clinit> in debug builds; debuggable is verified from the packaged manifest, not encoded defaults",
+  "dex": [
+    {
+      "name": "classes.dex",
+      "bytes": 8825492,
+      "sha256": "8944ae0790681ef87e68c5f9208fb55164678bc60a981834f75f8aa6e71b0e2d",
+      "classCount": 8341
+    },
+    {
+      "name": "classes2.dex",
+      "bytes": 5276524,
+      "sha256": "551dda9f26298f9add3bf6d667ebafefba7de5362518d0224f5a1809676e0037",
+      "classCount": 4291
+    }
+  ],
+  "updaterClasses": [],
+  "apkSignatureVerifierClasses": []
+}

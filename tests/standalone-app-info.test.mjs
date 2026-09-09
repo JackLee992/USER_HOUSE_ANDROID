@@ -31,6 +31,16 @@ test('old native APK with new web assets stays visibly distinguishable', () => {
   const app=normalizeAppInfo({appVersion:'1.0.0',versionCode:1,flavor:'system',engineVersion:'124.0.6367.219'});
   assert.equal(app.appVersion,'1.0.0'); assert.equal(app.webVersion,APP_VERSION);
   assert.equal(app.versionMatches,false); assert.equal(app.gameBaseline,GAME_BASELINE);
+  assert.equal(app.gameUpdatesEnabled,true); assert.equal(app.nativeSelfUpdateEnabled,true);
+  assert.equal(app.appUpdaterEnabled,false);
+});
+
+test('native build capabilities keep offline and optional updater interfaces distinct', () => {
+  const native={appVersion:APP_VERSION,versionCode:4,flavor:'system',engineVersion:'124.0',gameUpdatesEnabled:false,nativeSelfUpdateEnabled:false,appUpdaterEnabled:false};
+  const offline=normalizeAppInfo(native);
+  assert.equal(offline.gameUpdatesEnabled,false); assert.equal(offline.nativeSelfUpdateEnabled,false); assert.equal(offline.appUpdaterEnabled,false);
+  const optIn=normalizeAppInfo({...native,nativeSelfUpdateEnabled:true,appUpdaterEnabled:true});
+  assert.equal(optIn.gameUpdatesEnabled,false); assert.equal(optIn.nativeSelfUpdateEnabled,true); assert.equal(optIn.appUpdaterEnabled,true);
 });
 
 test('missing or unresponsive Gecko port cannot stall application boot', async () => {

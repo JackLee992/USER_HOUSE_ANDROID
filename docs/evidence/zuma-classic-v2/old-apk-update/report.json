@@ -1,0 +1,42 @@
+{
+  "passed": true,
+  "apk": {
+    "version": "1.2.0",
+    "versionCode": 3,
+    "debuggable": false,
+    "sha256": "9a0c79e397dcf248f49b6d0a980889f926d4f866cd7b59402a1332e67e148ace",
+    "unchangedThroughoutUpdateAndColdStart": true
+  },
+  "snapshotId": "7a122cbdc1df7cafba30cfb98269303b91da3f1089c81f028467cd9a4bd4e630",
+  "zumaPackage": {
+    "gameVersion": "1.1.0",
+    "runtimeApi": 1,
+    "saveSchema": 1,
+    "snapshotId": "7a122cbdc1df7cafba30cfb98269303b91da3f1089c81f028467cd9a4bd4e630",
+    "artVersions": {
+      "art.zuma": "1.1.0",
+      "art.shared": "1.0.1"
+    }
+  },
+  "update": {
+    "changedPackages": 8,
+    "downloadBytes": 10808049,
+    "initialTimeout": true,
+    "retrySucceeded": true,
+    "allFiveParsedBackupItemsEqualImmediatelyAfterActivation": true
+  },
+  "gameplay": {
+    "score": 90,
+    "schema": 2,
+    "lives": 3,
+    "levelIndex": 0,
+    "shots": 11,
+    "realTouchAttempts": 12,
+    "chain": 68
+  },
+  "coldStart": {
+    "allParsedBackupItemsEqual": true
+  },
+  "note": "Released APK and normal native UI/SAF only. No debug bridge, injected state or APK reinstall after baseline. System bars remain on old native host; 1.2.1 provides native immersive mode.",
+  "testedAt": "2026-09-09T04:42:33.399Z"
+}

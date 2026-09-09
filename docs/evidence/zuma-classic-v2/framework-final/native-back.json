@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "before": {
+    "width": 360,
+    "height": 746
+  },
+  "immersive": {
+    "width": 360,
+    "height": 746,
+    "paused": true
+  },
+  "catalog": {
+    "width": 360,
+    "height": 746,
+    "game": null
+  },
+  "note": "Android BACK uses real runtime and destroys portal; paired screenshots verify system bars"
+}

@@ -1,0 +1,20 @@
+{
+  "passed": false,
+  "testedAt": "2026-09-09T02:40:36.455Z",
+  "checks": [
+    {
+      "check": "trusted installed entry is healthy",
+      "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+      "gamePackage": {
+        "id": "game.zuma",
+        "kind": "game",
+        "version": "1.0.0",
+        "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-1/game.zuma-1.0.0.zip",
+        "sha256": "972144a5cd500d0554ee05d7977d0e59e6d630bb029f6e5e5501d0687cf1315a",
+        "size": 9424
+      }
+    }
+  ],
+  "error": "Error: Timeout offline dedicated artwork loaded false\n    at until (file:///Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/tests/android-zuma-classic.mjs:19:204)\n    at async openGame (file:///Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/tests/android-zuma-classic.mjs:33:2)\n    at async file:///Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/tests/android-zuma-classic.mjs:57:165",
+  "note": "rAF scheduling is not GPU presentation or power; no injected game state or artificial fixtures"
+}

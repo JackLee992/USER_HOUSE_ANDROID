@@ -1,0 +1,29 @@
+<!doctype html><meta charset="utf-8"><title>Zuma classic dedicated asset sampling QA</title>
+<style>body{margin:0;background:#071b1c;color:#f3e7c3;font:15px system-ui}h1{font-size:22px;margin:20px 30px}canvas{display:block;margin:0 20px}</style>
+<h1>Exact runtime source rectangles · 24 / 36 / 48 px marbles · opaque UI interiors</h1><canvas width="1200" height="770"></canvas>
+<script type="module">
+const base='/assets/game-art/zuma/';
+const m=(await(await fetch(base+'manifest.json')).json()).classic;
+const getImage=async path=>{const i=new Image();i.src=base+path;await i.decode();return i};
+const [sprites,ui,bg]=await Promise.all([getImage(m.atlas),getImage(m.uiAtlas),getImage(m.background)]);
+const canvas=document.querySelector('canvas'),c=canvas.getContext('2d');
+c.fillStyle='#102e2c';c.fillRect(0,0,1200,770);c.font='16px system-ui';
+const draw=(img,r,x,y,w,h)=>c.drawImage(img,...r,x,y,w,h);
+const names=['RED / sun','YELLOW / step','GREEN / leaf','BLUE / wave','PURPLE / star','ORANGE / flame'];
+for(let bgIndex=0;bgIndex<3;bgIndex++){
+ const x=20+bgIndex*390;c.fillStyle=['#faf3db','#10212a','#6b7060'][bgIndex];c.fillRect(x,20,370,240);
+ if(bgIndex===2)c.drawImage(bg,500,250,500,400,x,20,370,240);
+ for(let row=0;row<3;row++)m.sprites.balls.forEach((r,col)=>{const size=[24,36,48][row];draw(sprites,r,x+8+col*60+(48-size)/2,45+row*68,size,size)});
+ c.fillStyle='#f3e7c3';c.fillText(['Cream background','Dark background','Temple texture'][bgIndex],x,286);
+}
+names.forEach((s,i)=>{c.fillStyle='#f3e7c3';c.fillText(s,30+i*194,316)});
+draw(sprites,m.sprites.frog,50,360,160,160);draw(sprites,m.sprites.skull,255,340,130,160);
+c.fillStyle='#f3e7c3';c.fillText('Frog · top-down · facing up',30,552);c.fillText('Skull mouth points down',255,552);
+let x=450,y=350;
+for(const [key,w,h] of [['panel',650,90],['meter',650,40],['button',240,90],['plaque',240,90]]){
+ draw(ui,m.ui[key],x,y,w,h);c.fillStyle='#fff3ce';c.fillText(key,x+15,y+h/2+5);
+ if(key==='button'){x=760;}else{y+=h+22;}
+}
+window.zumaAlpha={sourceRects:m.sprites,ui:m.ui,spriteSize:m.spriteSize,ballOrder:m.ballOrder,renderedSizes:[24,36,48],note:'UI uses only the opaque interior source rectangles. The RGB atlas exterior is never sampled.'};
+window.iconsReady=true;
+</script>

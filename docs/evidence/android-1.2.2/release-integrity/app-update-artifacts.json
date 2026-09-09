@@ -1,0 +1,84 @@
+{
+  "verifiedAtUtc": "2026-09-09T05:24:03.291510+00:00",
+  "signatureVerified": "P-256/SHA-256",
+  "appManifestSha256": "15d2d7d7b3fadc669282ec6b1fdbb0e88aa8e5e4b8906f8852b63da364bb8817",
+  "appManifestSequence": 1,
+  "issuedAt": 1788930739,
+  "expiresAt": 1791522739,
+  "appManifestDomain": "wanba-apk-update",
+  "apps": 2,
+  "deltas": [
+    {
+      "flavor": "system",
+      "baseVersionCode": 4,
+      "targetVersionCode": 6,
+      "patch": "wanba-system-4-to-6.waup",
+      "bytes": 1158068,
+      "sha256": "3567242dbc849025a3abbc4c37f321b07bf505436234f4b4293ddca5ee71654a",
+      "baseSha256": "2c9974f81766d273d762c8cc18875e482809079a6b9c8c129d297222d3a7f6b7",
+      "operations": 465,
+      "copiedBytes": 58068709,
+      "literalBytes": 1153870,
+      "reconstructedBytes": 59222579,
+      "reconstructedSha256": "d1706b1ecc8c601f30bf5f546ac025c3d0ef31685701b50f4223941fac01f892",
+      "matchedFinalApk": true
+    },
+    {
+      "flavor": "system",
+      "baseVersionCode": 5,
+      "targetVersionCode": 6,
+      "patch": "wanba-system-5-to-6.waup",
+      "bytes": 884176,
+      "sha256": "a2d18b93ca01438e31089c50e8b06faa5a93d09f4769284b41e59dbd384fa1a4",
+      "baseSha256": "4b0ae3afbcba54df369f199b7671471a0e0d1ca0f938fa4239ee2396a4864480",
+      "operations": 479,
+      "copiedBytes": 58342727,
+      "literalBytes": 879852,
+      "reconstructedBytes": 59222579,
+      "reconstructedSha256": "d1706b1ecc8c601f30bf5f546ac025c3d0ef31685701b50f4223941fac01f892",
+      "matchedFinalApk": true
+    },
+    {
+      "flavor": "compat",
+      "baseVersionCode": 4,
+      "targetVersionCode": 6,
+      "patch": "wanba-compat-4-to-6.waup",
+      "bytes": 5880751,
+      "sha256": "719b9609112f501f8941cae406c7ea909e01fe63ba225e908e82cd1de9aa1dae",
+      "baseSha256": "8988136f202cc8529ced7c06bb45a1c64ab8bf2d00ee630445591697e489ebc6",
+      "operations": 691,
+      "copiedBytes": 218694859,
+      "literalBytes": 5874519,
+      "reconstructedBytes": 224569378,
+      "reconstructedSha256": "23ebea8f4382a5c356770423020dff19414afe4d307b5f5bc875cab7e1f94bdd",
+      "matchedFinalApk": true
+    },
+    {
+      "flavor": "compat",
+      "baseVersionCode": 5,
+      "targetVersionCode": 6,
+      "patch": "wanba-compat-5-to-6.waup",
+      "bytes": 1969930,
+      "sha256": "4129daa6ea72d9cf2af30039b925fe505e7ee3615d00afb80d3dba28e6c68f9f",
+      "baseSha256": "72e919be061b2259e2abd6fa7d01abfd09dc19943a596d39d985dd73b22bcd7f",
+      "operations": 711,
+      "copiedBytes": 222605860,
+      "literalBytes": 1963518,
+      "reconstructedBytes": 224569378,
+      "reconstructedSha256": "23ebea8f4382a5c356770423020dff19414afe4d307b5f5bc875cab7e1f94bdd",
+      "matchedFinalApk": true
+    }
+  ],
+  "downloadableFiles": 8,
+  "checksumIncludes": [
+    "2 APKs",
+    "4 WAUP deltas",
+    "app-updates.json",
+    "apk-integrity.json"
+  ],
+  "checksumExcludes": [
+    "SHA256SUMS"
+  ],
+  "sha256SumsSha256": "331f879b5ab852030c015b40db1b0347866c7ec5ddc574fb12a2c74d24043921",
+  "scope": "Local artifact validation only; no upload, installation or remote availability claim."
+}

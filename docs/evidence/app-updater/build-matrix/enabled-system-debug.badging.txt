@@ -1,0 +1,25 @@
+package: name='io.github.jacklee992.wanba' versionCode='4' versionName='1.2.1' platformBuildVersionName='17' platformBuildVersionCode='37' compileSdkVersion='37' compileSdkVersionCodename='17'
+sdkVersion:'26'
+targetSdkVersion:'36'
+uses-permission: name='android.permission.INTERNET'
+uses-permission: name='android.permission.REQUEST_INSTALL_PACKAGES'
+application-label:'玩吧'
+application-label-en:'Nookcade'
+application-label-ja:'ヌックケード'
+application-label-ko:'눅케이드'
+application-icon-160:'res/mipmap-en-anydpi-v26/ic_launcher.xml'
+application-icon-65534:'res/mipmap-en-anydpi-v26/ic_launcher.xml'
+application-icon-65535:'res/mipmap-en-anydpi-v26/ic_launcher.xml'
+application: label='玩吧' icon='res/mipmap-en-anydpi-v26/ic_launcher.xml'
+application-debuggable
+launchable-activity: name='io.github.jacklee992.wanba.MainActivity'  label='' icon=''
+feature-group: label=''
+  uses-feature: name='android.hardware.faketouch'
+  uses-implied-feature: name='android.hardware.faketouch' reason='default feature for all apps'
+main
+other-activities
+other-receivers
+supports-screens: 'small' 'normal' 'large' 'xlarge'
+supports-any-density: 'true'
+locales: '--_--' 'en' 'ja' 'ko'
+densities: '160' '65534' '65535'

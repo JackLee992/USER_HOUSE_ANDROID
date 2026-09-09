@@ -1,0 +1,36 @@
+{
+  "serial": "test-phone",
+  "testedAt": "2026-09-09T02:34:50.197Z",
+  "passed": true,
+  "package": [
+    "versionCode=3 minSdk=26 targetSdk=36",
+    "versionName=1.2.0",
+    "flags=[ HAS_CODE ALLOW_CLEAR_USER_DATA ]",
+    "hwflags=[ ]"
+  ],
+  "content": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+  "zumaPresent": true,
+  "items": [
+    {
+      "key": "wanbanXiaowu_settings_v1",
+      "sha256": "01b93b688690087d9e641584e3b504597b4817022627540822e73ca6b0b27b42"
+    },
+    {
+      "key": "wanbanXiaowu_scores_v1",
+      "sha256": "3451da8b18334f353c921f2a572cde4404e6fc330f1bcb2a02a14a0626a99ee8"
+    },
+    {
+      "key": "wanbanXiaowu_progress_v1",
+      "sha256": "c46bbb302efee54448bce56b79f6075682159b305639d1debdf530a3cef5c0d6"
+    },
+    {
+      "key": "wanbanXiaowu_records_v1",
+      "sha256": "6e202ddd4244d0ea0b5e9e9ed64b97ef6e2c770995e50cee1f473494f8102fcf"
+    },
+    {
+      "key": "wanbanXiaowu_sudokuState_v1",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    }
+  ],
+  "note": "Normal release SAF export: five parsed JSON items captured privately; settings API fields are intentionally omitted. This is not a claim of raw localStorage byte equality."
+}

@@ -1,0 +1,41 @@
+{
+  "scope": "Automated public docs text credential scan and PNG metadata-chunk inventory; does not claim exhaustive OCR of screenshot contents.",
+  "textFilesScanned": 235,
+  "credentialPatterns": [
+    "private-key",
+    "github-credential",
+    "aws-access-key",
+    "google-api-key",
+    "bearer-credential"
+  ],
+  "credentialMatches": [],
+  "redactedRealDeviceIdentifiers": 1,
+  "redactedTextFiles": [
+    "docs/evidence/android-1.2/compat-phone/native-settings2-final/settings-touch-result.json",
+    "docs/evidence/android-1.2/compat-phone/catalog-content3/catalog-scroll.json",
+    "docs/evidence/android-1.2/compat-phone/native-settings3/settings-touch-result.json",
+    "docs/evidence/android-1.2/compat-phone/native-settings2/settings-touch-result.json",
+    "docs/evidence/android-1.2/compat-phone/native-choice2/choice-dialog-result.json",
+    "docs/evidence/zuma-classic-v2/README.md",
+    "docs/evidence/zuma-classic-v2/baseline/baseline.json",
+    "docs/evidence/zuma-classic-v2/release/saf/baseline.json"
+  ],
+  "replacement": "test-phone",
+  "rawOriginalsLocation": ".local/private-evidence-before-redaction (not public)",
+  "pngFilesWithTextOrExifMetadata": [],
+  "retainedLowSensitivityEvidence": [
+    "Public repository/account names",
+    "Local build path and toolchain paths",
+    "Android model names and emulator identifiers",
+    "Public signing certificates and public-key hashes"
+  ],
+  "additionalHostTestLog": {
+    "path": "docs/evidence/android-1.2.2/release-integrity/host-tests.log",
+    "credentialMatches": 0,
+    "knownRealDeviceIdMatches": 0,
+    "tests": 270,
+    "passed": 270,
+    "failed": 0,
+    "skipped": 0
+  }
+}

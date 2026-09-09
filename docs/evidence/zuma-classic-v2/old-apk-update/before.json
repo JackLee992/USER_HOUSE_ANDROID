@@ -1,0 +1,387 @@
+{
+  "apkVersion": "1.2.0",
+  "versionCode": 3,
+  "installedSHA256": "9a0c79e397dcf248f49b6d0a980889f926d4f866cd7b59402a1332e67e148ace",
+  "snapshot": {
+    "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+    "games": {
+      "tetris": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.tetris": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "snake": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.snake": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "game2048": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.game2048": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "watermelon": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.watermelon": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "memory": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.memory": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "jump": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.jump": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "plank": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.plank": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "sudoku": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.sudoku": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "minesweeper": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.minesweeper": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "uyangle": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.uyangle": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "screw": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.screw": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "popstar": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.popstar": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "paopao": {
+        "gameVersion": "1.0.1",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.paopao": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "game1010": {
+        "gameVersion": "1.0.1",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.game1010": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "turkey": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.turkey": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "spider": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.spider": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "linklink": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.linklink": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "shuerte": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.shuerte": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "pinball": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 2,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.pinball": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "match3": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 3,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.match3": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "freecell": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.freecell": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "zuma": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.zuma": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "watersort": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.watersort": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "ludo": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.ludo": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "guessnumber": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.guessnumber": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "wordguess": {
+        "gameVersion": "1.0.1",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.wordguess": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "tictactoe": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.tictactoe": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "gomoku": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.gomoku": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "territory": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.territory": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "oldmaid": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.oldmaid": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "reversi": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.reversi": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "bombnumber": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.bombnumber": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "connect4d": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.connect4d": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "draughts": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.draughts": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "blackjack": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.blackjack": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "westernchess": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.westernchess": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      },
+      "chinesechess": {
+        "gameVersion": "1.0.0",
+        "runtimeApi": 1,
+        "saveSchema": 1,
+        "snapshotId": "8e815134b71ca8e726504aac90629c8f3c37270e99794b2031099b34bcb22fe2",
+        "artVersions": {
+          "art.chinesechess": "1.0.1",
+          "art.shared": "1.0.1"
+        }
+      }
+    }
+  },
+  "oldZuma": {
+    "score": 0,
+    "shots": 0,
+    "chain": 27,
+    "hasClassic": false
+  },
+  "testedAt": "2026-09-09T04:21:20.662Z"
+}

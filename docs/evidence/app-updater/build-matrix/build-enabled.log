@@ -1,0 +1,155 @@
+WARNING: We recommend using a newer Android Gradle plugin to use compile SDK version 37.1
+
+This Android Gradle plugin (9.2.1) was tested up to compile SDK version 37.0.
+
+You are strongly encouraged to update your project to use a newer
+Android Gradle plugin that has been tested with compile SDK version 37.1.
+
+If you are already using the latest version of the Android Gradle plugin,
+you may need to wait until a newer version with support for compile SDK version 37.1 is available.
+
+For more information refer to the compatibility table:
+https://d.android.com/r/tools/api-level-support
+
+To suppress this warning, add/update
+    android.suppressUnsupportedCompileSdk=37.1
+to this project's gradle.properties.
+> Task :app-updater:preBuild UP-TO-DATE
+> Task :app-updater:preDebugBuild UP-TO-DATE
+> Task :app-updater:processDebugNavigationResources UP-TO-DATE
+> Task :app-updater:generateDebugResources UP-TO-DATE
+> Task :app-updater:packageDebugResources UP-TO-DATE
+> Task :app-updater:parseDebugLocalResources UP-TO-DATE
+> Task :app-updater:generateDebugRFile UP-TO-DATE
+> Task :app-updater:compileDebugKotlin NO-SOURCE
+> Task :app-updater:javaPreCompileDebug UP-TO-DATE
+> Task :app-updater:compileDebugJavaWithJavac UP-TO-DATE
+> Task :app-updater:bundleLibCompileToJarDebug UP-TO-DATE
+> Task :app-updater:generateDebugAssets UP-TO-DATE
+> Task :app-updater:mergeDebugAssets UP-TO-DATE
+> Task :app-updater:writeDebugAarMetadata UP-TO-DATE
+> Task :app-updater:extractDeepLinksDebug
+> Task :app-updater:processDebugManifest UP-TO-DATE
+> Task :app-updater:mapDebugSourceSetPaths
+> Task :app-updater:bundleLibRuntimeToDirDebug
+> Task :app-updater:processDebugJavaRes NO-SOURCE
+> Task :app-updater:mergeDebugJniLibFolders UP-TO-DATE
+> Task :app-updater:mergeDebugNativeLibs NO-SOURCE
+> Task :app-updater:bundleLibRuntimeToJarDebug UP-TO-DATE
+> Task :app-updater:preDebugUnitTestBuild UP-TO-DATE
+> Task :app-updater:copyDebugJniLibsProjectOnly
+> Task :app-updater:compileDebugLibraryResources
+> Task :app-updater:generateDebugUnitTestStubRFile UP-TO-DATE
+> Task :app-updater:compileDebugUnitTestKotlin NO-SOURCE
+> Task :app-updater:javaPreCompileDebugUnitTest UP-TO-DATE
+> Task :app-updater:compileDebugUnitTestJavaWithJavac UP-TO-DATE
+> Task :app-updater:processDebugUnitTestJavaRes NO-SOURCE
+> Task :app-updater:testDebugUnitTest UP-TO-DATE
+
+> Task :app:prepareWebAssets
+{
+  "outputDir": "/Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/build/generated/wanbaAssets/www",
+  "fileCount": 221,
+  "totalBytes": 59848473,
+  "sha256": "246929b8d43efeafd917a329ed9e7458f1711babf5e91557845b4aa2c3419b53"
+}
+
+> Task :app:preBuild
+> Task :app:preSystemDebugBuild
+> Task :app:mergeSystemDebugNativeDebugMetadata NO-SOURCE
+> Task :app:generateSystemDebugBuildConfig
+> Task :app:generateSystemDebugResources UP-TO-DATE
+> Task :app:packageSystemDebugResources UP-TO-DATE
+> Task :app:processSystemDebugNavigationResources UP-TO-DATE
+> Task :app:parseSystemDebugLocalResources UP-TO-DATE
+> Task :app:generateSystemDebugRFile UP-TO-DATE
+> Task :app:compileSystemDebugKotlin NO-SOURCE
+> Task :app:javaPreCompileSystemDebug UP-TO-DATE
+
+> Task :app:compileSystemDebugJavaWithJavac
+Note: /Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/app/src/main/java/io/github/jacklee992/wanba/MainActivity.java uses or overrides a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+
+> Task :app:generateSystemDebugAssets UP-TO-DATE
+> Task :app:mergeSystemDebugAssets
+> Task :app:generateSystemDebugGlobalSynthetics UP-TO-DATE
+> Task :app:desugarSystemDebugFileDependencies UP-TO-DATE
+> Task :app:mapSystemDebugSourceSetPaths UP-TO-DATE
+> Task :app:checkSystemDebugDuplicateClasses
+> Task :app:compileSystemDebugNavigationResources UP-TO-DATE
+> Task :app:checkSystemDebugAarMetadata
+> Task :app:compressSystemDebugAssets
+> Task :app:mergeSystemDebugResources UP-TO-DATE
+> Task :app:createSystemDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksSystemDebug UP-TO-DATE
+> Task :app:processSystemDebugMainManifest
+> Task :app:mergeLibDexSystemDebug
+> Task :app:processSystemDebugManifest
+> Task :app:processSystemDebugJavaRes NO-SOURCE
+> Task :app:mergeSystemDebugJniLibFolders UP-TO-DATE
+> Task :app:mergeSystemDebugNativeLibs NO-SOURCE
+> Task :app:stripSystemDebugDebugSymbols NO-SOURCE
+> Task :app:validateSigningSystemDebug UP-TO-DATE
+> Task :app:writeSystemDebugAppMetadata UP-TO-DATE
+> Task :app:writeSystemDebugSigningConfigVersions UP-TO-DATE
+> Task :app:preCompatDebugBuild
+> Task :app:mergeCompatDebugNativeDebugMetadata NO-SOURCE
+> Task :app:generateCompatDebugBuildConfig
+> Task :app:generateCompatDebugResources UP-TO-DATE
+> Task :app:packageCompatDebugResources UP-TO-DATE
+> Task :app:processCompatDebugNavigationResources UP-TO-DATE
+> Task :app:parseCompatDebugLocalResources UP-TO-DATE
+> Task :app:generateCompatDebugRFile UP-TO-DATE
+> Task :app:compileCompatDebugKotlin NO-SOURCE
+> Task :app:javaPreCompileCompatDebug UP-TO-DATE
+> Task :app:mergeSystemDebugJavaResource
+
+> Task :app:compileCompatDebugJavaWithJavac
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+
+> Task :app:generateCompatDebugAssets UP-TO-DATE
+> Task :app:mergeExtDexSystemDebug
+> Task :app:mergeCompatDebugAssets
+> Task :app:generateCompatDebugGlobalSynthetics UP-TO-DATE
+> Task :app:processCompatDebugJavaRes NO-SOURCE
+> Task :app:compressCompatDebugAssets
+> Task :app:desugarCompatDebugFileDependencies UP-TO-DATE
+> Task :app:mapCompatDebugSourceSetPaths UP-TO-DATE
+> Task :app:compileCompatDebugNavigationResources UP-TO-DATE
+> Task :app:checkCompatDebugAarMetadata
+> Task :app:checkCompatDebugDuplicateClasses
+> Task :app:mergeCompatDebugResources UP-TO-DATE
+> Task :app:createCompatDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksCompatDebug UP-TO-DATE
+> Task :app:mergeLibDexCompatDebug
+> Task :app:processCompatDebugMainManifest
+> Task :app:processCompatDebugManifest
+> Task :app:mergeCompatDebugJniLibFolders UP-TO-DATE
+> Task :app:mergeCompatDebugNativeLibs UP-TO-DATE
+> Task :app:stripCompatDebugDebugSymbols UP-TO-DATE
+> Task :app:validateSigningCompatDebug UP-TO-DATE
+> Task :app:writeCompatDebugAppMetadata UP-TO-DATE
+> Task :app:writeCompatDebugSigningConfigVersions UP-TO-DATE
+> Task :app:processCompatDebugManifestForPackage
+> Task :app:processSystemDebugManifestForPackage
+> Task :app:mergeCompatDebugJavaResource
+> Task :app:processSystemDebugResources
+> Task :app:processCompatDebugResources
+> Task :app:dexBuilderSystemDebug
+> Task :app:mergeProjectDexSystemDebug
+> Task :app:dexBuilderCompatDebug
+> Task :app:mergeProjectDexCompatDebug
+> Task :app:packageSystemDebug
+> Task :app:createSystemDebugApkListingFileRedirect UP-TO-DATE
+> Task :app:assembleSystemDebug
+> Task :app:mergeExtDexCompatDebug
+> Task :app:packageCompatDebug
+> Task :app:createCompatDebugApkListingFileRedirect UP-TO-DATE
+> Task :app:assembleCompatDebug
+
+[Incubating] Problems report is available at: file:///Users/jacklee/develop/daillyTasks/USER_HOUSE_ANDROID/android/build/reports/problems/problems-report.html
+
+BUILD SUCCESSFUL in 5s
+93 actionable tasks: 38 executed, 55 up-to-date
+Consider enabling configuration cache to speed up this build: https://docs.gradle.org/9.4.1/userguide/configuration_cache_enabling.html

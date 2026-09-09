@@ -1,0 +1,61 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "check": "Same-signature install-r release version1.2.1/code4; no DEBUGGABLE; installed base.apk hash matches verified artifact",
+      "installedSHA256": "8988136f202cc8529ced7c06bb45a1c64ab8bf2d00ee630445591697e489ebc6"
+    },
+    {
+      "check": "Release normal SAF exports five parsed items unchanged except expected settings navigation/API omission; newer builtin4 is active",
+      "snapshotId": "7a122cbdc1df7cafba30cfb98269303b91da3f1089c81f028467cd9a4bd4e630",
+      "keys": [
+        {
+          "key": "wanbanXiaowu_settings_v1",
+          "beforeSHA256": "592e40b52c218a776d2af1dbf90815e759e4c314bcf2ec2cebf8b01cf3fae817"
+        },
+        {
+          "key": "wanbanXiaowu_scores_v1",
+          "beforeSHA256": "f81d9b1e26676d7a068952f3ea3188d5b33f1482ca054c4cb1b3617471246990"
+        },
+        {
+          "key": "wanbanXiaowu_progress_v1",
+          "beforeSHA256": "227ce7cc922de0cc9206df8f11716bdf15993ec1edf346bdfac1fc0b3f39ec66"
+        },
+        {
+          "key": "wanbanXiaowu_records_v1",
+          "beforeSHA256": "6e202ddd4244d0ea0b5e9e9ed64b97ef6e2c770995e50cee1f473494f8102fcf"
+        },
+        {
+          "key": "wanbanXiaowu_sudokuState_v1",
+          "beforeSHA256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+        }
+      ],
+      "zuma": {
+        "score": 4760,
+        "classicSchema": 2,
+        "level": 1,
+        "lives": 1
+      },
+      "settingsExceptions": [
+        "lastTab=settings after export",
+        "apiUrl/apiKey/apiModel omitted by normal backup policy"
+      ]
+    },
+    {
+      "check": "Release real continue opens new classic Zuma with pause/continue controls",
+      "debugTransportUsed": false
+    },
+    {
+      "check": "Original rotation settings remain restored",
+      "rotation": {
+        "mode": "free",
+        "accelerometer": "1",
+        "rotation": "0"
+      }
+    }
+  ],
+  "error": null,
+  "testedAt": "2026-09-09T04:08:54.392Z",
+  "debugCleanup": "app-specific yaml removed; only this QA forwards2829/9235 removed",
+  "visualObservation": "First pause dialog retains CSS fallback skin after eight seconds; board/header/footer art loaded. Source suggests skinButton runs while mask is hidden; rotating causes the missing skin to repaint. Functionality passes; reported to view owner."
+}
