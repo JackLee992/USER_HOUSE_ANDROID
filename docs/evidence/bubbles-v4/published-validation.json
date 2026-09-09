@@ -1,0 +1,31 @@
+{
+  "verified": true,
+  "unchangedPackages": 79,
+  "sourceCommit": "56536ef479a2aeb8e14dbd80c3b815ae36abc654",
+  "snapshotId": "9a2ecdc22df7e4d6853c392af42ac7d123c222aeccbff587d633003d12a65906",
+  "changed": [
+    {
+      "id": "art.paopao",
+      "filename": "art.paopao-1.0.3.zip",
+      "size": 1676626
+    },
+    {
+      "id": "game.paopao",
+      "filename": "game.paopao-1.0.3.zip",
+      "size": 9937
+    }
+  ],
+  "bytes": 1686563,
+  "zipValidation": [
+    {
+      "package": "art.paopao",
+      "files": 3,
+      "crcAndFileHashes": true
+    },
+    {
+      "package": "game.paopao",
+      "files": 2,
+      "crcAndFileHashes": true
+    }
+  ]
+}

@@ -1,0 +1,270 @@
+{
+  "device": "HONOR physical",
+  "serialRedacted": true,
+  "scope": "Actual Android native UI plus normal SAF export/import, no browser or debug transport. No APK installation, no clearing app data.",
+  "baseline": {
+    "app": {
+      "versionName": "1.2.2",
+      "versionCode": 6,
+      "debuggable": false,
+      "sha256": "23ebea8f4382a5c356770423020dff19414afe4d307b5f5bc875cab7e1f94bdd",
+      "signatureScheme": "2",
+      "certificateSha256": "806ede7461091d6b9668ad32b656d6e20f47d00eb4e11341e04f551377ced777",
+      "certificateEvidence": "Installed APK hash equals independently verified signed release"
+    },
+    "rotation": {
+      "mode": "free",
+      "accelerometer": "1",
+      "rotation": "0"
+    },
+    "snapshotId": "5beaba8e7a4498dea68dd9dddad4f2c4b07fd1968cea03fad84febf0542b4c22",
+    "itemHashes": {
+      "wanbanXiaowu_settings_v1": "01b93b688690087d9e641584e3b504597b4817022627540822e73ca6b0b27b42",
+      "wanbanXiaowu_scores_v1": "24d2ed616a81b0e01d447be533bc619d3edabb21361ee6b7dfdad6fe44c00c26",
+      "wanbanXiaowu_progress_v1": "23de9a818fe0bbdd54e7cbb25f863922b76fcb49d0dfa1a2056af11da540bf81",
+      "wanbanXiaowu_records_v1": "6e202ddd4244d0ea0b5e9e9ed64b97ef6e2c770995e50cee1f473494f8102fcf",
+      "wanbanXiaowu_sudokuState_v1": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    "savedGameCount": 37,
+    "bubble": {
+      "saved": true,
+      "score": 120,
+      "shots": 18,
+      "bubbles": 106,
+      "current": "green",
+      "next": "green",
+      "version": "1.0.1"
+    }
+  },
+  "content9": {
+    "testedAt": "2026-09-09T08:40:56.131Z",
+    "passed": true,
+    "sourceSnapshot": "5beaba8e7a4498dea68dd9dddad4f2c4b07fd1968cea03fad84febf0542b4c22",
+    "appBefore": {
+      "versionName": "1.2.2",
+      "versionCode": 6,
+      "debuggable": false,
+      "sha256": "23ebea8f4382a5c356770423020dff19414afe4d307b5f5bc875cab7e1f94bdd",
+      "signatureScheme": "2",
+      "certificateSha256": "806ede7461091d6b9668ad32b656d6e20f47d00eb4e11341e04f551377ced777",
+      "certificateEvidence": "Installed APK hash equals independently verified signed release"
+    },
+    "firstReady": {
+      "checkEnabled": true,
+      "withoutFocusOrRelaunch": true,
+      "visibleText": [
+        "资源版本 1.3.3",
+        "游戏内容已就绪"
+      ]
+    },
+    "itemHashes": {
+      "wanbanXiaowu_settings_v1": "01b93b688690087d9e641584e3b504597b4817022627540822e73ca6b0b27b42",
+      "wanbanXiaowu_scores_v1": "24d2ed616a81b0e01d447be533bc619d3edabb21361ee6b7dfdad6fe44c00c26",
+      "wanbanXiaowu_progress_v1": "23de9a818fe0bbdd54e7cbb25f863922b76fcb49d0dfa1a2056af11da540bf81",
+      "wanbanXiaowu_records_v1": "6e202ddd4244d0ea0b5e9e9ed64b97ef6e2c770995e50cee1f473494f8102fcf",
+      "wanbanXiaowu_sudokuState_v1": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    "allFiveItemsExactlyPreserved": true,
+    "all37ProgressExactlyPreserved": true,
+    "snapshotId": "9a2ecdc22df7e4d6853c392af42ac7d123c222aeccbff587d633003d12a65906",
+    "paopaoContent": {
+      "gameVersion": "1.0.3",
+      "runtimeApi": 1,
+      "saveSchema": 1,
+      "snapshotId": "9a2ecdc22df7e4d6853c392af42ac7d123c222aeccbff587d633003d12a65906",
+      "artVersions": {
+        "art.paopao": "1.0.3",
+        "art.shared": "1.0.1"
+      }
+    },
+    "appAfter": {
+      "versionName": "1.2.2",
+      "versionCode": 6,
+      "debuggable": false,
+      "sha256": "23ebea8f4382a5c356770423020dff19414afe4d307b5f5bc875cab7e1f94bdd",
+      "signatureScheme": "2",
+      "certificateSha256": "806ede7461091d6b9668ad32b656d6e20f47d00eb4e11341e04f551377ced777",
+      "certificateEvidence": "Installed APK hash equals independently verified signed release"
+    },
+    "installedApkUnchanged": true
+  },
+  "game": {
+    "steps": [
+      {
+        "check": "Real native canvas tap while paused leaves board, ammunition, score and shots unchanged",
+        "passed": true
+      },
+      {
+        "check": "Exactly one completed real native shot saved",
+        "before": 18,
+        "after": 19,
+        "score": 120,
+        "current": "green",
+        "next": "red"
+      },
+      {
+        "check": "Force-stop/cold-start then real saved-game continue restores board; native swap exchanges current and next",
+        "passed": true,
+        "before": {
+          "current": "green",
+          "next": "red"
+        },
+        "after": {
+          "current": "red",
+          "next": "green"
+        },
+        "distinctColorsObserved": true
+      }
+    ],
+    "nativeTouch": {
+      "x": 541,
+      "y": 1246
+    },
+    "visualReview": {
+      "visuallyReviewed": true,
+      "sixColorFamilies": true,
+      "centerSymbolsAbsent": true,
+      "roundEdgesComplete": true,
+      "currentAndNextReadable": true,
+      "distinctSwapSeen": [
+        "green/red",
+        "red/green"
+      ],
+      "screenshotsFromPhysicalAndroid": true,
+      "scope": "Visible rendering only, not GPU or FPS measurement."
+    },
+    "restoration": {
+      "testedAt": "2026-09-09T08:50:59.121Z",
+      "passed": true,
+      "restore": {
+        "source": "restore-original",
+        "filenameHash": "eea257faabc1feb8e7490b87225836b317f3e93247de680e44cdcf72935e9879",
+        "nativePickerAndExplicitConfirm": true,
+        "confirmationClosed": true
+      },
+      "exactBeforeCold": true,
+      "final": {
+        "snapshotId": "9a2ecdc22df7e4d6853c392af42ac7d123c222aeccbff587d633003d12a65906",
+        "allFiveItemsExactlyRestored": true,
+        "all37ProgressExactlyRestored": true,
+        "normalHomeBeforeColdMs": 10000,
+        "restorationSurvivedColdStart": true,
+        "itemHashes": {
+          "wanbanXiaowu_settings_v1": "01b93b688690087d9e641584e3b504597b4817022627540822e73ca6b0b27b42",
+          "wanbanXiaowu_scores_v1": "24d2ed616a81b0e01d447be533bc619d3edabb21361ee6b7dfdad6fe44c00c26",
+          "wanbanXiaowu_progress_v1": "23de9a818fe0bbdd54e7cbb25f863922b76fcb49d0dfa1a2056af11da540bf81",
+          "wanbanXiaowu_records_v1": "6e202ddd4244d0ea0b5e9e9ed64b97ef6e2c770995e50cee1f473494f8102fcf",
+          "wanbanXiaowu_sudokuState_v1": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        },
+        "app": {
+          "versionName": "1.2.2",
+          "versionCode": 6,
+          "debuggable": false,
+          "sha256": "23ebea8f4382a5c356770423020dff19414afe4d307b5f5bc875cab7e1f94bdd",
+          "signatureScheme": "2",
+          "certificateSha256": "806ede7461091d6b9668ad32b656d6e20f47d00eb4e11341e04f551377ced777",
+          "certificateEvidence": "Installed APK hash equals independently verified signed release"
+        },
+        "rotation": {
+          "mode": "free",
+          "accelerometer": "1",
+          "rotation": "0"
+        },
+        "bubble": {
+          "score": 120,
+          "shots": 18,
+          "bubbles": 106,
+          "current": "green",
+          "next": "green"
+        },
+        "returnedHome": true
+      }
+    },
+    "restoreProjection": {
+      "source": "Actual normal SAF export before test input",
+      "originalUnmodified": true,
+      "restoredItemCount": 4,
+      "omittedUnmodifiedLegacyKey": "wanbanXiaowu_sudokuState_v1",
+      "noGameStateConstructed": true,
+      "sourceSha256": "e2d0787515b07fca806890be4078331fd2b0aab47228e67117714d82cb6e007e",
+      "projectionSha256": "fb0964c2b6888e7ab9765cdc9de7c1b04dd78b9a437eae166ebf36b01e32bdcb"
+    }
+  },
+  "screenshots": [
+    {
+      "name": "pure-bubbles-visible.png",
+      "width": 1080,
+      "height": 2340,
+      "sha256": "68634ffc2708485d92adddf4a9cd720a30111f09ef2006caca6d836a54dda44f"
+    },
+    {
+      "name": "pure-bubbles-paused-protected.png",
+      "width": 1080,
+      "height": 2340,
+      "sha256": "e4e8036c839cf0b945576ce73e6549f58bbf96a80e80cf8e45b1b4b40e9e1697"
+    },
+    {
+      "name": "pure-bubbles-after-shot.png",
+      "width": 1080,
+      "height": 2340,
+      "sha256": "9e5b4676f41dd479adaaaa3d7df83f2d116cbb94fb4f830bc8904729d05bc16a"
+    },
+    {
+      "name": "pure-bubbles-cold-resumed.png",
+      "width": 1080,
+      "height": 2340,
+      "sha256": "5323662dd9c7643c0e1271f9c9a05815c6be823bb745b9a25ef09489e520b613"
+    },
+    {
+      "name": "pure-bubbles-swapped.png",
+      "width": 1080,
+      "height": 2340,
+      "sha256": "dba268defe532a41f54cf5ff23cdcd2167618c811d8319ef11ef1cadcb39ac73"
+    }
+  ],
+  "passed": true,
+  "testedAt": "2026-09-09T08:55:24.969Z",
+  "final": {
+    "snapshotId": "9a2ecdc22df7e4d6853c392af42ac7d123c222aeccbff587d633003d12a65906",
+    "allFiveItemsExactlyRestored": true,
+    "all37ProgressExactlyRestored": true,
+    "normalHomeBeforeColdMs": 10000,
+    "restorationSurvivedColdStart": true,
+    "itemHashes": {
+      "wanbanXiaowu_settings_v1": "01b93b688690087d9e641584e3b504597b4817022627540822e73ca6b0b27b42",
+      "wanbanXiaowu_scores_v1": "24d2ed616a81b0e01d447be533bc619d3edabb21361ee6b7dfdad6fe44c00c26",
+      "wanbanXiaowu_progress_v1": "23de9a818fe0bbdd54e7cbb25f863922b76fcb49d0dfa1a2056af11da540bf81",
+      "wanbanXiaowu_records_v1": "6e202ddd4244d0ea0b5e9e9ed64b97ef6e2c770995e50cee1f473494f8102fcf",
+      "wanbanXiaowu_sudokuState_v1": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    "app": {
+      "versionName": "1.2.2",
+      "versionCode": 6,
+      "debuggable": false,
+      "sha256": "23ebea8f4382a5c356770423020dff19414afe4d307b5f5bc875cab7e1f94bdd",
+      "signatureScheme": "2",
+      "certificateSha256": "806ede7461091d6b9668ad32b656d6e20f47d00eb4e11341e04f551377ced777",
+      "certificateEvidence": "Installed APK hash equals independently verified signed release"
+    },
+    "rotation": {
+      "mode": "free",
+      "accelerometer": "1",
+      "rotation": "0"
+    },
+    "bubble": {
+      "score": 120,
+      "shots": 18,
+      "bubbles": 106,
+      "current": "green",
+      "next": "green"
+    },
+    "returnedHome": true
+  },
+  "firstRestoreAttempt": {
+    "passed": false,
+    "sequence": "Native confirmation tap followed quickly by force-stop",
+    "observation": "The final comparison still contained the post-shot game state.",
+    "rootCause": "Not isolated. The final run verified the confirmation closed and all five items restored before HOME for 10 seconds, force-stop and cold-start verification. No game test was repeated."
+  },
+  "privacy": "Only native screenshots with no device serial or notification message bodies are published. Full SAF backups and the authorized four-item restoration projection remain private in .local."
+}

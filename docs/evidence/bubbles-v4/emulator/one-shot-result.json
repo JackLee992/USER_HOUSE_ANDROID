@@ -1,0 +1,18 @@
+{
+  "before": {
+    "score": 220,
+    "shots": 8,
+    "bubbles": 74,
+    "current": "red",
+    "next": "green"
+  },
+  "after": {
+    "score": 220,
+    "shots": 9,
+    "bubbles": 75,
+    "current": "red",
+    "next": "green"
+  },
+  "shotDelta": 1,
+  "bubbleDelta": 1
+}

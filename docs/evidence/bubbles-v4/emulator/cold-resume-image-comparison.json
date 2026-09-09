@@ -1,0 +1,28 @@
+{
+  "before": "after-one-shot",
+  "after": "cold-resumed",
+  "identicalGameArea": true,
+  "game": {
+    "roi": [
+      0,
+      400,
+      1080,
+      2339
+    ],
+    "identical": true,
+    "differentPixels": 0,
+    "differenceBounds": null
+  },
+  "wholeApp": {
+    "roi": [
+      0,
+      128,
+      1080,
+      2339
+    ],
+    "identical": true,
+    "differentPixels": 0,
+    "differenceBounds": null
+  },
+  "note": "The game area excludes toolbar button focus animation and the Android status clock."
+}

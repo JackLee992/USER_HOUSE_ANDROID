@@ -14,6 +14,16 @@
 
 ## 验收
 
-前置检查：[自动检查324/324](evidence/bubbles-v4/host-tests.txt)；[浏览器真实触控](evidence/bubbles-v4/browser/result.json)验证三档性能模式、换球发射、暂停、冷启动保存、窄屏和图片失败回退。浏览器结果不代替 Android 真机与模拟器验收，最终原生结果随正式发行补齐。
+前置检查：[自动检查324/324](evidence/bubbles-v4/host-tests.txt)；[浏览器真实触控](evidence/bubbles-v4/browser/result.json)验证三档性能模式、换球发射、暂停、冷启动保存、窄屏和图片失败回退。浏览器结果不代替 Android 真机与模拟器验收。
+
+正式 content-9 已在 HONOR 真机（兼容版）与 Android 模拟器（系统版）通过原生触控回归：六色完整圆球、换球、单次发射、确认暂停后的输入保护、保存与强制结束后的冷启动续局。使用真实 App 界面及系统文件选择器；没有以浏览器替代 Android 验收。更新前后 5 项管理数据及 37 份游戏进度逐项一致，测试后正常导入恢复原局并保留新版游戏包。APK 保持 1.2.2 / code 6，无需重新安装。
+
+[真机完整结果](evidence/bubbles-v4/phone/result.json) · [模拟器完整结果](evidence/bubbles-v4/emulator/native-verification.json)。这是本轮玩法与保存回归，不代表所有设备的持续帧率测量。
+
+![真机纯色球](evidence/bubbles-v4/phone/pure-bubbles-visible.png)
+
+## 用户更新
+
+[游戏资源 1.3.3 / content-9](https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/tag/content-9)。在玩吧首页检查更新、下载并安装即可。从 content-8 只变化两个包，共 1,686,563 字节（约 1.61 MiB）；其余 79 包复用。签名、包和逐文件摘要校验通过，公开发行 CI [34330013774](https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/actions/runs/34330013774) 已成功。
 
 历史content8的[符号版资料](bubble-visibility-v3-history.md)仅用于追溯；用户最终选择本页的无符号纯色版。

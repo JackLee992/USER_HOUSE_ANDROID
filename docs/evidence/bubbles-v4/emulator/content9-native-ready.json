@@ -1,0 +1,52 @@
+{
+  "expectedVersion": "1.3.3",
+  "ready": true,
+  "observations": [
+    {
+      "elapsedMs": 3004,
+      "status": [
+        {
+          "text": "游戏内容",
+          "enabled": "true",
+          "rect": [
+            57,
+            474,
+            199,
+            519
+          ]
+        },
+        {
+          "text": "资源版本 1.3.3",
+          "enabled": "true",
+          "rect": [
+            57,
+            532,
+            244,
+            582
+          ]
+        },
+        {
+          "text": "检查更新",
+          "enabled": "true",
+          "rect": [
+            837,
+            464,
+            1008,
+            584
+          ]
+        },
+        {
+          "text": "游戏内容已就绪",
+          "enabled": "true",
+          "rect": [
+            57,
+            611,
+            1023,
+            671
+          ]
+        }
+      ]
+    }
+  ],
+  "focusChanged": false
+}
