@@ -1,0 +1,32 @@
+[
+  {
+    "locale": "zh-CN",
+    "title": "App 更新",
+    "check": "检查 App 更新",
+    "native": true
+  },
+  {
+    "locale": "zh-TW",
+    "title": "App 更新",
+    "check": "檢查 App 更新",
+    "native": true
+  },
+  {
+    "locale": "en",
+    "title": "App update",
+    "check": "Check for app updates",
+    "native": true
+  },
+  {
+    "locale": "ja",
+    "title": "アプリ更新",
+    "check": "アプリ更新を確認",
+    "native": true
+  },
+  {
+    "locale": "ko",
+    "title": "앱 업데이트",
+    "check": "앱 업데이트 확인",
+    "native": true
+  }
+]

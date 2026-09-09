@@ -32,5 +32,38 @@
     "contentChoiceOpensSettings": true,
     "nativeUpdaterActivityOpens": true
   },
-  "compat": "pending"
+  "compat": {
+    "beforeAppVersion": "1.2.0",
+    "beforeCode": 3,
+    "beforeContentVersion": "1.2.1",
+    "normalSafBaseline": true,
+    "contentOnlyUpdate": {
+      "afterVersion": "1.4.0",
+      "changes": 12,
+      "displayedDownload": "2.2 MB",
+      "firstPageReady": true,
+      "checkEnabled": true,
+      "noFocusWorkaround": true,
+      "sameOldApk": true
+    },
+    "afterReleaseVersion": "1.3.0",
+    "afterReleaseCode": 7,
+    "afterReleaseNonDebuggable": true,
+    "coldNativeHome": true,
+    "releaseInstallPreservedAllFiveItems": true,
+    "originalData": {
+      "scores": true,
+      "progress": true,
+      "records": true,
+      "sudoku": true,
+      "settingsDifference": "Added default catalog only; existing preferences retained."
+    }
+  },
+  "systemColdNativeHome": true,
+  "nativeUpdaterFiveLocales": true,
+  "environmentRestored": {
+    "proxy": "null",
+    "accelerometerRotation": "1",
+    "userRotation": "0"
+  }
 }

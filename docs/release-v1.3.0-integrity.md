@@ -9,7 +9,7 @@
 
 两包的二进制 manifest 均为 `versionName=1.3.0`、`versionCode=7`；未启用 `android:debuggable` 或 `android:testOnly`。APK v2 签名校验通过，发布证书 SHA-256 为 `806ede7461091d6b9668ad32b656d6e20f47d00eb4e11341e04f551377ced777`。
 
-已从实际 DEX 读取构建开关：`WANBA_APP_UPDATER=true`、`WANBA_GAME_UPDATES=true`。 两包均实际包含整包更新器及 APK 签名验证类、安装权限和独立 P-256 公钥；更新 Activity 与安装结果 Receiver 均明确未导出。公钥字节与指定信任根一致，详细 DEX、组件和公钥摘要已归档。
+已从实际 DEX 读取构建开关：`WANBA_APP_UPDATER=true`、`WANBA_GAME_UPDATES=true`。 两包均实际包含整包更新器及 APK 签名验证类、安装权限和模块内置 P-256 公钥；更新 Activity 与安装结果 Receiver 均明确未导出。公钥字节与指定信任根一致，详细 DEX、组件和公钥摘要已归档。
 
 ## 内置内容
 

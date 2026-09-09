@@ -199,7 +199,7 @@ def write_document(args, report):
     updater_summary = ('本次调用未指定更新模块构建预期，保留历史验收范围。' if not updates['checked'] else
                        '已从实际 DEX 读取构建开关：' + '、'.join(f"`{key}={str(value).lower()}`" for key, value in updates['flags'].items()) + '。')
     if updates.get('expectedAppUpdater') is True:
-        updater_summary += (' 两包均实际包含整包更新器及 APK 签名验证类、安装权限和独立 P-256 公钥；更新 Activity 与安装结果 Receiver 均明确未导出。公钥字节与指定信任根一致，详细 DEX、组件和公钥摘要已归档。')
+        updater_summary += (' 两包均实际包含整包更新器及 APK 签名验证类、安装权限和模块内置 P-256 公钥；更新 Activity 与安装结果 Receiver 均明确未导出。公钥字节与指定信任根一致，详细 DEX、组件和公钥摘要已归档。')
     elif updates.get('expectedAppUpdater') is False:
         updater_summary += ' 两包均未包含整包更新器、apksig 类、安装权限、更新组件或专用公钥。'
     text = f'''# 玩吧 {args.version} 正式 APK 完整性验收

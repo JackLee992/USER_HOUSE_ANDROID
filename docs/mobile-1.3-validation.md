@@ -6,6 +6,7 @@
 
 - 392 项共享代码与 Android 桥接自动化测试通过，包括存档、收藏排序、五语言、两款新游戏、更新与调用边界。Android 原生更新策略和更新器语言另有 8 项 Java 单元测试通过；关闭可选更新模块的两种内核构建通过。
 - 两种正式 APK 的 assemble 与 lint 通过。独立校验 APK 非调试标志、版本、签名证书、两个更新开关、兼容版 GeckoView 155.0.1，以及全部 239 个随包文件与签名清单/源码的一致性。见 [发行完整性结果](evidence/android-1.3.0/release-integrity/apk-integrity.json)。
+- 第二位审查者只读复核最终实物摘要、APK 内部包名/权限/未导出更新组件、信任资产、两份清单签名和差分每条 COPY/ADD 边界，结论无阻塞。见 [独立复核](evidence/android-1.3.0/independent-release-review.json)。
 - content-10 的签名、8 个变化 ZIP 的 CRC/文件 SHA-256、73 个复用包元数据和全部 239 个资源文件通过独立校验；37 款游戏、81 个包，新增下载 537,804 字节。见 [内容校验](evidence/android-1.3.0/content-verification.json)。
 - 1.2.2 / code 6 → 1.3.0 / code 7 的两种 APK 差分使用 Android 更新器 Java 实现独立重建，SHA-256 与完整 APK 完全一致，并再次验证 APK 签名。轻量版差分 4,168,667 字节、整包 62,149,094 字节；兼容版差分 8,005,670 字节、整包 226,380,162 字节。分别节省 93.29% / 96.46% 下载量。见 [轻量版](evidence/android-1.3.0/release-integrity/delta-system.json)、[兼容版](evidence/android-1.3.0/release-integrity/delta-compat.json)。这是实际发行输入的离线重建验证，设备上的系统安装交互另行记录。
 - Android 模拟器与 HONOR Android 12 真机的原生首页、五语言、设置、Tab 点击和拖动经过实际触控检查。标题在选中前后保持固定布局；设置语言/性能可正常选择。模拟器另检查了横竖屏与原生下拉刷新。
@@ -16,6 +17,14 @@
 - 真机原生目录预热后 12 次滑动，共记录 386 帧，当前口径卡顿帧 0，旧口径 1；帧耗时 p95 为 7 ms。此值仅表示该次原生列表样本，不表示游戏帧率，也不能推导所有设备无卡顿。见 [匿名化指标](evidence/android-1.3.0/native-ui/physical-catalog-frame-metrics.json)。
 - iOS 在真实 Simulator 的 UIKit / WKWebView 中完成 37 款启动、暂停、保存和弹球 WASM 就绪检查。系统透明 Tab 的冷启动、拖动、五语言、收藏排序、Files 备份导入导出，以及代表游戏触控结果见 [iOS 证据](../ios/evidence/README.md)。
 - 同生产源码的 [iOS GitHub 构建](https://github.com/JackLee992/USER_HOUSE_ANDROID/actions/runs/34343994014)成功；[游戏内容仓库的公开发行验证](https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/actions/runs/34343845926)也已完成签名和全部 81 包下载摘要检查。
+
+## 最终 Android 模拟器验收
+
+两种正式 APK 均通过保留数据的覆盖安装，设备报告 1.3.0 / code 7、非 Debuggable；冷启动直接显示原生首页。轻量版安装前后通过普通系统文件面板导出的五项备份完全一致。游戏测试后再次正常导入最初备份，37 款游戏进度、分数、记录及数独状态恢复一致；设置只发生固定浅色主题和默认收藏/排序的预期迁移。
+
+兼容版先保持旧 App 1.2.0 / code 3 不变，经原页面检查、下载 12 个变化包（界面显示 2.2 MB）并激活内容 1.4.0。首个返回页面立即显示内容就绪及可用的检查按钮，没有切换焦点规避状态问题。随后覆盖正式兼容版 1.3.0，普通 SAF 备份的五项内容与升级 App 前完全一致；相较最初旧内容，只有设置新增默认收藏/排序字段。此前游戏数据原样保留。
+
+真实原生下拉手势已观察到刷新指示环并正常收起。更新提示的设备 instrumentation 覆盖游戏/文件选择器/后台延后、两类更新合并、后台消失不误记已提醒、“稍后”去重及新版本再提示、打开原生更新页；测试版本号为隔离的 9.9.x 元数据，不代表实际在线更新。原生 App 更新页的五语言入口也经过触控与截图检查。结果见 [模拟器验收记录](evidence/android-1.3.0/native-ui/emulator-verification.json)、[设备测试日志](evidence/android-1.3.0/native-ui/emulator-update-dialog-test.log)、[旧 App 内容更新](evidence/android-1.3.0/native-ui/emulator-compat-old-app-content10.png)和[正式兼容版原生首页](evidence/android-1.3.0/native-ui/emulator-compat-release-home.png)。临时代理及旋转设置已恢复，保留最新内容与原始游戏数据。
 
 ## 真机与平台边界
 

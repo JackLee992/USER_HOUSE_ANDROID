@@ -1,0 +1,8 @@
+{
+  "tag": "v1.3.0",
+  "latest": true,
+  "draft": false,
+  "publicAppUpdateManifestSha256": "238bda8987f8f0b39006e828aea6500736c736a062bcdd477cd0db32b6646f7f",
+  "anonymousManifestDownloadMatchesSignedCandidate": true,
+  "allEightRemoteAssetDigestsMatch": true
+}

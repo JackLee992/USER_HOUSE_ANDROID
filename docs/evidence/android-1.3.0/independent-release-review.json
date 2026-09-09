@@ -1,0 +1,124 @@
+{
+  "status": "pass",
+  "reviewedAtUtc": "2026-09-09T11:26:21.923Z",
+  "artifactDirectory": ".local/releases/v1.3.0-r2",
+  "contentDirectory": ".local/content-10-r2",
+  "checks": {
+    "sha256SumEntries": 7,
+    "signedAppManifest": true,
+    "signedContentChannel": true,
+    "appManifestSequence": 2,
+    "appManifestValidNow": true,
+    "contentSnapshot": "87b9f721b7e97b6c4dae93dd3761aa18c5e31bed6809f569bfd1e7e471f1a731",
+    "contentSequence": 10,
+    "sourceCommit": "8d0d40f2387c3a062a697b93f4026562fc8ee02e",
+    "contentFiles": 239,
+    "contentPackages": 81,
+    "games": 37,
+    "changedPacks": 8,
+    "changedPackBytes": 537804,
+    "strictRepositoryReleaseUrls": true,
+    "baseApkHashes": true,
+    "deltaOperationBounds": true,
+    "reportsConsistent": true,
+    "actualApkEmbeddedTrustAndBinaryManifest": true,
+    "publicReportMatchesR2": true,
+    "publicReportWorkspacePathsAbsent": true
+  },
+  "trust": {
+    "appUpdatePublicKeySha256": "f358f6d45e02c636230bec0deec9cf2cf91fe27619a4d386f0ba51eacb9d13c9",
+    "contentPublicKeySha256": "f358f6d45e02c636230bec0deec9cf2cf91fe27619a4d386f0ba51eacb9d13c9"
+  },
+  "packages": [
+    {
+      "flavor": "system",
+      "packageName": "io.github.jacklee992.wanba",
+      "versionName": "1.3.0",
+      "versionCode": 7,
+      "fullBytes": 62149094,
+      "fullSha256": "a041848cd6c1e12e714657c0294c339c48ece65857b4f3f5e8ebf1d6f913d43e",
+      "baseVersionCode": 6,
+      "baseSha256": "d1706b1ecc8c601f30bf5f546ac025c3d0ef31685701b50f4223941fac01f892",
+      "patchBytes": 4168667,
+      "patchSha256": "02f219ada66e39291d1dc35a13b73415d350e48c70f7dc935d2027fe94e16712",
+      "operations": 427,
+      "copiedBytes": 57984283,
+      "addedBytes": 4164811,
+      "operationBoundsValid": true
+    },
+    {
+      "flavor": "compat",
+      "packageName": "io.github.jacklee992.wanba.compat",
+      "versionName": "1.3.0",
+      "versionCode": 7,
+      "fullBytes": 226380162,
+      "fullSha256": "69ef9521ca28fc104c3eb1e96a87640a77048cf9f0d863f1cf5a3d8eacb7bbb1",
+      "baseVersionCode": 6,
+      "baseSha256": "23ebea8f4382a5c356770423020dff19414afe4d307b5f5bc875cab7e1f94bdd",
+      "patchBytes": 8005670,
+      "patchSha256": "985e93dafc0df8d7ecc1e41ea7fe7aca18d89b012d4ae04b180a455d3ebe8778",
+      "operations": 651,
+      "copiedBytes": 218380364,
+      "addedBytes": 7999798,
+      "operationBoundsValid": true
+    }
+  ],
+  "scope": "Independent local signatures, file digests, metadata and bounded patch stream review. No build, reconstruction, device, network or publication action.",
+  "actualApks": [
+    {
+      "flavor": "system",
+      "binaryManifestVersionAndPackage": true,
+      "nativePermissions": [
+        "android.permission.INTERNET",
+        "android.permission.REQUEST_INSTALL_PACKAGES",
+        "io.github.jacklee992.wanba.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+      ],
+      "updaterComponents": [
+        {
+          "type": "activity",
+          "name": "io.github.jacklee992.wanba.appupdater.AppUpdateActivity",
+          "exported": false
+        },
+        {
+          "type": "receiver",
+          "name": "io.github.jacklee992.wanba.appupdater.InstallResultReceiver",
+          "exported": false
+        }
+      ],
+      "builtinChannelByteMatch": true,
+      "bothEmbeddedKeysMatch": true,
+      "releasedBaseHasSameAppUpdateTrustRoot": true
+    },
+    {
+      "flavor": "compat",
+      "binaryManifestVersionAndPackage": true,
+      "nativePermissions": [
+        "android.permission.INTERNET",
+        "android.permission.ACCESS_NETWORK_STATE",
+        "android.permission.WAKE_LOCK",
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+        "android.permission.REQUEST_INSTALL_PACKAGES",
+        "io.github.jacklee992.wanba.compat.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+      ],
+      "updaterComponents": [
+        {
+          "type": "activity",
+          "name": "io.github.jacklee992.wanba.appupdater.AppUpdateActivity",
+          "exported": false
+        },
+        {
+          "type": "receiver",
+          "name": "io.github.jacklee992.wanba.appupdater.InstallResultReceiver",
+          "exported": false
+        }
+      ],
+      "builtinChannelByteMatch": true,
+      "bothEmbeddedKeysMatch": true,
+      "releasedBaseHasSameAppUpdateTrustRoot": true
+    }
+  ],
+  "notes": [
+    "Java reconstruction scope wording describes the offline test boundary; version 1.2.2 base APKs already include the app updater trust asset. This review did not execute installation or reconstruct APKs.",
+    "DEX flags and APK certificate verification are cross-checked from the digest-bound integrity report; native permissions/components and embedded trust roots were independently read from the final APKs."
+  ]
+}
