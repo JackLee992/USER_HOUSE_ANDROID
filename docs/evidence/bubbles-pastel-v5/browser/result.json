@@ -1,0 +1,379 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "mode": "eco",
+      "canvas": {
+        "width": 355,
+        "height": 480,
+        "cssWidth": 355,
+        "cssHeight": 480,
+        "inside": true,
+        "art": "paopao-pastel-v5",
+        "controls": [
+          {
+            "left": 33,
+            "top": 628,
+            "right": 87,
+            "bottom": 662
+          },
+          {
+            "left": 243,
+            "top": 644,
+            "right": 271,
+            "bottom": 672
+          }
+        ],
+        "viewport": {
+          "w": 390,
+          "h": 844
+        }
+      },
+      "realTouchSwapAndShot": true,
+      "idleRedraws": 0,
+      "pausedRedraws": 0,
+      "coldSaveRestore": true
+    },
+    {
+      "mode": "normal",
+      "canvas": {
+        "width": 710,
+        "height": 960,
+        "cssWidth": 355,
+        "cssHeight": 480,
+        "inside": true,
+        "art": "paopao-pastel-v5",
+        "controls": [
+          {
+            "left": 33,
+            "top": 628,
+            "right": 87,
+            "bottom": 662
+          },
+          {
+            "left": 243,
+            "top": 644,
+            "right": 271,
+            "bottom": 672
+          }
+        ],
+        "viewport": {
+          "w": 390,
+          "h": 844
+        }
+      },
+      "realTouchSwapAndShot": true,
+      "idleRedraws": 0,
+      "pausedRedraws": 0,
+      "coldSaveRestore": true
+    },
+    {
+      "mode": "game",
+      "canvas": {
+        "width": 1065,
+        "height": 1440,
+        "cssWidth": 355,
+        "cssHeight": 480,
+        "inside": true,
+        "art": "paopao-pastel-v5",
+        "controls": [
+          {
+            "left": 33,
+            "top": 628,
+            "right": 87,
+            "bottom": 662
+          },
+          {
+            "left": 243,
+            "top": 644,
+            "right": 271,
+            "bottom": 672
+          }
+        ],
+        "viewport": {
+          "w": 390,
+          "h": 844
+        }
+      },
+      "realTouchSwapAndShot": true,
+      "idleRedraws": 0,
+      "pausedRedraws": 0,
+      "coldSaveRestore": true
+    },
+    {
+      "narrow320CanvasAndPreviewVisible": true
+    },
+    {
+      "productionSpritePixels": [
+        {
+          "size": 19,
+          "color": "red",
+          "corners": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "centerAlpha": 255
+        },
+        {
+          "size": 19,
+          "color": "blue",
+          "corners": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "centerAlpha": 255
+        },
+        {
+          "size": 19,
+          "color": "green",
+          "corners": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "centerAlpha": 255
+        },
+        {
+          "size": 19,
+          "color": "yellow",
+          "corners": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "centerAlpha": 255
+        },
+        {
+          "size": 19,
+          "color": "purple",
+          "corners": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "centerAlpha": 255
+        },
+        {
+          "size": 19,
+          "color": "orange",
+          "corners": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "centerAlpha": 255
+        },
+        {
+          "size": 24,
+          "color": "red",
+          "corners": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "centerAlpha": 255
+        },
+        {
+          "size": 24,
+          "color": "blue",
+          "corners": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "centerAlpha": 255
+        },
+        {
+          "size": 24,
+          "color": "green",
+          "corners": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "centerAlpha": 255
+        },
+        {
+          "size": 24,
+          "color": "yellow",
+          "corners": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "centerAlpha": 255
+        },
+        {
+          "size": 24,
+          "color": "purple",
+          "corners": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "centerAlpha": 255
+        },
+        {
+          "size": 24,
+          "color": "orange",
+          "corners": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "centerAlpha": 255
+        },
+        {
+          "size": 30,
+          "color": "red",
+          "corners": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "centerAlpha": 255
+        },
+        {
+          "size": 30,
+          "color": "blue",
+          "corners": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "centerAlpha": 255
+        },
+        {
+          "size": 30,
+          "color": "green",
+          "corners": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "centerAlpha": 255
+        },
+        {
+          "size": 30,
+          "color": "yellow",
+          "corners": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "centerAlpha": 255
+        },
+        {
+          "size": 30,
+          "color": "purple",
+          "corners": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "centerAlpha": 255
+        },
+        {
+          "size": 30,
+          "color": "orange",
+          "corners": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "centerAlpha": 255
+        },
+        {
+          "size": 48,
+          "color": "red",
+          "corners": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "centerAlpha": 255
+        },
+        {
+          "size": 48,
+          "color": "blue",
+          "corners": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "centerAlpha": 255
+        },
+        {
+          "size": 48,
+          "color": "green",
+          "corners": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "centerAlpha": 255
+        },
+        {
+          "size": 48,
+          "color": "yellow",
+          "corners": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "centerAlpha": 255
+        },
+        {
+          "size": 48,
+          "color": "purple",
+          "corners": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "centerAlpha": 255
+        },
+        {
+          "size": 48,
+          "color": "orange",
+          "corners": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "centerAlpha": 255
+        }
+      ]
+    },
+    {
+      "oldNeonAtlasBlockedAndShotStillWorks": true
+    }
+  ],
+  "errors": []
+}

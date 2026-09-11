@@ -3,7 +3,7 @@ import { getCanvasPixelRatio } from '../../../../standalone/performance.js';
 import { createBubbleArt, BUBBLE_PALETTE } from './bubble-art.js';
 // Independently versioned game plugin. Keep imports relative to this immutable snapshot.
 export const GAME_ID = 'paopao';
-export const GAME_VERSION = '1.0.3';
+export const GAME_VERSION = '1.0.4';
 export const HOST_API_VERSION = 1;
 export const REQUIRED_ENV = Object.freeze(["activeGameController","clearProgress","currentGame","gamePaused","getHostDocument","getHostWindow","qs","saveProgress","setScore","showGameOver","speak","toast"]);
 

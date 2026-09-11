@@ -1,23 +1,22 @@
 {
   "schema": 1,
   "gameId": "paopao",
-  "artVersion": "1.0.3",
+  "artVersion": "1.0.4",
   "sharedArtVersion": "1.0.1",
   "stylesheet": "standalone/game-art.css",
   "rendererHelper": "src/games/plugins/paopao/bubble-art.js",
   "assetRefs": [
     "assets/game-art/premium/v1/candy-bubbles.png",
-    "assets/game-art/icons-v2/sheet-02.png",
-    "assets/game-art/paopao/bubbles-v4.png"
+    "assets/game-art/icons-v2/sheet-02.png"
   ],
   "appliedSurfaces": [
-    "Six distinct color families with calm plain satin surfaces and no center symbols",
+    "Original-style pastel palette with lower saturation and no center symbols",
     "Bomb sprite",
     "Flying and next bubbles",
     "Individually illustrated game directory icon",
-    "Six complete circular bubble sprites with transparent padding",
+    "Six complete procedural circles with transparent padding and no outer glow",
     "Larger current and next bubble previews",
-    "Matching simple colored spheres in the image failure fallback"
+    "Cached size-aware rendering without a downloaded image dependency"
   ],
   "retainedPresentation": [
     "Trajectory and background remain existing vector"
