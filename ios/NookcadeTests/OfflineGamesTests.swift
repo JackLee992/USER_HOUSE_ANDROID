@@ -33,12 +33,19 @@ final class OfflineGamesTests: XCTestCase {
                 try await waitFor("!document.querySelector('#wb-progress-new') && !!document.querySelector('#wb-start-cover-btn')", seconds: 5)
                 _ = try await value("(()=>{document.querySelector('#wb-start-cover-btn').click();return true})()")
                 try await waitFor("wanbaApp.inspect().started && !!wanbaApp.inspect().controller", seconds: 5)
-                let samples = try await value("new Promise(resolve=>{const rows=[],start=performance.now();function sample(){const s=wanbaApp.inspect().controller;rows.push({time:performance.now()-start,intro:s.introTime,visible:s.chain.filter(b=>b.s>=0).length,head:s.chain.at(-1)?.s??null,shots:s.details.shots});if(performance.now()-start<2200)requestAnimationFrame(sample);else resolve(rows)}sample()})") as! [[String: Any]]
+                async let sampled = value("new Promise(resolve=>{const rows=[],start=performance.now();function sample(){const s=wanbaApp.inspect().controller;rows.push({time:performance.now()-start,intro:s.introTime,visible:s.chain.filter(b=>b.s>=0).length,head:s.chain.at(-1)?.s??null,shots:s.details.shots,pose:s.view.introPose});if(performance.now()-start<2200 || (s.introTime!==null && performance.now()-start<6500))requestAnimationFrame(sample);else resolve(rows)}sample()})")
+                for stage in 0..<2 {
+                    try await Task.sleep(for: .milliseconds(stage == 0 ? 450 : 700))
+                    let image = XCTAttachment(image: try await host.webView.takeSnapshot(configuration: nil)); image.name = "zuma-skull-round-\(round)-stage-\(stage)"; image.lifetime = .keepAlways; add(image)
+                }
+                let samples = try await sampled as! [[String: Any]]
                 let first = samples.first!, last = samples.last!
                 XCTAssertNotNil(first["intro"] as? Double, "New round must animate into the track")
                 XCTAssertTrue(last["intro"] is NSNull, "Opening must finish")
                 XCTAssertLessThan(first["visible"] as! Int, last["visible"] as! Int)
                 XCTAssertGreaterThan(last["head"] as! Double, first["head"] as! Double)
+                XCTAssertTrue(samples.contains { (($0["pose"] as? [String: Any])?["impact"] as? Double ?? 0) > 0 }, "Landing impact must be rendered")
+                XCTAssertTrue(samples.contains { abs(($0["pose"] as? [String: Any])?["rotation"] as? Double ?? 0) > 1 }, "Skull must rotate during entry")
                 XCTAssertGreaterThan(samples.count, 30, "Real WKWebView must deliver animation frames")
                 let data = try JSONSerialization.data(withJSONObject: samples, options: [.prettyPrinted])
                 let evidence = XCTAttachment(data: data, uniformTypeIdentifier: "public.json"); evidence.name = "zuma-opening-round-\(round)"; evidence.lifetime = .keepAlways; add(evidence)

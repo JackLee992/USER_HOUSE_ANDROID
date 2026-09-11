@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
+import {zumaSkullIntroPose} from '../src/games/plugins/zuma/intro-motion.js';
 import {createMarbleGL} from '../src/games/plugins/zuma/marble-gl.js';
 
 // A WebGL API recorder, not a shader/rasterizer simulator. Visual output and
@@ -98,7 +99,7 @@ function frameHarness(paused=false){
     destroyed:false,env:{isActive:()=>true,isPaused:()=>paused},doc:{hidden:false},localPause:false,
     lastTime:1000,elapsed:0,engine:{state,level:{ballRadius:26},update:dt=>updates.push(dt),drainEvents:()=>queued.splice(0)},
     mouthLoad:0,fireKick:0,swallowPulse:0,waves:[],bursts:[],particles:[],floats:[],dirty:false,dialogKind:'pause',
-    toastUntil:0,lastSave:2000,raf:0,gl:null,glDisabled:false,
+    artSettled:true,introPrevious:null,toastUntil:0,lastSave:2000,raf:0,gl:null,glDisabled:false,
     win:{performance:{now:()=>0},requestAnimationFrame:()=>1},
     eco:false,COLORS:['#ff0000'],RGB:[[1,0,0]],text:{},sound(){},toast(){},updateUI(){},draw(){},save(){},destroy(){},dialog(){},
   });
@@ -126,7 +127,7 @@ test('the dangerous end hole remains visible when artwork cannot be decoded',()=
   const ctx=new Proxy({}, {get(_target,name){
     return (..._args)=>{if(['fill','stroke','fillText','drawImage'].includes(name))marks++;};
   },set:()=>true});
-  const c=vm.createContext({ctx,art:null,images:{},swallowPulse:0,
+  const c=vm.createContext({ctx,art:null,images:{},swallowPulse:0,zumaSkullIntroPose,reducedMotion:false,eco:false,
     engine:{state:{status:'playing',drainTime:0},level:{ballRadius:26,path:{length:4000}}},
     zumaPointAt:()=>({x:400,y:800}),
   });

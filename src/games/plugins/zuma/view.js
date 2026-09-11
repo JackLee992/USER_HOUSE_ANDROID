@@ -1,4 +1,5 @@
 import {createZumaEngine,zumaPointAt} from './engine.js';
+import {zumaSkullIntroPose} from './intro-motion.js';
 import {getCanvasPixelRatio,getPerformanceMode} from '../../../../standalone/performance.js';
 import {getLocale} from '../../../../standalone/i18n.js';
 import {zumaLabels} from './labels.js';
@@ -35,10 +36,13 @@ export function createZumaGame(saved,env) {
   doc.body.append(portal);
   const q=s=>portal.querySelector(s),canvas=q('.zc-canvas'),ctx=canvas.getContext('2d'),background=q('.zc-background'),bg=background.getContext('2d'),glCanvas=q('.zc-marble-gl');
   const mode=getPerformanceMode(win),pixelRatio=getCanvasPixelRatio(win),eco=mode==='eco';
+  const reducedMotion=eco||!!win.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
   let engine=createZumaEngine(readZumaSave(saved),{layout:win.innerWidth>win.innerHeight?'landscape':'portrait'});
   let destroyed=false,raf=0,lastTime=0,lastSave=0,lastUI='',localPause=false,dialogKind='',activePointer=null,aiming=false,dirty=true,elapsed=0,toastUntil=0,displayScore=-1;
   let art=null,images={},ballCache=[],particles=[],bursts=[],waves=[],floats=[],boardScale=1,glSlowFrames=0,glDisabled=false,audio=null;
   let mouthLoad=0,fireKick=0,swallowPulse=0,lastGulpSound=-1;
+  let artSettled=false,introPrevious=engine.state.introTime,boardShake='';
+  const artDeadline=win.setTimeout(()=>{artSettled=true;},4000);
   let muted=false;try{muted=win.localStorage.getItem('wanba_zuma_muted_v1')==='1';}catch{}
   const gl=!eco?createMarbleGL(glCanvas,()=>{glDisabled=true;portal.dataset.renderer='canvas2d';dirty=true;}):null;
   portal.dataset.renderer='canvas2d';portal.dataset.performance=mode;
@@ -50,6 +54,12 @@ export function createZumaGame(saved,env) {
     if(muted||eco||destroyed)return;if(kind==='gulp'){if(elapsed-lastGulpSound<.09)return;lastGulpSound=elapsed;}
     try {const Audio=win.AudioContext||win.webkitAudioContext;if(!Audio)return;if(!audio)audio=new Audio();if(audio.state==='suspended')audio.resume().catch(()=>{});
       if(kind==='unlock')return;
+      if(kind==='impact'||kind==='arrival'){
+        const start=audio.currentTime,o=audio.createOscillator(),gain=audio.createGain();
+        o.type='triangle';o.frequency.setValueAtTime(kind==='impact'?120:280,start);o.frequency.exponentialRampToValueAtTime(kind==='impact'?34:65,start+.3);
+        gain.gain.setValueAtTime(.0001,start);gain.gain.exponentialRampToValueAtTime(kind==='impact'?.22:.09,start+.02);gain.gain.exponentialRampToValueAtTime(.0001,start+.45);
+        o.connect(gain);gain.connect(audio.destination);o.start(start);o.stop(start+.46);return;
+      }
       const notes=kind==='clear'?[523,659,784]:kind==='coin'?[988,1318]:kind==='match'?[392,587]:kind==='swap'?[420]:[180];
       notes.forEach((frequency,i)=>{const start=audio.currentTime+i*.055,o=audio.createOscillator(),gain=audio.createGain();o.type=kind==='shot'?'triangle':'sine';o.frequency.setValueAtTime(frequency,start);o.frequency.exponentialRampToValueAtTime(frequency*(kind==='shot'?.55:1.08),start+.09);gain.gain.setValueAtTime(.0001,start);gain.gain.exponentialRampToValueAtTime(.065,start+.009);gain.gain.exponentialRampToValueAtTime(.0001,start+.14);o.connect(gain);gain.connect(audio.destination);o.start(start);o.stop(start+.15);});
     }catch{}
@@ -105,14 +115,22 @@ export function createZumaGame(saved,env) {
   }
   function drawSkull(){
     const level=engine.level,r=level.ballRadius,end=zumaPointAt(level.path,level.path.length),draining=engine.state.status==='draining';
+    const pose=zumaSkullIntroPose(engine.state.introTime,{reducedMotion});
+    ctx.save();ctx.fillStyle=`rgba(0,8,4,${pose.shadow*.55})`;ctx.beginPath();ctx.ellipse(end.x,end.y+r*.45,r*2.15*pose.shadow,r*.65*pose.shadow,0,0,Math.PI*2);ctx.fill();ctx.restore();
+    if(pose.impact>0){
+      const phase=1-pose.impact;ctx.save();ctx.translate(end.x,end.y+r*.6);ctx.scale(1,.45);
+      ctx.strokeStyle=`rgba(227,197,133,${pose.impact*.7})`;ctx.lineWidth=4*pose.impact;ctx.beginPath();ctx.arc(0,0,r*(1.8+phase*6),0,Math.PI*2);ctx.stroke();
+      for(let i=0;i<(eco?5:12);i++){const a=i*2.399;ctx.fillStyle=`rgba(180,164,124,${pose.impact*.32})`;ctx.beginPath();ctx.ellipse(Math.cos(a)*r*(2+phase*5),Math.sin(a)*r*(2+phase*5),r*(.25+phase*.6),r*(.3+phase*.8),a,0,Math.PI*2);ctx.fill();}ctx.restore();
+    }
+    ctx.save();ctx.translate(end.x+pose.x*r,end.y+pose.y*r);ctx.rotate(pose.rotation);ctx.scale(pose.scale,pose.scale);ctx.globalAlpha=pose.opacity;ctx.translate(-end.x,-end.y);
     const jaw=(draining?(.45+.55*Math.abs(Math.sin(engine.state.drainTime*17))):swallowPulse/.16)*r*.38;
-    const rect=art?.sprites?.skull;if(!rect||!images.atlas){ctx.fillStyle='#050c09';ctx.strokeStyle='#b39b55';ctx.lineWidth=5;ctx.beginPath();ctx.ellipse(end.x,end.y,r*1.3,r*1.6+jaw,0,0,Math.PI*2);ctx.fill();ctx.stroke();return;}
+    const rect=art?.sprites?.skull;if(!rect||!images.atlas){ctx.fillStyle='#050c09';ctx.strokeStyle='#b39b55';ctx.lineWidth=5;ctx.beginPath();ctx.ellipse(end.x,end.y,r*1.3,r*1.6+jaw,0,0,Math.PI*2);ctx.fill();ctx.stroke();ctx.restore();return;}
     const w=r*4.2,h=r*5.15,x=end.x-w*.48,y=end.y-h*.74;
     ctx.save();ctx.fillStyle='#050b09';ctx.beginPath();ctx.ellipse(end.x,end.y,r*.95,r*1.45+jaw,0,0,Math.PI*2);ctx.fill();
     if(draining){ctx.save();ctx.translate(end.x,end.y);ctx.rotate(engine.state.drainTime*8);ctx.strokeStyle='#ed88436b';ctx.lineWidth=3;for(let i=0;i<3;i++){ctx.beginPath();ctx.arc(0,0,r*(.25+i*.27),i*1.8,i*1.8+2.2);ctx.stroke();}ctx.restore();}
     const [sx,sy,sw,sh]=rect,split=images.motion&&art.motion?.skullJaw?.length ? .63 : .73;
     ctx.drawImage(images.atlas,sx,sy,sw,sh*split,x,y,w,h*split);
-    if(images.motion&&art.motion?.skullJaw)ctx.drawImage(images.motion,...art.motion.skullJaw,end.x-r*1.55,end.y-r*.5+jaw,r*3.1,r*2.32);else ctx.drawImage(images.atlas,sx,sy+sh*split,sw,sh*(1-split),x,y+h*split+jaw,w,h*(1-split));ctx.restore();
+    if(images.motion&&art.motion?.skullJaw)ctx.drawImage(images.motion,...art.motion.skullJaw,end.x-r*1.55,end.y-r*.5+jaw,r*3.1,r*2.32);else ctx.drawImage(images.atlas,sx,sy+sh*split,sw,sh*(1-split),x,y+h*split+jaw,w,h*(1-split));ctx.restore();ctx.restore();
   }
   function drawFrog(){
     const s=engine.state,{frog:f,ballRadius:r}=engine.level,angle=Number.isFinite(s.aim)?s.aim:-Math.PI/2;
@@ -142,7 +160,11 @@ export function createZumaGame(saved,env) {
     const s=engine.state,level=engine.level,r=level.ballRadius;ctx.clearRect(0,0,level.width,level.height);
     const balls=s.chain.filter(b=>b.s>=0).map(ball=>({...zumaPointAt(level.path,ball.s),r:r*(s.status==='draining'?clamp((level.path.length-ball.s)/(r*1.5),.08,1):1),spin:ball.s/(r*2.6),rect:art?.sprites?.balls?.[ball.color],ball}));
     if(s.shot)balls.push({x:s.shot.x,y:s.shot.y,r:r*.91,spin:elapsed*8,rect:art?.sprites?.balls?.[s.shot.color],ball:s.shot});
+    const pose=zumaSkullIntroPose(s.introTime,{reducedMotion});
+    const shake=`translate(-50%,-50%) translate(${pose.shakeX*r*boardScale}px,${pose.shakeY*r*boardScale}px)`;
+    if(shake!==boardShake){q('.zc-board').style.transform=shake;boardShake=shake;}
     const gpuFX=[];
+    if(pose.impact>0&&!eco){const end=zumaPointAt(level.path,level.path.length);gpuFX.push({x:end.x,y:end.y,r:r*(2+(1-pose.impact)*7),alpha:pose.impact*.65,color:[1,.72,.28],kind:1,phase:1-pose.impact});}
     for(const p of particles)gpuFX.push({x:p.x,y:p.y,r:eco?5:11,alpha:clamp(p.life/.55,0,1),color:RGB[p.colorIndex]||[1,.8,.35],stretch:1.5,angle:Math.atan2(p.vy,p.vx)});
     for(const wave of waves){const phase=1-wave.life/wave.duration;gpuFX.push({x:wave.x,y:wave.y,r:wave.radius*(.2+phase),alpha:(1-phase)*.85,color:wave.color,kind:1,phase});}
     if(s.shot){const length=Math.hypot(s.shot.vx,s.shot.vy)||1;for(let i=1;i<=6;i++)gpuFX.push({x:s.shot.x-s.shot.vx/length*i*r*.52,y:s.shot.y-s.shot.vy/length*i*r*.52,r:r*(.65-i*.065),alpha:.75-i*.10,color:RGB[s.shot.color],stretch:1.5,angle:Math.atan2(s.shot.vy,s.shot.vx)});}
@@ -201,7 +223,7 @@ export function createZumaGame(saved,env) {
       const manifest=await(await win.fetch(new URL('manifest.json',ART))).json();if(!manifest.classic)return;art=manifest.classic;
       await Promise.allSettled(Object.entries({background:art.background,atlas:art.atlas,ui:art.uiAtlas,motion:art.motion?.atlas}).filter(([,file])=>file).map(async([key,file])=>{if(!/^(?:[a-zA-Z0-9_-]+\/)*[a-zA-Z0-9_-]+\.(?:png|webp|jpg)$/.test(file))throw Error('Invalid game artwork');const img=new win.Image();img.src=new URL(file,ART).href;await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=reject;});if(!destroyed)images[key]=img;}));
       if(destroyed)return;gl?.setAtlas(images.atlas);portal.style.backgroundImage=q('.zc-playfield').style.backgroundImage=`linear-gradient(#15271f20,#15271f20),url("${new URL(art.background,ART).href}")`;resize();
-    }catch(error){console.warn('[Zuma] Artwork unavailable; using offline fallback',error.message);}
+    }catch(error){console.warn('[Zuma] Artwork unavailable; using offline fallback',error.message);}finally{artSettled=true;win.clearTimeout(artDeadline);}
   }
   function position(event){const rect=canvas.getBoundingClientRect();return {x:(event.clientX-rect.left)*engine.level.width/rect.width,y:(event.clientY-rect.top)*engine.level.height/rect.height};}
   function aim(event){const p=position(event),f=engine.level.frog;engine.state.aim=Math.atan2(p.y-f.y,p.x-f.x);dirty=true;return p;}
@@ -219,13 +241,17 @@ export function createZumaGame(saved,env) {
     if(destroyed)return;if(!env.isActive()){destroy();return;}
     const dt=lastTime?Math.min(5,Math.max(0,(now-lastTime)/1000)):0;lastTime=now;
     const paused=env.isPaused()||localPause||doc.hidden;
-    if(!paused){elapsed+=dt;mouthLoad=Math.max(0,mouthLoad-dt);fireKick=Math.max(0,fireKick-dt);swallowPulse=Math.max(0,swallowPulse-dt);for(const wave of waves)wave.life-=dt;waves=waves.filter(w=>w.life>0);for(const b of bursts)b.life-=dt;bursts=bursts.filter(b=>b.life>0);for(const p of particles){p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt;p.vy+=100*dt;}particles=particles.filter(p=>p.life>0);for(const f of floats){f.y-=25*dt;f.life-=dt;}floats=floats.filter(f=>f.life>0);engine.update(dt);processEvents();dirty=true;}
+    if(!paused){elapsed+=dt;mouthLoad=Math.max(0,mouthLoad-dt);fireKick=Math.max(0,fireKick-dt);swallowPulse=Math.max(0,swallowPulse-dt);for(const wave of waves)wave.life-=dt;waves=waves.filter(w=>w.life>0);for(const b of bursts)b.life-=dt;bursts=bursts.filter(b=>b.life>0);for(const p of particles){p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt;p.vy+=100*dt;}particles=particles.filter(p=>p.life>0);for(const f of floats){f.y-=25*dt;f.life-=dt;}floats=floats.filter(f=>f.life>0);if(engine.state.introTime===null||artSettled){
+      const before=engine.state.introTime;if(before!==null&&dt>0&&(introPrevious===null||before===0))sound('arrival');
+      engine.update(dt);const after=engine.state.introTime;
+      if(before!==null&&before<1.05&&(after===null||after>=1.05))sound('impact');introPrevious=after;
+    }processEvents();dirty=true;}
     else if(!dialogKind&&['playing','draining'].includes(engine.state.status)&&!doc.hidden)dialog('pause');
     updateUI();if(toastUntil&&elapsed>toastUntil){q('.zc-toast').classList.remove('show');toastUntil=0;}
     if(dirty&&!doc.hidden){const start=win.performance.now();draw();if(gl?.ready&&!glDisabled){const duration=win.performance.now()-start;if(duration>12)glSlowFrames++;else glSlowFrames=Math.max(0,glSlowFrames-1);if(glSlowFrames>=12){glDisabled=true;glCanvas.hidden=true;portal.dataset.renderer='canvas2d';}}}
     if(!paused&&now-lastSave>1000){lastSave=now;save(false);}raf=win.requestAnimationFrame(frame);
   }
-  function destroy(){if(destroyed)return;destroyed=true;win.cancelAnimationFrame(raf);observer?.disconnect();win.removeEventListener('resize',resize);doc.removeEventListener('keydown',keydown);doc.removeEventListener('visibilitychange',visibility);gl?.destroy();audio?.close?.().catch(()=>{});nativeImmersive(false);portal.remove();}
-  resize();updateUI();save();loadArt();raf=win.requestAnimationFrame(frame);
-  return {save:()=>save(),destroy,getState:()=>({...engine.serialize(),view:{layout:engine.level.layout,width:engine.level.width,height:engine.level.height,ballRadius:engine.level.ballRadius,frog:{...engine.level.frog},renderer:portal.dataset.renderer,paused:env.isPaused()||localPause,assetsReady:!!images.atlas,motionReady:!!images.motion,effects:{sparks:particles.length,waves:waves.length,loading:mouthLoad,swallowing:swallowPulse}}})};
+  function destroy(){if(destroyed)return;destroyed=true;win.clearTimeout(artDeadline);win.cancelAnimationFrame(raf);observer?.disconnect();win.removeEventListener('resize',resize);doc.removeEventListener('keydown',keydown);doc.removeEventListener('visibilitychange',visibility);gl?.destroy();audio?.close?.().catch(()=>{});nativeImmersive(false);portal.remove();}
+  sound('unlock');resize();updateUI();save();loadArt();raf=win.requestAnimationFrame(frame);
+  return {save:()=>save(),destroy,getState:()=>({...engine.serialize(),view:{layout:engine.level.layout,width:engine.level.width,height:engine.level.height,ballRadius:engine.level.ballRadius,frog:{...engine.level.frog},renderer:portal.dataset.renderer,paused:env.isPaused()||localPause,assetsReady:!!images.atlas,artSettled,introPose:zumaSkullIntroPose(engine.state.introTime,{reducedMotion}),motionReady:!!images.motion,effects:{sparks:particles.length,waves:waves.length,loading:mouthLoad,swallowing:swallowPulse}}})};
 }

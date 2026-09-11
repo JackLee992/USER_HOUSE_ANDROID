@@ -7,15 +7,19 @@
 - 祖玛 1.1.3：初始珠链从入口外排列，1.8 秒快速进场、平滑减至正常速度。新局、重试、下一关共用；开场暂不允许发射。暂停不消耗进场时间，存档和旋转保留进场进度；旧存档正常续玩而不重播。
 - 共用网页 core 版本 1.3.1。此修复包含原生代码，iOS 用户需要新版 App，不能只更新游戏资源。
 
+- 骷髅开局演出：完整旋转飞入、1.05 秒落地、回弹、扩散尘雾/冲击波及短促低频音效。使用同一存档时间驱动，省电/减少动态模式去除旋转与震屏。首次开局等素材就绪，最多 4 秒后允许离线绘制降级。
+
 ## 验证
 
 - 旧版 iPhone 模拟器重现：WKWebView 顶部位于 y=62，而屏幕为 y=0。
 - iPhone 17 真机：XCUITest 验证竖屏、左横屏、右横屏的实际方向以及 WKWebView 四边和屏幕完全一致；换球按钮可点，暂停/继续/保存退出通过。
 - 真机截图：[竖屏](evidence/zuma-ios-fullscreen/iphone17-portrait.png)、[左横屏](evidence/zuma-ios-fullscreen/iphone17-landscape-left.png)、[右横屏](evidence/zuma-ios-fullscreen/iphone17-landscape-right.png)。
 - iPhone 17 Pro 模拟器：真实 WKWebView 连续两次重新开局，分别收集 124 / 129 个动画帧，均从 0 颗可见球逐步进入 25 颗，introTime 从 0 到完成；测试恢复运行前的备份。
-- JavaScript 祖玛逻辑、存档、渲染契约和 iOS app-info：47 项通过。
+- JavaScript 祖玛逻辑、存档、渲染契约和 iOS app-info：52 项通过。
 - 模拟器旋转请求未真正转向，因此不以该模拟器的横屏截图宣称横屏通过；横屏结论使用上述 iPhone 17 真机的方向断言与截图。
-- 真机开场逐帧测试受设备自动锁屏阻塞，尚待最后一次完成；不把模拟器结果当成真机结果。
+- iPhone 17 真机开场逐帧测试最终通过：两次新局均从入口外开始、逐步入轨并结束进场阶段。原始采样保存在 evidence/zuma-ios-fullscreen/iphone17-intro-round-*.json。
+
+- 后续骷髅演出已补 iPhone 17 真机及模拟器逐帧验证：两次重新开始均含旋转与非零落地冲击，最终稳定归位；保留中途和落地截图。声音已实现，自动化不代替人工听感验收。
 
 ## 交付状态
 
