@@ -7,8 +7,8 @@ settings:
   base:
     SWIFT_VERSION: '5.0'
     TARGETED_DEVICE_FAMILY: '1,2'
-    MARKETING_VERSION: '1.3.0'
-    CURRENT_PROJECT_VERSION: '1'
+    MARKETING_VERSION: '1.3.1'
+    CURRENT_PROJECT_VERSION: '3'
     CODE_SIGN_STYLE: Automatic
     ENABLE_USER_SCRIPT_SANDBOXING: 'YES'
 targets:
@@ -22,6 +22,7 @@ targets:
         buildPhase: resources
     settings:
       base:
+        DEVELOPMENT_TEAM: 5BG4VDJKTY
         PRODUCT_BUNDLE_IDENTIFIER: io.github.jacklee992.wanba.ios
         INFOPLIST_FILE: Nookcade/Info.plist
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
@@ -32,6 +33,7 @@ targets:
     dependencies: [{target: Nookcade}]
     settings:
       base:
+        DEVELOPMENT_TEAM: 5BG4VDJKTY
         GENERATE_INFOPLIST_FILE: 'YES'
   NookcadeUITests:
     type: bundle.ui-testing
@@ -40,6 +42,7 @@ targets:
     dependencies: [{target: Nookcade}]
     settings:
       base:
+        DEVELOPMENT_TEAM: 5BG4VDJKTY
         GENERATE_INFOPLIST_FILE: 'YES'
 schemes:
   Nookcade:

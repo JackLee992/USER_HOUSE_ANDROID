@@ -16,6 +16,7 @@ import android.provider.OpenableColumns;
 import android.provider.Settings;
 import android.view.View;
 import android.view.Gravity;
+import android.view.HapticFeedbackConstants;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.webkit.ValueCallback;
@@ -411,6 +412,12 @@ public final class MainActivity extends Activity {
         }
     }
 
+    private int hapticEffect(String kind) {
+        if ("drop".equals(kind) || "hard".equals(kind)) return HapticFeedbackConstants.LONG_PRESS;
+        if ("soft".equals(kind)) return HapticFeedbackConstants.CLOCK_TICK;
+        return HapticFeedbackConstants.VIRTUAL_KEY;
+    }
+
     public final class NativeBridge {
         @JavascriptInterface public void onShellState(String json) { main.post(() -> { if (!destroyed && trustedDocument && nativeShell != null && contentUpdates.isTrustedEntry(webView.getUrl())) nativeShell.acceptState(json); }); }
         @JavascriptInterface public void onShellUnavailable() { main.post(() -> { if (!destroyed && trustedDocument && nativeShell != null) nativeShell.unavailable(); }); }
@@ -424,6 +431,12 @@ public final class MainActivity extends Activity {
                 // remains valid then, while entering immersive needs foreground.
                 if (!destroyed && trustedDocument && webView != null && (!enabled || !activityPaused)
                         && contentUpdates.isTrustedEntry(webView.getUrl())) immersive.request(enabled);
+            });
+        }
+        @JavascriptInterface public void performHapticFeedback(String kind) {
+            main.post(() -> {
+                if (!destroyed && trustedDocument && webView != null && !activityPaused
+                        && contentUpdates.isTrustedEntry(webView.getUrl())) webView.performHapticFeedback(hapticEffect(kind));
             });
         }
         @JavascriptInterface public String getContentState() { return trustedDocument ? contentUpdates.getContentState() : "{}"; }

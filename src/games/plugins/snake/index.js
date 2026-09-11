@@ -2,7 +2,7 @@ import {createClassicGame} from './classic.js';
 import {createArenaGame} from './arena-controller.js';
 import {isArenaState} from './arena-engine.js';
 export const GAME_ID='snake';
-export const GAME_VERSION='1.1.0';
+export const GAME_VERSION='1.2.0';
 export const HOST_API_VERSION=1;
 export const REQUIRED_ENV=Object.freeze(['activeGameController','addSwipe','addTapDirection','canvasThemePalette','clearProgress','controlModeLabel','currentGame','gamePaused','getHostDocument','getHostWindow','isNightTheme','nextControlMode','qs','qsa','saveProgress','scheduleFitGameSurface','setScore','settings','showGameOver','snakeTimer','speak']);
 export function createGame(env,state){

@@ -133,3 +133,42 @@ test('winning double tap settles once, even if a late native dblclick follows',(
   ui.click(col(0),100);ui.click(col(0),200);ui.dispatch('dblclick',target,201,2);
   assert.equal(ui.effects.finished,1);assert.equal(ui.game.getState().moves,1);ui.game.destroy();
 });
+
+test('fullscreen surface enters native immersive mode and exits cleanly',()=>{
+  const listeners=new Map(),immersive=[],pauses=[],saves=[];
+  const makeEl=()=>({
+    innerHTML:'',dataset:{},attrs:{},children:[],isConnected:false,
+    addEventListener:(name,fn)=>listeners.set(name,fn),
+    removeEventListener:name=>listeners.delete(name),
+    setAttribute(name,value){this.attrs[name]=String(value);},
+    append(...nodes){this.children.push(...nodes);},
+    remove(){this.removed=true;this.isConnected=false;},
+  });
+  const root=makeEl(),surface=makeEl();
+  const doc={getElementById:()=>true,createElement:()=>surface,body:{append(node){node.isConnected=true;}},head:{append(){}}};
+  const game=createFreeCellGame({
+    root,document:doc,window:{NativeBridge:{setGameImmersive:value=>immersive.push(value)}},
+    isPaused:()=>pauses.at(-1)===true,isActive:()=>true,setPaused:value=>pauses.push(value),
+    save:state=>saves.push(state),clear(){},finish(){},toast(){},speak(){},setScore(){},exit(){pauses.push('exit');}
+  },board());
+  assert.equal(root.innerHTML,'');
+  assert.equal(surface.id,'wb-freecell-fullscreen');
+  assert.equal(surface.className,'wb-freecell');
+  assert.match(surface.innerHTML,/data-action="pause"/);
+  assert.deepEqual(immersive,[true]);
+  listeners.get('click')({target:{closest:selector=>selector==='[data-action]'?{dataset:{action:'pause'}}:null},preventDefault(){},detail:1,timeStamp:1});
+  assert.deepEqual(pauses,[true]);
+  assert.match(surface.innerHTML,/data-freecell-mask/);
+  assert.doesNotMatch(surface.innerHTML,/data-freecell-mask hidden/);
+  listeners.get('click')({target:{closest:selector=>selector==='[data-action]'?{dataset:{action:'resume'}}:null},preventDefault(){},detail:1,timeStamp:2});
+  assert.deepEqual(pauses,[true,false]);
+  listeners.get('click')({target:{closest:selector=>selector==='[data-action]'?{dataset:{action:'exit'}}:null},preventDefault(){},detail:1,timeStamp:3});
+  assert.deepEqual(immersive,[true,false]);
+  assert.equal(surface.removed,true);
+  assert.equal(pauses.at(-1),'exit');
+  const count=saves.length;
+  game.destroy();
+  assert.deepEqual(immersive,[true,false]);
+  assert.equal(saves.length,count);
+  assert.equal(listeners.size,0);
+});

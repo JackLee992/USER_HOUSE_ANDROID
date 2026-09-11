@@ -16,6 +16,7 @@ import android.provider.OpenableColumns;
 import android.provider.Settings;
 import android.view.View;
 import android.view.Gravity;
+import android.view.HapticFeedbackConstants;
 import android.view.ViewGroup;
 import android.webkit.ValueCallback;
 import android.widget.FrameLayout;
@@ -228,6 +229,9 @@ public final class CompatActivity extends Activity {
                             if (isTrustedForeground() || (!enabled && trustedDocument)) immersive.request(enabled);
                         }
                         break;
+                    case "haptic":
+                        if (isTrustedForeground() && message.opt("kind") instanceof String) geckoView.performHapticFeedback(hapticEffect(message.optString("kind")));
+                        break;
                     case "downloads": if (isTrustedForeground()) nativeBridge.openDownloads(); break;
                     case "appUpdater": if (isTrustedForeground()) nativeBridge.openAppUpdater(); break;
                     case "info":
@@ -246,6 +250,12 @@ public final class CompatActivity extends Activity {
                 if (source == bridgePort) { bridgePort = null; trustedDocument = false; immersive.reset(); }
             }
         });
+    }
+
+    private int hapticEffect(String kind) {
+        if ("drop".equals(kind) || "hard".equals(kind)) return HapticFeedbackConstants.LONG_PRESS;
+        if ("soft".equals(kind)) return HapticFeedbackConstants.CLOCK_TICK;
+        return HapticFeedbackConstants.VIRTUAL_KEY;
     }
 
     private static JSONObject json(Object... fields) {

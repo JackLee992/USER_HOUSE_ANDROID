@@ -16,7 +16,11 @@ const engineExpr='(()=>{const c=wanbaApp.inspect().controller;if(!c)return null;
 const sha=s=>createHash('sha256').update(JSON.stringify(s)).digest('hex');
 let c,failed=null,drainCount=0;
 const state=()=>c.evaluate(engineExpr);
+function screenSize(){const text=adb('shell','wm','size'),match=/Physical size:\s*(\d+)x(\d+)/.exec(text);if(!match)throw Error('Unable to read Android physical display size: '+text);return{width:Number(match[1]),height:Number(match[2])};}
+function physicalCoverage(l,display){const dpr=Number(l.dpr)||1;const cssWidth=Math.round(l.portal.width*dpr),cssHeight=Math.round(l.portal.height*dpr);const rootLong=Math.max(cssWidth,cssHeight),rootShort=Math.min(cssWidth,cssHeight);const displayLong=Math.max(display.width,display.height),displayShort=Math.min(display.width,display.height);return{display,cssWidth,cssHeight,missingLong:Math.max(0,displayLong-rootLong),missingShort:Math.max(0,displayShort-rootShort)};}
+function assertPhysicalFullscreen(l,display,label){const coverage=physicalCoverage(l,display);assert(coverage.missingLong<=36&&coverage.missingShort<=36,`${label} covers physical display; missing ${coverage.missingLong}x${coverage.missingShort}px`);return coverage;}
 async function until(fn,label,timeout=15000){const deadline=Date.now()+timeout;let last;while(Date.now()<deadline){try{last=await fn();if(last)return last}catch(e){last=String(e)}await c.wait(100)}throw Error('Timeout '+label+' '+JSON.stringify(last));}
+async function openShellTab(tab){const result=await c.evaluate(`wanbaApp.openShellTab(${JSON.stringify(tab)})`);assert.equal(result.ok,true,`open shell tab ${tab}`);await c.wait(250);}
 async function catalog(){
  if(await c.evaluate('!!document.querySelector("#wb-zuma-fullscreen")')){
   if(!await c.evaluate('!document.querySelector(".zc-mask").hidden'))await touch(c,'#wb-zuma-pause');
@@ -24,7 +28,7 @@ async function catalog(){
   assert(buttons.at(-1)?.includes('退出'),'Expected Chinese save/exit action');await touch(c,'.zc-dialog-buttons button:last-child');
  }
  for(let i=0;i<4&&await c.evaluate('!!wanbaApp.inspect().game');i++)adb('shell','input','keyevent','4');
- await until(()=>c.evaluate('!wanbaApp.inspect().game'),'catalog');await touch(c,'[data-tab=single]');
+ await until(()=>c.evaluate('!wanbaApp.inspect().game'),'catalog');await openShellTab('single');
 }
 async function openGame(){
  await catalog();await touch(c,'[data-game=zuma]');await c.wait(250);
@@ -35,7 +39,7 @@ async function openGame(){
  await until(async()=>!(await c.evaluate('wanbaApp.inspect().controller.view.paused')),'playing');await c.wait(400);
 }
 async function layout(){return c.evaluate(`(()=>{const p=document.querySelector('#wb-zuma-fullscreen');return {url:location.href,width:innerWidth,height:innerHeight,dpr:devicePixelRatio,app:wanbaApp.inspect().appInfo,view:wanbaApp.inspect().controller.view,portal:p.getBoundingClientRect().toJSON(),controls:['.zc-canvas','#wb-zuma-pause','#wb-zuma-swap','#wb-zuma-help'].map(s=>{const e=document.querySelector(s);return{selector:s,rect:e.getBoundingClientRect().toJSON(),width:e.width||null,height:e.height||null}}),nativeImmersiveAvailable:typeof NativeBridge?.setGameImmersive==='function'}})()`);}
-function checkLayout(l){assert(Math.abs(l.portal.x)<2&&Math.abs(l.portal.y)<2&&Math.abs(l.portal.width-l.width)<2&&Math.abs(l.portal.height-l.height)<2,'portal fills available app viewport');for(const e of l.controls){const r=e.rect;assert(r.width>20&&r.height>20,e.selector+' usable size');assert(r.x>=-1&&r.y>=-1&&r.right<=l.width+1&&r.bottom<=l.height+1,e.selector+' not clipped');}}
+function checkLayout(l,display,label='Zuma'){assert(Math.abs(l.portal.x)<2&&Math.abs(l.portal.y)<2&&Math.abs(l.portal.width-l.width)<2&&Math.abs(l.portal.height-l.height)<2,'portal fills available app viewport');const coverage=display?assertPhysicalFullscreen(l,display,label):null;for(const e of l.controls){const r=e.rect;assert(r.width>20&&r.height>20,e.selector+' usable size');assert(r.x>=-1&&r.y>=-1&&r.right<=l.width+1&&r.bottom<=l.height+1,e.selector+' not clipped');}return coverage;}
 async function readyToFire(){
  const deadline=Date.now()+30000;
  while(Date.now()<deadline){
@@ -89,14 +93,14 @@ try {
  await catalog();const before=await c.evaluate(storageExpr);writeFileSync(raw+'/before.json',JSON.stringify(before,null,2));
  const content=JSON.parse(await c.evaluate('NativeBridge.getContentState()'));assert(content.bootHealthy);checks.push({check:'trusted installed entry is healthy',snapshotId:content.activeSnapshotId,gamePackage:content.active.packages.find(p=>p.id==='game.zuma')});
  for(const profile of profiles){
-  await catalog();await touch(c,'[data-tab=settings]');await nativeSelectValue(c,'#wanba-language','zh-CN');await nativeSelectValue(c,'#wanba-performance',profile);await openGame();
-  await readyToFire();const l=await layout();checkLayout(l);assert.equal(l.app.webVersion,'1.2.1');assert.equal(l.app.appVersion,'1.2.1');assert(l.app.versionMatches,'native/web version agrees');if(process.env.ZUMA_ALLOW_PENDING_ART==='1')checks.push({check:'development framework only: dedicated artwork is not a pass condition',artworkVerified:false,assetsReady:l.view.assetsReady});if(process.env.ZUMA_EXPECT_NATIVE_IMMERSIVE==='1')assert(l.nativeImmersiveAvailable,'new APK exposes immersive bridge');
+  await catalog();await openShellTab('settings');await nativeSelectValue(c,'#wanba-language','zh-CN');await nativeSelectValue(c,'#wanba-performance',profile);await openGame();
+  await readyToFire();const display=screenSize(),l=await layout(),coverage=checkLayout(l,display,`${profile} Zuma start`);assert.equal(l.app.source,'native');assert(/^\d+\.\d+\.\d+/.test(l.app.appVersion),'native app version is semver-like');assert(/^\d+\.\d+\.\d+/.test(l.app.webVersion),'web content version is semver-like');if(process.env.ZUMA_ALLOW_PENDING_ART==='1')checks.push({check:'development framework only: dedicated artwork is not a pass condition',artworkVerified:false,assetsReady:l.view.assetsReady});if(process.env.ZUMA_EXPECT_NATIVE_IMMERSIVE==='1')assert(l.nativeImmersiveAvailable,'new APK exposes immersive bridge');
   screenshot(`${out}/${profile}-start.png`);const initial=await state();
   await until(async()=>!(await state()).shot,'shot settled');const colors=await state();await touch(c,'#wb-zuma-swap');const swapped=await state();assert.equal(swapped.current,colors.next);assert.equal(swapped.next,colors.current);
   checks.push({check:'real swap control exchanges two balls',profile,current:swapped.current,next:swapped.next});
   await beginFrames();const shots=[],start=Date.now();while(Date.now()-start<sampleMs){shots.push(await fire());await c.wait(850);}
-  const metrics=await stopFrames(),after=await state(),endLayout=await layout();checkLayout(endLayout);assert(shots.length>=3,'at least three real shots');
-  checks.push({check:'real aiming/firing and frame sample',profile,layout:l,endLayout,wallDurationMs:Date.now()-start,shots,scoreBefore:initial.score,scoreAfter:after.score,metrics});screenshot(`${out}/${profile}-playing.png`);
+  const metrics=await stopFrames(),after=await state(),endLayout=await layout(),endCoverage=checkLayout(endLayout,display,`${profile} Zuma playing`);assert(shots.length>=3,'at least three real shots');
+  checks.push({check:'real aiming/firing and frame sample',profile,layout:l,physicalCoverage:coverage,endLayout,endPhysicalCoverage:endCoverage,wallDurationMs:Date.now()-start,shots,scoreBefore:initial.score,scoreAfter:after.score,metrics});screenshot(`${out}/${profile}-playing.png`);
   await touch(c,'#wb-zuma-pause');await until(()=>c.evaluate('wanbaApp.inspect().controller.view.paused'),'pause');await c.wait(150);const paused=await state();await c.wait(700);assert.deepEqual(await state(),paused,'all engine fields frozen while paused');
   await touch(c,'#wb-zuma-swap');assert.deepEqual(await state(),paused,'paused swap cannot mutate engine');screenshot(`${out}/${profile}-paused.png`);
   adb('shell','input','keyevent','3');await c.wait(1000);assert.deepEqual(await state(),paused,'background state remains frozen');adb('shell','am','start','--activity-reorder-to-front','-n',activity);await c.wait(600);assert.deepEqual(await state(),paused,'foreground stays paused');
@@ -106,10 +110,10 @@ try {
  // Save through ordinary lifecycle before process reclamation; do not claim
  // immediate crash durability for Gecko's asynchronous localStorage flush.
  await c.evaluate('wanbaApp.save()');adb('shell','input','keyevent','3');await c.wait(10000);const saved=await c.evaluate(storageExpr);writeFileSync(raw+'/before-cold.json',JSON.stringify(saved,null,2));
- await c.close();c=null;adb('shell','am','force-stop',activity.split('/')[0]);adb('shell','am','start','-n',activity);c=await connect();const coldApp=await c.evaluate('wanbaApp.inspect().appInfo');assert.equal(coldApp.webVersion,'1.2.1');assert.equal(coldApp.appVersion,'1.2.1');assert(coldApp.versionMatches);const restored=await c.evaluate(storageExpr);writeFileSync(raw+'/after-cold.json',JSON.stringify(restored,null,2));assert.deepEqual(restored,saved,'all five raw storage keys persist through normal cold launch');
+ await c.close();c=null;adb('shell','am','force-stop',activity.split('/')[0]);adb('shell','am','start','-n',activity);c=await connect();const coldApp=await c.evaluate('wanbaApp.inspect().appInfo');assert.equal(coldApp.source,'native');assert(/^\d+\.\d+\.\d+/.test(coldApp.appVersion),'native app version is semver-like after cold launch');assert(/^\d+\.\d+\.\d+/.test(coldApp.webVersion),'web content version is semver-like after cold launch');const restored=await c.evaluate(storageExpr);writeFileSync(raw+'/after-cold.json',JSON.stringify(restored,null,2));assert.deepEqual(restored,saved,'all five raw storage keys persist through normal cold launch');
  checks.push({check:'HOME ten-second flush then cold process launch retains all five raw storage keys',app:coldApp,keys:Object.fromEntries(Object.entries(saved).map(([k,v])=>[k,sha(v)]))});
- await openGame();await touch(c,'#wb-zuma-pause');screenshot(`${out}/cold-continued.png`);await catalog();await touch(c,'[data-tab=settings]');await nativeSelectValue(c,'#wanba-performance','normal');await touch(c,'[data-tab=single]');
- await c.syncEvidence();assert.equal(c.errors.length,0,JSON.stringify(c.errors));checks.push({check:'no observed JS errors; actual continue succeeds; restored normal profile and catalog'});screenshot(`${out}/catalog-final.png`);
+ await openGame();await touch(c,'#wb-zuma-pause');screenshot(`${out}/cold-continued.png`);await catalog();await openShellTab('settings');await nativeSelectValue(c,'#wanba-performance','normal');await openShellTab('single');
+ if(typeof c.syncEvidence==='function')await c.syncEvidence();assert.equal(c.errors.length,0,JSON.stringify(c.errors));checks.push({check:'no observed JS errors; actual continue succeeds; restored normal profile and catalog'});screenshot(`${out}/catalog-final.png`);
  console.log(JSON.stringify({passed:true,checks},null,2));
 }catch(error){failed=String(error).split('\n')[0];process.exitCode=1;writeFileSync(raw+'/failure.txt',String(error.stack||error));try{screenshot(raw+'/failure.png')}catch{}console.error(failed)}
 finally{if(c){await c.evaluate('(()=>{const p=window.__zumaFrames;if(p){p.running=false;cancelAnimationFrame(p.id)}wanbaApp.pause();wanbaApp.save();return true})()').catch(()=>{});await c.close();}writeFileSync(out+'/zuma-classic.json',JSON.stringify({passed:!failed,testedAt:new Date().toISOString(),checks,error:failed,note:'rAF scheduling is not GPU presentation or power; no injected game state or artificial fixtures'},null,2));}

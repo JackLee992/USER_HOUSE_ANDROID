@@ -7,6 +7,7 @@
     getContentState:() => send('getContentState'),
     onShellState:state => send('onShellState', state),
     saveBackup:(filename, json) => send('saveBackup', filename, json),
+    performHapticFeedback:kind => send('performHapticFeedback', kind),
     setGameImmersive:value => send('setGameImmersive', value),
   })});
 })();

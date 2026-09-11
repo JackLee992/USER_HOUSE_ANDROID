@@ -1,16 +1,22 @@
 package io.github.jacklee992.wanba;
 
+import android.graphics.Color;
+import android.graphics.Insets;
 import android.os.Build;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowInsetsController;
+import android.view.WindowManager;
 
-/** System bars remain recoverable with an edge swipe; cutouts and IME stay safe. */
+/** Games draw edge-to-edge through cutouts; shell pages keep normal safe-area padding. */
 final class GameImmersiveController {
     private final Window window;
     private final View content;
     private final int originalSystemUi;
+    private final int originalStatusColor;
+    private final int originalNavigationColor;
+    private final int originalCutoutMode;
     private final GameImmersiveState state;
     private boolean immersive;
 
@@ -19,14 +25,18 @@ final class GameImmersiveController {
         this.window = window;
         this.content = content;
         originalSystemUi = window.getDecorView().getSystemUiVisibility();
+        originalStatusColor = window.getStatusBarColor();
+        originalNavigationColor = window.getNavigationBarColor();
+        originalCutoutMode = Build.VERSION.SDK_INT >= 28
+                ? window.getAttributes().layoutInDisplayCutoutMode
+                : WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_DEFAULT;
         if (Build.VERSION.SDK_INT >= 30) {
             window.setDecorFitsSystemWindows(false);
             content.setOnApplyWindowInsetsListener((view, insets) -> {
-                // Transient bars overlay an immersive game instead of resizing it.
-                int safeTypes = WindowInsets.Type.displayCutout();
-                if (!immersive) safeTypes |= WindowInsets.Type.systemBars();
-                android.graphics.Insets safe = insets.getInsets(safeTypes);
-                android.graphics.Insets keyboard = insets.getInsets(WindowInsets.Type.ime());
+                Insets safe = immersive
+                        ? Insets.NONE
+                        : insets.getInsets(WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout());
+                Insets keyboard = insets.getInsets(WindowInsets.Type.ime());
                 view.setPadding(safe.left, safe.top, safe.right, Math.max(safe.bottom, keyboard.bottom));
                 return insets;
             });
@@ -46,6 +56,13 @@ final class GameImmersiveController {
     @SuppressWarnings("deprecation")
     private void apply(boolean enabled) {
         immersive = enabled;
+        if (Build.VERSION.SDK_INT >= 28) {
+            WindowManager.LayoutParams params = window.getAttributes();
+            params.layoutInDisplayCutoutMode = enabled ? immersiveCutoutMode() : originalCutoutMode;
+            window.setAttributes(params);
+        }
+        window.setStatusBarColor(enabled ? Color.TRANSPARENT : originalStatusColor);
+        window.setNavigationBarColor(enabled ? Color.TRANSPARENT : originalNavigationColor);
         if (Build.VERSION.SDK_INT >= 30) {
             WindowInsetsController controller = window.getInsetsController();
             if (controller != null) {
@@ -61,5 +78,10 @@ final class GameImmersiveController {
                     : originalSystemUi);
         }
         content.requestApplyInsets();
+    }
+
+    private int immersiveCutoutMode() {
+        if (Build.VERSION.SDK_INT >= 35) return WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS;
+        return WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
     }
 }

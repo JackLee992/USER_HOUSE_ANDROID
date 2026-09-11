@@ -31,8 +31,8 @@ android {
         minSdk = 26
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         targetSdk = 36
-        versionCode = providers.gradleProperty("wanbaVersionCode").orElse("7").get().toInt().also { require(it > 0) }
-        versionName = providers.gradleProperty("wanbaVersionName").orElse("1.3.0").get().also { require(it.matches(Regex("[0-9]+\\.[0-9]+\\.[0-9]+(?:-[A-Za-z0-9.]+)?"))) }
+        versionCode = providers.gradleProperty("wanbaVersionCode").orElse("8").get().toInt().also { require(it > 0) }
+        versionName = providers.gradleProperty("wanbaVersionName").orElse("1.3.1").get().also { require(it.matches(Regex("[0-9]+\\.[0-9]+\\.[0-9]+(?:-[A-Za-z0-9.]+)?"))) }
         buildConfigField("boolean", "WANBA_GAME_UPDATES", providers.gradleProperty("wanbaGameUpdates").orElse("true").get().toBooleanStrict().toString())
         buildConfigField("boolean", "WANBA_APP_UPDATER", providers.gradleProperty("wanbaAppUpdater").orElse("false").get().toBooleanStrict().toString())
     }

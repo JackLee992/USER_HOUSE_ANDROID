@@ -4,18 +4,22 @@ import vm from 'node:vm';
 import fs from 'node:fs';
 import {normalizeCatalogPreferences} from '../standalone/catalog-preferences.js';
 const source=fs.readFileSync(new URL('../src/runtime/wanban-app.js',import.meta.url),'utf8');
-function harness({failSave=false,game=null}={}){
+function harness({failSave=false,game=null,withBridge=false}={}){
  const events=[],stored={catalog:{favorites:[],order:['paopao','zuma']},rememberWindow:true};
- const ctx=vm.createContext({currentGame:game,currentTab:'single',startupBlocked:false,
-  GAME_META:{paopao:{id:'paopao',name:'泡泡龙',mode:'single'},zuma:{id:'zuma',name:'祖玛',mode:'single'}},
+ const hostWindow={dispatchEvent:e=>events.push(['event',e.detail])};
+ if(withBridge) hostWindow.NativeBridge={onShellState:value=>events.push(['shellState',JSON.parse(value)])};
+ const ctx=vm.createContext({currentGame:game,currentTab:'single',startupBlocked:false,standalone:true,
+  GAME_META:{paopao:{id:'paopao',name:'泡泡龙',mode:'single'},zuma:{id:'zuma',name:'祖玛',mode:'single'}},GAME_ICON_ART_V2:{},LOCALES:[],standaloneAppInfo:{appVersion:'test'},
   normalizeCatalogPreferences,settings:()=>stored,setSettings:v=>{if(failSave)return false;Object.assign(stored,v);return true;},
   isPlainObject:v=>!!v&&typeof v==='object'&&!Array.isArray(v),renderSelect:tab=>events.push(['renderSelect',tab]),
-  getHostWindow:()=>({dispatchEvent:e=>events.push(['event',e.detail])}),CustomEvent:class{constructor(type,p){this.type=type;this.detail=p.detail;}},
+  getHostWindow:()=>hostWindow,CustomEvent:class{constructor(type,p){this.type=type;this.detail=p.detail;}},
+  getLocale:()=>'zh-CN',getPerformanceMode:()=>'normal',getUILabels:()=>({}),translateSource:v=>v,localizedGameTitle:(id,name)=>name,cardScoreDisplay:id=>'0分',contentForGame:id=>({gameVersion:'test'}),qs:()=>null,qsa:()=>[],
   saveStandaloneState:()=>events.push(['save']),stopGame:()=>events.push(['stop']),saveWindowState:(tab,game)=>events.push(['window',tab,game]),render:()=>events.push(['render']),
-  renderGame:id=>{ctx.currentGame=id;events.push(['game',id]);},
+  renderGame:id=>{ctx.currentGame=id;events.push(['game',id]);},console:{warn:(...args)=>events.push(['warn',...args])},
   buildImportPlan:items=>{if(!items||!Object.keys(items).length)throw Error('empty');return items;},commitImportPlan:plan=>events.push(['import',plan]),
  });
- vm.runInContext(source.slice(source.indexOf('  function nativeNotifyNavigation()'),source.indexOf("  if (standalone) {\n    getHostDocument().body.classList.add('wanba-standalone');")),ctx);
+ const snippet=source.slice(source.indexOf('  function standaloneBack()'),source.indexOf("  if (standalone) {\n    getHostDocument().body.classList.add('wanba-standalone');")).replaceAll('import.meta.url','"file:///wanban-app.js"');
+ vm.runInContext(snippet,ctx);
  return {ctx,stored,events};
 }
 test('native catalog writes the same normalized settings and reports failed persistence',()=>{
@@ -38,6 +42,17 @@ test('native backup validation is read only and import requires confirmation and
  assert.equal(ctx.nativeImportBackup(data,true).ok,true);assert.equal(events.filter(e=>e[0]==='import').length,1);assert.equal(ctx.currentTab,'settings');
  const active=harness({game:'paopao'});assert.equal(active.ctx.nativeImportBackup(data,true).ok,false);assert.equal(active.events.length,0);
 });
+
+test('standalone navigation pushes a complete shell state back to native chrome',()=>{
+ const {ctx,events}=harness({game:'paopao',withBridge:true});
+ assert.equal(ctx.standaloneBack(),true);
+ const shell=events.find(e=>e[0]==='shellState')?.[1];
+ assert.equal(shell.schema,1);
+ assert.equal(shell.game,null);
+ assert.equal(shell.tab,'single');
+ assert.deepEqual(shell.games.map(g=>g.id),['paopao','zuma']);
+});
+
 test('remembered My launch survives a cold boot without moving to the games tab',()=>{
  const ctx=vm.createContext({settings:()=>({rememberWindow:true,lastTab:'my',lastGame:'paopao'}),GAME_META:{paopao:{mode:'single'}},standalone:true,currentTab:'single',currentGame:null});
  vm.runInContext(source.slice(source.indexOf('  function restoreWindowState()'),source.indexOf('  function scores()')),ctx);ctx.restoreWindowState();assert.equal(ctx.currentTab,'my');assert.equal(ctx.currentGame,'paopao');

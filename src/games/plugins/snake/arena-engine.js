@@ -1,6 +1,6 @@
 // Deterministic offline simulation. Rendering and device pixel ratio never enter these rules.
 export const ARENA_VERSION = 1;
-export const ARENA_RULES = Object.freeze({width:1800,height:1400,step:1/60,speed:100,boostSpeed:172,turnRate:3.4,radius:11,minLength:100,startLength:170,maxLength:1400,boostCost:12,seconds:180,maxFood:1400});
+export const ARENA_RULES = Object.freeze({width:1800,height:1400,step:1/60,speed:160,boostSpeed:380,turnRate:7,radius:11,minLength:100,startLength:170,maxLength:1400,boostCost:8,foodGrowth:26,spawnShieldTicks:180,seconds:180,maxFood:1400});
 const R=ARENA_RULES,TAU=Math.PI*2;
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 const distance=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
@@ -68,12 +68,14 @@ export function createArena({mode='endless',seed=Date.now(),state:saved,aiCount=
     state.ticks++;indexWorld();
     for(let i=0;i<state.snakes.length;i++){const s=state.snakes[i];if(!s.alive){if(s.id!=='player'&&state.ticks>=s.respawnAt)state.snakes[i]=makeSnake(s.id,i);continue;}if(i)aiSteer(s,i);move(s,i?s.target:input.angle??s.angle,i?s.boost:input.boost);}
     indexWorld();const deaths=new Map();
-    for(const s of state.snakes){if(!s.alive)continue;if(s.x<R.radius||s.y<R.radius||s.x>R.width-R.radius||s.y>R.height-R.radius){deaths.set(s.id,{reason:'boundary'});continue;}
+    const protectedPlayer=s=>s.id==='player'&&state.ticks<=R.spawnShieldTicks;
+    for(const s of state.snakes){if(!s.alive)continue;if(s.x<R.radius||s.y<R.radius||s.x>R.width-R.radius||s.y>R.height-R.radius){if(!protectedPlayer(s))deaths.set(s.id,{reason:'boundary'});continue;}
       const hit=bodyGrid.query(s.x,s.y,R.radius*1.8).find(p=>p.owner!==s.id);if(hit)deaths.set(s.id,{reason:'collision',killer:state.snakes.find(other=>other.id===hit.owner)});
     }
-    for(let i=0;i<state.snakes.length;i++)for(let j=i+1;j<state.snakes.length;j++){const a=state.snakes[i],b=state.snakes[j];if(a.alive&&b.alive&&distance(a,b)<R.radius*1.8){deaths.set(a.id,{reason:'collision'});deaths.set(b.id,{reason:'collision'});}}
+    for(const s of state.snakes)if(protectedPlayer(s))deaths.delete(s.id);
+    for(let i=0;i<state.snakes.length;i++)for(let j=i+1;j<state.snakes.length;j++){const a=state.snakes[i],b=state.snakes[j];if(a.alive&&b.alive&&distance(a,b)<R.radius*1.8){if(!protectedPlayer(a))deaths.set(a.id,{reason:'collision'});if(!protectedPlayer(b))deaths.set(b.id,{reason:'collision'});}}
     for(const s of state.snakes)if(deaths.has(s.id))eliminate(s,deaths.get(s.id).reason,deaths.get(s.id).killer);
-    for(const s of state.snakes)if(s.alive){for(const dot of foodGrid.query(s.x,s.y,R.radius+6)){if(dot.dead)continue;dot.dead=true;s.length=Math.min(R.maxLength,s.length+dot.value*4);s.eaten++;s.best=Math.max(s.best,s.length);}}
+    for(const s of state.snakes)if(s.alive){for(const dot of foodGrid.query(s.x,s.y,R.radius+6)){if(dot.dead)continue;dot.dead=true;s.length=Math.min(R.maxLength,s.length+dot.value*R.foodGrowth);s.eaten++;s.best=Math.max(s.best,s.length);}}
     state.food=state.food.filter(p=>!p.dead);if(state.ticks%6===0&&state.food.length<state.foodTarget)food(20+random()*(R.width-40),20+random()*(R.height-40));
     if(!state.ended&&state.mode==='timed'&&state.ticks>=R.seconds/R.step)state.ended='time';
   }

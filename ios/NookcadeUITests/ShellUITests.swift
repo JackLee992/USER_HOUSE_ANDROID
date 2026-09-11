@@ -85,6 +85,13 @@ final class ShellUITests: XCTestCase {
         XCUIDevice.shared.orientation = .landscapeLeft; sleep(2); assertTabGeometry(app); capture("landscape-full-screen", app: app)
         XCUIDevice.shared.orientation = .portrait; sleep(1); capture("portrait-restored", app: app)
     }
+    private func leaveWebGame(_ app: XCUIApplication, file: StaticString = #filePath, line: UInt = #line) {
+        let back = app.webViews.buttons["返回"].firstMatch
+        XCTAssertTrue(back.waitForExistence(timeout: 8), "Expected web game back button before returning to native shell", file: file, line: line)
+        back.tap()
+        XCTAssertTrue(app.buttons["native-games-tab"].waitForExistence(timeout: 15), "Expected native games tab after leaving web game", file: file, line: line)
+    }
+
     func startGame(_ id: String, app: XCUIApplication) {
         app.buttons["native-games-tab"].tap()
         let launch = app.buttons["launch-" + id]
@@ -110,16 +117,20 @@ final class ShellUITests: XCTestCase {
         boost.press(forDuration: 1.2)
         assertNoTextSelectionMenu(app); capture("snake-boost-long-press-no-menu", app: app)
         let stick = app.webViews.otherElements["方向摇杆"]
-        XCTAssertTrue(stick.exists)
-        let origin = stick.coordinate(withNormalizedOffset: CGVector(dx: 0.35, dy: 0.75))
-        origin.press(forDuration: 0.2, thenDragTo: origin.withOffset(CGVector(dx: 50, dy: -55)))
-        if app.webViews.buttons["暂停"].exists {
-            app.webViews.buttons["暂停"].tap(); capture("snake-arena-paused", app: app)
+        if stick.waitForExistence(timeout: 2) {
+            let origin = stick.coordinate(withNormalizedOffset: CGVector(dx: 0.35, dy: 0.75))
+            origin.press(forDuration: 0.2, thenDragTo: origin.withOffset(CGVector(dx: 50, dy: -55)))
+            if app.webViews.buttons["暂停"].exists {
+                app.webViews.buttons["暂停"].tap(); capture("snake-arena-paused", app: app)
+            } else {
+                // A real collision may end this short, uncontrolled steering trial.
+                XCTAssertTrue(app.webViews.buttons["留在本局"].waitForExistence(timeout: 3)); capture("snake-real-collision", app: app); app.webViews.buttons["留在本局"].tap()
+            }
         } else {
-            // A real collision may end this short, uncontrolled steering trial.
-            XCTAssertTrue(app.webViews.buttons["留在本局"].exists); capture("snake-real-collision", app: app); app.webViews.buttons["留在本局"].tap()
+            // Boost can already end a real arena run on small screens; still verify the game can exit cleanly.
+            XCTAssertTrue(app.webViews.buttons["留在本局"].waitForExistence(timeout: 3)); capture("snake-boost-collision", app: app); app.webViews.buttons["留在本局"].tap()
         }
-        app.webViews.buttons["返回"].tap()
+        leaveWebGame(app)
         startGame("tetris", app: app)
         let duel = app.webViews.buttons["离线 AI 对战"]
         XCTAssertTrue(duel.waitForExistence(timeout: 15)); capture("tetris-mode-select", app: app); duel.tap()
@@ -134,7 +145,7 @@ final class ShellUITests: XCTestCase {
         XCUIDevice.shared.orientation = .landscapeLeft; sleep(1); capture("tetris-duel-landscape", app: app)
         app.webViews.buttons["暂停"].tap(); capture("tetris-duel-paused", app: app)
         XCUIDevice.shared.orientation = .portrait
-        app.webViews.buttons["返回"].tap()
+        leaveWebGame(app)
     }
     func testFavoriteAndNativeCardDrag() throws {
         continueAfterFailure = false
@@ -169,9 +180,13 @@ final class ShellUITests: XCTestCase {
         XCTAssertTrue(app.webViews.buttons.matching(NSPredicate(format: "label IN %@", ["换球", "SWAP"])).firstMatch.waitForExistence(timeout: 15))
         for (orientation, name) in [(UIDeviceOrientation.portrait, "portrait"), (.landscapeLeft, "landscape-left"), (.landscapeRight, "landscape-right")] {
             XCUIDevice.shared.orientation = orientation
-            sleep(2)
+            let landscape = orientation != .portrait
+            let reached = NSPredicate { _, _ in
+                let frame = app.webViews.firstMatch.frame
+                return (frame.width > frame.height) == landscape
+            }
+            wait(for: [XCTNSPredicateExpectation(predicate: reached, object: nil)], timeout: 5)
             let screen = app.frame, web = app.webViews.firstMatch.frame
-            XCTAssertEqual(screen.width > screen.height, orientation != .portrait, "Requested orientation must actually reach the game")
             capture("zuma-fullscreen-" + name, app: app)
             XCTAssertEqual(web.minX, screen.minX, accuracy: 1)
             XCTAssertEqual(web.minY, screen.minY, accuracy: 1)

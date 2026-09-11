@@ -88,6 +88,14 @@ final class GameHost: NSObject, WKScriptMessageHandlerWithReply, WKNavigationDel
         catalog = state; onCatalog?(state)
         if UIApplication.shared.applicationState != .active { pauseAndSave() }
     }
+    private func performHapticFeedback(_ kind: String?) {
+        switch kind {
+        case "drop", "hard": UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+        case "soft", "left", "right": UISelectionFeedbackGenerator().selectionChanged()
+        default: UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        }
+    }
+
     func pauseAndSave() {
         guard ready else { return }
         if backgroundTask == .invalid {
@@ -111,6 +119,7 @@ final class GameHost: NSObject, WKScriptMessageHandlerWithReply, WKNavigationDel
             guard let raw = args.first as? String, raw.utf8.count <= 256 * 1024, let data = raw.data(using: .utf8), let state = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { replyHandler(nil, "Invalid shell state"); return }
             accept(state); replyHandler(true, nil)
         case "setGameImmersive": replyHandler(true, nil) // Full-screen game controller already owns safe-area/status-bar policy.
+        case "performHapticFeedback": performHapticFeedback(args.first as? String); replyHandler(true, nil)
         case "saveBackup":
             guard UIApplication.shared.applicationState == .active, args.count == 2, let text = args[1] as? String, text.utf8.count <= 16 * 1024 * 1024, let data = text.data(using: .utf8), (try? JSONSerialization.jsonObject(with: data)) != nil else { replyHandler(nil, "Invalid backup"); return }
             export(data); replyHandler(true, nil)

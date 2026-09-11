@@ -11701,7 +11701,7 @@ export async function initWanbanXiaowu(options = {}) {
     body.innerHTML = '<div class="wb-layout ' + layoutClass + '"><div class="wb-panel wb-game-main"><div class="wb-toolbar"><button class="wb-btn" id="wb-back">返回</button><div class="wb-stat"><span class="wb-pill wb-title-row"><span class="wb-game-title-text">' + esc(g.name) + '</span><button class="wb-rule-btn" id="wb-game-rules" title="游戏介绍" aria-label="游戏介绍" type="button">💡</button></span><span class="wb-pill" id="wb-score">本局：0</span><span class="wb-pill" id="wb-high">' + esc(scoreDisplay(id)) + '</span></div><div class="wb-actions">' + wordBankTools + lineTools + '<button class="wb-btn" id="wb-game-records">记录</button>' + pauseBtn + '<button class="wb-btn" id="wb-restart">重开</button></div></div><div class="wb-board-wrap wb-gamebox-' + esc(id) + '" id="wb-gamebox"><div class="wb-start-cover"><div>准备开始</div><button class="wb-btn primary" id="wb-start-cover-btn">开始游戏</button></div></div></div>' + companionPanel + '</div>';
     if (!standalone) primeMessageNotifyBaseline();
     gameStarted = false; gamePaused = true;
-    qs('#wb-back').onclick = () => { stopGame(); currentGame = null; saveWindowState(currentTab, ''); syncPopupModeClass(); if (standalone) render(); else renderSelect(currentTab); };
+    qs('#wb-back').onclick = () => { stopGame(); currentGame = null; saveWindowState(currentTab, ''); syncPopupModeClass(); if (standalone) { render(); nativeNotifyNavigation(); } else renderSelect(currentTab); };
     qs('#wb-start-cover-btn').onclick = () => startCurrentGame(id);
     qs('#wb-game-rules').onclick = e => { e.stopPropagation(); showGameRules(id); };
     qs('#wb-game-records').onclick = () => showGameRecords(id);
@@ -12797,8 +12797,8 @@ function showGameRecords(game, page) {
       if (cancel) cancel.click(); else mask.remove();
       return true;
     }
-    if (currentGame) { saveStandaloneState(); stopGame(); currentGame = null; saveWindowState(currentTab, ''); render(); return true; }
-    if (currentTab === 'settings' || currentTab === 'my' || currentTab === 'double') { currentTab = 'single'; saveWindowState(currentTab, ''); render(); return true; }
+    if (currentGame) { saveStandaloneState(); stopGame(); currentGame = null; saveWindowState(currentTab, ''); render(); nativeNotifyNavigation(); return true; }
+    if (currentTab === 'settings' || currentTab === 'my' || currentTab === 'double') { currentTab = 'single'; saveWindowState(currentTab, ''); render(); nativeNotifyNavigation(); return true; }
     return false;
   }
 
@@ -12817,6 +12817,10 @@ function showGameRecords(game, page) {
   }
   function nativeNotifyNavigation() {
     getHostWindow().dispatchEvent(new CustomEvent('wanba:navigation',{detail:{tab:currentTab,game:currentGame}}));
+    try {
+      const bridge = getHostWindow().NativeBridge;
+      if (standalone && typeof bridge?.onShellState === 'function') bridge.onShellState(JSON.stringify(nativeCatalog()));
+    } catch (error) { console.warn('[玩吧] 原生导航状态同步失败', error); }
   }
   function nativeSetCatalog(value) {
     if (!isPlainObject(value) || !Array.isArray(value.favorites) || !Array.isArray(value.order)) return {ok:false,error:'Invalid catalog preferences'};

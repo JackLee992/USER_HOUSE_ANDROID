@@ -108,9 +108,9 @@ test('only the exact trusted origin and standalone top-level path can install th
   assert.deepEqual(h.sent, [{ op: 'ready' }]);
 });
 
-test('the page receives only the twelve declared native operations on a fixed bridge property', () => {
+test('the page receives only the thirteen declared native operations on a fixed bridge property', () => {
   const h = harness();
-  const names = ['activateGameUpdate', 'checkGameUpdates', 'downloadGameUpdate', 'getAppInfo', 'getContentState', 'onShellState', 'openAppUpdater', 'openDownloads', 'reportGameContentReady', 'rollbackGameUpdate', 'saveBackup', 'setGameImmersive'];
+  const names = ['activateGameUpdate', 'checkGameUpdates', 'downloadGameUpdate', 'getAppInfo', 'getContentState', 'onShellState', 'openAppUpdater', 'openDownloads', 'performHapticFeedback', 'reportGameContentReady', 'rollbackGameUpdate', 'saveBackup', 'setGameImmersive'];
   assert.deepEqual(Object.getOwnPropertyNames(h.bridge).sort(), names);
   assert.deepEqual(h.exported.sort(), names);
   for (const name of names) assert.equal(typeof h.bridge[name], 'function');
@@ -126,14 +126,15 @@ test('the page receives only the twelve declared native operations on a fixed br
   assert.deepEqual(h.sent.at(-1), { op: 'appUpdater' });
 });
 
-test('immersive requests accept only explicit booleans and stop after disconnect', () => {
+test('immersive and haptic requests validate small typed messages and stop after disconnect', () => {
   const h = harness();
-  h.bridge.setGameImmersive(true);h.bridge.setGameImmersive(false);
-  assert.deepEqual(h.sent.slice(-2), [{op:'immersive',enabled:true},{op:'immersive',enabled:false}]);
+  h.bridge.setGameImmersive(true);h.bridge.setGameImmersive(false);h.bridge.performHapticFeedback('left');
+  assert.deepEqual(h.sent.slice(-3), [{op:'immersive',enabled:true},{op:'immersive',enabled:false},{op:'haptic',kind:'left'}]);
   const count=h.sent.length;
   for(const value of [null, undefined, 'true', 'false', 1, 0, {}, [], new Boolean(true)])h.bridge.setGameImmersive(value);
+  for(const value of [null, undefined, 1, {}, [], 'x'.repeat(25)])h.bridge.performHapticFeedback(value);
   assert.equal(h.sent.length,count);
-  h.disconnect();h.bridge.setGameImmersive(true);assert.equal(h.sent.length,count);
+  h.disconnect();h.bridge.setGameImmersive(true);h.bridge.performHapticFeedback('right');assert.equal(h.sent.length,count);
 });
 
 test('immutable snapshot entry installs the bridge while malformed IDs and sibling pages do not', () => {

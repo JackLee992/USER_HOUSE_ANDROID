@@ -2,9 +2,9 @@ import {createClassicGame} from './classic.js';
 import {createBattleGame} from './battle-controller.js';
 import {isBattleState} from './battle-engine.js';
 export const GAME_ID='tetris';
-export const GAME_VERSION='1.1.0';
+export const GAME_VERSION='1.1.2';
 export const HOST_API_VERSION=1;
-export const REQUIRED_ENV=Object.freeze(['activeGameController','addSwipe','addTapDirection','canvasThemePalette','clearProgress','controlModeLabel','currentGame','gamePaused','getHostDocument','getHostWindow','isNightTheme','nextControlMode','qs','saveProgress','scheduleFitGameSurface','setScore','settings','showGameOver','speak','tetrisTimer']);
+export const REQUIRED_ENV=Object.freeze(['activeGameController','addSwipe','addTapDirection','canvasThemePalette','clearProgress','controlModeLabel','currentGame','gamePaused','getHostDocument','getHostWindow','hideGamePauseOverlay','isNightTheme','nextControlMode','qs','saveProgress','scheduleFitGameSurface','setScore','settings','showGameOver','speak','tetrisTimer']);
 export function createGame(env,state){
   if(isBattleState(state?.battle))return createBattleGame(env,state);
   if(Array.isArray(state?.board))return createClassicGame(env,state);
