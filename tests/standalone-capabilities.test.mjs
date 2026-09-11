@@ -76,7 +76,7 @@ test('Android back cancels a visible match-three dialog before leaving the game'
     qs:requested => { assert.equal(requested,selector); return dialogVisible ? {click:() => { dialogVisible=false; events.push('cancel'); }} : null; },
     qsa:() => [], currentGame:'match3', currentTab:'single',
     saveStandaloneState:() => events.push('save'), stopGame:() => events.push('stop'),
-    saveWindowState:() => events.push('window'), render:() => events.push('render'),
+    saveWindowState:() => events.push('window'), render:() => events.push('render'), nativeNotifyNavigation:() => {},
   });
   vm.runInContext(back,ctx);
   assert.equal(ctx.standaloneBack(),true);

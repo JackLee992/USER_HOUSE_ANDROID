@@ -38,5 +38,5 @@ test('the Android shell permits native content downloads without storage permiss
  const native=readFileSync(join(root,'android/app/src/main/java/io/github/jacklee992/wanba/MainActivity.java'),'utf8');assert.match(native,/setWebContentsDebuggingEnabled\(BuildConfig.DEBUG\)/);assert.match(native,/setBlockNetworkLoads\(true\)/);assert.doesNotMatch(native,/handler\.proceed\(|setAllowUniversalAccessFromFileURLs\(true\)/);
  const gradle=readFileSync(join(root,'android/app/build.gradle.kts'),'utf8');assert.match(gradle,/\.local\/signing.properties/);assert.match(gradle,/minorApiLevel = 1/);assert.match(gradle,/minSdk = 26/);
  assert.equal(/gradleProperty\("wanbaVersionName"\)\.orElse\("([^"]+)"\)/.exec(gradle)?.[1],APP_VERSION,'default native and web app versions agree');
- assert.equal(Number(/gradleProperty\("wanbaVersionCode"\)\.orElse\("(\d+)"\)/.exec(gradle)?.[1]),7,'1.3.0 native catalog release uses code7 after the code6 Android update');
+ assert.equal(Number(/gradleProperty\("wanbaVersionCode"\)\.orElse\("(\d+)"\)/.exec(gradle)?.[1]),8,'1.3.1 native catalog release uses code8 after the code7 Android update');
 });

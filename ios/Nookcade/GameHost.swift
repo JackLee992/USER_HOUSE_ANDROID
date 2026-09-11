@@ -110,7 +110,7 @@ final class GameHost: NSObject, WKScriptMessageHandlerWithReply, WKNavigationDel
               let body = message.body as? [String: Any], let method = body["method"] as? String, let args = body["args"] as? [Any] else { replyHandler(nil, "Untrusted frame"); return }
         switch method {
         case "getAppInfo":
-            replyHandler(["flavor": "ios", "appVersion": Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.3.0", "versionCode": Int(Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "1") ?? 1, "engineVersion": UIDevice.current.systemVersion, "providerVersion": "iOS " + UIDevice.current.systemVersion, "gameUpdatesEnabled": false, "nativeSelfUpdateEnabled": false, "appUpdaterEnabled": false], nil)
+            replyHandler(["flavor": "ios", "appVersion": Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.3.1", "versionCode": Int(Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "1") ?? 1, "engineVersion": UIDevice.current.systemVersion, "providerVersion": "iOS " + UIDevice.current.systemVersion, "gameUpdatesEnabled": false, "nativeSelfUpdateEnabled": false, "appUpdaterEnabled": false], nil)
         case "getContentState":
             let url = root.appendingPathComponent("ios-content.json")
             guard let data = try? Data(contentsOf: url), let value = try? JSONSerialization.jsonObject(with: data) else { replyHandler(nil, "Missing content metadata"); return }
