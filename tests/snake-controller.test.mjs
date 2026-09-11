@@ -25,6 +25,7 @@ function harness({mode='normal',dpr=3,state,arenaMode='endless',start=createAren
     node.getContext=()=>context;node.querySelector=query;node.querySelectorAll=selector=>{
       if(selector==='[data-snake-mode]')return ['endless','timed','classic'].map(name=>{const button=query('mode-'+name);button.dataset.snakeMode=name;return button;});
       if(selector==='[data-classic-dir]')return ['up','left','right','down'].map(name=>{const button=query('classic-'+name);button.dataset.classicDir=name;return button;});
+      if(selector==='[data-classic-speed-mode]')return ['relaxed','classic','turbo'].map(name=>{const button=query('speed-'+name);button.dataset.classicSpeedMode=name;return button;});
       return [];
     };
     if(tag==='canvas')canvases.push(node);return node;
@@ -96,6 +97,16 @@ test('classic controls queue rapid legal turns while non-board taps never steer'
   h.event(h.query('classic-right'),'pointerdown',{pointerId:4});
   assert.deepEqual(h.controller.getState().queued,['up','left','down'],'a full queue keeps the earliest committed turns');
   h.controller.destroy();
+});
+test('classic speed presets are slower by default, apply immediately, and survive restart and save',()=>{
+  const h=harness({start:createClassicGame});
+  assert.equal(h.controller.getState().speedMode,'classic');assert.equal(h.controller.getState().delay,160);
+  h.query('speed-relaxed').click();assert.equal(h.controller.getState().speedMode,'relaxed');assert.equal(h.controller.getState().delay,210);assert.equal(h.saved.at(-1).speedMode,'relaxed');
+  h.event(h.query('classic-up'),'pointerdown',{pointerId:1});assert.equal([...h.timers.values()][0].at,210);
+  h.query('speed-turbo').click();assert.equal(h.controller.getState().speedMode,'turbo');assert.equal(h.controller.getState().delay,110);assert.equal([...h.timers.values()][0].at,110);
+  h.query('[data-classic-restart]').click();assert.equal(h.controller.getState().speedMode,'turbo');assert.equal(h.controller.getState().ready,true);assert.equal(h.controller.getState().delay,110);
+  h.controller.destroy();
+  const restored=harness({start:createClassicGame,state:{snake:[{x:10,y:10},{x:9,y:10}],dir:{x:1,y:0},next:{x:1,y:0},food:{x:14,y:14},score:20,speedMode:'relaxed'}});assert.equal(restored.controller.getState().speedMode,'relaxed');assert.equal(restored.controller.getState().delay,204);restored.controller.destroy();
 });
 test('classic return button exits through the legacy host back control',()=>{
   const h=harness({start:createClassicGame});let backs=0;h.query('#wb-back').addEventListener('click',()=>backs++);
