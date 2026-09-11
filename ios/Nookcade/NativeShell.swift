@@ -21,7 +21,9 @@ final class NativeShell: UIViewController, UITabBarControllerDelegate {
     private var synchronizedTab = ""
     init(host: GameHost) { self.host = host; super.init(nibName: nil, bundle: nil) }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask { UIDevice.current.userInterfaceIdiom == .pad ? .all : .allButUpsideDown }
     override var prefersStatusBarHidden: Bool { gameVisible }
+    override var prefersHomeIndicatorAutoHidden: Bool { gameVisible }
     override var preferredStatusBarStyle: UIStatusBarStyle { .darkContent }
     override func viewDidLoad() {
         super.viewDidLoad(); overrideUserInterfaceStyle = .light
@@ -30,7 +32,9 @@ final class NativeShell: UIViewController, UITabBarControllerDelegate {
         resident.addSubview(host.webView); host.webView.frame = resident.bounds
         gameSurface.backgroundColor = Palette.background; gameSurface.isHidden = true
         view.addSubview(gameSurface); gameSurface.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([gameSurface.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor), gameSurface.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor), gameSurface.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor), gameSurface.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)])
+        // The game surface fills the display; each game's web UI owns safe-area
+        // padding for controls, so UIKit must not inset the whole background.
+        NSLayoutConstraint.activate([gameSurface.leadingAnchor.constraint(equalTo: view.leadingAnchor), gameSurface.trailingAnchor.constraint(equalTo: view.trailingAnchor), gameSurface.topAnchor.constraint(equalTo: view.topAnchor), gameSurface.bottomAnchor.constraint(equalTo: view.bottomAnchor)])
         loading.text = "Nookcade"; loading.textColor = Palette.secondary; loading.textAlignment = .center; loading.accessibilityIdentifier = "native-loading"
         view.addSubview(loading); loading.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([loading.centerXAnchor.constraint(equalTo: view.centerXAnchor), loading.centerYAnchor.constraint(equalTo: view.centerYAnchor)])
@@ -79,7 +83,7 @@ final class NativeShell: UIViewController, UITabBarControllerDelegate {
             host.webView.removeFromSuperview()
             if show { gameSurface.addSubview(host.webView); host.webView.frame = gameSurface.bounds; host.webView.autoresizingMask = [.flexibleWidth, .flexibleHeight] }
             else { resident.addSubview(host.webView); host.webView.frame = resident.bounds }
-            setNeedsStatusBarAppearanceUpdate(); view.setNeedsLayout(); view.layoutIfNeeded()
+            setNeedsUpdateOfHomeIndicatorAutoHidden(); setNeedsStatusBarAppearanceUpdate(); view.setNeedsLayout(); view.layoutIfNeeded()
         }
         if !show, let tab = state["tab"] as? String, tab != synchronizedTab {
             // Repeated catalog refreshes must not reset the system's in-flight

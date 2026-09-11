@@ -12,6 +12,7 @@ export const POWERUPS = ['bomb', 'slow', 'reverse', 'accuracy'];
 // Original tuning values, not claims about the exact timing of the commercial game.
 export const POWERUP_DURATION = 16;
 export const ZUMA_REVERSE_DURATION = 1.4;
+export const ZUMA_INTRO_DURATION = 1.8;
 export const DRAIN_MIN_DURATION = 1.25;
 export const DRAIN_TARGET_DURATION = 2.2;
 const STEP = 1 / 120;
@@ -97,6 +98,7 @@ export function createZumaEngine(saved,options={}) {
   const state={schema:2,layout:layoutName(valid?saved.layout:(options.layout||saved?.layout)),levelIndex:valid?integer(saved.levelIndex):0,
     lives:valid?clamp(integer(saved.lives,3),0,99):3,score:integer(saved?.score),levelScore:valid?integer(saved.levelScore):0,
     status:valid&&['playing','draining','levelComplete','lifeLost','gameOver'].includes(saved.status)?saved.status:'playing',
+    introTime:valid&&saved.status==='playing'&&Number.isFinite(saved.introTime)&&saved.introTime>=0&&saved.introTime<ZUMA_INTRO_DURATION?saved.introTime:null,
     generating:valid?saved.generating!==false:true,chain:[],gaps:[],shot:null,current:0,next:0,aim:finite(saved?.aim,-Math.PI/2),
     combo:valid?integer(saved.combo):0,chainDepth:valid?integer(saved.chainDepth):0,shotSeq:valid?integer(saved.shotSeq):0,nextId:valid?Math.max(1,integer(saved.nextId,1)):1,
     effects:{slow:0,reverse:0,accuracy:0},elapsed:valid?Math.max(0,finite(saved.elapsed)):0,accumulator:valid?clamp(finite(saved.accumulator),0,STEP):0,
@@ -115,7 +117,8 @@ export function createZumaEngine(saved,options={}) {
   function resetBoard(){
     level=getZumaLevel(state.levelIndex,state.layout);state.chain=[];state.gaps=[];state.shot=null;state.levelScore=0;state.generating=true;state.status='playing';state.combo=0;state.chainDepth=0;
     state.effects={slow:0,reverse:0,accuracy:0};state.elapsed=0;state.accumulator=0;state.cooldown=0;state.coin=null;state.coinTimer=6;state.coinsCollected=0;state.dangerActive=false;state.drainTime=0;state.drainAcceleration=1800;
-    for(let i=0;i<level.initial;i++)state.chain.push(makeBall(level.spacing*.6+i*level.spacing,state.chain.slice(-2)));
+    state.introTime=0;
+    for(let i=0;i<level.initial;i++)state.chain.push(makeBall(-level.ballRadius-(level.initial-1-i)*level.spacing,state.chain.slice(-2)));
     state.current=pick(activeColors());state.next=pick(activeColors());
   }
   level=getZumaLevel(state.levelIndex,state.layout);
@@ -139,6 +142,22 @@ export function createZumaEngine(saved,options={}) {
     if(options.layout&&layoutName(options.layout)!==state.layout)setLayout(options.layout);
   }else{
     resetBoard();if(saved)emit('migrated',{fromSchema:integer(saved.schema,1),score:state.score});
+  }
+  function positionIntro(){
+    // Integral of a linearly decreasing velocity. Start entirely outside the
+    // entrance and reach the old opening position with exactly normal velocity.
+    const t=state.introTime,T=ZUMA_INTRO_DURATION;
+    const distance=(level.initial-1+.6)*level.spacing+level.ballRadius;
+    const extra=distance-level.speed*T;
+    const head=-level.ballRadius+level.speed*t+extra*(2*t/T-(t/T)**2);
+    for(let i=0;i<state.chain.length;i++)state.chain[i].s=head-(state.chain.length-1-i)*level.spacing;
+  }
+  function tickIntro(dt){
+    state.introTime=Math.min(ZUMA_INTRO_DURATION,state.introTime+dt);
+    if(ZUMA_INTRO_DURATION-state.introTime<1e-9)state.introTime=ZUMA_INTRO_DURATION;
+    positionIntro();
+    // Do not consume play timers, powerups or spawn additional balls during setup.
+    if(state.introTime===ZUMA_INTRO_DURATION){state.introTime=null;emit('introComplete');}
   }
   function addScore(points){const before=Math.floor(state.score/50000);state.score+=points;state.levelScore+=points;
     const earned=Math.floor(state.score/50000)-before;if(earned){state.lives+=earned;emit('extraLife',{lives:state.lives});}
@@ -266,7 +285,7 @@ export function createZumaEngine(saved,options={}) {
   }
   function tick(dt){
     if(state.status==='draining'){tickDrain(dt);return;}
-    if(state.status!=='playing')return;state.elapsed+=dt;state.cooldown=Math.max(0,state.cooldown-dt);
+    if(state.status!=='playing')return;if(state.introTime!==null){tickIntro(dt);return;}state.elapsed+=dt;state.cooldown=Math.max(0,state.cooldown-dt);
     for(const effect of Object.keys(state.effects))state.effects[effect]=Math.max(0,state.effects[effect]-dt);
     for(const ball of state.chain)if(ball.powerup&&ball.s>=0){
       ball.powerupRemaining=Math.max(0,finite(ball.powerupRemaining,POWERUP_DURATION)-dt);
@@ -290,7 +309,7 @@ export function createZumaEngine(saved,options={}) {
     while(state.accumulator+1e-10>=STEP){state.accumulator-=STEP;if(Math.abs(state.accumulator)<1e-10)state.accumulator=0;tick(STEP);if(state.status!=='playing'&&state.status!=='draining'){state.accumulator=0;break;}}
   }
   function fire(angle){
-    if(state.status!=='playing'||state.shot||state.cooldown>0||!Number.isFinite(angle))return false;
+    if(state.status!=='playing'||state.introTime!==null||state.shot||state.cooldown>0||!Number.isFinite(angle))return false;
     refreshColors();state.aim=angle;const speed=state.effects.accuracy>0?1500:1080,offset=level.ballRadius*1.45;
     state.shot={id:++state.shotSeq,color:state.current,x:level.frog.x+Math.cos(angle)*offset,y:level.frog.y+Math.sin(angle)*offset,vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed,gaps:[]};
     state.current=state.next;state.next=pick(activeColors());state.cooldown=state.effects.accuracy>0?.08:.16;state.details.shots++;emit('shot',{shotId:state.shot.id,color:state.shot.color});return true;
@@ -300,6 +319,7 @@ export function createZumaEngine(saved,options={}) {
   function retry(){if(state.status!=='lifeLost'&&state.status!=='gameOver')return false;if(state.status==='gameOver'){state.lives=3;state.score=0;state.levelIndex=0;for(const key of Object.keys(state.details))state.details[key]=0;}resetBoard();emit('levelStart',{levelIndex:state.levelIndex});return true;}
   function setLayout(value){
     value=layoutName(value);if(value===state.layout)return false;const old=level;state.layout=value;level=getZumaLevel(state.levelIndex,value);
+    if(state.introTime!==null){positionIntro();state.aim=Math.atan2(Math.sin(state.aim)*level.height/old.height,Math.cos(state.aim)*level.width/old.width);emit('layout',{layout:value});return true;}
     const ratio=level.path.length/old.path.length,positions=state.chain.map(ball=>ball.s);
     // Keep contacting segments attached. Preserve each real gap relative to track length,
     // while anchoring the dangerous head at its previous normalized progress.

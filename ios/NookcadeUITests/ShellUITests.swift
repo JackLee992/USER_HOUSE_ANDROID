@@ -90,9 +90,9 @@ final class ShellUITests: XCTestCase {
         let launch = app.buttons["launch-" + id]
         for _ in 0..<10 { if launch.exists && launch.isHittable { break }; app.collectionViews["native-catalog"].swipeUp() }
         XCTAssertTrue(launch.isHittable); launch.tap()
-        let restart = app.webViews.buttons["重新开始"]
+        let restart = app.webViews.buttons.matching(NSPredicate(format: "label IN %@", ["重新开始", "Start over"])).firstMatch
         if restart.waitForExistence(timeout: 2) { restart.tap() }
-        let start = app.webViews.buttons["开始游戏"]
+        let start = app.webViews.buttons.matching(NSPredicate(format: "label IN %@", ["开始游戏", "Play"])).firstMatch
         if start.waitForExistence(timeout: 8) { start.tap() }
     }
     func testSnakeAndTetrisRealControls() throws {
@@ -158,6 +158,34 @@ final class ShellUITests: XCTestCase {
         app.buttons["native-my-tab"].tap(); XCTAssertTrue(favorites.cells["game-game2048"].waitForExistence(timeout: 5)); XCTAssertTrue(favorites.cells["game-snake"].exists)
         capture("native-favorites-cold", app: app)
         app.buttons["native-games-tab"].tap()
+    }
+    func testZumaFullScreenBounds() throws {
+        continueAfterFailure = false
+        XCUIDevice.shared.orientation = .portrait
+        defer { XCUIDevice.shared.orientation = .portrait }
+        let app = XCUIApplication(); app.launch()
+        XCTAssertTrue(app.buttons["native-games-tab"].waitForExistence(timeout: 30))
+        startGame("zuma", app: app)
+        XCTAssertTrue(app.webViews.buttons.matching(NSPredicate(format: "label IN %@", ["换球", "SWAP"])).firstMatch.waitForExistence(timeout: 15))
+        for (orientation, name) in [(UIDeviceOrientation.portrait, "portrait"), (.landscapeLeft, "landscape-left"), (.landscapeRight, "landscape-right")] {
+            XCUIDevice.shared.orientation = orientation
+            sleep(2)
+            let screen = app.frame, web = app.webViews.firstMatch.frame
+            XCTAssertEqual(screen.width > screen.height, orientation != .portrait, "Requested orientation must actually reach the game")
+            capture("zuma-fullscreen-" + name, app: app)
+            XCTAssertEqual(web.minX, screen.minX, accuracy: 1)
+            XCTAssertEqual(web.minY, screen.minY, accuracy: 1)
+            XCTAssertEqual(web.width, screen.width, accuracy: 1)
+            XCTAssertEqual(web.height, screen.height, accuracy: 1)
+            XCTAssertTrue(app.webViews.buttons.matching(NSPredicate(format: "label IN %@", ["换球", "SWAP"])).firstMatch.isHittable)
+            let pause = app.webViews.buttons.matching(NSPredicate(format: "label IN %@", ["暂停", "Pause"])).allElementsBoundByIndex.last!
+            XCTAssertTrue(pause.isHittable); pause.tap()
+            XCTAssertTrue(app.webViews.buttons.matching(NSPredicate(format: "label IN %@", ["继续冒险", "Continue"])).firstMatch.waitForExistence(timeout: 5))
+            app.webViews.buttons.matching(NSPredicate(format: "label IN %@", ["继续冒险", "Continue"])).firstMatch.tap()
+        }
+        app.webViews.buttons.matching(NSPredicate(format: "label IN %@", ["暂停", "Pause"])).allElementsBoundByIndex.last!.tap()
+        app.webViews.buttons.matching(NSPredicate(format: "label IN %@", ["保存并退出", "Save & exit"])).firstMatch.tap()
+        XCTAssertTrue(app.buttons["native-games-tab"].waitForExistence(timeout: 5))
     }
     func testBubbleZumaAndPinballTouch() throws {
         continueAfterFailure = false

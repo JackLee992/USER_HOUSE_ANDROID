@@ -18,6 +18,40 @@ final class OfflineGamesTests: XCTestCase {
         }
         XCTFail("Timed out: \(expression)"); throw NSError(domain: "Timed out", code: 1)
     }
+    func testZumaOpeningOnDevice() async throws {
+        try await waitFor("!!window.wanbaApp", seconds: 45)
+        continueAfterFailure = false
+        let backup = try await value("wanbaApp.backupData()") as! String
+        let quoted = String(data: try JSONSerialization.data(withJSONObject: [backup]), encoding: .utf8)!
+        do {
+            for round in 0..<2 {
+                _ = try await value("wanbaApp.openShellTab('single')")
+                _ = try await value("wanbaApp.launch('zuma','single')")
+                try await Task.sleep(for: .milliseconds(200)) // Runtime presents the saved-game choice after 60 ms.
+                try await waitFor("!wanbaApp.inspect().started && !!document.querySelector('#wb-start-cover-btn')", seconds: 5)
+                _ = try await value("(()=>{document.querySelector('#wb-progress-new')?.click();return true})()")
+                try await waitFor("!document.querySelector('#wb-progress-new') && !!document.querySelector('#wb-start-cover-btn')", seconds: 5)
+                _ = try await value("(()=>{document.querySelector('#wb-start-cover-btn').click();return true})()")
+                try await waitFor("wanbaApp.inspect().started && !!wanbaApp.inspect().controller", seconds: 5)
+                let samples = try await value("new Promise(resolve=>{const rows=[],start=performance.now();function sample(){const s=wanbaApp.inspect().controller;rows.push({time:performance.now()-start,intro:s.introTime,visible:s.chain.filter(b=>b.s>=0).length,head:s.chain.at(-1)?.s??null,shots:s.details.shots});if(performance.now()-start<2200)requestAnimationFrame(sample);else resolve(rows)}sample()})") as! [[String: Any]]
+                let first = samples.first!, last = samples.last!
+                XCTAssertNotNil(first["intro"] as? Double, "New round must animate into the track")
+                XCTAssertTrue(last["intro"] is NSNull, "Opening must finish")
+                XCTAssertLessThan(first["visible"] as! Int, last["visible"] as! Int)
+                XCTAssertGreaterThan(last["head"] as! Double, first["head"] as! Double)
+                XCTAssertGreaterThan(samples.count, 30, "Real WKWebView must deliver animation frames")
+                let data = try JSONSerialization.data(withJSONObject: samples, options: [.prettyPrinted])
+                let evidence = XCTAttachment(data: data, uniformTypeIdentifier: "public.json"); evidence.name = "zuma-opening-round-\(round)"; evidence.lifetime = .keepAlways; add(evidence)
+                let shot = XCTAttachment(image: try await host.webView.takeSnapshot(configuration: nil)); shot.name = "zuma-opening-complete-\(round)"; shot.lifetime = .keepAlways; add(shot)
+            }
+        } catch {
+            _ = try? await value("wanbaApp.openShellTab('single')")
+            _ = try? await value("wanbaApp.importBackup(\(quoted)[0],true)")
+            throw error
+        }
+        _ = try await value("wanbaApp.openShellTab('single')")
+        _ = try await value("wanbaApp.importBackup(\(quoted)[0],true)")
+    }
     func testAll37BundledGamesAndWasm() async throws {
         try await waitFor("!!window.wanbaApp", seconds: 45)
         let capability = try await value("({origin:location.origin, secure:isSecureContext, wasm:typeof WebAssembly.instantiate==='function', gl:!!document.createElement('canvas').getContext('webgl'), games:wanbaApp.catalog().games.length, app:wanbaApp.catalog().appInfo})") as! [String: Any]

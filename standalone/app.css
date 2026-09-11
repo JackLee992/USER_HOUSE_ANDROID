@@ -202,3 +202,12 @@ body.wanba-standalone #wanbanXiaowu-popup .wb-pill {background:transparent!impor
 body.wanba-standalone #wanbanXiaowu-popup {box-sizing:border-box!important;padding:0!important}
 @media(min-width:840px){body.wanba-standalone #wanbanXiaowu-popup .wanba-bottom-nav .wb-tab{flex:0 0 64px!important}body.wanba-standalone #wanbanXiaowu-popup .wanba-app-header{grid-row:1!important}}
 body.wanba-standalone #wanbanXiaowu-popup {left:0!important;top:0!important;right:auto!important;bottom:auto!important;transform:none!important}
+
+/* Full-display native game hosts: legacy in-flow game controls still avoid
+   the camera and home gesture. Portal games provide their own safe-area CSS. */
+body.wanba-standalone #wanbanXiaowu-popup #wb-body.wb-game-mode {
+  padding-top:max(8px,env(safe-area-inset-top));
+  padding-right:max(8px,env(safe-area-inset-right));
+  padding-bottom:max(8px,env(safe-area-inset-bottom));
+  padding-left:max(8px,env(safe-area-inset-left));
+}

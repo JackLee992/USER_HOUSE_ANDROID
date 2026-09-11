@@ -1,9 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createZumaEngine,getZumaLevel,createZumaPath,zumaPointAt,zumaTangentAt,sweepCircleHit,LEVELS,ZUMA_LAYOUTS,POWERUP_DURATION,ZUMA_REVERSE_DURATION} from '../src/games/plugins/zuma/engine.js';
+import {createZumaEngine,getZumaLevel,createZumaPath,zumaPointAt,zumaTangentAt,sweepCircleHit,LEVELS,ZUMA_LAYOUTS,POWERUP_DURATION,ZUMA_REVERSE_DURATION,ZUMA_INTRO_DURATION} from '../src/games/plugins/zuma/engine.js';
 
 const make=()=>createZumaEngine(null,{random:()=>.37});
-function board(engine,balls){engine.state.chain=balls.map((ball,i)=>({id:i+1,color:ball[0],s:ball[1],...(ball[2]?{powerup:ball[2],powerupRemaining:POWERUP_DURATION}:{})}));engine.state.nextId=100;engine.state.gaps=[];engine.state.shot=null;engine.state.generating=false;engine.state.coinTimer=100;engine.state.coin=null;engine.state.current=balls[0]?.[0]||0;engine.state.next=engine.state.current;engine.drainEvents();}
+function board(engine,balls){engine.state.introTime=null;engine.state.chain=balls.map((ball,i)=>({id:i+1,color:ball[0],s:ball[1],...(ball[2]?{powerup:ball[2],powerupRemaining:POWERUP_DURATION}:{})}));engine.state.nextId=100;engine.state.gaps=[];engine.state.shot=null;engine.state.generating=false;engine.state.coinTimer=100;engine.state.coin=null;engine.state.current=balls[0]?.[0]||0;engine.state.next=engine.state.current;engine.drainEvents();}
 function shotAt(engine,index,color){const ball=engine.state.chain[index],p=zumaPointAt(engine.level.path,ball.s),t=zumaTangentAt(engine.level.path,ball.s);engine.state.shot={id:++engine.state.shotSeq,color,x:p.x-t.y*110,y:p.y+t.x*110,vx:t.y*1500,vy:-t.x*1500,gaps:[]};}
 function advance(engine,seconds,hz=60){for(let i=0;i<Math.round(seconds*hz);i++)engine.update(1/hz);}
 function nearest(path,x,y){return path.points.reduce((a,b)=>Math.hypot(a.x-x,a.y-y)<Math.hypot(b.x-x,b.y-y)?a:b).s;}
@@ -253,4 +253,31 @@ test('draining snapshots resume exactly and rotation does not restart or cancel 
   e.update(0);assert.deepEqual(e.serialize(),saved,'a paused caller can leave the animation state untouched');
   e.setLayout('landscape');restored.setLayout('landscape');assert.equal(e.state.drainTime,saved.drainTime);assert.equal(e.state.lives,3);assert.deepEqual(e.serialize(),restored.serialize());
   for(const dt of [.02,.33,.2,.9,.8]){e.update(dt);restored.update(dt);}assert.deepEqual(e.serialize(),restored.serialize());assert.equal(e.state.status,'lifeLost');assert.equal(e.state.lives,2);assert.equal(e.state.chain.length,0);
+});
+
+
+test('fresh rounds feed marbles progressively from the entrance then ease to normal speed',()=>{
+  for(const layout of ['portrait','landscape']){
+    const e=createZumaEngine(null,{layout,random:()=>.37}),ids=e.state.chain.map(b=>b.id);
+    assert.equal(e.state.introTime,0);assert.ok(e.state.chain.every(b=>b.s<0));assert.equal(e.fire(0),false);
+    e.update(.25);const early=e.state.chain.at(-1).s,visible=e.state.chain.filter(b=>b.s>=0).length;
+    assert.ok(visible>0&&visible<e.level.initial);e.update(.25);const fast=e.state.chain.at(-1).s-early;
+    e.update(ZUMA_INTRO_DURATION-.75);const late=e.state.chain.at(-1).s;e.update(.25);
+    assert.ok(e.state.chain.at(-1).s-late<fast/3,'the visible rush decelerates');
+    assert.equal(e.state.introTime,null);assert.deepEqual(e.state.chain.map(b=>b.id),ids);
+    assertClose(e.state.chain[0].s,e.level.spacing*.6);const head=e.state.chain.at(-1).s;e.update(.1);
+    assertClose(e.state.chain.at(-1).s-head,e.level.speed*.1);assert.equal(e.fire(0),true);
+  }
+});
+
+test('intro replay and continuation cover retry, next course, pause, rotation and old saves',()=>{
+  const e=make();e.update(.613);const saved=e.serialize(),restored=createZumaEngine(saved);
+  assert.deepEqual(restored.serialize(),saved);e.update(0);assert.deepEqual(e.serialize(),saved);
+  e.setLayout('landscape');restored.setLayout('landscape');assert.equal(e.state.introTime,saved.introTime);
+  for(const dt of [.13,.45,.8]){e.update(dt);restored.update(dt);}assert.deepEqual(e.serialize(),restored.serialize());
+  e.state.status='lifeLost';assert.equal(e.retry(),true);assert.equal(e.state.introTime,0);assert.ok(e.state.chain.every(b=>b.s<0));
+  e.state.status='levelComplete';assert.equal(e.advanceLevel(),true);assert.equal(e.state.introTime,0);assert.equal(e.state.levelIndex,1);
+  e.state.status='gameOver';assert.equal(e.retry(),true);assert.equal(e.state.introTime,0);assert.equal(e.state.levelIndex,0);
+  const old=restored.serialize();delete old.introTime;const legacy=createZumaEngine(old);assert.equal(legacy.state.introTime,null);
+  assert.deepEqual(legacy.state.chain,old.chain,'existing rounds do not replay or teleport');
 });

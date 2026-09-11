@@ -11,7 +11,7 @@ const RGB=COLORS.map(c=>[1,3,5].map(i=>parseInt(c.slice(i,i+2),16)/255));
 const SYMBOLS=['◉','△','✦','≋','◇','⌁'];
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
 const styles=`
-#wb-zuma-fullscreen{position:fixed;inset:0;z-index:2147483000;box-sizing:border-box;display:grid;grid-template-rows:auto minmax(0,1fr) auto;overflow:hidden;background:#14231d;color:#f6e5b0;font-family:system-ui,sans-serif;isolation:isolate;overscroll-behavior:none;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);touch-action:none}
+#wb-zuma-fullscreen{position:fixed;inset:0;z-index:2147483000;box-sizing:border-box;display:grid;grid-template-rows:auto minmax(0,1fr) auto;overflow:hidden;background:#14231d center/cover;color:#f6e5b0;font-family:system-ui,sans-serif;isolation:isolate;overscroll-behavior:none;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);touch-action:none}
 #wb-zuma-fullscreen *{box-sizing:border-box}#wb-zuma-fullscreen button{font:inherit;cursor:pointer;color:#ffedb3;touch-action:manipulation;-webkit-tap-highlight-color:transparent}#wb-zuma-fullscreen button:focus-visible{outline:3px solid #ffe08c;outline-offset:2px}
 .zc-head{position:relative;z-index:4;background:linear-gradient(#3e4630,#222e22);border-bottom:2px solid #a58b42;box-shadow:0 5px 18px #0008;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;padding:7px 14px}
 .zc-heading{text-align:center;min-width:0}.zc-heading b{display:block;font-family:Georgia,serif;font-size:24px;letter-spacing:5px;color:#f7d270;text-shadow:0 2px #17180e,0 -1px #fff7c2}.zc-heading small{font-size:9px;letter-spacing:2px;color:#d2bb7b;white-space:nowrap}
@@ -27,7 +27,7 @@ const styles=`
 export function createZumaGame(saved,env) {
   const {document:doc,window:win}=env, text=zumaLabels(getLocale());
   if(!doc.getElementById('wb-zuma-classic-css')){const style=doc.createElement('style');style.id='wb-zuma-classic-css';style.textContent=styles;doc.head.append(style);}
-  const portal=doc.createElement('section');portal.id='wb-zuma-fullscreen';portal.setAttribute('aria-label',text.title);portal.dataset.gameVersion='1.1.0';
+  const portal=doc.createElement('section');portal.id='wb-zuma-fullscreen';portal.setAttribute('aria-label',text.title);portal.dataset.gameVersion='1.1.3';
   portal.innerHTML=`<header class="zc-head"><div class="zc-score"><span>${text.score}</span><b id="wb-zuma-score">0</b></div><div class="zc-heading"><b>${text.title}</b><small>${text.subtitle}</small></div><div class="zc-right"><div class="zc-lives" id="wb-zuma-lives"></div></div><div class="zc-progress-wrap"><span class="zc-stage-label" id="wb-zuma-level"></span><div class="zc-progress" role="progressbar" aria-label="${text.target}" aria-valuemin="0" aria-valuemax="100"><i></i></div></div></header>
     <main class="zc-playfield"><div class="zc-board"><canvas class="zc-background"></canvas><canvas class="zc-marble-gl" hidden></canvas><canvas id="wb-zuma-canvas" class="zc-canvas wb-zuma-canvas" aria-label="${text.aim}"></canvas></div><div class="zc-effects"></div><div class="zc-toast" role="status"></div></main>
     <footer class="zc-footer"><button class="zc-icon" id="wb-zuma-pause" aria-label="${text.pause}">Ⅱ</button><div class="zc-hint">${text.aim}<small>${text.rotate}</small></div><button class="zc-button zc-swap" id="wb-zuma-swap" aria-label="${text.swap}"><canvas class="zc-preview" width="48" height="48"></canvas>${text.swap} ⇄</button><button class="zc-icon" id="wb-zuma-help" aria-label="${text.help}">?</button></footer>
@@ -200,7 +200,7 @@ export function createZumaGame(saved,env) {
     try{
       const manifest=await(await win.fetch(new URL('manifest.json',ART))).json();if(!manifest.classic)return;art=manifest.classic;
       await Promise.allSettled(Object.entries({background:art.background,atlas:art.atlas,ui:art.uiAtlas,motion:art.motion?.atlas}).filter(([,file])=>file).map(async([key,file])=>{if(!/^(?:[a-zA-Z0-9_-]+\/)*[a-zA-Z0-9_-]+\.(?:png|webp|jpg)$/.test(file))throw Error('Invalid game artwork');const img=new win.Image();img.src=new URL(file,ART).href;await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=reject;});if(!destroyed)images[key]=img;}));
-      if(destroyed)return;gl?.setAtlas(images.atlas);q('.zc-playfield').style.backgroundImage=`linear-gradient(#15271f20,#15271f20),url("${new URL(art.background,ART).href}")`;resize();
+      if(destroyed)return;gl?.setAtlas(images.atlas);portal.style.backgroundImage=q('.zc-playfield').style.backgroundImage=`linear-gradient(#15271f20,#15271f20),url("${new URL(art.background,ART).href}")`;resize();
     }catch(error){console.warn('[Zuma] Artwork unavailable; using offline fallback',error.message);}
   }
   function position(event){const rect=canvas.getBoundingClientRect();return {x:(event.clientX-rect.left)*engine.level.width/rect.width,y:(event.clientY-rect.top)*engine.level.height/rect.height};}

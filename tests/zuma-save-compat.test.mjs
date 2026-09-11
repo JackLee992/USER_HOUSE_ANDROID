@@ -78,9 +78,18 @@ test('unwrapped old or flat current saves remain readable, while malformed neste
 });
 
 test('a mid-consumption death preserves full animation state while its legacy projection stays safe',()=>{
-  const e=fresh(),end=e.level.path.length;e.state.chain=Array.from({length:70},(_,i)=>({id:i+1,color:i%4,s:end-1-(69-i)*e.level.spacing}));e.state.nextId=100;e.update(.35);
+  const e=fresh(),end=e.level.path.length;e.state.introTime=null;e.state.chain=Array.from({length:70},(_,i)=>({id:i+1,color:i%4,s:end-1-(69-i)*e.level.spacing}));e.state.nextId=100;e.update(.35);
   assert.equal(e.state.status,'draining');const snapshot=e.serialize(),wrapped=writeZumaSave(snapshot);validLegacy(wrapped);
   assert.deepEqual(readZumaSave(wrapped),snapshot);assert.equal(wrapped.score,snapshot.score);
   const resumed=createZumaEngine(readZumaSave(JSON.parse(JSON.stringify(wrapped))));assert.deepEqual(resumed.serialize(),snapshot);
   e.update(2);resumed.update(2);assert.deepEqual(resumed.serialize(),e.serialize());assert.equal(resumed.state.status,'lifeLost');assert.equal(resumed.state.lives,2);
+});
+
+
+test('the resource save envelope resumes a partially entered opening without skipping or replaying it',()=>{
+  const e=fresh();e.update(.4);const snapshot=e.serialize();
+  assert.ok(snapshot.introTime>0);assert.ok(snapshot.chain.some(b=>b.s<0));assert.ok(snapshot.chain.some(b=>b.s>=0));
+  const wrapper=writeZumaSave(snapshot);validLegacy(wrapper);
+  const restored=createZumaEngine(readZumaSave(JSON.parse(JSON.stringify(wrapper))));assert.deepEqual(restored.serialize(),snapshot);
+  for(const dt of [.2,.013,.4,.8]){e.update(dt);restored.update(dt);}assert.deepEqual(restored.serialize(),e.serialize());
 });
