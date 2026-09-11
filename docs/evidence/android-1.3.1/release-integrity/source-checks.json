@@ -1,0 +1,1442 @@
+[
+  {
+    "packagePath": "assets/game-art/blackjack/manifest.json",
+    "sourcePath": "assets/game-art/blackjack/manifest.json",
+    "size": 859,
+    "sha256": "cf76f0182a62e9cbd2fb3a9802482056bc3c22f67c0b8202d678e2bb00ebdc39"
+  },
+  {
+    "packagePath": "assets/game-icons/21p.png",
+    "sourcePath": "assets/game-icons/21p.png",
+    "size": 140798,
+    "sha256": "d225e4897c4b581a2b0847096b43a5d65b1cd3b3c9b630fa1f6a3615f7405645"
+  },
+  {
+    "packagePath": "assets/game-art/bombnumber/manifest.json",
+    "sourcePath": "assets/game-art/bombnumber/manifest.json",
+    "size": 820,
+    "sha256": "ef558be20565bb50289faaf14df450185bd186997aa4b000e19174b08483752f"
+  },
+  {
+    "packagePath": "assets/game-icons/bombnumber.jpg",
+    "sourcePath": "assets/game-icons/bombnumber.jpg",
+    "size": 16678,
+    "sha256": "d9d8ed46dddc963ce9239089eeb0a8a1a446746ade0a07dea4351abc751675da"
+  },
+  {
+    "packagePath": "assets/game-art/chinesechess/manifest.json",
+    "sourcePath": "assets/game-art/chinesechess/manifest.json",
+    "size": 848,
+    "sha256": "54c490f16222161d6fb0de45ca8644a00a91d5425a14820c05828567743c2cac"
+  },
+  {
+    "packagePath": "assets/game-icons/chinese_chess.png",
+    "sourcePath": "assets/game-icons/chinese_chess.png",
+    "size": 2052919,
+    "sha256": "b378957389f24892b421f52bb8f3e96c2b96f91b4f8cc0e55a8aa40143fd9353"
+  },
+  {
+    "packagePath": "assets/game-art/connect4d/manifest.json",
+    "sourcePath": "assets/game-art/connect4d/manifest.json",
+    "size": 923,
+    "sha256": "d78f5438f6e2f29794a354e406e5164096415814581e76ff11064ebd9fba00c3"
+  },
+  {
+    "packagePath": "assets/game-icons/connect4d.jpg",
+    "sourcePath": "assets/game-icons/connect4d.jpg",
+    "size": 19075,
+    "sha256": "58cb48291384f9379b821fe94b6bbb5a225a3fe6387c9a4d5414562016136584"
+  },
+  {
+    "packagePath": "assets/game-art/draughts/manifest.json",
+    "sourcePath": "assets/game-art/draughts/manifest.json",
+    "size": 888,
+    "sha256": "7b6df11d1f751a38ad1770e688c2d70a8de9f9e3e8da1677c627c1ca4d5fce90"
+  },
+  {
+    "packagePath": "assets/game-icons/draughts.png",
+    "sourcePath": "assets/game-icons/draughts.png",
+    "size": 2344910,
+    "sha256": "11e57354db4a0dd5b3eef2b43255091ee5d928971608602224530466808f7128"
+  },
+  {
+    "packagePath": "assets/game-art/freecell/manifest.json",
+    "sourcePath": "assets/game-art/freecell/manifest.json",
+    "size": 838,
+    "sha256": "500025925939d0ca1495484160e541afed14ea4f95833b1f251f5e81b849382d"
+  },
+  {
+    "packagePath": "assets/game-icons/freecell.png",
+    "sourcePath": "assets/game-icons/freecell.png",
+    "size": 2288304,
+    "sha256": "24ed80fdaab535291994d509835b750535199e5bdf0d58bfad06cf191925d315"
+  },
+  {
+    "packagePath": "assets/game-art/game1010/manifest.json",
+    "sourcePath": "assets/game-art/game1010/manifest.json",
+    "size": 850,
+    "sha256": "8b83618756c6b5ab4f6cc623ecb1beca943491873e6c0c600fc8cfddf9e7f641"
+  },
+  {
+    "packagePath": "assets/game-icons/1010.png",
+    "sourcePath": "assets/game-icons/1010.png",
+    "size": 157189,
+    "sha256": "9a8c98453d42164f39c3ae853cebd36d7a26399068a060056360dbab544f3b19"
+  },
+  {
+    "packagePath": "assets/game-art/game2048/manifest.json",
+    "sourcePath": "assets/game-art/game2048/manifest.json",
+    "size": 825,
+    "sha256": "bf381fd6aa84e7c13bc5f1af59485a0736a6b397cc004d65864261514ac70324"
+  },
+  {
+    "packagePath": "assets/game-icons/game2048.png",
+    "sourcePath": "assets/game-icons/game2048.png",
+    "size": 110605,
+    "sha256": "949f11a0d1935ec851359d887bdd9f9c077b9c64c2d7759ff98ab2b5d11d0741"
+  },
+  {
+    "packagePath": "assets/game-art/gomoku/manifest.json",
+    "sourcePath": "assets/game-art/gomoku/manifest.json",
+    "size": 871,
+    "sha256": "be8af3a5cdfdbbcf6140b2606f627a19662c2307ea945786648b7f3e185f22f3"
+  },
+  {
+    "packagePath": "assets/game-icons/gomoku.jpg",
+    "sourcePath": "assets/game-icons/gomoku.jpg",
+    "size": 16007,
+    "sha256": "716e1cc76f3c68b884166da55e0ff72a1741ffdb06a9d2932a99e362b32c3728"
+  },
+  {
+    "packagePath": "assets/game-art/guessnumber/manifest.json",
+    "sourcePath": "assets/game-art/guessnumber/manifest.json",
+    "size": 839,
+    "sha256": "b566222cbb76d76442aafce99c8a2989cffdfa37c6a9e486aa59af706f8cecad"
+  },
+  {
+    "packagePath": "assets/game-icons/guessnumber.jpg",
+    "sourcePath": "assets/game-icons/guessnumber.jpg",
+    "size": 17653,
+    "sha256": "0f273a0586db295c2c39a790b486f0a0ccee180fda972e3dfa81cdbc6dfb6ddf"
+  },
+  {
+    "packagePath": "assets/game-art/jump/manifest.json",
+    "sourcePath": "assets/game-art/jump/manifest.json",
+    "size": 832,
+    "sha256": "2836533fd49d17e6254e0c43d814a7bbfb8b15382be9c34cac0aa3dcafa02fcf"
+  },
+  {
+    "packagePath": "assets/game-icons/jump.jpg",
+    "sourcePath": "assets/game-icons/jump.jpg",
+    "size": 17337,
+    "sha256": "09b1564abb35edf2b06f75138561e44748bb630b5c835acea2e311bec0afc205"
+  },
+  {
+    "packagePath": "assets/game-art/linklink/manifest.json",
+    "sourcePath": "assets/game-art/linklink/manifest.json",
+    "size": 1030,
+    "sha256": "13580906db7752ab29e0f022b60eb007ee1a12792445a5183e53aa1d1b09e40a"
+  },
+  {
+    "packagePath": "assets/game-icons/lian.png",
+    "sourcePath": "assets/game-icons/lian.png",
+    "size": 153381,
+    "sha256": "1d764308cb33a0fa07dfcdaa60e1a846e3117cabd1cf2ca59552ca0c1e90c9dc"
+  },
+  {
+    "packagePath": "assets/game-art/ludo/manifest.json",
+    "sourcePath": "assets/game-art/ludo/manifest.json",
+    "size": 873,
+    "sha256": "85a59642de59a66381ba307ccdfb36347c2211e9e037dde1b100e44d37a8fac3"
+  },
+  {
+    "packagePath": "assets/game-icons/ludo.jpg",
+    "sourcePath": "assets/game-icons/ludo.jpg",
+    "size": 18946,
+    "sha256": "35e3533169124007a8af1c4ae4816160d05346b1a7dc037c255f9786bb6a330e"
+  },
+  {
+    "packagePath": "assets/game-art/match3/manifest.json",
+    "sourcePath": "assets/game-art/match3/manifest.json",
+    "size": 935,
+    "sha256": "cb0c31f8f0b1e544791ccc14b45b633b440b54c73c298bf6bdd019bc9d2011fa"
+  },
+  {
+    "packagePath": "assets/game-icons/match3.png",
+    "sourcePath": "assets/game-icons/match3.png",
+    "size": 2023349,
+    "sha256": "99746f3b5f0dd652d01632fd9b0e10ac4802eb2c7050b5cbd98591abe27b5cf6"
+  },
+  {
+    "packagePath": "assets/game-art/memory/manifest.json",
+    "sourcePath": "assets/game-art/memory/manifest.json",
+    "size": 888,
+    "sha256": "14153c20b9a39e40a77fe05dcdee73608cf1579900f273a6e1700db1b90dce7f"
+  },
+  {
+    "packagePath": "assets/game-icons/memory.png",
+    "sourcePath": "assets/game-icons/memory.png",
+    "size": 111253,
+    "sha256": "11f15236a443efe42b8d45d109b542fa756b5bc1dc83075ee542317b7b5266cb"
+  },
+  {
+    "packagePath": "assets/game-art/minesweeper/manifest.json",
+    "sourcePath": "assets/game-art/minesweeper/manifest.json",
+    "size": 909,
+    "sha256": "3c1f29a27a4c6c2b9ed266fc67757f34de9dd88000f36a6b1a63d0e32f987396"
+  },
+  {
+    "packagePath": "assets/game-icons/minesweeper.png",
+    "sourcePath": "assets/game-icons/minesweeper.png",
+    "size": 2008846,
+    "sha256": "78984224c5e237a03572b27f1824cc26299f93c996a922ca307ccfb46119ab33"
+  },
+  {
+    "packagePath": "assets/game-art/oldmaid/manifest.json",
+    "sourcePath": "assets/game-art/oldmaid/manifest.json",
+    "size": 891,
+    "sha256": "f0d03f0035f2be14a2e0902962d76f683b30a39c58f8907be704eddb97bc4be5"
+  },
+  {
+    "packagePath": "assets/game-icons/oldmaid.jpg",
+    "sourcePath": "assets/game-icons/oldmaid.jpg",
+    "size": 18663,
+    "sha256": "0c794e041880c9b0cecdad854011d3e4f1e97b60aaeaf492d75476ba6e56beeb"
+  },
+  {
+    "packagePath": "assets/game-art/paopao/bubbles-v4.png",
+    "sourcePath": "assets/game-art/paopao/bubbles-v4.png",
+    "size": 1529063,
+    "sha256": "d3c0e10acdc59ec2d5d510e66ed692db61bb47e8d9315a62d8c3cb5de3979850"
+  },
+  {
+    "packagePath": "assets/game-art/paopao/manifest.json",
+    "sourcePath": "assets/game-art/paopao/manifest.json",
+    "size": 1167,
+    "sha256": "8dacb221a21838386de36f83bba5a529660fcedfcc25a9b399ae29871229e5b7"
+  },
+  {
+    "packagePath": "assets/game-icons/paoapao.png",
+    "sourcePath": "assets/game-icons/paoapao.png",
+    "size": 158820,
+    "sha256": "9eee6f0d4b014bd6f4b457d6b0279df862892799eefb72b4c1b9092caaafd48e"
+  },
+  {
+    "packagePath": "assets/game-art/pinball/manifest.json",
+    "sourcePath": "assets/game-art/pinball/manifest.json",
+    "size": 857,
+    "sha256": "30f5df0f67a2d96e5753243cf4a1fe3836585c1cacb6a390cc83616002fa438e"
+  },
+  {
+    "packagePath": "assets/game-icons/pinball.png",
+    "sourcePath": "assets/game-icons/pinball.png",
+    "size": 2468526,
+    "sha256": "a6d4b8a3591dc056373219045b90d34fcbf469f10ffabaeccbcd49941496ba97"
+  },
+  {
+    "packagePath": "assets/space-cadet/playfield-hd.png",
+    "sourcePath": "assets/space-cadet/playfield-hd.png",
+    "size": 2499832,
+    "sha256": "6eaaafc15a480f690e37c30fe01804f246aa6a48b3599d7654cb2e01c8e1e865"
+  },
+  {
+    "packagePath": "assets/game-art/plank/manifest.json",
+    "sourcePath": "assets/game-art/plank/manifest.json",
+    "size": 823,
+    "sha256": "04206ed1c9d7c33cb1d7d7a739c55010c1c282b220fd4b7cc988b3f50eecd736"
+  },
+  {
+    "packagePath": "assets/game-icons/plank.jpg",
+    "sourcePath": "assets/game-icons/plank.jpg",
+    "size": 15092,
+    "sha256": "a0c6893d78b8502c8605f89ec6560e46913c5022627598fd923b95eb665b5d64"
+  },
+  {
+    "packagePath": "assets/game-art/popstar/manifest.json",
+    "sourcePath": "assets/game-art/popstar/manifest.json",
+    "size": 913,
+    "sha256": "26430848242892ffa4322fc042d3d3c7181c02c5963b0f9e5afbb8ec5d1733f3"
+  },
+  {
+    "packagePath": "assets/game-icons/star.png",
+    "sourcePath": "assets/game-icons/star.png",
+    "size": 180707,
+    "sha256": "d60cd4dc0e95187f0d308a5496f923865c06c80e3ec962f9810aa9cad2c15354"
+  },
+  {
+    "packagePath": "assets/game-art/reversi/manifest.json",
+    "sourcePath": "assets/game-art/reversi/manifest.json",
+    "size": 873,
+    "sha256": "5400937d4b88dfd747cc92ff27dfce6837c1d1c0f93393a37d00ce4f74aae0bf"
+  },
+  {
+    "packagePath": "assets/game-icons/reversi.jpg",
+    "sourcePath": "assets/game-icons/reversi.jpg",
+    "size": 15990,
+    "sha256": "79ad5ca32c29181583d6482d3f2b42655b8fa09889a1ce7a39b3051e434ebb09"
+  },
+  {
+    "packagePath": "assets/game-art/screw/manifest.json",
+    "sourcePath": "assets/game-art/screw/manifest.json",
+    "size": 929,
+    "sha256": "95d5ca3e3fac7570564767d3060ad2e75383e0109f68242208f47afc0c3669c7"
+  },
+  {
+    "packagePath": "assets/game-icons/screw.png",
+    "sourcePath": "assets/game-icons/screw.png",
+    "size": 168527,
+    "sha256": "03baa527088f73ae9f3ac70e51c11a1d006ff56be40b3cd4f3ba1c201457628b"
+  },
+  {
+    "packagePath": "assets/app-brand/app-icon.png",
+    "sourcePath": "assets/app-brand/app-icon.png",
+    "size": 389745,
+    "sha256": "09357652a0722361e739ce7aa418218a58f9561086f20cad851d36220663cfaf"
+  },
+  {
+    "packagePath": "assets/app-brand/international/app-icon.png",
+    "sourcePath": "assets/app-brand/international/app-icon.png",
+    "size": 148961,
+    "sha256": "abd7813bc43927a0b11d46a73c7920788eb163abd9c727172510ca60d7cc93ec"
+  },
+  {
+    "packagePath": "assets/game-art/icons-v2/manifest.json",
+    "sourcePath": "assets/game-art/icons-v2/manifest.json",
+    "size": 14741,
+    "sha256": "880fecb9efae04f730def627885c4ac6f6f6caa09a50a2038eef840cc6f56048"
+  },
+  {
+    "packagePath": "assets/game-art/icons-v2/sheet-01.png",
+    "sourcePath": "assets/game-art/icons-v2/sheet-01.png",
+    "size": 1811043,
+    "sha256": "46ea2027d8740efe424ab1138364ee9a74f89b021040d734b110411ca1f06083"
+  },
+  {
+    "packagePath": "assets/game-art/icons-v2/sheet-02.png",
+    "sourcePath": "assets/game-art/icons-v2/sheet-02.png",
+    "size": 1839333,
+    "sha256": "26bc01a3057c4d26ca05db5d5557adb82c90fc0e0726fa365952b033906ae3e8"
+  },
+  {
+    "packagePath": "assets/game-art/icons-v2/sheet-03.png",
+    "sourcePath": "assets/game-art/icons-v2/sheet-03.png",
+    "size": 2020124,
+    "sha256": "259a36408bdedb082dc06b355f694ffd8a4cfae4edad6b7c88abaf61e90d3f22"
+  },
+  {
+    "packagePath": "assets/game-art/icons-v2/sheet-04.png",
+    "sourcePath": "assets/game-art/icons-v2/sheet-04.png",
+    "size": 2095699,
+    "sha256": "6c119e41ddbedefd90bcacca8e1ad77d022c8541a5cdc55edbef114661b8b10b"
+  },
+  {
+    "packagePath": "assets/game-art/icons-v2/sheet-05.png",
+    "sourcePath": "assets/game-art/icons-v2/sheet-05.png",
+    "size": 2003134,
+    "sha256": "d8e19e6d4947255c8bd77e4657d92213d9825c4167616760e502773518163430"
+  },
+  {
+    "packagePath": "assets/game-art/premium/v1/candy-bubbles.png",
+    "sourcePath": "assets/game-art/premium/v1/candy-bubbles.png",
+    "size": 1440672,
+    "sha256": "e6e62f6746d4156f985ec7beb9ff7f6a3a054d33fdc4f3e4884159c89188d2f5"
+  },
+  {
+    "packagePath": "assets/game-art/premium/v1/fruits.png",
+    "sourcePath": "assets/game-art/premium/v1/fruits.png",
+    "size": 2063839,
+    "sha256": "35fd64770dc5585676e7c4bb1c23fc4f30f2773bf0df36ff062ab7ed73a364d7"
+  },
+  {
+    "packagePath": "assets/game-art/premium/v1/manifest.json",
+    "sourcePath": "assets/game-art/premium/v1/manifest.json",
+    "size": 2711,
+    "sha256": "62ee5be7a342c456ee06b2ef1e44a5a29d00df16e842a606592c373a546e15c4"
+  },
+  {
+    "packagePath": "assets/game-art/premium/v1/materials.png",
+    "sourcePath": "assets/game-art/premium/v1/materials.png",
+    "size": 2680083,
+    "sha256": "cc8fd822515655655dd05c598732e6949cea46bb446fdef876df593b24feb4e7"
+  },
+  {
+    "packagePath": "assets/game-art/premium/v1/pieces.png",
+    "sourcePath": "assets/game-art/premium/v1/pieces.png",
+    "size": 1526748,
+    "sha256": "e82443de33cfba4d881e169fd264c50bacc1725dc81f06ccbe0a8385f52cb00a"
+  },
+  {
+    "packagePath": "assets/game-art/premium/v2/bubbles.png",
+    "sourcePath": "assets/game-art/premium/v2/bubbles.png",
+    "size": 1654312,
+    "sha256": "d4387408c5ad65984f3552767632d53c761bcc3ce63aff1ecfc23ecdb1adf3e5"
+  },
+  {
+    "packagePath": "assets/game-icons/card-zhen.png",
+    "sourcePath": "assets/game-icons/card-zhen.png",
+    "size": 304341,
+    "sha256": "72fa3406e0b59d3a51a5733076827b753da594ddbd946700f172927425ba4183"
+  },
+  {
+    "packagePath": "assets/game-icons/farm.png",
+    "sourcePath": "assets/game-icons/farm.png",
+    "size": 293366,
+    "sha256": "30520b314d85948e9d2a94fb30905d7975252327e3eb228fe505b336b51ffc6f"
+  },
+  {
+    "packagePath": "assets/game-icons/jump-down.png",
+    "sourcePath": "assets/game-icons/jump-down.png",
+    "size": 37978,
+    "sha256": "ddc4151acc0b09d8b6b231e398f0767883a1587e603ebe997d9d73a5f42f5cd2"
+  },
+  {
+    "packagePath": "assets/game-icons/jump-stand.png",
+    "sourcePath": "assets/game-icons/jump-stand.png",
+    "size": 43717,
+    "sha256": "34bb173a355076308739e039b0133d1f11c597f0b218b240ed45b9f3d0551d63"
+  },
+  {
+    "packagePath": "assets/game-icons/memory-1.jpg",
+    "sourcePath": "assets/game-icons/memory-1.jpg",
+    "size": 8807,
+    "sha256": "ff6b3d9af004067c062dabb1085455f06f06964d5795dbe80d9cfdd6085f0775"
+  },
+  {
+    "packagePath": "assets/game-icons/memory-2.jpg",
+    "sourcePath": "assets/game-icons/memory-2.jpg",
+    "size": 8786,
+    "sha256": "e8abed30673e653cba7bec4f6f4c471346af9d308b0a388c05672d5b1845b839"
+  },
+  {
+    "packagePath": "assets/game-icons/memory-3.jpg",
+    "sourcePath": "assets/game-icons/memory-3.jpg",
+    "size": 8016,
+    "sha256": "38ee06fce626ee39a47022d25301c4459ceb1d6c93038ce14100fc6e9ca7347c"
+  },
+  {
+    "packagePath": "assets/game-icons/memory-4.jpg",
+    "sourcePath": "assets/game-icons/memory-4.jpg",
+    "size": 9949,
+    "sha256": "b229a9cd4322cbaf2dc434cbc5f438b59bee0141c16a526cbcf24fa8ac870f16"
+  },
+  {
+    "packagePath": "assets/game-icons/memory-5.jpg",
+    "sourcePath": "assets/game-icons/memory-5.jpg",
+    "size": 9321,
+    "sha256": "0266d5d7c2678c7eec18d1742c9894ec5343d64b97b5b41a8c406adb8a80de2f"
+  },
+  {
+    "packagePath": "assets/game-icons/memory-6.jpg",
+    "sourcePath": "assets/game-icons/memory-6.jpg",
+    "size": 8667,
+    "sha256": "bec659f1e7d9a10d7c74deecdfd6945f400598f2b41a9a177eb4edf24979b0ba"
+  },
+  {
+    "packagePath": "assets/game-icons/memory-7.jpg",
+    "sourcePath": "assets/game-icons/memory-7.jpg",
+    "size": 8023,
+    "sha256": "ba6f702fbf79d78fe6944079542b25eda507496f8bdc1bfa644221306600e3ff"
+  },
+  {
+    "packagePath": "assets/game-icons/memory-8.jpg",
+    "sourcePath": "assets/game-icons/memory-8.jpg",
+    "size": 10402,
+    "sha256": "4d92cfd4edb8050aaa3596b28810fb16dc0efbe6e3aab942b17981bd724fedf7"
+  },
+  {
+    "packagePath": "assets/game-icons/memory-card.jpg",
+    "sourcePath": "assets/game-icons/memory-card.jpg",
+    "size": 18698,
+    "sha256": "cb70f51c437c77890271da439418e9d20ce9bcea6620befe03e73b6db06927af"
+  },
+  {
+    "packagePath": "assets/game-icons/oldmaid-back.jpg",
+    "sourcePath": "assets/game-icons/oldmaid-back.jpg",
+    "size": 14047,
+    "sha256": "3934aa94022b99215c73f52514169ba2e8434318e8fd7c91ed8b1c6ccf5843c7"
+  },
+  {
+    "packagePath": "assets/game-icons/oldmaid-card.jpg",
+    "sourcePath": "assets/game-icons/oldmaid-card.jpg",
+    "size": 7522,
+    "sha256": "3bfed406a788ec4a7948df407528c492c667283405dc123e9c03d3178bdf78a8"
+  },
+  {
+    "packagePath": "assets/game-icons/pet.png",
+    "sourcePath": "assets/game-icons/pet.png",
+    "size": 273913,
+    "sha256": "b3b9d34938ecff5d5f476a4f9fa611eb2d2a4e06eee6d3727c48e215cf7cbcc4"
+  },
+  {
+    "packagePath": "assets/game-icons/plank-stand.png",
+    "sourcePath": "assets/game-icons/plank-stand.png",
+    "size": 34404,
+    "sha256": "fcbb5b6ad3b44ef5c3271d383f7d0e29a04bfb3c789dfd8b4991af5d9d9d3b9c"
+  },
+  {
+    "packagePath": "assets/game-icons/plank-walk.png",
+    "sourcePath": "assets/game-icons/plank-walk.png",
+    "size": 40325,
+    "sha256": "829a3d2ba3e9603970e6be243f8c0f8ccdc0366c2aa7df3b87fbd71f485a42c4"
+  },
+  {
+    "packagePath": "assets/game-icons/spider-card.png",
+    "sourcePath": "assets/game-icons/spider-card.png",
+    "size": 58547,
+    "sha256": "d56a26e7e6a01fe95ed53a74c2bd98a29a55f4d63342e60864ea4f54596b3a86"
+  },
+  {
+    "packagePath": "assets/game-icons/U1.png",
+    "sourcePath": "assets/game-icons/U1.png",
+    "size": 24069,
+    "sha256": "2da64ad4bbfbe8838a12fad8e4bdb3f5d1d3e405aa54cb65b88d221023aebd8b"
+  },
+  {
+    "packagePath": "assets/game-icons/U10.png",
+    "sourcePath": "assets/game-icons/U10.png",
+    "size": 22843,
+    "sha256": "db0d3c9843c15ee46a5aa639a338553b49262b08732e89c34f5c96eb7d4e9ceb"
+  },
+  {
+    "packagePath": "assets/game-icons/U11.png",
+    "sourcePath": "assets/game-icons/U11.png",
+    "size": 20121,
+    "sha256": "53d916363bbbd73c81d85bf8da6a40a8d2c5931f99392654e450e0b41b03e0ab"
+  },
+  {
+    "packagePath": "assets/game-icons/U12.png",
+    "sourcePath": "assets/game-icons/U12.png",
+    "size": 22207,
+    "sha256": "a3e5895c30e9d2a0b0f44dec20ac4db4e9749f745d4ead60f4e95c98268ae049"
+  },
+  {
+    "packagePath": "assets/game-icons/U2.png",
+    "sourcePath": "assets/game-icons/U2.png",
+    "size": 21096,
+    "sha256": "56da4652dc4eb939442081282bf6249b694dce3032379c4faefff9fc6a20fea6"
+  },
+  {
+    "packagePath": "assets/game-icons/U3.png",
+    "sourcePath": "assets/game-icons/U3.png",
+    "size": 19031,
+    "sha256": "89c09d99b5964b211f87235ba6e306cb68263f25497837a3b708f381e9114fc9"
+  },
+  {
+    "packagePath": "assets/game-icons/U4.png",
+    "sourcePath": "assets/game-icons/U4.png",
+    "size": 19563,
+    "sha256": "bf8badf4b8c569396775532600ed5f3e78eec3ef5b7e0d2ab1dd37dd39e49bed"
+  },
+  {
+    "packagePath": "assets/game-icons/U5.png",
+    "sourcePath": "assets/game-icons/U5.png",
+    "size": 20280,
+    "sha256": "6f30fc3fbe78eafd0619179e3cd27dd434e8bfb5cb63f2c7889d55c9b0bf9c5d"
+  },
+  {
+    "packagePath": "assets/game-icons/U6.png",
+    "sourcePath": "assets/game-icons/U6.png",
+    "size": 23852,
+    "sha256": "598a2ffb311f1e163ea6e86aa25420793ecfb019917881ae80d4bebdaa71fa6f"
+  },
+  {
+    "packagePath": "assets/game-icons/U7.png",
+    "sourcePath": "assets/game-icons/U7.png",
+    "size": 20901,
+    "sha256": "926a2a8e353ef35f7a929746a78884adf13f93469ff6aaac1b97fc1e26cd358e"
+  },
+  {
+    "packagePath": "assets/game-icons/U8.png",
+    "sourcePath": "assets/game-icons/U8.png",
+    "size": 18347,
+    "sha256": "47fc3acd4c4f38fea8525a0a632125a1e20c1839e9f63c010b52a25cdf72a40c"
+  },
+  {
+    "packagePath": "assets/game-icons/U9.png",
+    "sourcePath": "assets/game-icons/U9.png",
+    "size": 19245,
+    "sha256": "9c52bf254900988a5b9e01ec44027cfbb0631e4099f3e70855d15202e7516b7e"
+  },
+  {
+    "packagePath": "assets/game-icons/wanban.png",
+    "sourcePath": "assets/game-icons/wanban.png",
+    "size": 71855,
+    "sha256": "0d1be391c68428815bbefa7910c3c991cdae46d486a09ff7ec68573da12e9fb6"
+  },
+  {
+    "packagePath": "assets/game-art/shuerte/manifest.json",
+    "sourcePath": "assets/game-art/shuerte/manifest.json",
+    "size": 828,
+    "sha256": "01c4d16d7a53987fc72bfb5e9b4aa506e43c7191470b045ebeec4584ef8aeaa8"
+  },
+  {
+    "packagePath": "assets/game-icons/shuerte.png",
+    "sourcePath": "assets/game-icons/shuerte.png",
+    "size": 1988233,
+    "sha256": "e8f5674d3becac8503818669dfb0d2709045a62ce043c761e56585a3bca48a95"
+  },
+  {
+    "packagePath": "assets/game-art/snake/manifest.json",
+    "sourcePath": "assets/game-art/snake/manifest.json",
+    "size": 869,
+    "sha256": "58836898975440c62229663bec829c53d62501bbb40dc59902ea90d3c85849b6"
+  },
+  {
+    "packagePath": "assets/game-icons/snake.jpg",
+    "sourcePath": "assets/game-icons/snake.jpg",
+    "size": 16474,
+    "sha256": "691ea3a402eb5c75f8a51164c0223b8cb4d119fe0e3203813e5b85547e4fb3ea"
+  },
+  {
+    "packagePath": "assets/game-art/spider/manifest.json",
+    "sourcePath": "assets/game-art/spider/manifest.json",
+    "size": 849,
+    "sha256": "471c612831b80200df0151d31e9fce17a98e8b670543be465374001b40e455e7"
+  },
+  {
+    "packagePath": "assets/game-icons/spider.png",
+    "sourcePath": "assets/game-icons/spider.png",
+    "size": 121373,
+    "sha256": "b5ca4e508f0a29180d0258f55850916b6bdc6d703ff39b3bb04a6e2314dcd5eb"
+  },
+  {
+    "packagePath": "assets/game-art/sudoku/manifest.json",
+    "sourcePath": "assets/game-art/sudoku/manifest.json",
+    "size": 823,
+    "sha256": "12919234ecb86d9f33ca88810e10478d68fb1dcf5a49e0368125a22f902a9d5a"
+  },
+  {
+    "packagePath": "assets/game-icons/sudoku.jpg",
+    "sourcePath": "assets/game-icons/sudoku.jpg",
+    "size": 18280,
+    "sha256": "749f12d3103f9c67ad48533fe356e471d99249c5fbc7fb28659cccc960dc0b74"
+  },
+  {
+    "packagePath": "assets/game-art/territory/manifest.json",
+    "sourcePath": "assets/game-art/territory/manifest.json",
+    "size": 815,
+    "sha256": "8d9a4b529f6c4f6fbe6b1afb126d834bd716ceee9e8a4c429d1bd8653cc09273"
+  },
+  {
+    "packagePath": "assets/game-icons/territory.jpg",
+    "sourcePath": "assets/game-icons/territory.jpg",
+    "size": 17031,
+    "sha256": "a830fc26ab6ff2e61233542f021e0c7b1e2cc057d3926abef7ec8bfffdb807da"
+  },
+  {
+    "packagePath": "assets/game-art/tetris/manifest.json",
+    "sourcePath": "assets/game-art/tetris/manifest.json",
+    "size": 799,
+    "sha256": "8eeed0f36fbec8088b06e8b632f230b25a186e791895e4a8e54f3304dcdc4048"
+  },
+  {
+    "packagePath": "assets/game-icons/tetris.png",
+    "sourcePath": "assets/game-icons/tetris.png",
+    "size": 106728,
+    "sha256": "e7808518c4612764950b4fff889a90cf11e9cf2b95f1cbd32d9df9604887de17"
+  },
+  {
+    "packagePath": "assets/game-art/tictactoe/manifest.json",
+    "sourcePath": "assets/game-art/tictactoe/manifest.json",
+    "size": 799,
+    "sha256": "67ebf2a96de313658594d85e92cb60d59349b033d6ded137e177f3a7f707f3cb"
+  },
+  {
+    "packagePath": "assets/game-icons/tictactoe.jpg",
+    "sourcePath": "assets/game-icons/tictactoe.jpg",
+    "size": 16087,
+    "sha256": "f2648b47dfabaf66e87f5349b84ce32279518031ff03032b8dbbb7602423659f"
+  },
+  {
+    "packagePath": "assets/game-art/turkey/manifest.json",
+    "sourcePath": "assets/game-art/turkey/manifest.json",
+    "size": 839,
+    "sha256": "8acc36d99f23b1fbd37395e7ef1161288af07339b2e13a571a32b43a5fb466f3"
+  },
+  {
+    "packagePath": "assets/game-icons/turkey.png",
+    "sourcePath": "assets/game-icons/turkey.png",
+    "size": 112900,
+    "sha256": "cf78890d7609dcc61f15f1cfc4cd5303ef8560e8ca83a845ae593fb1b4796c12"
+  },
+  {
+    "packagePath": "assets/game-art/uyangle/manifest.json",
+    "sourcePath": "assets/game-art/uyangle/manifest.json",
+    "size": 919,
+    "sha256": "8d3e2e033e7a163ebe57db9172b34c1061a29e3a0e6ea606b2640ebaae5ba501"
+  },
+  {
+    "packagePath": "assets/game-icons/sheep.png",
+    "sourcePath": "assets/game-icons/sheep.png",
+    "size": 131822,
+    "sha256": "358cf819dc08fe790a9fa4cc77ed3618f4d9ff0773c64cddd85cafd7480d6b3c"
+  },
+  {
+    "packagePath": "assets/game-art/watermelon/manifest.json",
+    "sourcePath": "assets/game-art/watermelon/manifest.json",
+    "size": 836,
+    "sha256": "764652b07cce9aa910b3d5b75720215858dc0dd94fb28f39d20127fb62477118"
+  },
+  {
+    "packagePath": "assets/game-icons/watermelon.png",
+    "sourcePath": "assets/game-icons/watermelon.png",
+    "size": 124062,
+    "sha256": "3629e7ce71f8bb0d1dcd45e7f363be733e9c46f921ac50dd2c48bff484e24a44"
+  },
+  {
+    "packagePath": "assets/game-art/watersort/manifest.json",
+    "sourcePath": "assets/game-art/watersort/manifest.json",
+    "size": 843,
+    "sha256": "a54ef038856216b595cf330a4ce5c19675dd4362af9e38d8deef4db8e669c76c"
+  },
+  {
+    "packagePath": "assets/game-icons/watersort.png",
+    "sourcePath": "assets/game-icons/watersort.png",
+    "size": 73662,
+    "sha256": "230d34d699b5701602c3576e90bab12d487ac547c1f28d7e85ac1505e49be325"
+  },
+  {
+    "packagePath": "assets/game-art/westernchess/manifest.json",
+    "sourcePath": "assets/game-art/westernchess/manifest.json",
+    "size": 835,
+    "sha256": "5a27b5efeb97f6630f192b9da0d6c968074534f864cf934a8550acc76a763a51"
+  },
+  {
+    "packagePath": "assets/game-icons/western_chess.png",
+    "sourcePath": "assets/game-icons/western_chess.png",
+    "size": 1978903,
+    "sha256": "3844bb9d461b5ab5fd29784b79df021e3f9a23892541ebffb494d8b81d28b759"
+  },
+  {
+    "packagePath": "assets/game-art/wordguess/manifest.json",
+    "sourcePath": "assets/game-art/wordguess/manifest.json",
+    "size": 818,
+    "sha256": "e33caf1585decd4d092ae409d7b77e585fb702ac6f1c7815eb20bf8a089e602c"
+  },
+  {
+    "packagePath": "assets/game-icons/wordguess.jpg",
+    "sourcePath": "assets/game-icons/wordguess.jpg",
+    "size": 16938,
+    "sha256": "971af4fe91d10967fc4438c257d484a4abf37378df8ddd7fbc21aea7cb77d7a8"
+  },
+  {
+    "packagePath": "assets/game-art/zuma/classic-v2/mouth-motion.png",
+    "sourcePath": "assets/game-art/zuma/classic-v2/mouth-motion.png",
+    "size": 1874786,
+    "sha256": "91b073928b2796dc30bf130b87cffdec55d9e4007d9129e52d2e255011f6f645"
+  },
+  {
+    "packagePath": "assets/game-art/zuma/classic-v2/temple-background.png",
+    "sourcePath": "assets/game-art/zuma/classic-v2/temple-background.png",
+    "size": 3787694,
+    "sha256": "21267f00a5cfcc79f5b22a23016991f65c0a1d6d18cf290eb73f32417a0a066b"
+  },
+  {
+    "packagePath": "assets/game-art/zuma/classic-v2/temple-sprites.png",
+    "sourcePath": "assets/game-art/zuma/classic-v2/temple-sprites.png",
+    "size": 2226513,
+    "sha256": "57117b7ff9bfe45d5bf988cf0930386378ec78d35243dd89086f191641d4c98f"
+  },
+  {
+    "packagePath": "assets/game-art/zuma/classic-v2/temple-ui.png",
+    "sourcePath": "assets/game-art/zuma/classic-v2/temple-ui.png",
+    "size": 2511098,
+    "sha256": "688f624aeedd94cafb5726e772be028e970d73e40102d45247c1219f82eb7252"
+  },
+  {
+    "packagePath": "assets/game-art/zuma/manifest.json",
+    "sourcePath": "assets/game-art/zuma/manifest.json",
+    "size": 4682,
+    "sha256": "8a014fac89af5c1ba0bb761205b5254a74ae1e9a958eb9d10d4b686564b4412b"
+  },
+  {
+    "packagePath": "assets/game-icons/zuma.png",
+    "sourcePath": "assets/game-icons/zuma.png",
+    "size": 100659,
+    "sha256": "aec07348256f57771e09c56be3b641fc9d0cbea15944e40779fbea1d4b75f102"
+  },
+  {
+    "packagePath": "licenses/space-cadet/EMSCRIPTEN-LICENSE.txt",
+    "sourcePath": "tools/space-cadet/EMSCRIPTEN-LICENSE.txt",
+    "size": 5093,
+    "sha256": "620a78084fc7ca97c0b5dea9abf891f3ffcadfdbf305276f099c9c4e12fc1d86"
+  },
+  {
+    "packagePath": "licenses/space-cadet/ENGINE-LICENSE.txt",
+    "sourcePath": "tools/space-cadet/ENGINE-LICENSE.txt",
+    "size": 1079,
+    "sha256": "db6fc129469da7e295ddcd27bb4b7cc05b35d1bb89c460a33250e23bf004dc96"
+  },
+  {
+    "packagePath": "licenses/space-cadet/OPEN-CADET-CC0.txt",
+    "sourcePath": "tools/space-cadet/OPEN-CADET-CC0.txt",
+    "size": 755,
+    "sha256": "b63ba4bbec694f53045b3c5b09fbdde07731f4456541e3736cd1d0555f9fce89"
+  },
+  {
+    "packagePath": "licenses/space-cadet/OPEN-CADET-NOTICE.md",
+    "sourcePath": "tools/space-cadet/OPEN-CADET-NOTICE.md",
+    "size": 2568,
+    "sha256": "6183f3cce3a9d6130480f03caa27cde4fcf6fb5e9e891ff2f864b8eeb67032b8"
+  },
+  {
+    "packagePath": "licenses/space-cadet/SDL2-LICENSE.txt",
+    "sourcePath": "tools/space-cadet/SDL2-LICENSE.txt",
+    "size": 884,
+    "sha256": "9b9e1764f06701bcf7ce21e942c682d5921ba0900c6fca760321b1c8837a9662"
+  },
+  {
+    "packagePath": "licenses/space-cadet/SDL2-MIXER-LICENSE.txt",
+    "sourcePath": "tools/space-cadet/SDL2-MIXER-LICENSE.txt",
+    "size": 878,
+    "sha256": "a0e8ce06504966e45088ee1cc7583cc8af9aac615d4cf56d47d847da9cb15139"
+  },
+  {
+    "packagePath": "src/companion/index.js",
+    "sourcePath": "src/companion/index.js",
+    "size": 296,
+    "sha256": "80dfd9e89f8c4372028ca1cae8a6469b4040630821285b434ead29401e81e381"
+  },
+  {
+    "packagePath": "src/core/metadata.js",
+    "sourcePath": "src/core/metadata.js",
+    "size": 266,
+    "sha256": "630d30bfd12cd04b08d8d169d2e6513cbad7156dda1cf55c9583295211cf780a"
+  },
+  {
+    "packagePath": "src/core/sillytavern.js",
+    "sourcePath": "src/core/sillytavern.js",
+    "size": 1275,
+    "sha256": "2a912719cc762920dd72363cc3a0d73d9dd330165d21b00e33c1c4c7d9093b20"
+  },
+  {
+    "packagePath": "src/games/index.js",
+    "sourcePath": "src/games/index.js",
+    "size": 309,
+    "sha256": "611ab5b126eb94d302af1a2807eb917e64cd1e26d990a5d9373e0d1e3bf9ab5b"
+  },
+  {
+    "packagePath": "src/games/plugins/README.md",
+    "sourcePath": "src/games/plugins/README.md",
+    "size": 3743,
+    "sha256": "acfe23d28a9ee0d2f2ef31d6b78df8c9e5b4a6efe2341364a4886bda04a6cee6"
+  },
+  {
+    "packagePath": "src/games/plugins/registry.js",
+    "sourcePath": "src/games/plugins/registry.js",
+    "size": 2363,
+    "sha256": "fa5912975f407be1617f50e1277c7536f593cecccbb59f6b95e4cbdf5fc78bef"
+  },
+  {
+    "packagePath": "src/games/shared/demand-renderer.js",
+    "sourcePath": "src/games/shared/demand-renderer.js",
+    "size": 1536,
+    "sha256": "5b685ad8ed37eb7f4aa5e9a5f89e40df0f3e243d79ada3fa3a5f9bf7e83ce22e"
+  },
+  {
+    "packagePath": "src/games/shared/webgl-surface.js",
+    "sourcePath": "src/games/shared/webgl-surface.js",
+    "size": 8896,
+    "sha256": "6a96b12427ace36293ac3c5f7a9bf4dbd9f5bcd21a5a53aa2578c0ab351b04b6"
+  },
+  {
+    "packagePath": "src/runtime/game_generation_prompt.txt",
+    "sourcePath": "src/runtime/game_generation_prompt.txt",
+    "size": 8320,
+    "sha256": "853719ca93524d1babd4c93c6a7816f937397bdd529807b01b82222e72be2c85"
+  },
+  {
+    "packagePath": "src/runtime/wanban-app.js",
+    "sourcePath": "src/runtime/wanban-app.js",
+    "size": 1009106,
+    "sha256": "77d07cd443c92ea4c9f458497c0e8451e7c2c1354f626a5fef6e2fc3ddd9695c"
+  },
+  {
+    "packagePath": "src/runtime/wanban-prompts.js",
+    "sourcePath": "src/runtime/wanban-prompts.js",
+    "size": 37930,
+    "sha256": "d6e43bd421fac6d0ebf3e50d569bc4be3c636d141761fbad65b00f3516e7cb3a"
+  },
+  {
+    "packagePath": "src/runtime/wanban-prompts.txt",
+    "sourcePath": "src/runtime/wanban-prompts.txt",
+    "size": 11688,
+    "sha256": "256718cfb536465efef4be8928dc9753cb4c8dafdf66fac1e2d34211d3348b01"
+  },
+  {
+    "packagePath": "src/runtime/wanban-wordguess-bank.txt",
+    "sourcePath": "src/runtime/wanban-wordguess-bank.txt",
+    "size": 195517,
+    "sha256": "2d737cf5c66084f489d7563241e2e1ef549e885881e077e986ff46338cd2474f"
+  },
+  {
+    "packagePath": "src/ui/index.js",
+    "sourcePath": "src/ui/index.js",
+    "size": 319,
+    "sha256": "c721000805cd7b8f14b8ea7b9c56636941172cad57c089a5515952b39ca6d444"
+  },
+  {
+    "packagePath": "src/utils/index.js",
+    "sourcePath": "src/utils/index.js",
+    "size": 300,
+    "sha256": "be555e0ecfc634abd699f33510084caabb691bfa9faaf89c3d5f73ac45bd4491"
+  },
+  {
+    "packagePath": "src/world/index.js",
+    "sourcePath": "src/world/index.js",
+    "size": 310,
+    "sha256": "032d7d4afc9e8e1c14405eb1eafae5760d69fac273993fbdca29644f9c080c90"
+  },
+  {
+    "packagePath": "standalone/app-info.js",
+    "sourcePath": "standalone/app-info.js",
+    "size": 3809,
+    "sha256": "14be55c189629b9a640c9e2a6dd5f145a7e66b3656d0d1f7c4c7eeb1ddac6fdb"
+  },
+  {
+    "packagePath": "standalone/app.css",
+    "sourcePath": "standalone/app.css",
+    "size": 20951,
+    "sha256": "183e18d051080a6395b7a81e19f22218de3f0406bde67d9d054e874a3d73a145"
+  },
+  {
+    "packagePath": "standalone/app.js",
+    "sourcePath": "standalone/app.js",
+    "size": 3371,
+    "sha256": "91bc7301495aff83d8e6611031230368783416fcadf90394cf2911137d7315d2"
+  },
+  {
+    "packagePath": "standalone/capabilities.js",
+    "sourcePath": "standalone/capabilities.js",
+    "size": 1221,
+    "sha256": "c42ffe8aaa7a29abf0a1f0bf73f810f1cc88c16ce02ce18db5b6e00d6f03a920"
+  },
+  {
+    "packagePath": "standalone/catalog-preferences.js",
+    "sourcePath": "standalone/catalog-preferences.js",
+    "size": 1601,
+    "sha256": "2eaa91634770eb227c2b137cf9c7c5984faada2f443e2c4d5c9bd8360381b4bc"
+  },
+  {
+    "packagePath": "standalone/catalog-view.js",
+    "sourcePath": "standalone/catalog-view.js",
+    "size": 12709,
+    "sha256": "a4a2b833180bc971389b99b4e1478919d55de2adf798019f037c9cdc1e43a4cf"
+  },
+  {
+    "packagePath": "standalone/content-state.js",
+    "sourcePath": "standalone/content-state.js",
+    "size": 3432,
+    "sha256": "61a79385bf450102121a6ebd95d449a90cebb2e8070e195bd441ed275d7fa455"
+  },
+  {
+    "packagePath": "standalone/game-art.css",
+    "sourcePath": "standalone/game-art.css",
+    "size": 9757,
+    "sha256": "b1589a73c4a807755228d0fff614105b8decb48bbb4811ccd90ce271b783355b"
+  },
+  {
+    "packagePath": "standalone/game-art.js",
+    "sourcePath": "standalone/game-art.js",
+    "size": 6184,
+    "sha256": "bdb26597daf34589b40cc1b0592b02efbe55644e4c18560b8823a1c9b0b2ec61"
+  },
+  {
+    "packagePath": "standalone/game-icons.js",
+    "sourcePath": "standalone/game-icons.js",
+    "size": 12589,
+    "sha256": "6d03293715acd03810ef97b2d7602f8e8d4961fb6e6c58775720ed1ce9b40074"
+  },
+  {
+    "packagePath": "standalone/game-updates.js",
+    "sourcePath": "standalone/game-updates.js",
+    "size": 7971,
+    "sha256": "1d0aca8f7de996775c51eebe0539843230bce35c6142dbd6bb097cce72319169"
+  },
+  {
+    "packagePath": "standalone/i18n.js",
+    "sourcePath": "standalone/i18n.js",
+    "size": 15524,
+    "sha256": "c0be6ee2ec401128dd68fc382af35c7ecea031367de7174f5a50eda6c43e3692"
+  },
+  {
+    "packagePath": "standalone/index.html",
+    "sourcePath": "standalone/index.html",
+    "size": 988,
+    "sha256": "6050ce561fab36b3343a8a90a786849f1c84aaaad430e46096b3ec934d992902"
+  },
+  {
+    "packagePath": "standalone/licenses/GeckoView-NOTICES.txt",
+    "sourcePath": "standalone/licenses/GeckoView-NOTICES.txt",
+    "size": 233415,
+    "sha256": "dffe035b3f860f44d8e9b212307d73c8024d394834cc3829aa904aefbc35860f"
+  },
+  {
+    "packagePath": "standalone/licenses/GeckoView-PROVENANCE.json",
+    "sourcePath": "standalone/licenses/GeckoView-PROVENANCE.json",
+    "size": 1092,
+    "sha256": "e8082816c067b875176446e2b8ff6a25168684937af61e768fedf57a745dcd49"
+  },
+  {
+    "packagePath": "standalone/licenses/GeckoView-SOURCE.txt",
+    "sourcePath": "standalone/licenses/GeckoView-SOURCE.txt",
+    "size": 1800,
+    "sha256": "7b671b028f7d12b7377f02c2ccc3bff4c23e5593c2efb76667b7dfa7658441df"
+  },
+  {
+    "packagePath": "standalone/licenses.js",
+    "sourcePath": "standalone/licenses.js",
+    "size": 890,
+    "sha256": "cada20a6d2066ad605292f97e9dd0af8a2b6a496ed2db74a2c873b2f235edac1"
+  },
+  {
+    "packagePath": "standalone/performance.js",
+    "sourcePath": "standalone/performance.js",
+    "size": 5690,
+    "sha256": "51b30b4b1c6956b547f3af59900f53f4098aceeb3a5f53216610e0e65769d6da"
+  },
+  {
+    "packagePath": "style.css",
+    "sourcePath": "style.css",
+    "size": 176285,
+    "sha256": "b0f64df119fe61e96716f03ec5111be199a5982c979766a84c46dd71502203ae"
+  },
+  {
+    "packagePath": "src/games/plugins/blackjack/index.js",
+    "sourcePath": "src/games/plugins/blackjack/index.js",
+    "size": 24307,
+    "sha256": "00b711e02d9f5afd941b2720af9eb686105d5d6b3156b515eb924e0c858fd1bf"
+  },
+  {
+    "packagePath": "src/games/plugins/bombnumber/index.js",
+    "sourcePath": "src/games/plugins/bombnumber/index.js",
+    "size": 6328,
+    "sha256": "2e790b3ca39903793cbc597566a9d24d06d10170032214925e3c36521e53d77f"
+  },
+  {
+    "packagePath": "src/games/plugins/chinesechess/index.js",
+    "sourcePath": "src/games/plugins/chinesechess/index.js",
+    "size": 18195,
+    "sha256": "a43aa6685ace9edee06d8fe56acfa6c86a6ce4a3fb2794089fdb82f991b842fd"
+  },
+  {
+    "packagePath": "src/games/plugins/connect4d/index.js",
+    "sourcePath": "src/games/plugins/connect4d/index.js",
+    "size": 11940,
+    "sha256": "236599e641d6c0033ad9ce3a0fadc84348b9a11422c529c4a31e50bcc41bab30"
+  },
+  {
+    "packagePath": "src/games/plugins/draughts/index.js",
+    "sourcePath": "src/games/plugins/draughts/index.js",
+    "size": 23144,
+    "sha256": "82bcaf2c5014e2f0456c8f337bb7c2e6bf1f70034bdfb11dddddb4d506155884"
+  },
+  {
+    "packagePath": "src/games/freecell.js",
+    "sourcePath": "src/games/freecell.js",
+    "size": 25699,
+    "sha256": "c7cda681e3cc2f13f51f6138096645bf2507bbf33969618578e4a3950a250c12"
+  },
+  {
+    "packagePath": "src/games/plugins/freecell/index.js",
+    "sourcePath": "src/games/plugins/freecell/index.js",
+    "size": 321,
+    "sha256": "cdab33b75db81b463c5b9cd8f9364364b6d176579612468d228b5792e5bec4a6"
+  },
+  {
+    "packagePath": "src/games/plugins/game1010/index.js",
+    "sourcePath": "src/games/plugins/game1010/index.js",
+    "size": 20092,
+    "sha256": "8d7a5c5e6759ba9c502e2bbbdd166bdf13c7961e59efe66ea74bd946b128b311"
+  },
+  {
+    "packagePath": "src/games/plugins/game2048/index.js",
+    "sourcePath": "src/games/plugins/game2048/index.js",
+    "size": 7786,
+    "sha256": "732cfa37862e18d6ddcb0fdcb053d9691048e829545bf625f007ea1e2d5ef2e9"
+  },
+  {
+    "packagePath": "src/games/plugins/gomoku/index.js",
+    "sourcePath": "src/games/plugins/gomoku/index.js",
+    "size": 18909,
+    "sha256": "b9615f0f6f5d62352621eff18f4018a78b3ab815911ccebbbdc4f110b3f2aee9"
+  },
+  {
+    "packagePath": "src/games/plugins/guessnumber/index.js",
+    "sourcePath": "src/games/plugins/guessnumber/index.js",
+    "size": 3929,
+    "sha256": "6121db40241ae26ffad9c43315dba929e35d6074a82a34b1725608bbfc0332fd"
+  },
+  {
+    "packagePath": "src/games/plugins/jump/index.js",
+    "sourcePath": "src/games/plugins/jump/index.js",
+    "size": 21320,
+    "sha256": "a54f34a9e10510f678b9598030083da27c25ac785f2c37f6b932dabc0d17ee8a"
+  },
+  {
+    "packagePath": "src/games/plugins/linklink/index.js",
+    "sourcePath": "src/games/plugins/linklink/index.js",
+    "size": 27780,
+    "sha256": "cc3bc0f7839d1a7bdb6b44ce7c2be23295277f0510ca4ffc9481b168d18755a8"
+  },
+  {
+    "packagePath": "src/games/plugins/ludo/index.js",
+    "sourcePath": "src/games/plugins/ludo/index.js",
+    "size": 16139,
+    "sha256": "a958e63493c79595c35df01a3d824a5eeecce7d739f29a5133adad971b93d35c"
+  },
+  {
+    "packagePath": "src/games/match3.js",
+    "sourcePath": "src/games/match3.js",
+    "size": 40569,
+    "sha256": "793b88763cad8cb95ab2260265a5cc0ee5994f9b36d4de90ec299e56cf1141c2"
+  },
+  {
+    "packagePath": "src/games/plugins/match3/index.js",
+    "sourcePath": "src/games/plugins/match3/index.js",
+    "size": 313,
+    "sha256": "f2858f7d25dbb9b6ee311de59d536e62526e8f3ab1b9045f47feca54bd09fbe5"
+  },
+  {
+    "packagePath": "src/games/plugins/memory/index.js",
+    "sourcePath": "src/games/plugins/memory/index.js",
+    "size": 4047,
+    "sha256": "a91315f7261f0fdb56eceb0d699d9bdd0419ad5a948fcb906af6cabccd7fba26"
+  },
+  {
+    "packagePath": "src/games/plugins/minesweeper/index.js",
+    "sourcePath": "src/games/plugins/minesweeper/index.js",
+    "size": 10628,
+    "sha256": "b0708b8c84ed255a821d5122bb777b7e615ea312dbd6c681ef14fe7b4fbb9442"
+  },
+  {
+    "packagePath": "src/games/plugins/oldmaid/index.js",
+    "sourcePath": "src/games/plugins/oldmaid/index.js",
+    "size": 8896,
+    "sha256": "f10c6b6f8790047345a0ef5200b6834fc4dcb0124a812e2d3d7ca47c83345a01"
+  },
+  {
+    "packagePath": "src/games/plugins/paopao/bubble-art.js",
+    "sourcePath": "src/games/plugins/paopao/bubble-art.js",
+    "size": 5040,
+    "sha256": "5b26956032b8fde4b46c1a520d3eb9f96f04e76a5dee09a962da9048f19b5537"
+  },
+  {
+    "packagePath": "src/games/plugins/paopao/index.js",
+    "sourcePath": "src/games/plugins/paopao/index.js",
+    "size": 23485,
+    "sha256": "a8929f4d00a92b48e0101124af474ef2bfdd52c8be80e02226b27204c1068e2d"
+  },
+  {
+    "packagePath": "assets/space-cadet/display.js",
+    "sourcePath": "assets/space-cadet/display.js",
+    "size": 5112,
+    "sha256": "58cb0a97fd61338dbe4b80c18e7bffe5846c4cc899e6c245ea08e5da8e946c23"
+  },
+  {
+    "packagePath": "assets/space-cadet/host.html",
+    "sourcePath": "assets/space-cadet/host.html",
+    "size": 668,
+    "sha256": "b4278b6a4a92093b8b3f2c89fe930e8c696a5e6a386a3b8d18db44ca99d329a6"
+  },
+  {
+    "packagePath": "assets/space-cadet/host.js",
+    "sourcePath": "assets/space-cadet/host.js",
+    "size": 4901,
+    "sha256": "c1c7bb9ba35ed81a9212609ed99a5f962e1c791ce0ff7ab973c58e6ab94f7573"
+  },
+  {
+    "packagePath": "assets/space-cadet/space-cadet.data",
+    "sourcePath": "assets/space-cadet/space-cadet.data",
+    "size": 2118249,
+    "sha256": "3b49400d576d5d6d9dd8c75dde9293eb75229a533afac37c632cb4dd6f1de153"
+  },
+  {
+    "packagePath": "assets/space-cadet/space-cadet.js",
+    "sourcePath": "assets/space-cadet/space-cadet.js",
+    "size": 198671,
+    "sha256": "d8c3df77abe322f44b00799ed1b64abeef9bce8d67b3974a90f025484b6c007c"
+  },
+  {
+    "packagePath": "assets/space-cadet/space-cadet.wasm",
+    "sourcePath": "assets/space-cadet/space-cadet.wasm",
+    "size": 1387433,
+    "sha256": "0a5eb51438485f229d8261550dac7b128cb8bab88e45c16bd6b34cf96900a9a3"
+  },
+  {
+    "packagePath": "src/games/plugins/pinball/index.js",
+    "sourcePath": "src/games/plugins/pinball/index.js",
+    "size": 327,
+    "sha256": "b80e53696ed61199fa678beedf19b732d04dfe5e81918f111961488886699921"
+  },
+  {
+    "packagePath": "src/games/space-cadet-data.js",
+    "sourcePath": "src/games/space-cadet-data.js",
+    "size": 7028,
+    "sha256": "ff6bfb00d6805ce740b0c4ca388aee862c948a55d34556c3868a4a71b22adf16"
+  },
+  {
+    "packagePath": "src/games/space-cadet.js",
+    "sourcePath": "src/games/space-cadet.js",
+    "size": 18893,
+    "sha256": "0f49ad1d81bffa2ce547ae2395dd3a67cb082f3d21dacd2aedeb4801e0f08517"
+  },
+  {
+    "packagePath": "src/games/plugins/plank/index.js",
+    "sourcePath": "src/games/plugins/plank/index.js",
+    "size": 15611,
+    "sha256": "926d5a95e914d71c7e5a202350907318a57f958ae3f1f3be2bdaab19563c2025"
+  },
+  {
+    "packagePath": "src/games/plugins/popstar/index.js",
+    "sourcePath": "src/games/plugins/popstar/index.js",
+    "size": 23989,
+    "sha256": "b7e1059aee0db9311e699e51bb69ccfdfb20166844cbeb66e7b388c00af7e8e2"
+  },
+  {
+    "packagePath": "src/games/plugins/reversi/index.js",
+    "sourcePath": "src/games/plugins/reversi/index.js",
+    "size": 9387,
+    "sha256": "db35ee4db9bc96b4c8708288fe22d11888df55e61ecebbe5a484fcfb7eed3a10"
+  },
+  {
+    "packagePath": "src/games/plugins/screw/index.js",
+    "sourcePath": "src/games/plugins/screw/index.js",
+    "size": 36601,
+    "sha256": "b032fe5f76103ca6a35e6f77789eba3ec743870868d13c0d0ec1dfac0f811bfa"
+  },
+  {
+    "packagePath": "src/games/plugins/shuerte/index.js",
+    "sourcePath": "src/games/plugins/shuerte/index.js",
+    "size": 10156,
+    "sha256": "b1ab9b646e51b0e5d823fd14c6a0458876c2c46995781ecbc1776cee44dc8e8c"
+  },
+  {
+    "packagePath": "src/games/plugins/snake/arena-controller.js",
+    "sourcePath": "src/games/plugins/snake/arena-controller.js",
+    "size": 17764,
+    "sha256": "0da3efc8993fedc25ccc963b279064b5ae061b73b0f54381f431e8792809d743"
+  },
+  {
+    "packagePath": "src/games/plugins/snake/arena-engine.js",
+    "sourcePath": "src/games/plugins/snake/arena-engine.js",
+    "size": 9429,
+    "sha256": "06280321a87ead6d5431a8c3d4f14cb19a4b99315fcf4ccfac5785e35e9f7bbd"
+  },
+  {
+    "packagePath": "src/games/plugins/snake/arena-renderer.js",
+    "sourcePath": "src/games/plugins/snake/arena-renderer.js",
+    "size": 4546,
+    "sha256": "d156343d8be743a238f05f7be58c64ad5e598bda640badf04c75afb24089cce6"
+  },
+  {
+    "packagePath": "src/games/plugins/snake/arena-save.js",
+    "sourcePath": "src/games/plugins/snake/arena-save.js",
+    "size": 567,
+    "sha256": "6192ff7e0175a0b556ba335f5ef6823bd1b8b0f2a6c14f765e161493a011cd56"
+  },
+  {
+    "packagePath": "src/games/plugins/snake/classic.js",
+    "sourcePath": "src/games/plugins/snake/classic.js",
+    "size": 26500,
+    "sha256": "1ab09003a61f0a70213933209c15a1a3296786ad88219c83d95df2af7196a263"
+  },
+  {
+    "packagePath": "src/games/plugins/snake/index.js",
+    "sourcePath": "src/games/plugins/snake/index.js",
+    "size": 2514,
+    "sha256": "7a1ce303bbd50a01a4623dd5e984a9e5049624ef51df3f85b51936da9e4034f8"
+  },
+  {
+    "packagePath": "src/games/plugins/spider/index.js",
+    "sourcePath": "src/games/plugins/spider/index.js",
+    "size": 31193,
+    "sha256": "cc8f9f0b577787e4fb3ba85e6089a2a08f38bc854aba5aff067074cec50f6761"
+  },
+  {
+    "packagePath": "src/games/plugins/sudoku/index.js",
+    "sourcePath": "src/games/plugins/sudoku/index.js",
+    "size": 18450,
+    "sha256": "96fdb389a53ca7a7b7f332d39d8077daba9a67c78f6693b002487a2219f1acd6"
+  },
+  {
+    "packagePath": "src/games/plugins/sudoku/labels.js",
+    "sourcePath": "src/games/plugins/sudoku/labels.js",
+    "size": 19570,
+    "sha256": "f90306b3cc7c2bf23019e0d6e0e9daebb00e655e0f812a7083867c08f07d684e"
+  },
+  {
+    "packagePath": "src/games/plugins/sudoku/model.js",
+    "sourcePath": "src/games/plugins/sudoku/model.js",
+    "size": 21378,
+    "sha256": "5005b52c7565bed356b1ba7de371426b094d2f17cf0964dae68b6d00628a15cd"
+  },
+  {
+    "packagePath": "src/games/plugins/sudoku/styles.js",
+    "sourcePath": "src/games/plugins/sudoku/styles.js",
+    "size": 9947,
+    "sha256": "a0b6f43e28b70792c0fd5fbdec33b33d2e2803a4353bd1533d7c1c8904858ecd"
+  },
+  {
+    "packagePath": "src/games/plugins/territory/index.js",
+    "sourcePath": "src/games/plugins/territory/index.js",
+    "size": 10033,
+    "sha256": "41548914691dc4240028aaf3e29fa2fad0b70508ff4f2f34da3f0c61cb6d999e"
+  },
+  {
+    "packagePath": "src/games/plugins/tetris/battle-controller.js",
+    "sourcePath": "src/games/plugins/tetris/battle-controller.js",
+    "size": 24216,
+    "sha256": "917ed1278ab3c7374e84b129d06c26012fbab2875c1ef1e11ad55d8d36893366"
+  },
+  {
+    "packagePath": "src/games/plugins/tetris/battle-engine.js",
+    "sourcePath": "src/games/plugins/tetris/battle-engine.js",
+    "size": 8854,
+    "sha256": "6958873d96deb50f2df314fbca4a7ca1bab7d3de68afe62e3899ea0317e0b635"
+  },
+  {
+    "packagePath": "src/games/plugins/tetris/battle-renderer.js",
+    "sourcePath": "src/games/plugins/tetris/battle-renderer.js",
+    "size": 4993,
+    "sha256": "02bb60e06813792997ec5a6b2a9e9dc67b815de60d18df3db8de02821b16fb4f"
+  },
+  {
+    "packagePath": "src/games/plugins/tetris/classic.js",
+    "sourcePath": "src/games/plugins/tetris/classic.js",
+    "size": 10470,
+    "sha256": "582ae0fac96445b1d0805e049dd3fb90914a1c0e32e6abf87ee5a270f4a86abc"
+  },
+  {
+    "packagePath": "src/games/plugins/tetris/index.js",
+    "sourcePath": "src/games/plugins/tetris/index.js",
+    "size": 2583,
+    "sha256": "422fa915583c57bf58ff9befcfdee2f2aa71cc1cdaf0c400b8ee9db9f9669aaa"
+  },
+  {
+    "packagePath": "src/games/plugins/tictactoe/index.js",
+    "sourcePath": "src/games/plugins/tictactoe/index.js",
+    "size": 5249,
+    "sha256": "8b18c8a9a253bfc1b3bb8d1d7cbefdae88daa31b76730a1e627ad76e4aacbea7"
+  },
+  {
+    "packagePath": "src/games/plugins/turkey/index.js",
+    "sourcePath": "src/games/plugins/turkey/index.js",
+    "size": 17940,
+    "sha256": "30e7684b3825ce6fea1b85bf4ad7d61ff1d073edbdd41413b673f13b88666507"
+  },
+  {
+    "packagePath": "src/games/plugins/uyangle/index.js",
+    "sourcePath": "src/games/plugins/uyangle/index.js",
+    "size": 20022,
+    "sha256": "1d49e672ed7bc1ad2643a8f729dfa65d85417a0909faad6e88b4522298941334"
+  },
+  {
+    "packagePath": "src/games/plugins/watermelon/index.js",
+    "sourcePath": "src/games/plugins/watermelon/index.js",
+    "size": 19559,
+    "sha256": "12ea5a5a8b4bf012c588787967527d706bfec9398d4266dbd0f04f32b306b103"
+  },
+  {
+    "packagePath": "src/games/plugins/watersort/index.js",
+    "sourcePath": "src/games/plugins/watersort/index.js",
+    "size": 326,
+    "sha256": "4ad6d0e7d88e68e2f4a9a4157a239d72c33e7bc5254bf0f95e2162529645d458"
+  },
+  {
+    "packagePath": "src/games/water-sort.js",
+    "sourcePath": "src/games/water-sort.js",
+    "size": 25494,
+    "sha256": "0fc498adc1bcf995b3c8000573455b0227ca9cd345fe225c0ff2e6845c71a24f"
+  },
+  {
+    "packagePath": "src/games/plugins/westernchess/index.js",
+    "sourcePath": "src/games/plugins/westernchess/index.js",
+    "size": 21352,
+    "sha256": "e435ef1e519af9e6c2139d41033e7b087c1984bcd14354a29d4c4a22b241c104"
+  },
+  {
+    "packagePath": "src/games/plugins/wordguess/index.js",
+    "sourcePath": "src/games/plugins/wordguess/index.js",
+    "size": 13165,
+    "sha256": "378963e13d367f96359b8b1ed9a21817dc004d235f0f86c6a14605b1e8927227"
+  },
+  {
+    "packagePath": "src/games/plugins/zuma/engine.js",
+    "sourcePath": "src/games/plugins/zuma/engine.js",
+    "size": 27972,
+    "sha256": "0e422016210ec8d1a12be6f8e16f1484b3146fc94962d33c55256e413a67a2d5"
+  },
+  {
+    "packagePath": "src/games/plugins/zuma/index.js",
+    "sourcePath": "src/games/plugins/zuma/index.js",
+    "size": 305,
+    "sha256": "5299bbbe64cf97dfb6220a8d6e42bfcabbc87d3b76ef1ad8c6c43cba5783893b"
+  },
+  {
+    "packagePath": "src/games/plugins/zuma/intro-motion.js",
+    "sourcePath": "src/games/plugins/zuma/intro-motion.js",
+    "size": 1618,
+    "sha256": "df647da880a2d73e1ed03e86a05071d93b4de2c0a672059700a5fed5b1a9ac78"
+  },
+  {
+    "packagePath": "src/games/plugins/zuma/labels.js",
+    "sourcePath": "src/games/plugins/zuma/labels.js",
+    "size": 7392,
+    "sha256": "b2b0fec24736054c089e55ff8201d6b70e6205c45c9741d035d228a2dac2e788"
+  },
+  {
+    "packagePath": "src/games/plugins/zuma/marble-gl.js",
+    "sourcePath": "src/games/plugins/zuma/marble-gl.js",
+    "size": 4956,
+    "sha256": "5b89e6f0da1e9c3bfd57fa1a75adc00e7aca4f910e2bf353e9b4cdb70095a328"
+  },
+  {
+    "packagePath": "src/games/plugins/zuma/save.js",
+    "sourcePath": "src/games/plugins/zuma/save.js",
+    "size": 3180,
+    "sha256": "f5a65d506dc82f7675cf691707ab18e153504e4d3785ef3f878219ab2f299212"
+  },
+  {
+    "packagePath": "src/games/plugins/zuma/view.js",
+    "sourcePath": "src/games/plugins/zuma/view.js",
+    "size": 38447,
+    "sha256": "9acfd4ad4513156aed8c78bc08123522b6f4bbd804cff63f3f5719363416b714"
+  },
+  {
+    "packagePath": "src/games/zuma.js",
+    "sourcePath": "src/games/zuma.js",
+    "size": 3276,
+    "sha256": "8e84adb111b4431a857b9c167d6623d18018d378fb7f40b5f0ff6d7fe7dee085"
+  },
+  {
+    "packagePath": "locales/en.json",
+    "sourcePath": "locales/en.json",
+    "size": 35764,
+    "sha256": "d1570f1bef37d4e569f75e0e6a6e887c4156fca96f3a2e160eafd7127425d0fb"
+  },
+  {
+    "packagePath": "locales/ja.json",
+    "sourcePath": "locales/ja.json",
+    "size": 41459,
+    "sha256": "26c89130c15588e31b173f466d02555d4e9e91629ba0f9c65c992671565d2410"
+  },
+  {
+    "packagePath": "locales/ko.json",
+    "sourcePath": "locales/ko.json",
+    "size": 40412,
+    "sha256": "d32cfb27652d458e7b98f7e01b9f94072eb8613419b71d4b44b27e444a02685c"
+  },
+  {
+    "packagePath": "locales/zh-CN.json",
+    "sourcePath": "locales/zh-CN.json",
+    "size": 38998,
+    "sha256": "2aa90cf21499763bb618a3876ed8a6e20b23365bc0faed38d3fa609b375e1007"
+  },
+  {
+    "packagePath": "locales/zh-TW.json",
+    "sourcePath": "locales/zh-TW.json",
+    "size": 39045,
+    "sha256": "7479d8b19c0e9d34679a5856cf664cb17eef4e7b98bd3255f2324bb8dfa8dd0f"
+  }
+]

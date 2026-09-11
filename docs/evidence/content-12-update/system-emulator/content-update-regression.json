@@ -1,0 +1,93 @@
+{
+  "passed": true,
+  "activationOnly": true,
+  "testedAt": "2026-09-11T13:57:57.747Z",
+  "checks": [
+    {
+      "check": "real GitHub signed manifest accepted",
+      "repository": "JackLee992/USER_HOUSE_GAME_PACKS",
+      "oldId": "87b9f721b7e97b6c4dae93dd3761aa18c5e31bed6809f569bfd1e7e471f1a731",
+      "newId": "cef4a54ce78eb7419d8389590208ff740010fa8ed6a60fa70dc0fb61cf125be2",
+      "changed": [
+        {
+          "id": "core",
+          "kind": "core",
+          "version": "1.3.2",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-12/core-1.3.2.zip",
+          "sha256": "5f43d5ef753bbf8289aecb1000f7060b5cd16dac5b0c4051bbd0760c305a958b",
+          "size": 437018
+        },
+        {
+          "id": "game.freecell",
+          "kind": "game",
+          "version": "1.0.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-11/game.freecell-1.0.1.zip",
+          "sha256": "2000c1fe3b155f5418226a3c16394ca02cde2b87e050b8dbabf09b0c69601af0",
+          "size": 8861
+        },
+        {
+          "id": "game.snake",
+          "kind": "game",
+          "version": "1.2.1",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-12/game.snake-1.2.1.zip",
+          "sha256": "17230260bd573f5500b15ca25d674f904f587ec419e0ff812df7db89b4f05b5a",
+          "size": 22211
+        },
+        {
+          "id": "game.tetris",
+          "kind": "game",
+          "version": "1.1.2",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-11/game.tetris-1.1.2.zip",
+          "sha256": "3c6a2c9b32368c6341f643a2d37e96445d546a79b29cabe3a514d6aa3a339338",
+          "size": 18927
+        },
+        {
+          "id": "game.zuma",
+          "kind": "game",
+          "version": "1.1.3",
+          "url": "https://github.com/JackLee992/USER_HOUSE_GAME_PACKS/releases/download/content-11/game.zuma-1.1.3.zip",
+          "sha256": "a560015f4c834b31c9b099ba061703b2e1b643f534614da5fd60d9c2644e139a",
+          "size": 32117
+        }
+      ]
+    },
+    {
+      "check": "only the changed package downloaded; prior active snapshot and all five storage keys unchanged",
+      "job": {
+        "jobId": "update-1789135061865-4",
+        "action": "download",
+        "state": "ready",
+        "downloadedBytes": 519134,
+        "totalBytes": 519134,
+        "message": "下载完成，回到首页后可安装"
+      }
+    },
+    {
+      "check": "immutable snapshot atomically activated and marked healthy; unchanged package records and exact raw checkpoint retained",
+      "unchangedPackages": 76,
+      "bootHealthy": true,
+      "storage": {
+        "wanbanXiaowu_settings_v1": {
+          "bytes": 1669,
+          "sha256": "8d1d702f192e2d0ce9fc25435c015d08431bc1fb8715b9a599caf4ce2533d995"
+        },
+        "wanbanXiaowu_scores_v1": {
+          "bytes": 0,
+          "sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        },
+        "wanbanXiaowu_progress_v1": {
+          "bytes": 0,
+          "sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        },
+        "wanbanXiaowu_records_v1": {
+          "bytes": 0,
+          "sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        },
+        "wanbanXiaowu_sudokuState_v1": {
+          "bytes": 0,
+          "sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+        }
+      }
+    }
+  ]
+}

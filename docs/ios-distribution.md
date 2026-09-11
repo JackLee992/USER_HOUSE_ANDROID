@@ -1,5 +1,11 @@
 # 玩吧 iOS 测试分发与上架操作说明
 
+## 2026-09-11 1.3.1 (3) 上传记录
+
+`Nookcade 1.3.1 (3)` 已用 Xcode 26.6、iOS 26.5 SDK完成 arm64 设备归档，Organizer 显示版本 `1.3.1 (3)`、Bundle ID `io.github.jacklee992.wanba.ios` 和团队 `li yilin`。北京时间 22:04 通过 **Distribute App → App Store Connect** 上传，Xcode 明确返回 **App upload complete** 与 **Nookcade 1.3.1 (3) uploaded**。Apple 仍需处理该构建；处理、加密声明和加入外部组是独立步骤，在后台完成前不把公开链接描述为已经切换到新版。
+
+该构建同步包含 `content-12` 的 37 款游戏和贪吃蛇 1.2.1。模拟器已实测经典贪吃蛇全屏覆盖、休闲/经典/极速三档选择、方向键转向和暂停；共享单元测试及 37 款离线启动检查通过。完整 UI 套件中的其他代表性用例通过，祖玛横屏边界用例仍因模拟器未接受方向请求失败；此前同一祖玛全屏实现已在 iPhone 真机完成横竖屏验证。
+
 ## 2026-09-11 新版上传记录
 
 `1.3.0 (2)` 已于北京时间 14:48 上传成功，xcodebuild 返回 `Upload succeeded` 与 `EXPORT SUCCEEDED`。本包包含 iPhone 游戏全屏修复、祖玛开局珠链快速入轨和当前骷髅入场动效；骷髅动效与原版的进一步对照调整尚未包含。归档内 242 个内容文件与暂存目录逐字节核验一致。Apple 已完成处理；加密声明已保存，新构建已加入“Nookcade 玩家外测”，提交后状态直接变为 **Testing**，有效期 90 天，并已启用自动通知测试者。现有公开链接继续使用：https://testflight.apple.com/join/zddwjUZV 。

@@ -1,0 +1,546 @@
+{
+  "passed": true,
+  "testedAt": "2026-09-11T14:03:22.323Z",
+  "checks": [
+    {
+      "check": "classic Snake opens fullscreen, defaults to the slower classic pace, and accepts the relaxed preset before play",
+      "layout": {
+        "width": 412,
+        "height": 915,
+        "dpr": 2.625,
+        "root": {
+          "x": 0,
+          "y": 0,
+          "width": 412.19049072265625,
+          "height": 915.047607421875,
+          "right": 412.19049072265625,
+          "bottom": 915.047607421875
+        },
+        "canvas": {
+          "x": 12,
+          "y": 185.6666717529297,
+          "width": 388.19049072265625,
+          "height": 388.19049072265625,
+          "right": 400.19049072265625,
+          "bottom": 573.8571624755859
+        },
+        "controls": {
+          "x": 105.0952377319336,
+          "y": 685.047607421875,
+          "width": 202,
+          "height": 176,
+          "right": 307.0952377319336,
+          "bottom": 861.047607421875
+        },
+        "pause": {
+          "x": 342.19049072265625,
+          "y": 12,
+          "width": 52,
+          "height": 52,
+          "right": 394.19049072265625,
+          "bottom": 64
+        },
+        "buttons": {
+          "up": {
+            "x": 174.09524536132812,
+            "y": 689.047607421875,
+            "width": 64,
+            "height": 54,
+            "right": 238.09524536132812,
+            "bottom": 743.047607421875
+          },
+          "left": {
+            "x": 105.0952377319336,
+            "y": 748.047607421875,
+            "width": 64,
+            "height": 54,
+            "right": 169.0952377319336,
+            "bottom": 802.047607421875
+          },
+          "right": {
+            "x": 243.09524536132812,
+            "y": 748.047607421875,
+            "width": 64,
+            "height": 54,
+            "right": 307.0952453613281,
+            "bottom": 802.047607421875
+          },
+          "down": {
+            "x": 174.09524536132812,
+            "y": 807.047607421875,
+            "width": 64,
+            "height": 54,
+            "right": 238.09524536132812,
+            "bottom": 861.047607421875
+          }
+        },
+        "position": "fixed",
+        "overflow": 0,
+        "state": {
+          "mode": "classic",
+          "fullscreen": true,
+          "snake": [
+            {
+              "x": 10,
+              "y": 10
+            },
+            {
+              "x": 9,
+              "y": 10
+            },
+            {
+              "x": 8,
+              "y": 10
+            },
+            {
+              "x": 7,
+              "y": 10
+            }
+          ],
+          "dir": {
+            "x": 1,
+            "y": 0
+          },
+          "next": {
+            "x": 1,
+            "y": 0
+          },
+          "queued": [],
+          "food": {
+            "x": 16,
+            "y": 2
+          },
+          "score": 0,
+          "speedMode": "classic",
+          "speedLabel": "经典",
+          "turnCount": 0,
+          "ready": true,
+          "dead": false,
+          "paused": false,
+          "delay": 160
+        }
+      },
+      "relaxed": {
+        "mode": "classic",
+        "fullscreen": true,
+        "snake": [
+          {
+            "x": 10,
+            "y": 10
+          },
+          {
+            "x": 9,
+            "y": 10
+          },
+          {
+            "x": 8,
+            "y": 10
+          },
+          {
+            "x": 7,
+            "y": 10
+          }
+        ],
+        "dir": {
+          "x": 1,
+          "y": 0
+        },
+        "next": {
+          "x": 1,
+          "y": 0
+        },
+        "queued": [],
+        "food": {
+          "x": 16,
+          "y": 2
+        },
+        "score": 0,
+        "speedMode": "relaxed",
+        "speedLabel": "休闲",
+        "turnCount": 0,
+        "ready": true,
+        "dead": false,
+        "paused": false,
+        "delay": 210
+      },
+      "physicalCoverage": {
+        "display": {
+          "width": 1080,
+          "height": 2400
+        },
+        "cssWidth": 1082,
+        "cssHeight": 2402,
+        "missingLong": 0,
+        "missingShort": 0
+      }
+    },
+    {
+      "check": "three rapid D-pad corners start the game, buffer, and play in order",
+      "before": {
+        "mode": "classic",
+        "fullscreen": true,
+        "snake": [
+          {
+            "x": 10,
+            "y": 10
+          },
+          {
+            "x": 9,
+            "y": 10
+          },
+          {
+            "x": 8,
+            "y": 10
+          },
+          {
+            "x": 7,
+            "y": 10
+          }
+        ],
+        "dir": {
+          "x": 1,
+          "y": 0
+        },
+        "next": {
+          "x": 1,
+          "y": 0
+        },
+        "queued": [],
+        "food": {
+          "x": 16,
+          "y": 2
+        },
+        "score": 0,
+        "speedMode": "relaxed",
+        "speedLabel": "休闲",
+        "turnCount": 0,
+        "ready": true,
+        "dead": false,
+        "paused": false,
+        "delay": 210
+      },
+      "queued": {
+        "mode": "classic",
+        "fullscreen": true,
+        "snake": [
+          {
+            "x": 10,
+            "y": 10
+          },
+          {
+            "x": 9,
+            "y": 10
+          },
+          {
+            "x": 8,
+            "y": 10
+          },
+          {
+            "x": 7,
+            "y": 10
+          }
+        ],
+        "dir": {
+          "x": 1,
+          "y": 0
+        },
+        "next": {
+          "x": 0,
+          "y": -1
+        },
+        "queued": [
+          "up",
+          "left",
+          "up"
+        ],
+        "food": {
+          "x": 16,
+          "y": 2
+        },
+        "score": 0,
+        "speedMode": "relaxed",
+        "speedLabel": "休闲",
+        "turnCount": 3,
+        "ready": false,
+        "dead": false,
+        "paused": false,
+        "delay": 210
+      },
+      "after": {
+        "mode": "classic",
+        "fullscreen": true,
+        "snake": [
+          {
+            "x": 10,
+            "y": 9
+          },
+          {
+            "x": 10,
+            "y": 10
+          },
+          {
+            "x": 9,
+            "y": 10
+          },
+          {
+            "x": 8,
+            "y": 10
+          }
+        ],
+        "dir": {
+          "x": 0,
+          "y": -1
+        },
+        "next": {
+          "x": -1,
+          "y": 0
+        },
+        "queued": [
+          "left",
+          "up"
+        ],
+        "food": {
+          "x": 16,
+          "y": 2
+        },
+        "score": 0,
+        "speedMode": "relaxed",
+        "speedLabel": "休闲",
+        "turnCount": 3,
+        "ready": false,
+        "dead": false,
+        "paused": true,
+        "delay": 210
+      }
+    },
+    {
+      "check": "pause freezes the simulation while the turbo preset applies immediately",
+      "paused": {
+        "mode": "classic",
+        "fullscreen": true,
+        "snake": [
+          {
+            "x": 10,
+            "y": 9
+          },
+          {
+            "x": 10,
+            "y": 10
+          },
+          {
+            "x": 9,
+            "y": 10
+          },
+          {
+            "x": 8,
+            "y": 10
+          }
+        ],
+        "dir": {
+          "x": 0,
+          "y": -1
+        },
+        "next": {
+          "x": -1,
+          "y": 0
+        },
+        "queued": [
+          "left",
+          "up"
+        ],
+        "food": {
+          "x": 16,
+          "y": 2
+        },
+        "score": 0,
+        "speedMode": "relaxed",
+        "speedLabel": "休闲",
+        "turnCount": 3,
+        "ready": false,
+        "dead": false,
+        "paused": true,
+        "delay": 210
+      },
+      "turbo": {
+        "mode": "classic",
+        "fullscreen": true,
+        "snake": [
+          {
+            "x": 10,
+            "y": 9
+          },
+          {
+            "x": 10,
+            "y": 10
+          },
+          {
+            "x": 9,
+            "y": 10
+          },
+          {
+            "x": 8,
+            "y": 10
+          }
+        ],
+        "dir": {
+          "x": 0,
+          "y": -1
+        },
+        "next": {
+          "x": -1,
+          "y": 0
+        },
+        "queued": [
+          "left",
+          "up"
+        ],
+        "food": {
+          "x": 16,
+          "y": 2
+        },
+        "score": 0,
+        "speedMode": "turbo",
+        "speedLabel": "极速",
+        "turnCount": 3,
+        "ready": false,
+        "dead": false,
+        "paused": true,
+        "delay": 110
+      }
+    },
+    {
+      "check": "rotation preserves paused game and keeps board plus controls on screen",
+      "layout": {
+        "width": 915,
+        "height": 412,
+        "dpr": 2.625,
+        "root": {
+          "x": 0,
+          "y": 0,
+          "width": 915.047607421875,
+          "height": 412.19049072265625,
+          "right": 915.047607421875,
+          "bottom": 412.19049072265625
+        },
+        "canvas": {
+          "x": 173.02381896972656,
+          "y": 60.9523811340332,
+          "width": 339.23809814453125,
+          "height": 339.23809814453125,
+          "right": 512.2619171142578,
+          "bottom": 400.19047927856445
+        },
+        "controls": {
+          "x": 710.6666870117188,
+          "y": 136.07142639160156,
+          "width": 164,
+          "height": 156,
+          "right": 874.6666870117188,
+          "bottom": 292.07142639160156
+        },
+        "pause": {
+          "x": 613.2857055664062,
+          "y": 7,
+          "width": 44,
+          "height": 44,
+          "right": 657.2857055664062,
+          "bottom": 51
+        },
+        "buttons": {
+          "up": {
+            "x": 766.6666870117188,
+            "y": 140.07142639160156,
+            "width": 52,
+            "height": 48,
+            "right": 818.6666870117188,
+            "bottom": 188.07142639160156
+          },
+          "left": {
+            "x": 710.6666870117188,
+            "y": 192.07142639160156,
+            "width": 52,
+            "height": 48,
+            "right": 762.6666870117188,
+            "bottom": 240.07142639160156
+          },
+          "right": {
+            "x": 822.6666870117188,
+            "y": 192.07142639160156,
+            "width": 52,
+            "height": 48,
+            "right": 874.6666870117188,
+            "bottom": 240.07142639160156
+          },
+          "down": {
+            "x": 766.6666870117188,
+            "y": 244.07142639160156,
+            "width": 52,
+            "height": 48,
+            "right": 818.6666870117188,
+            "bottom": 292.07142639160156
+          }
+        },
+        "position": "fixed",
+        "overflow": 0,
+        "state": {
+          "mode": "classic",
+          "fullscreen": true,
+          "snake": [
+            {
+              "x": 10,
+              "y": 9
+            },
+            {
+              "x": 10,
+              "y": 10
+            },
+            {
+              "x": 9,
+              "y": 10
+            },
+            {
+              "x": 8,
+              "y": 10
+            }
+          ],
+          "dir": {
+            "x": 0,
+            "y": -1
+          },
+          "next": {
+            "x": -1,
+            "y": 0
+          },
+          "queued": [
+            "left",
+            "up"
+          ],
+          "food": {
+            "x": 16,
+            "y": 2
+          },
+          "score": 0,
+          "speedMode": "turbo",
+          "speedLabel": "极速",
+          "turnCount": 3,
+          "ready": false,
+          "dead": false,
+          "paused": true,
+          "delay": 110
+        }
+      },
+      "physicalCoverage": {
+        "display": {
+          "width": 1080,
+          "height": 2400
+        },
+        "cssWidth": 2402,
+        "cssHeight": 1082,
+        "missingLong": 0,
+        "missingShort": 0
+      }
+    },
+    "exit returns to catalog without JavaScript errors"
+  ],
+  "error": null
+}
