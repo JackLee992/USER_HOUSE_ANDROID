@@ -1,5 +1,11 @@
 # 玩吧 iOS 测试分发与上架操作说明
 
+## 2026-09-11 1.3.1 (4) 发布检查
+
+`Nookcade 1.3.1 (4)` 已完成 iPhone 17 Pro / iOS 26.5 模拟器构建与回归。4 个原生离线测试全部通过，确认 37 个内置游戏、WebGL、WASM、本地安全源和祖玛开场动画正常；泡泡龙、祖玛、三维弹球的真实触控 UI 用例 1/1 通过。Release 设备归档为 arm64，签名结构校验通过；归档内 `www` 与待发布目录的 242 个文件逐字节一致，内置快照为 `1.5.2`，其中泡泡龙 `1.0.4`、祖玛 `1.1.3`、贪吃蛇 `1.2.1`、俄罗斯方块 `1.1.2`、空档接龙 `1.0.1`。
+
+连接的 iPhone 当前实际安装版本仍是 `1.3.0 (2)`。因此公开 TestFlight 链接没有显示最新游戏的直接原因是外测组仍在分发旧构建，并非新游戏漏打进归档。命令行首次上传尝试因没有选中 App Store Connect 账号而停止；随后在 Xcode Organizer 中明确选择 `419505080@qq.com` 的 **li yilin** 团队并重新分发，北京时间 23:34 显示 **App upload complete** 与 **Nookcade 1.3.1 (4) uploaded**。下一步等待 Apple 处理与加密声明，再把该构建加入“Nookcade 玩家外测”；公开链接继续复用 <https://testflight.apple.com/join/zddwjUZV>。
+
 ## 2026-09-11 1.3.1 (3) 上传记录
 
 `Nookcade 1.3.1 (3)` 已用 Xcode 26.6、iOS 26.5 SDK完成 arm64 设备归档，Organizer 显示版本 `1.3.1 (3)`、Bundle ID `io.github.jacklee992.wanba.ios` 和团队 `li yilin`。北京时间 22:04 通过 **Distribute App → App Store Connect** 上传，Xcode 明确返回 **App upload complete** 与 **Nookcade 1.3.1 (3) uploaded**。Apple 仍需处理该构建；处理、加密声明和加入外部组是独立步骤，在后台完成前不把公开链接描述为已经切换到新版。

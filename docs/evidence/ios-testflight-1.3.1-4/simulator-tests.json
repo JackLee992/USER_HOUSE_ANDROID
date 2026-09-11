@@ -1,0 +1,30 @@
+{
+  "simulator": "iPhone 17 Pro",
+  "runtime": "iOS 26.5",
+  "results": [
+    {
+      "suite": "NookcadeTests",
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "checks": [
+        "37 bundled games",
+        "WebGL and WASM capability",
+        "loopback security",
+        "Zuma opening animation"
+      ]
+    },
+    {
+      "suite": "NookcadeUITests/ShellUITests/testBubbleZumaAndPinballTouch",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "checks": [
+        "Bubble Shooter real touch and pause",
+        "Zuma real touch",
+        "3D Pinball launch and flippers"
+      ]
+    }
+  ],
+  "result": "passed"
+}
