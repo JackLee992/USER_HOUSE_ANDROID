@@ -15,4 +15,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) { host.pauseAndSave() }
     func applicationWillTerminate(_ application: UIApplication) { host.pauseAndSave() }
     func applicationDidBecomeActive(_ application: UIApplication) { host.refresh() }
+    func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+        UIDevice.current.userInterfaceIdiom == .pad ? .all : .allButUpsideDown
+    }
 }

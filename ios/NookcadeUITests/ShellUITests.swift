@@ -1,6 +1,17 @@
 import XCTest
 
 final class ShellUITests: XCTestCase {
+    private let backLabels = ["返回", "Back", "戻る", "돌아가기", "뒤로"]
+    private let pauseLabels = ["暂停", "暫停", "Pause", "一時停止", "일시 정지", "일시정지"]
+    private let resumeLabels = ["继续", "繼續", "Resume", "Continue", "再開", "冒険を続ける", "계속", "계속하기"]
+    private let saveExitLabels = ["保存并退出", "儲存並退出", "Save & exit", "保存して終了", "저장 후 나가기"]
+    private let continueSavedLabels = ["继续上次", "繼續上次", "Continue saved game", "続きから", "이어 하기"]
+    private func button(_ query: XCUIElementQuery, labels: [String]) -> XCUIElement {
+        query.matching(NSPredicate(format: "label IN %@", labels)).firstMatch
+    }
+    private func alert(_ app: XCUIApplication, labels: [String]) -> XCUIElement {
+        app.alerts.matching(NSPredicate(format: "label IN %@", labels)).firstMatch
+    }
     func capture(_ name: String, app: XCUIApplication) {
         let image = XCTAttachment(screenshot: XCUIScreen.main.screenshot()); image.name = name; image.lifetime = .keepAlways; add(image)
     }
@@ -76,17 +87,21 @@ final class ShellUITests: XCTestCase {
             app.cells["setting-1-1"].tap()
             let file = app.collectionViews["File View"].cells.matching(NSPredicate(format: "label CONTAINS %@", "Nookcade-backup-")).firstMatch
             XCTAssertTrue(file.waitForExistence(timeout: 10)); capture("files-import-picker", app: app); file.tap()
-            let alert = app.alerts["导入备份"]
-            XCTAssertTrue(alert.waitForExistence(timeout: 10)); capture(confirm ? "files-import-confirm" : "files-import-cancel", app: app)
-            alert.buttons[confirm ? "确定" : "取消"].tap()
-            if confirm { XCTAssertTrue(app.alerts.staticTexts["备份已导入"].waitForExistence(timeout: 10)); app.alerts.buttons["确定"].tap() }
+            let importAlert = alert(app, labels: ["导入备份", "匯入備份", "Import backup", "バックアップを読み込む", "백업 가져오기"])
+            XCTAssertTrue(importAlert.waitForExistence(timeout: 10)); capture(confirm ? "files-import-confirm" : "files-import-cancel", app: app)
+            let actionLabels = confirm ? ["确定", "確定", "OK", "확인"] : ["取消", "Cancel", "キャンセル", "취소"]
+            button(importAlert.buttons, labels: actionLabels).tap()
+            if confirm {
+                let imported = app.alerts.staticTexts.matching(NSPredicate(format: "label IN %@", ["备份已导入", "備份已匯入", "Backup imported", "読み込みました", "백업 가져옴"])).firstMatch
+                XCTAssertTrue(imported.waitForExistence(timeout: 10)); button(app.alerts.buttons, labels: ["确定", "確定", "OK", "확인"]).tap()
+            }
         }
         app.buttons["native-games-tab"].tap()
         XCUIDevice.shared.orientation = .landscapeLeft; sleep(2); assertTabGeometry(app); capture("landscape-full-screen", app: app)
         XCUIDevice.shared.orientation = .portrait; sleep(1); capture("portrait-restored", app: app)
     }
     private func leaveWebGame(_ app: XCUIApplication, file: StaticString = #filePath, line: UInt = #line) {
-        let back = app.webViews.buttons["返回"].firstMatch
+        let back = button(app.webViews.buttons, labels: backLabels)
         XCTAssertTrue(back.waitForExistence(timeout: 8), "Expected web game back button before returning to native shell", file: file, line: line)
         back.tap()
         XCTAssertTrue(app.buttons["native-games-tab"].waitForExistence(timeout: 15), "Expected native games tab after leaving web game", file: file, line: line)
@@ -206,27 +221,30 @@ final class ShellUITests: XCTestCase {
         continueAfterFailure = false
         XCUIDevice.shared.orientation = .portrait
         let app = XCUIApplication(); app.launch()
-        if app.webViews.buttons["返回"].waitForExistence(timeout: 3) { app.webViews.buttons["返回"].firstMatch.tap() }
+        let existingBack = button(app.webViews.buttons, labels: backLabels)
+        if existingBack.waitForExistence(timeout: 3) { existingBack.tap() }
         XCTAssertTrue(app.buttons["native-games-tab"].waitForExistence(timeout: 30))
         startGame("paopao", app: app)
         let swap = app.webViews.buttons["切换当前泡泡和下一个泡泡"]
         XCTAssertTrue(swap.waitForExistence(timeout: 15)); capture("bubbles-before-shot", app: app); swap.tap()
         let board = app.webViews.firstMatch.coordinate(withNormalizedOffset: CGVector(dx: 0.48, dy: 0.43)); board.tap(); sleep(1)
-        app.webViews.buttons["暂停"].tap(); capture("bubbles-shot-paused", app: app); app.webViews.buttons["返回"].tap()
+        button(app.webViews.buttons, labels: pauseLabels).tap(); capture("bubbles-shot-paused", app: app); button(app.webViews.buttons, labels: backLabels).tap()
         app.terminate(); app.launch()
         XCTAssertTrue(app.buttons["native-games-tab"].waitForExistence(timeout: 30))
         startGame("zuma", app: app)
-        let zswap = app.webViews.buttons["换球"]
+        let zswap = button(app.webViews.buttons, labels: ["换球", "換球", "SWAP", "交換", "교체"])
         XCTAssertTrue(zswap.waitForExistence(timeout: 15)); capture("zuma-start", app: app); zswap.tap()
         app.webViews.firstMatch.coordinate(withNormalizedOffset: CGVector(dx: 0.35, dy: 0.4)).tap(); sleep(1)
-        let zumaPause = app.webViews.buttons.matching(identifier: "暂停").allElementsBoundByIndex.last!
-        XCTAssertTrue(zumaPause.isHittable); zumaPause.tap(); capture("zuma-paused", app: app)
-        app.webViews.buttons["保存并退出"].tap()
+        let zumaPause = app.webViews.buttons.matching(NSPredicate(format: "label IN %@", pauseLabels)).allElementsBoundByIndex.last!
+        XCTAssertTrue(zumaPause.waitForExistence(timeout: 5)); XCTAssertTrue(zumaPause.isHittable); zumaPause.tap(); capture("zuma-paused", app: app)
+        button(app.webViews.buttons, labels: saveExitLabels).tap()
         startGame("pinball", app: app)
-        let launch = app.webViews.buttons["长按蓄力"]
+        let launch = button(app.webViews.buttons, labels: ["长按蓄力", "長按蓄力", "Hold to charge", "長押しでチャージ", "길게 눌러 힘 모으기"])
         XCTAssertTrue(launch.waitForExistence(timeout: 45)); sleep(3); capture("pinball-ready", app: app)
-        launch.press(forDuration: 3.2); app.webViews.buttons["左挡板"].press(forDuration: 0.4); app.webViews.buttons["右挡板"].press(forDuration: 0.4)
-        app.webViews.buttons["暂停"].tap(); capture("pinball-touch-paused", app: app); app.webViews.buttons["返回"].tap()
+        launch.press(forDuration: 3.2)
+        button(app.webViews.buttons, labels: ["左挡板", "左擋板", "Left flipper", "左フリッパー", "왼쪽 플리퍼"]).press(forDuration: 0.4)
+        button(app.webViews.buttons, labels: ["右挡板", "右擋板", "Right flipper", "右フリッパー", "오른쪽 플리퍼"]).press(forDuration: 0.4)
+        button(app.webViews.buttons, labels: pauseLabels).tap(); capture("pinball-touch-paused", app: app); button(app.webViews.buttons, labels: backLabels).tap()
     }
     func testRestoreChosenBackupAndExport() throws {
         guard let filename = ProcessInfo.processInfo.environment["IOS_QA_BACKUP_NAME"], !filename.isEmpty else { throw XCTSkip("Supply IOS_QA_BACKUP_NAME for an already exported test-device backup") }
@@ -254,15 +272,16 @@ final class ShellUITests: XCTestCase {
         XCTAssertTrue(app.webViews.buttons["切换当前泡泡和下一个泡泡"].waitForExistence(timeout: 15))
         app.webViews.firstMatch.coordinate(withNormalizedOffset: CGVector(dx: 0.48, dy: 0.43)).tap(); sleep(1)
         XCUIDevice.shared.press(.home); sleep(2); app.activate()
-        XCTAssertTrue(app.webViews.buttons["继续"].waitForExistence(timeout: 10)); capture("bubble-background-paused", app: app)
-        app.webViews.buttons["返回"].tap(); app.terminate(); app.launch()
+        let resume = button(app.webViews.buttons, labels: resumeLabels)
+        XCTAssertTrue(resume.waitForExistence(timeout: 10)); capture("bubble-background-paused", app: app)
+        button(app.webViews.buttons, labels: backLabels).tap(); app.terminate(); app.launch()
         XCTAssertTrue(app.buttons["native-games-tab"].waitForExistence(timeout: 30)); app.buttons["native-games-tab"].tap()
         let launch = app.buttons["launch-paopao"]
         for _ in 0..<10 { if launch.exists && launch.isHittable { break }; app.collectionViews["native-catalog"].swipeUp() }
         launch.tap()
-        let resume = app.webViews.buttons["继续上次"]
-        XCTAssertTrue(resume.waitForExistence(timeout: 10)); capture("bubble-cold-continue-prompt", app: app); resume.tap()
+        let continueSaved = button(app.webViews.buttons, labels: continueSavedLabels)
+        XCTAssertTrue(continueSaved.waitForExistence(timeout: 10)); capture("bubble-cold-continue-prompt", app: app); continueSaved.tap()
         XCTAssertTrue(app.webViews.buttons["切换当前泡泡和下一个泡泡"].waitForExistence(timeout: 15)); sleep(1)
-        app.webViews.buttons["暂停"].tap(); capture("bubble-cold-continued", app: app); app.webViews.buttons["返回"].tap()
+        button(app.webViews.buttons, labels: pauseLabels).tap(); capture("bubble-cold-continued", app: app); button(app.webViews.buttons, labels: backLabels).tap()
     }
 }

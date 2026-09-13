@@ -21,12 +21,15 @@ final class NativeShell: UIViewController, UITabBarControllerDelegate {
     private var synchronizedTab = ""
     init(host: GameHost) { self.host = host; super.init(nibName: nil, bundle: nil) }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    override var shouldAutorotate: Bool { true }
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask { UIDevice.current.userInterfaceIdiom == .pad ? .all : .allButUpsideDown }
     override var prefersStatusBarHidden: Bool { gameVisible }
     override var prefersHomeIndicatorAutoHidden: Bool { gameVisible }
     override var preferredStatusBarStyle: UIStatusBarStyle { .darkContent }
     override func viewDidLoad() {
         super.viewDidLoad(); overrideUserInterfaceStyle = .light
+        UIDevice.current.beginGeneratingDeviceOrientationNotifications()
+        NotificationCenter.default.addObserver(self, selector: #selector(deviceOrientationChanged), name: UIDevice.orientationDidChangeNotification, object: nil)
         view.backgroundColor = Palette.background; view.tintColor = Palette.accent
         view.addSubview(resident); resident.frame = CGRect(x: 0, y: 0, width: 1, height: 1); resident.alpha = 0.01; resident.isUserInteractionEnabled = false; resident.accessibilityElementsHidden = true
         resident.addSubview(host.webView); host.webView.frame = resident.bounds
@@ -41,6 +44,28 @@ final class NativeShell: UIViewController, UITabBarControllerDelegate {
         host.presenter = self
         host.onCatalog = { [weak self] state in self?.update(state) }
         host.onError = { [weak self] message in self?.loading.text = message; self?.loading.numberOfLines = 0; self?.loading.isHidden = false }
+    }
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: UIDevice.orientationDidChangeNotification, object: nil)
+        UIDevice.current.endGeneratingDeviceOrientationNotifications()
+    }
+    @objc private func deviceOrientationChanged() {
+        #if DEBUG
+        NSLog("Nookcade device orientation changed: %d gameVisible=%@", UIDevice.current.orientation.rawValue, gameVisible.description)
+        #endif
+        guard gameVisible, let scene = view.window?.windowScene else { return }
+        let orientations: UIInterfaceOrientationMask
+        switch UIDevice.current.orientation {
+        case .portrait: orientations = .portrait
+        case .portraitUpsideDown where UIDevice.current.userInterfaceIdiom == .pad: orientations = .portraitUpsideDown
+        case .landscapeLeft: orientations = .landscapeRight
+        case .landscapeRight: orientations = .landscapeLeft
+        default: return
+        }
+        setNeedsUpdateOfSupportedInterfaceOrientations()
+        scene.requestGeometryUpdate(.iOS(interfaceOrientations: orientations)) { error in
+            NSLog("Nookcade could not follow device orientation: %@", error.localizedDescription)
+        }
     }
     private var labels: [String] { [host.label("玩吧"), host.label("我的"), host.label("设置")] }
     private func installTabs() {
@@ -83,7 +108,7 @@ final class NativeShell: UIViewController, UITabBarControllerDelegate {
             host.webView.removeFromSuperview()
             if show { gameSurface.addSubview(host.webView); host.webView.frame = gameSurface.bounds; host.webView.autoresizingMask = [.flexibleWidth, .flexibleHeight] }
             else { resident.addSubview(host.webView); host.webView.frame = resident.bounds }
-            setNeedsUpdateOfHomeIndicatorAutoHidden(); setNeedsStatusBarAppearanceUpdate(); view.setNeedsLayout(); view.layoutIfNeeded()
+            setNeedsUpdateOfHomeIndicatorAutoHidden(); setNeedsStatusBarAppearanceUpdate(); setNeedsUpdateOfSupportedInterfaceOrientations(); view.setNeedsLayout(); view.layoutIfNeeded()
         }
         if !show, let tab = state["tab"] as? String, tab != synchronizedTab {
             // Repeated catalog refreshes must not reset the system's in-flight
