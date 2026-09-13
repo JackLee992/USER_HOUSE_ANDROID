@@ -21,7 +21,7 @@ import {
 } from './model.js';
 
 export const GAME_ID = 'screw';
-export const GAME_VERSION = '1.3.0';
+export const GAME_VERSION = '1.3.1';
 export const HOST_API_VERSION = 1;
 export const REQUIRED_ENV = Object.freeze([
   'activeGameController','choiceForState','choiceSavePatch','clearProgress','currentGameDurationMs',
@@ -38,6 +38,33 @@ const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 const easeOutCubic = value => 1 - (1 - value) ** 3;
 const easeInCubic = value => value ** 3;
 const UNSCREW_LIFT_PHASE = .64;
+
+const panelLayer = panel => Number.isFinite(Number(panel?.z)) ? Number(panel.z) : 0;
+const panelOrder = panel => Number.isFinite(Number(panel?.order)) ? Number(panel.order) : panelLayer(panel);
+
+// Physics may move a board, but it must never move that board to the front of
+// the pile. Build one immutable paint plan that places released boards back at
+// their saved z position instead of appending every animated board on top.
+export function stablePanelPaintStack(panels = [], releasedPanels = []) {
+  const releasedById = new Map(releasedPanels.filter(Boolean).map(panel => [panel.id, panel]));
+  const entries = panels
+    .filter(panel => panel && !panel.gone && !releasedById.has(panel.id))
+    .map(panel => ({ panel, released:false }));
+  for (const panel of releasedById.values()) entries.push({ panel, released:true });
+  return entries.sort((left, right) =>
+    panelLayer(left.panel) - panelLayer(right.panel) ||
+    panelOrder(left.panel) - panelOrder(right.panel) ||
+    String(left.panel.id || '').localeCompare(String(right.panel.id || '')));
+}
+
+// Base depth styling on the complete saved pile. Filtering a removed board out
+// of the denominator made every remaining board suddenly brighten or fade.
+export function stablePanelFrontness(panel, panels = []) {
+  const layers = panels.filter(Boolean).map(panelLayer);
+  if (!layers.length) return 1;
+  const minimum = Math.min(...layers), maximum = Math.max(...layers);
+  return maximum <= minimum ? 1 : clamp((panelLayer(panel) - minimum) / (maximum - minimum), 0, 1);
+}
 
 function performancePixelRatio(win) {
   let mode = 'normal';
@@ -231,6 +258,7 @@ export function createGame(env, savedState) {
   canvas.width = Math.round(W * renderProfile.value); canvas.height = Math.round(H * renderProfile.value);
   canvas.dataset.screwArt = 'atelier-v4'; canvas.dataset.renderMode = renderProfile.mode; canvas.dataset.depthFocus = 'semantic-v2';
   canvas.dataset.physics = 'gravity-v1'; canvas.dataset.contactPhysics = 'collision-v1'; canvas.dataset.acceleration = 'hardware-canvas2d';
+  canvas.dataset.layerCompositor = 'stable-z-v1';
   ctx.setTransform(renderProfile.value, 0, 0, renderProfile.value, 0, 0); ctx.imageSmoothingEnabled = true;
   const staticLayer = doc.createElement('canvas');
   staticLayer.width = canvas.width; staticLayer.height = canvas.height;
@@ -252,11 +280,15 @@ export function createGame(env, savedState) {
     target.save(); target.translate(x,y); target.rotate(rotation); target.globalAlpha *= alpha;
     target.drawImage(sprite,-size*scale/2,-size*scale/2,size*scale,size*scale); target.restore();
   }
-  function movingPanelSprite(panel) {
+  function movingPanelSprite(panel, options = {}, visibleScrewIds = new Set()) {
     const holes = (panel.screws || []).map(item => `${Number(item.lx).toFixed(1)},${Number(item.ly).toFixed(1)}`).join(';');
-    const key = [panel.id,panel.shape,panel.material,panel.tint,Number(panel.w).toFixed(1),Number(panel.h).toFixed(1),holes,renderProfile.mode].join(':');
+    const visible = [...visibleScrewIds].sort().join(',');
+    const style = ['alpha','fog','edgeAlpha','outerWidth','innerWidth','detail','shadowAlpha','shadowBlur','shadowOffsetY']
+      .map(name => `${name}=${String(options[name] ?? '')}`).join(',');
+    const key = [panel.id,panel.shape,panel.material,panel.tint,Number(panel.w).toFixed(1),Number(panel.h).toFixed(1),holes,visible,style,renderProfile.mode].join(':');
     if (movingPanelSprites.has(key)) return movingPanelSprites.get(key);
-    while (movingPanelSprites.size >= 6) {
+    const cacheLimit = Math.max(48, state.panels.filter(item => !item.gone).length + falling.length + 8);
+    while (movingPanelSprites.size >= cacheLimit) {
       const oldestKey = movingPanelSprites.keys().next().value, oldest = movingPanelSprites.get(oldestKey);
       if (oldest?.canvas) { oldest.canvas.width = 0; oldest.canvas.height = 0; }
       movingPanelSprites.delete(oldestKey);
@@ -268,21 +300,25 @@ export function createGame(env, savedState) {
     const spriteCtx = sprite.getContext('2d', { alpha:true, desynchronized:true });
     spriteCtx.setTransform(renderProfile.value,0,0,renderProfile.value,0,0); spriteCtx.imageSmoothingEnabled = true;
     drawPanel(spriteCtx, { ...panel, x:width / 2, y:height / 2, a:0 }, {
-      alpha:1, fog:0, edgeAlpha:1, outerWidth:3, innerWidth:1,
-      detail:renderProfile.mode !== 'eco', shadowAlpha:renderProfile.mode === 'eco' ? 0 : .18,
-      shadowBlur:renderProfile.mode === 'eco' ? 0 : 8, shadowOffsetY:5,
+      ...options,
+      alpha:1,
+      visibleScrewIds,
     });
     const record = { canvas:sprite, width, height, bytes:sprite.width * sprite.height * 4 };
     movingPanelSprites.set(key, record);
     return record;
   }
-  function drawMovingPanel(target, panel, alpha = 1) {
-    const sprite = movingPanelSprite(panel);
+  function drawMovingPanel(target, panel, options = {}, visibleScrewIds = new Set(), alpha = 1) {
+    const sprite = movingPanelSprite(panel, options, visibleScrewIds);
     target.save(); target.translate(panel.x,panel.y); target.rotate(panel.a || 0); target.globalAlpha *= alpha;
     target.drawImage(sprite.canvas,-sprite.width/2,-sprite.height/2,sprite.width,sprite.height); target.restore();
   }
   let staticDirty = true, boxesSignature = '', traySignature = '';
-  const invalidateBoard = () => { staticDirty = true; };
+  function clearMovingPanelSprites() {
+    for (const sprite of movingPanelSprites.values()) { sprite.canvas.width = 0; sprite.canvas.height = 0; }
+    movingPanelSprites.clear();
+  }
+  const invalidateBoard = () => { staticDirty = true; clearMovingPanelSprites(); };
 
   const haptic = (pattern = 10) => { try { win.navigator?.vibrate?.(pattern); } catch {} };
   function save(force = false) {
@@ -361,8 +397,7 @@ export function createGame(env, savedState) {
     showResult(); updateScore();
   }
 
-  function depthStyle(index, count, focus) {
-    const frontness = count <= 1 ? 1 : index / (count - 1);
+  function depthStyle(frontness, focus) {
     const shadowScale = renderProfile.mode === 'eco' ? 0 : 1;
     if (focus === 'priority') return {
       alpha:1, fog:0, edgeAlpha:1, outerWidth:3, innerWidth:1,
@@ -394,15 +429,15 @@ export function createGame(env, savedState) {
       else nextFocusStats.secondary += 1;
     }
     focusStats = nextFocusStats;
-    const panels = state.panels.filter(item => !item.gone).sort((a, b) => a.z - b.z);
+    const panels = stablePanelPaintStack(state.panels);
     const dynamicPanelIds = new Set(swings.map(item => item.panelId));
-    for (let index = 0; index < panels.length; index += 1) {
-      const panel = panels[index];
+    for (const entry of panels) {
+      const panel = entry.panel;
       if (dynamicPanelIds.has(panel.id)) continue;
       const offset = activeShake?.panelId === panel.id ? Math.sin(activeShake.phase * Math.PI * 8) * 4 * (1 - activeShake.phase) : 0;
       const visual = offset ? { ...panel, x:panel.x + offset } : panel;
       const focus = priorityPanels.has(panel.id) ? 'priority' : secondaryPanels.has(panel.id) ? 'secondary' : 'hidden';
-      const depth = depthStyle(index, panels.length, focus);
+      const depth = depthStyle(stablePanelFrontness(panel, state.panels), focus);
       drawPanel(target, visual, { ...depth, visibleScrewIds });
       for (const screw of panel.screws || []) {
         if (screw.gone) continue;
@@ -410,6 +445,38 @@ export function createGame(env, savedState) {
         if (!reachable) continue;
         const priority = active.has(screw.color);
         drawScrew(target, screw.color, point.x, point.y, priority ? 14 : 13, 0, priority, priority ? 1 : .76);
+      }
+    }
+    target.restore();
+  }
+
+  function paintMotionBoard(target, activeShake = null) {
+    target.save(); target.setTransform(renderProfile.value, 0, 0, renderProfile.value, 0, 0); drawBackground(target);
+    const hits = reachableScrews(state), reachability = new Map(hits.map(hit => [hit.screw.id, hit.reachable]));
+    const active = new Set(state.boxes.map(box => box.color));
+    const visibleScrewIds = new Set(hits.filter(hit => hit.reachable).map(hit => hit.screw.id));
+    const priorityPanels = new Set(hits.filter(hit => hit.reachable && active.has(hit.screw.color)).map(hit => hit.panel.id));
+    const secondaryPanels = new Set(hits.filter(hit => hit.reachable && !active.has(hit.screw.color)).map(hit => hit.panel.id));
+    const swingByPanel = new Map(swings.map(motion => [motion.panelId, motion]));
+    const stack = stablePanelPaintStack(state.panels, falling);
+    for (const entry of stack) {
+      const panel = entry.panel;
+      const offset = activeShake?.panelId === panel.id ? Math.sin(activeShake.phase * Math.PI * 8) * 4 * (1 - activeShake.phase) : 0;
+      const visual = offset ? { ...panel, x:panel.x + offset } : panel;
+      const focus = entry.released || priorityPanels.has(panel.id) ? 'priority' : secondaryPanels.has(panel.id) ? 'secondary' : 'hidden';
+      const depth = depthStyle(stablePanelFrontness(panel, state.panels), focus);
+      const holes = entry.released ? new Set((panel.screws || []).map(screw => screw.id)) :
+        new Set((panel.screws || []).filter(screw => visibleScrewIds.has(screw.id)).map(screw => screw.id));
+      const fadeAt = entry.released ? (panel.settled ? Math.max(1.55, (panel.firstContactAt || 0) + .85) : 1.52) : Infinity;
+      const alpha = entry.released ? clamp(1 - Math.max(0, panel.time - fadeAt) / .28, 0, 1) : 1;
+      drawMovingPanel(target, visual, depth, holes, alpha * (depth.alpha ?? 1));
+      if (entry.released) continue;
+      const swing = swingByPanel.get(panel.id);
+      for (const screw of panel.screws || []) {
+        if (screw.gone || !reachability.get(screw.id)) continue;
+        const point = screwWorld(visual, screw), priority = active.has(screw.color);
+        const rotation = swing?.anchorId === screw.id ? -panel.a * 1.8 : 0;
+        drawMovingScrew(target, screw.color, point.x, point.y, priority ? 14 : 13, rotation, priority ? 1 : .76);
       }
     }
     target.restore();
@@ -424,19 +491,13 @@ export function createGame(env, savedState) {
 
   function drawBoard() {
     drawCount += 1; canvas.dataset.drawCount = String(drawCount);
-    if (shake) paintStaticBoard(ctx, shake);
+    if (swings.length || falling.length) paintMotionBoard(ctx, shake);
+    else if (shake) paintStaticBoard(ctx, shake);
     else {
       ensureStaticBoard();
       ctx.save(); ctx.setTransform(1,0,0,1,0,0); ctx.drawImage(staticLayer,0,0); ctx.restore();
     }
     ctx.save(); ctx.setTransform(renderProfile.value, 0, 0, renderProfile.value, 0, 0);
-    for (const motion of swings) {
-      const panel = state.panels.find(item => item.id === motion.panelId && !item.gone);
-      if (!panel) continue;
-      drawMovingPanel(ctx, panel, 1);
-      const anchor = panel.screws.find(item => item.id === motion.anchorId && !item.gone);
-      if (anchor) drawMovingScrew(ctx, anchor.color, motion.pivotX, motion.pivotY, 14, -panel.a * 1.8, 1);
-    }
     if (hint) {
       const highlighted = allLiveScrews(state).find(hit => hit.screw.id === hint.id);
       if (highlighted) {
@@ -445,10 +506,6 @@ export function createGame(env, savedState) {
         ctx.strokeStyle = 'rgba(255,244,164,.94)'; ctx.lineWidth = 3; ctx.beginPath();
         ctx.arc(highlighted.point.x,highlighted.point.y,25+Math.sin(hint.phase*Math.PI*6)*3,0,Math.PI*2); ctx.stroke();
       }
-    }
-    for (const panel of falling) {
-      const fadeAt = panel.settled ? Math.max(1.55, (panel.firstContactAt || 0) + .85) : 1.52;
-      drawMovingPanel(ctx, panel, clamp(1 - Math.max(0, panel.time - fadeAt) / .28, 0, 1));
     }
     for (const flight of flights) {
       const t = clamp(flight.time / flight.duration, 0, 1);
@@ -665,6 +722,7 @@ export function createGame(env, savedState) {
     return Object.assign(structuredClone(state), {
       fullscreen:false, render:{mode:renderProfile.mode,pixelRatio:renderProfile.value,targetFps:renderProfile.targetFps,drawCount,staticBuildCount,
         depthFocus:canvas.dataset.depthFocus,physics:canvas.dataset.physics,contactPhysics:canvas.dataset.contactPhysics,acceleration:canvas.dataset.acceleration,
+        layerCompositor:canvas.dataset.layerCompositor,
         canvasBytes:canvas.width*canvas.height*4,staticBytes:staticLayer.width*staticLayer.height*4,
         spriteBytes:[...movingScrewSprites.values()].reduce((sum,item) => sum + item.width*item.height*4,0) +
           [...movingPanelSprites.values()].reduce((sum,item) => sum + item.bytes,0),filterFree:true,focus:structuredClone(focusStats),
@@ -680,8 +738,7 @@ export function createGame(env, savedState) {
     staticLayer.width=0; staticLayer.height=0;
     for (const sprite of movingScrewSprites.values()) { sprite.width=0; sprite.height=0; }
     movingScrewSprites.clear();
-    for (const sprite of movingPanelSprites.values()) { sprite.canvas.width=0; sprite.canvas.height=0; }
-    movingPanelSprites.clear();
+    clearMovingPanelSprites();
     canvas.removeEventListener('pointerdown',handleTap); canvas.removeEventListener('contextmenu',onContextMenu);
     doc.removeEventListener('visibilitychange',onVisibility);
     flights=[]; falling=[]; swings=[]; particles=[]; hint=null; shake=null;

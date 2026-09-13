@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "snapshotVersion": "1.6.5",
+  "snapshotVersion": "1.6.6",
   "packages": {
     "core": "1.4.4",
     "art.shared": "1.0.1",

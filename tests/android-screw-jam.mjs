@@ -1,10 +1,10 @@
-// Installed Android app regression for Screw Jam 1.3.0.
+// Installed Android app regression for Screw Jam 1.3.1.
 // CDP only reads state; every game and tool interaction is sent through Android input.
 import assert from 'node:assert/strict';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { connect, adb, screenshot, activity } from './android-driver.mjs';
 
-const out = process.env.QA_OUT || 'docs/evidence/screw-jam-1.3.0/android-emulator';
+const out = process.env.QA_OUT || 'docs/evidence/screw-jam-1.3.1/android-emulator';
 mkdirSync(out, { recursive:true });
 const packageName = activity.split('/')[0], checks = [];
 let client, failure = null, inputOffsetY = 0;
@@ -80,7 +80,7 @@ try {
   await openScrew();
   await until(async () => (await state())?.render?.idle, 'initial idle');
   const ready = await layout();
-  assert.equal(ready.codeVersion, '1.3.0');
+  assert.equal(ready.codeVersion, '1.3.1');
   assert.equal(ready.art, 'atelier-v4');
   assert.equal(ready.boxes, 3);
   assert.equal(ready.slots, 5);
@@ -94,11 +94,12 @@ try {
   assert.equal(ready.state.render.physics, 'gravity-v1');
   assert.equal(ready.state.render.contactPhysics, 'collision-v1');
   assert.equal(ready.state.render.acceleration, 'hardware-canvas2d');
+  assert.equal(ready.state.render.layerCompositor, 'stable-z-v1');
   assert.equal(ready.state.render.targetFps, 60);
   assert.equal(ready.state.render.filterFree, true);
   assert.ok(ready.state.render.focus.priority > 0);
   assert.ok(ready.state.render.focus.hidden > 0);
-  checks.push({ check:'installed APK opens Screw Jam 1.3.0 with semantic depth focus and gravity motion', layout:{ viewport:ready.viewport, gamebox:ready.gamebox, canvas:ready.canvas, top:ready.top, tools:ready.tools } });
+  checks.push({ check:'installed APK opens Screw Jam 1.3.1 with stable z-order, semantic depth focus, and gravity motion', layout:{ viewport:ready.viewport, gamebox:ready.gamebox, canvas:ready.canvas, top:ready.top, tools:ready.tools } });
 
   const idleDraws = ready.state.render.drawCount;
   await client.wait(650);

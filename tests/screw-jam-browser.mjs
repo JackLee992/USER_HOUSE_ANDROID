@@ -5,7 +5,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 
 const port = Number(process.env.CDP_PORT || 9357);
 const origin = process.env.QA_ORIGIN || 'http://127.0.0.1:8877';
-const out = process.env.QA_OUT || '.local/qa-screw-jam-1.3.0/browser';
+const out = process.env.QA_OUT || '.local/qa-screw-jam-1.3.1/browser';
 mkdirSync(out, { recursive:true });
 
 const tabs = await (await fetch(`http://127.0.0.1:${port}/json`)).json();
@@ -194,6 +194,7 @@ try {
     assert.equal(current.state.render.physics, 'gravity-v1');
     assert.equal(current.state.render.contactPhysics, 'collision-v1');
     assert.equal(current.state.render.acceleration, 'hardware-canvas2d');
+    assert.equal(current.state.render.layerCompositor, 'stable-z-v1');
     assert.equal(current.state.render.targetFps, mode === 'eco' ? 30 : 120);
     assert.equal(current.state.render.filterFree, true);
     assert.equal(current.state.render.canvasBytes, 420 * 560 * ratio * ratio * 4);
