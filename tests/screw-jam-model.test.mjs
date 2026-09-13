@@ -8,7 +8,9 @@ import {
   addEndlessBox,
   addTraySlot,
   advanceFallingPanel,
+  advanceHangingPanel,
   applyScrew,
+  createHangingPanelMotion,
   createScrewState,
   endlessScore,
   extendEndlessState,
@@ -217,4 +219,70 @@ function fallingAt(fps, milliseconds = 800) {
 for (const fps of [10, 15, 30, 120]) test(`released boards fall the same distance at ${fps} and 60 FPS`, () => {
   const expected = fallingAt(60), actual = fallingAt(fps);
   for (const key of ['x','y','a','vx','vy']) assert.ok(Math.abs(actual[key] - expected[key]) < .001, `${key}: ${actual[key]} versus ${expected[key]}`);
+});
+
+function hangingAt(fps, milliseconds = 1400) {
+  const panel = {
+    id:'swinging-panel', x:190, y:250, a:-.42, w:220, h:96,
+    screws:[
+      { id:'removed', lx:-72, ly:0, color:'ruby', gone:true },
+      { id:'pivot', lx:72, ly:0, color:'ocean', gone:false },
+    ],
+  };
+  const pivotBefore = { ...panel, point:null };
+  pivotBefore.point = {
+    x:panel.x + Math.cos(panel.a) * 72,
+    y:panel.y + Math.sin(panel.a) * 72,
+  };
+  const motion = createHangingPanelMotion(panel, { removedLocalX:-72 });
+  assert.ok(motion, 'one remaining screw creates a hanging-panel motion');
+  const frames = Math.round(milliseconds * fps / 1000);
+  for (let frame = 0; frame < frames && !motion.finished; frame += 1) advanceHangingPanel(panel, motion, 1 / fps);
+  const pivotAfter = {
+    x:panel.x + Math.cos(panel.a) * 72,
+    y:panel.y + Math.sin(panel.a) * 72,
+  };
+  return { panel, motion, pivotBefore:pivotBefore.point, pivotAfter };
+}
+
+test('a board with one remaining screw swings under gravity while the screw stays fixed', () => {
+  const result = hangingAt(60);
+  assert.equal(result.motion.finished, true);
+  assert.ok(Math.abs(result.pivotAfter.x - result.pivotBefore.x) < .001);
+  assert.ok(Math.abs(result.pivotAfter.y - result.pivotBefore.y) < .001);
+  const centreBelowPivot = result.panel.y > result.pivotAfter.y;
+  assert.equal(centreBelowPivot, true);
+});
+
+for (const fps of [15, 30, 120]) test(`hanging-board gravity is stable at ${fps} and 60 FPS`, () => {
+  const expected = hangingAt(60), actual = hangingAt(fps);
+  for (const key of ['x','y','a']) assert.ok(Math.abs(actual.panel[key] - expected.panel[key]) < .012, `${key}: ${actual.panel[key]} versus ${expected.panel[key]}`);
+});
+
+test('the one-anchor gravity swing keeps the recorded one-second rhythm', () => {
+  const result = hangingAt(60, 1400);
+  assert.ok(result.motion.duration >= 1 && result.motion.duration <= 1.16, `duration ${result.motion.duration}`);
+  assert.equal(result.motion.finished, true);
+});
+
+function fallingOntoPanelAt(fps, milliseconds = 1500) {
+  const panel = { id:'falling', z:3, x:200, y:70, a:.04, w:150, h:54, vx:10, vy:18, va:.35, time:0 };
+  const support = { id:'support', z:1, x:205, y:360, a:-.03, w:250, h:62, gone:false };
+  const frames = Math.round(milliseconds * fps / 1000);
+  for (let frame = 0; frame < frames; frame += 1) advanceFallingPanel(panel, 1 / fps, [support]);
+  return panel;
+}
+
+test('a released board contacts, rebounds and settles on the board below', () => {
+  const panel = fallingOntoPanelAt(60);
+  assert.ok(panel.contacts >= 2, `contacts ${panel.contacts}`);
+  assert.equal(panel.settled, true);
+  assert.ok(panel.y < 330 && panel.y > 260, `settled y ${panel.y}`);
+  assert.ok(Math.abs(panel.vy) < .001);
+});
+
+for (const fps of [30, 120]) test(`released-board contact is stable at ${fps} and 60 FPS`, () => {
+  const expected = fallingOntoPanelAt(60), actual = fallingOntoPanelAt(fps);
+  assert.equal(actual.settled, true);
+  for (const key of ['x','y','a']) assert.ok(Math.abs(actual[key] - expected[key]) < 1.2, `${key}: ${actual[key]} versus ${expected[key]}`);
 });

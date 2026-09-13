@@ -1,6 +1,6 @@
 # Android、iOS 与酒馆插件同步发布
 
-37 款游戏的唯一开发源位于本仓库的 `src/games/plugins`。Android 游戏包、iOS 内置资源和 SillyTavern 插件都从同一个源码提交生成，发行记录必须写入这个完整提交哈希。
+38 款游戏的唯一开发源位于本仓库的 `src/games/plugins`。Android 游戏包、iOS 内置资源和 SillyTavern 插件都从同一个源码提交生成，发行记录必须写入这个完整提交哈希。
 
 ## 发行顺序
 

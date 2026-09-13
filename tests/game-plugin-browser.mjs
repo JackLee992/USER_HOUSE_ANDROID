@@ -29,7 +29,7 @@ try {
   await evaluate(`localStorage.clear();localStorage.setItem('wanba_locale_v1',${JSON.stringify(locale)})`);
   const generation=String(Date.now());await send('Page.addScriptToEvaluateOnNewDocument',{source:`window.__wanbaQaGeneration=${JSON.stringify(generation)}`});
   await send('Page.reload');await until(`window.__wanbaQaGeneration===${JSON.stringify(generation)}&&!!window.wanbaApp`);
-  const games=await evaluate('wanbaApp.inspect().games');assert.equal(games.length,37);
+  const games=await evaluate('wanbaApp.inspect().games');assert.equal(games.length,38);
   for (const game of games) {
     await click(`[data-tab="${game.mode}"]`);await click(`[data-game="${game.id}"]`);await wait(140);
     for(let n=0;n<20;n++) {
@@ -59,9 +59,9 @@ try {
   }
   await until('wanbaApp.inspect().started');await wait(200);assert.equal(await evaluate('!!document.querySelector(".wb-gomoku-endless-panel")'),true);await evaluate('wanbaApp.pause();wanbaApp.back()');
   results.push({id:'gomoku:endless',started:true,paused:true});
-  assert.equal(new Set(requests.filter(u=>/\/src\/games\/plugins\/[^/]+\/index\.js$/.test(u))).size,37);
+  assert.equal(new Set(requests.filter(u=>/\/src\/games\/plugins\/[^/]+\/index\.js$/.test(u))).size,38);
   assert.deepEqual(errors,[]);assert.equal(requests.filter(u=>/^https?:/.test(u)&&!u.startsWith(origin+'/')).length,0);
-  console.log('37 module entries + endless Gomoku opened, paused, and saved without external requests or runtime errors.');
+  console.log('38 module entries + endless Gomoku opened, paused, and saved without external requests or runtime errors.');
 } catch(error) {
   const shot=await send('Page.captureScreenshot',{format:'png'});writeFileSync(out+'/failure.png',Buffer.from(shot.data,'base64'));
   console.error(error);process.exitCode=1;

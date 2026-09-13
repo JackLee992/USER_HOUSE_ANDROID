@@ -291,7 +291,7 @@ process.stdout.write('P-256 updater trust root verified');
     manifest, channel, snapshot_id = verified_manifest(args.content, args.public_key)
     require(manifest['sequence'] == args.sequence and manifest['releaseTag'] == f'content-{args.sequence}', 'Wrong signed content sequence')
     require(manifest['minAppVersionCode'] <= args.code, 'Content is incompatible with the requested APK code')
-    require(len(manifest['games']) == 37, 'Expected all 37 games')
+    require(len(manifest['games']) == 38, 'Expected all 38 games')
     require(set(manifest['locales']) == set(BRANDS), 'Expected all five language packages')
     expected = {file['path']: file for package in manifest['packages'] for file in package['files']}
     require(len(expected) == sum(len(package['files']) for package in manifest['packages']), 'Duplicate packaged files')

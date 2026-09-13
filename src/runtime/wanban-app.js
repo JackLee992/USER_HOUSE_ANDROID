@@ -213,7 +213,8 @@ export async function initWanbanXiaowu(options = {}) {
     sudoku: { id: 'sudoku', name: '数独', mode: 'single', unit: '分', icon: '9', iconImage: GAME_ICON_BASE + 'sudoku.jpg' },
     minesweeper: { id: 'minesweeper', name: '扫雷', mode: 'single', unit: '分', icon: '雷', iconImage: GAME_ICON_BASE + 'minesweeper.png' },
     uyangle: { id: 'uyangle', name: 'U了个U', mode: 'single', unit: '分', icon: 'U', iconImage: GAME_ICON_BASE + 'sheep.png' },
-    screw: { id: 'screw', name: '拧螺丝', mode: 'single', unit: '分', icon: '螺', iconImage: GAME_ICON_BASE + 'screw.png' },
+    screwclassic: { id: 'screwclassic', name: '拧螺丝', mode: 'single', unit: '分', icon: '螺', iconImage: GAME_ICON_BASE + 'screw.png' },
+    screw: { id: 'screw', name: '疯狂拧螺丝', mode: 'single', unit: '分', icon: '⚡', iconImage: new URL('../../assets/game-art/screw/crazy-icon.png', import.meta.url).href },
     popstar: { id: 'popstar', name: '消灭星星', mode: 'single', unit: '分', icon: '星', iconImage: GAME_ICON_BASE + 'star.png' },
     paopao: { id: 'paopao', name: '泡泡龙', mode: 'single', unit: '分', icon: '泡', iconImage: GAME_ICON_BASE + 'paoapao.png' },
     game1010: { id: 'game1010', name: '1010!', mode: 'single', unit: '分', icon: '1010', iconImage: GAME_ICON_BASE + '1010.png' },
@@ -313,7 +314,8 @@ export async function initWanbanXiaowu(options = {}) {
     minesweeper: '每局会先选择难度：简单9×9、10雷；中等12×12、25雷；困难16×16、50雷。下方按钮可在“翻开”和“插旗”之间切换；数字格周围旗数等于数字时会按正式扫雷规则翻开周围未插旗格，旗插错会直接失败。',
     shuerte: '每局会先选择难度：简单4×4、中等5×5、困难6×6，并可选择“盲点”模式。数字会随机打散在方格里，点击1开始计时，并按1、2、3……一路点到最后一个数字。普通模式点对后数字会变淡；盲点模式点对后不变色，难度更高且有少量倍率加成。点错会扣分并出现红色反馈；下方道具可以提示下一个数字、短暂聚焦目标所在行列或重排未点击数字。完成全部数字后按难度基础分、连击、速度和道具使用结算。',
     uyangle: '三消叠牌小游戏。普通模式可通关；无尽模式会在剩余牌较少时自动追加下一批牌层，失败时统计已消除数量。点击没有被上层遮挡的卡牌放入下方7格槽，同图标凑满3张会消除；槽位超过7格且没有消除时失败。',
-    screw: '经典工坊包含12个逐步加深且保证可解的关卡。无尽工坊恢复玩伴小屋初版玩法：每批随机生成28到32块、每块2到4颗螺丝的大型板件堆，接近清空时直接补入下一批，不弹出过关结算。5个临时孔位填满后仍可继续点击当前收纳盒颜色来自救；只有再选择一颗无法入盒的螺丝才结束。顶部默认启用3个颜色收纳盒，每盒装满3颗同色螺丝后自动封箱并补上下一盒；可使用3次加盒，最多同时开启6盒，盒数越少最终计分倍率越高。刷新或退出会保存当前连续进度。',
+    screwclassic: '完整保留首个独立游戏包 Screw 1.0.0 的玩法。普通模式每局随机生成42到47块分层面板，清空全部面板即通关；无尽模式每层生成28到32块，剩余螺丝不超过24颗或面板不超过8块时自动补入下一层，不弹出关卡结算。上层会遮挡下层螺丝；板件剩一颗螺丝时绕固定点摆动，最后一颗拆除后受重力加速下落，并会被前层仍固定的螺丝挡住。顶部同时开启3个颜色工具盒，同色3颗自动打包；非当前颜色进入5格临时托盘，可增加盒子到最多6个。',
+    screw: '经典工坊包含12个逐步加深且保证可解的关卡。无尽工坊会持续补入28到32块的大型板件堆。5个临时孔位填满后仍可点击当前收纳盒颜色自救；只有再选择一颗无法入盒的螺丝才结束。顶部默认启用3个颜色收纳盒，每盒装满3颗同色螺丝后自动封箱并补上下一盒；可使用3次加盒，最多同时开启6盒，盒数越少最终计分倍率越高。刷新或退出会保存当前连续进度。',
     popstar: '10×10彩色星星棋盘。点击2个及以上上下左右相连的同色星星即可消除，得分为消除数量×消除数量×5，8/12/16个以上大块会有额外奖励。困难模式每关有步数限制，消除、打乱、单消都会消耗1步；简单模式没有步数限制，可以一直消到没有可消除组合。无可消除组合或困难模式步数用完时本关结算，剩余10个以内有少量奖励；如果无可消除组合且还剩步数，会按未用步数奖励。累计分数达到当前关目标就进入下一关，否则游戏结束。',
     paopao: '交错网格泡泡射击。按住或拖动瞄准，松开发射；泡泡会在左右墙反弹，撞到天花板或现有泡泡后吸附到最近空槽。3个及以上同色相连会消除，不再连着顶部的泡泡会掉落得分。初始每发射10次顶部压下一行，每下压3行后间隔减少1次，最低固定为5次；场上只剩5个以内会立刻补压一行。任意泡泡越过红色警戒线即结束。每局有5个炸弹，炸弹会消除落点周围3格泡泡。',
     pinball: '完整 Space Cadet 球台：长按约3秒蓄力，松手发射；左右触控按钮或方向键控制挡板，空格发射。击中任务靶后上左侧坡道接受任务，利用虫洞、超空间和燃料通道得分晋级。连续震台会 TILT。可放大画面、切换高清／经典显示。三球用尽结算；同页返回可继续完整球局，刷新后只保留分数、常规球数和军衔，从新球开始。',
@@ -385,6 +387,10 @@ export async function initWanbanXiaowu(options = {}) {
       { id:'normal', title:'经典工坊', sub:'12关 · 每关保证可解', multiplier:1 },
       { id:'endless', title:'无尽工坊', sub:'初版规则 · 28–32块连续补层', multiplier:1 }
     ],
+    screwclassic: [
+      { id:'normal', title:'普通模式', sub:'可通关的正常关卡', multiplier:1 },
+      { id:'endless', title:'无尽模式', sub:'一直玩就会一直爽！', multiplier:1 }
+    ],
     draughts: [
       { id:'fool', title:'傻瓜模式', sub:'自动跳到合适的点', multiplier:1 },
       { id:'master', title:'大师模式', sub:'自由思考每一步连跳', multiplier:1 }
@@ -425,7 +431,8 @@ export async function initWanbanXiaowu(options = {}) {
     minesweeper: { start:'扫雷开局，16×16棋盘里藏着50个雷。', number:'玩家翻开安全格并出现数字。', flag:'玩家进行插旗或问号标记。', chord:'玩家点击已翻开的数字格，周围标记数量符合数字，成功试探并翻开新格。', big_open:'一次翻开超过5个安全格。', half:'安全格已经翻开一半。', last_5:'按剩余雷数和插旗数计算，显示只剩最后5个雷以内。', record:'扫雷刷新历史最高分。', gameover:'玩家踩到雷，本局失败。', random:'观看扫雷时的待机碎碎念。' },
     shuerte: { start:'舒尔特方格开局，玩家需要按升序寻找随机数字。', first:'玩家点中数字1，计时开始。', combo:'玩家达成5连击或更高连击。', half:'已经按顺序点完一半数字。', last:'只剩最后5个以内数字。', wrong:'玩家点到非目标数字。', hint:'玩家使用提示，高亮下一个目标数字。', focus:'玩家使用聚焦，突出目标所在行列。', shuffle:'玩家使用重排，打散剩余未点击数字。', record:'舒尔特方格刷新历史最高分。', gameover:'玩家点完最后一个数字，挑战完成。', random:'观看舒尔特方格时的待机碎碎念。' },
     uyangle: { start:'U了个U开局。这是一个三消叠牌小游戏，玩家点击未被遮挡的卡牌放入7格槽，同图标3张会消除。', match:'玩家累计每完成3次三消时触发一次普通三消语录；如果同一步触发危险、最后10张、失败或完成等特殊事件，则优先特殊事件。', shuffle:'玩家使用打乱，重新随机排列剩余牌面。', moveout:'玩家使用移出，把槽内一张卡牌移到上方暂存区。', danger:'下方槽位已经占满6个以上，距离失败很近。', last_10:'场上剩余最后10张以内卡牌。', record:'U了个U刷新历史最高分。', gameover:'下方7格槽已满，玩家再放入一张卡牌后没有形成三消，槽位溢出导致失败。', random:'观看U了个U三消叠牌时的碎碎念。' },
-    screw: { start:'拧螺丝开局，玩家需要按当前颜色收纳盒清理分层板件。', match:'玩家把一颗同色螺丝直接收入当前收纳盒。', add_box:'玩家扩充一次收纳空间；经典模式增加暂存孔，无尽模式增加当前收纳盒。', progress_50:'拧螺丝经典关卡进度首次达到50%。', progress_80:'玩家完成当前经典关卡。', tray_4:'临时孔位已占4格，只剩最后一格安全空间。', record:'拧螺丝刷新历史最高分。', gameover:'临时孔位全部占满，当前游戏结束。', random:'观看拧螺丝时的碎碎念。' },
+    screwclassic: { start:'原版拧螺丝开局，玩家需要按当前颜色工具盒清理分层面板。', match:'原版工具盒完成一次三颗同色螺丝打包。', add_box:'玩家把同时开启的工具盒增加一个。', progress_50:'原版拧螺丝进度首次达到50%。', progress_80:'原版拧螺丝进度首次达到80%。', tray_4:'临时托盘已占满5格，下一颗无法入盒的螺丝会导致失败。', record:'原版拧螺丝刷新历史最高分。', gameover:'临时托盘满后又选了无法直接入盒的螺丝。', random:'观看原版拧螺丝时的碎碎念。' },
+    screw: { start:'疯狂拧螺丝开局，玩家需要按当前颜色收纳盒清理分层板件。', match:'玩家把一颗同色螺丝直接收入当前收纳盒。', add_box:'玩家扩充一次收纳空间；经典模式增加暂存孔，无尽模式增加当前收纳盒。', progress_50:'疯狂拧螺丝经典关卡进度首次达到50%。', progress_80:'玩家完成当前经典关卡。', tray_4:'临时孔位已占4格，只剩最后一格安全空间。', record:'疯狂拧螺丝刷新历史最高分。', gameover:'临时孔位全部占满，当前游戏结束。', random:'观看疯狂拧螺丝时的碎碎念。' },
     popstar: { start:'消灭星星开局，10×10彩色星星棋盘已生成。', first_clear:'当前关第一次消除星星。', small_clear:'玩家只消除了2个星星。', high_clear:'玩家一次消除4个及以上星星，获得较高分数。', level_clear:'玩家通过当前关。', record:'消灭星星刷新历史最高分。', cheat:'玩家使用打乱或单消道具。', target_met:'玩家当前累计分数首次达到本关通关分数。', gameover:'消灭星星没有可消除组合且分数未达到本关目标。', random:'观看消灭星星时的碎碎念。' },
     paopao: { start:'泡泡龙开局，顶部已有5行泡泡，玩家准备瞄准发射。', aim:'玩家按住并拖动，虚线轨迹正在根据墙壁反弹预测落点。', clear:'玩家成功消除同色泡泡。', clear_5:'玩家一次性消除超过5个泡泡。', drop:'失去顶部连接的泡泡悬空掉落。', danger:'泡泡群快要接近红色警戒线。', score_1000:'泡泡龙本局分数每增加1000分时触发。', bomb:'玩家使用炸弹泡泡，炸掉落点周围3格泡泡。', record:'泡泡龙刷新历史最高分。', gameover:'泡泡越过红色警戒线，泡泡龙本局结束。', random:'观看泡泡龙时的待机碎碎念。' },
     zuma: { start:'祖玛无尽模式开局，青蛙准备向持续移动的珠链发射彩珠。', resume:'继续祖玛无尽模式存档。', shoot:'玩家从青蛙口中发射普通彩珠。', swap:'玩家交换当前珠和下一颗珠。', clear:'玩家消除3到4颗同色珠，彩珠播放爆裂淡出后珠链开始回退。', clear_5:'玩家一次消除5颗以上同色珠，彩珠播放爆裂淡出后珠链开始回退。', chain:'珠链平滑回退接合后再次形成同色三消，继续播放爆裂和回退连锁。', miss:'玩家发射的珠子没有击中珠链。', danger:'珠链前端已经接近终点洞口。', bomb:'炸弹命中但只清除少量珠子。', bomb_big:'炸弹命中并清除5颗珠子。', slow:'玩家使用减速道具，珠链减速8秒。', rainbow:'彩虹珠命中后变为目标颜色。', spawn_pressure:'珠链入口累计生成的珠子跨过新的50颗节点。', clear_all:'玩家清空整条珠链获得600分，入口仍会继续生成新珠子。', speed_up:'祖玛动态速度跨过新的阶段。', record:'祖玛刷新历史最高分。', gameover:'珠链进入终点洞口，祖玛无尽模式结束。', random:'观看祖玛时的待机碎碎念。' },
@@ -680,7 +687,7 @@ export async function initWanbanXiaowu(options = {}) {
   }
   function scores() {
     const loaded = safeObject(loadJSON(STORAGE_SCORES, {}));
-    const base = { tetris: 0, snake: 0, game2048: 0, watermelon: 0, memory: 0, jump: 0, plank: 0, sudoku: 0, minesweeper: 0, shuerte: 0, uyangle: 0, screw: 0, popstar: 0, paopao: 0, zuma: 0, watersort: 0, game1010: 0, turkey: 0, spider: 0, ludo: { user: 0, ta: 0 }, guessnumber: { user: 0, ta: 0 }, wordguess: { user: 0, ta: 0 }, tictactoe: { user: 0, ta: 0 }, gomoku: { user: 0, ta: 0 }, territory: { user: 0, ta: 0 }, oldmaid: { user: 0, ta: 0 }, reversi: { user: 0, ta: 0 }, bombnumber: { user: 0, ta: 0 }, connect4d: { user: 0, ta: 0 }, draughts: { user: 0, ta: 0 }, westernchess: { user: 0, ta: 0 }, chinesechess: { user: 0, ta: 0 } };
+    const base = { tetris: 0, snake: 0, game2048: 0, watermelon: 0, memory: 0, jump: 0, plank: 0, sudoku: 0, minesweeper: 0, shuerte: 0, uyangle: 0, screwclassic: 0, screw: 0, popstar: 0, paopao: 0, zuma: 0, watersort: 0, game1010: 0, turkey: 0, spider: 0, ludo: { user: 0, ta: 0 }, guessnumber: { user: 0, ta: 0 }, wordguess: { user: 0, ta: 0 }, tictactoe: { user: 0, ta: 0 }, gomoku: { user: 0, ta: 0 }, territory: { user: 0, ta: 0 }, oldmaid: { user: 0, ta: 0 }, reversi: { user: 0, ta: 0 }, bombnumber: { user: 0, ta: 0 }, connect4d: { user: 0, ta: 0 }, draughts: { user: 0, ta: 0 }, westernchess: { user: 0, ta: 0 }, chinesechess: { user: 0, ta: 0 } };
     ['ludo','guessnumber','wordguess','tictactoe','gomoku','territory','oldmaid','reversi','bombnumber','connect4d','draughts','westernchess','chinesechess'].forEach(k => { if (typeof loaded[k] === 'number') loaded[k] = { user: loaded[k], ta: 0 }; });
     return Object.assign(base, loaded);
   }
@@ -1006,7 +1013,7 @@ export async function initWanbanXiaowu(options = {}) {
     if (game === 'watermelon') return !!(state.score || (state.balls && state.balls.length));
     if (game === 'memory') return !!(state.moves || (state.done && state.done.length) || (state.open && state.open.length));
     if (game === 'uyangle') return !!(state.tiles && state.tiles.some(t => !t.gone)) || !!(state.tray && state.tray.length) || !!(state.hold && state.hold.length);
-    if (game === 'screw') return !!(state.panels && state.panels.some(p => !p.gone)) || !!(state.tray && state.tray.length);
+    if (game === 'screw' || game === 'screwclassic') return !!(state.panels && state.panels.some(p => !p.gone)) || !!(state.tray && state.tray.length);
     if (game === 'popstar') return !!state.score || Number(state.level || 1) > 1 || !!(state.board && state.board.some(row => row && row.some(Boolean)));
     if (game === 'paopao') return !!state.score || !!state.shots || !!(state.bubbles && state.bubbles.length); 
     if (game === 'pinball') return validCadetProgress(state);
@@ -1250,7 +1257,8 @@ export async function initWanbanXiaowu(options = {}) {
     if (game === 'minesweeper') return '字段说明：胜负是user的扫雷结果；排对雷表示插旗位置确实是雷的数量；成功时用时越短分数越高，失败时按已排对雷和已翻开安全格给少量分。';
     if (game === 'shuerte') return '字段说明：舒尔特方格是按顺序寻找数字的专注力游戏；尺寸表示本局选择的4×4、5×5或6×6关卡；错误是点到非目标数字次数；最高连击表示连续正确点击的最大次数。';
     if (game === 'uyangle') return '字段说明：U了个U是三消叠牌小游戏；分数由用时和打乱次数共同计算，用时越短、打乱越少，分数越高。';
-    if (game === 'screw') return '字段说明：拧螺丝是颜色收纳盒与分层板件解谜；经典工坊共12关并按关结算星级。无尽工坊会在板件接近清空时连续补入新层，不按关卡结算；默认3个收纳盒，可扩到6盒，盒数越少计分倍率越高。';
+    if (game === 'screwclassic') return '字段说明：拧螺丝完整保留首个独立游戏包的普通与无尽玩法；普通模式每局42到47块板件，无尽模式每层28到32块并在接近清空时连续补层。默认3个颜色工具盒，可扩到6盒；板件剩一颗螺丝时绕固定点摆动，最后一颗拆除后受重力下落。';
+    if (game === 'screw') return '字段说明：疯狂拧螺丝是颜色收纳盒与分层板件解谜；经典工坊共12关并按关结算星级。无尽工坊会在板件接近清空时连续补入新层，不按关卡结算；默认3个收纳盒，可扩到6盒，盒数越少计分倍率越高。';
     if (game === 'popstar') return '字段说明：消灭星星是10×10连通消除游戏；一次消除n个星星得分n×n×5，并对8个以上大块追加奖励；困难模式每关有步数限制，消除和使用道具都会消耗步数；简单模式没有步数限制，可以一直消到没有可消除组合；结算时累计分数达到关卡目标进入下一关。';
     if (game === 'paopao') return '字段说明：泡泡龙是交错网格射击生存游戏；发射表示本局射出的泡泡数量；下压表示顶部新增行并整体下移的次数，下压间隔会从10发逐步缩短到5发。';
     if (game === 'zuma') return '字段说明：祖玛神庙冒险包含关卡、生命、三连消除、同色吸回连锁、连续命中、穿隙奖励与四种标记珠能力。消除为累计清除彩珠，最高连锁为连续命中纪录。';
@@ -1302,6 +1310,7 @@ export async function initWanbanXiaowu(options = {}) {
     if (game === 'sudoku') return '分数：' + sudokuRecordPoints(rec) + '；提示次数：' + (d.hints || 0) + '次；修改次数：' + (d.edits || 0) + '次；修改最多的格子修改次数：' + (d.maxEditsOneCell || 0) + '次；全部完成后错误次数：' + (d.finalErrors || 0) + '格。';
     if (game === 'minesweeper') return '结果：' + (d.won ? '成功' : '失败') + '；插旗数量：' + (d.flags || 0) + '；排对的雷：' + (d.correctFlags || 0) + '个；未插旗扫雷数量：' + (d.unflaggedMines || 0) + '个；踩雷时已开格子：' + (d.openedAtBlast || d.openedSafe || 0) + '格；犹豫次数：' + (d.hesitations || 0) + '次；数字试探成功次数：' + (d.chordSuccesses || 0) + '次；不确定试探成功次数：' + (d.riskyChordSuccesses || 0) + '次。';
     if (game === 'shuerte') return '尺寸：' + (d.size || 0) + '×' + (d.size || 0) + (d.noFade ? '（盲点）' : '') + '；最终分数：' + (d.score || singleRecordPoints(rec)) + '分；用时：' + ((d.durationMs || 0) / 1000).toFixed(2) + '秒；正确点击：' + (d.correct || 0) + '次；错误点击：' + (d.wrong || 0) + '次；最高连击：' + (d.maxCombo || 0) + '；提示/聚焦/重排：' + (d.hintUsed || 0) + '/' + (d.focusUsed || 0) + '/' + (d.shuffleUsed || 0) + '次；平均反应：' + ((d.avgReactionMs || 0) / 1000).toFixed(2) + '秒。';
+    if (game === 'screwclassic') return '结果：' + (d.completed ? '成功' : '失败') + '；拆除螺丝：' + (d.removed || 0) + '颗；完成打包：' + (d.matches || 0) + '盒；收入盒中：' + (d.packed || 0) + '颗；临时托盘最大占用：' + (d.maxTray || 0) + '格；托盘满载：' + (d.trayFullCount || 0) + '次；增加盒子：' + (d.addBoxUses || 0) + '次；误点遮挡螺丝：' + (d.blocked || 0) + '次；重力掉落板件：' + (d.fallen || 0) + '块。';
     if (game === 'screw') return '结果：' + (d.completed ? '成功' : '失败') + '；完成关卡：' + (d.levels || 0) + '关；无尽层数：' + (d.endlessLayers || 1) + '层；收纳完成：' + (d.boxesCompleted || 0) + '盒；收入螺丝：' + (d.packed || 0) + '颗；临时孔位最大占用：' + (d.maxTray || 0) + '格；满孔失败：' + (d.trayFullCount || 0) + '次；撤销/提示/扩容：' + (d.undos || 0) + '/' + (d.hints || 0) + '/' + (d.addBoxUses || 0) + '次；误点遮挡螺丝：' + (d.blocked || 0) + '次；掉落板件：' + (d.fallen || 0) + '块。';
     if (game === 'popstar') return '模式：' + (d.mode === 'easy' ? '简单模式' : d.mode === 'hard' ? '困难模式' : '未记录') + '；最终关卡：第' + (d.level || 1) + '关；最终分数：' + (d.score || 0) + '分；消除星星总数：' + (d.removedTotal || 0) + '个；高分方块统计：5个' + (d.highClears?.['5'] || 0) + '次，6个' + (d.highClears?.['6'] || 0) + '次，7个' + (d.highClears?.['7'] || 0) + '次，8个及以上' + (d.highClears?.['8plus'] || 0) + '次；大块额外奖励：' + (d.bigBonusTotal || 0) + '分；余步奖励：' + (d.unusedMoveBonusTotal || 0) + '分；命悬一线次数：' + (d.clutchCount || 0) + '次；连消高分次数：' + (d.highComboCount || 0) + '次；连续高分消除最大次数：' + (d.maxHighStreak || 0) + '次；使用打乱：' + (d.shuffleUsed || 0) + '次；使用单消：' + (d.singleUsed || 0) + '次；剩余方块统计：' + finalCountText(d.remainingCounts, '剩余') + '；竟然全部消除：' + (d.clearAllCount || 0) + '次。';
     if (game === 'paopao') return '最终分数：' + (d.score || singleRecordPoints(rec)) + '分；发射：' + (d.shots || 0) + '次；下压：' + (d.pushes || 0) + '行；主动消除：' + (d.cleared || 0) + '个；悬空掉落：' + (d.dropTotal || 0) + '个；接近警戒线：' + (d.dangerCount || 0) + '次；炸弹使用：' + (d.bombUsed || 0) + '次；炸弹低收益：' + (d.bombBad ? '是' : '否') + '；连续高分最大次数：' + (d.maxHighStreak || 0) + '次；竟然全部消除：' + (d.clearAllCount || 0) + '次。';
@@ -1476,7 +1485,7 @@ export async function initWanbanXiaowu(options = {}) {
         'normal：普通小剧场。完成或失败后的普通互动。',
         '如果同一局同时满足多个特殊小剧场，会在满足条件的类型里等概率随机选择一个。'
       ].join('\n');
-      if (game === 'screw') return [
+      if (game === 'screw' || game === 'screwclassic') return [
         'super_good：超级厉害小剧场。不增加盒子/槽位并完成拧螺丝。',
         'screw_regret：遗憾小剧场。拧螺丝达到80%进度以上后失败。',
         'record：破纪录小剧场。刷新当前游戏历史最高分。',
@@ -1701,8 +1710,8 @@ export async function initWanbanXiaowu(options = {}) {
     if (game === 'uyangle' && meta.completed && (meta.shuffles || 0) === 0 && (meta.moveouts || 0) === 0) candidates.push('super_good');
     if (game === 'uyangle' && meta.fullTraySurvived && (meta.usedAllMoveouts || (meta.moveouts || 0) >= 3)) candidates.push('uyangle_clutch');
     if (game === 'uyangle' && meta.badLuck) candidates.push('bad_luck');
-    if (game === 'screw' && meta.completed && (meta.addBoxUses || 0) === 0) candidates.push('super_good');
-    if (game === 'screw' && !meta.completed && (meta.progress || 0) >= 80) candidates.push('screw_regret');
+    if ((game === 'screw' || game === 'screwclassic') && meta.completed && (meta.addBoxUses || 0) === 0) candidates.push('super_good');
+    if ((game === 'screw' || game === 'screwclassic') && !meta.completed && (meta.progress || 0) >= 80) candidates.push('screw_regret');
     if (game === 'popstar' && meta.completed && (meta.maxHighStreak || meta.details?.maxHighStreak || 0) >= 3) candidates.push('super_good');
     if (game === 'popstar' && !meta.completed && (meta.level || meta.details?.level || 1) <= 4) candidates.push('super_bad');
     if (game === 'popstar' && meta.clutch) candidates.push('popstar_clutch');
@@ -1754,7 +1763,7 @@ export async function initWanbanXiaowu(options = {}) {
     if (durationMs <= 15000 && ((game === 'tetris' && score < 200) || (game === 'snake' && score < 30) || ((game === 'jump' || game === 'plank') && score < 3) || (game === 'watermelon' && score < 120) || (game === 'game2048' && score < 128))) candidates.push('super_bad');
     if (game !== 'linklink' && durationMs >= 1200000) candidates.push('long_run');
     if (currentRoundRecord) candidates.push('record');
-    if (game === 'screw' && !candidates.length) candidates.push(meta.completed ? 'screw_success' : 'screw_fail');
+    if ((game === 'screw' || game === 'screwclassic') && !candidates.length) candidates.push(meta.completed ? 'screw_success' : 'screw_fail');
     return candidates.length ? candidates[Math.floor(Math.random() * candidates.length)] : '';
   }
   function doubleSpecialTheater(game, outcome, scoreText, meta) {
@@ -3651,7 +3660,7 @@ export async function initWanbanXiaowu(options = {}) {
       .wb-screw-tool span { font-size:11px; font-weight:850; white-space:nowrap; }
       .wb-screw-tool em { position:absolute; right:5px; top:5px; min-width:16px; height:16px; display:grid; place-items:center; padding:0 3px; border-radius:999px; color:#fff; background:#bd6b8c; box-shadow:0 1px 3px rgba(96,54,75,.18); font-size:9px; font-weight:900; font-style:normal; }
       .wb-screw-stage { position:relative; min-width:0; min-height:0; width:100%; height:100%; display:grid; place-items:center; overflow:hidden; border:1px solid rgba(113,78,98,.15); border-radius:24px; background:linear-gradient(160deg,#fff8f5,#efe6ee); box-shadow:0 10px 26px rgba(99,66,84,.14); }
-      .wb-screw-canvas { display:block; height:100%; width:auto; max-width:100%; max-height:100%; aspect-ratio:3/4; border:0; border-radius:22px; background:#f5ddbf; box-shadow:inset 0 0 0 1px rgba(255,255,255,.68); touch-action:none; user-select:none; -webkit-user-select:none; }
+      .wb-screw-canvas { display:block; height:100%; width:auto; max-width:100%; max-height:100%; aspect-ratio:3/4; border:0; border-radius:22px; background:#f5ddbf; box-shadow:inset 0 0 0 1px rgba(255,255,255,.68); touch-action:none; user-select:none; -webkit-user-select:none; contain:paint; isolation:isolate; transform:translateZ(0); backface-visibility:hidden; }
       .wb-screw-callout { position:absolute; z-index:3; left:50%; bottom:10px; max-width:calc(100% - 24px); min-height:28px; transform:translateX(-50%); display:grid; place-items:center; padding:6px 13px; border:1px solid rgba(132,92,115,.15); border-radius:999px; background:rgba(255,252,250,.84); color:#604257; box-shadow:0 5px 16px rgba(94,61,79,.13); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); font-size:10px; font-weight:800; line-height:1.3; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; pointer-events:none; }
       .wb-screw-callout.warn { color:#8b4b42; border-color:rgba(183,100,88,.32); background:rgba(255,244,237,.92); }
       .wb-screw-result { position:absolute; z-index:7; inset:0; display:grid; place-items:center; padding:20px; background:rgba(85,57,75,.32); backdrop-filter:blur(7px); -webkit-backdrop-filter:blur(7px); }
@@ -11028,7 +11037,7 @@ export async function initWanbanXiaowu(options = {}) {
       if (game === 'minesweeper') return [['score','normal'], ['score','record'], ['score','super_good'], ['score','bad_luck'], ['score','minesweeper_regret'], ['score','mine_lucky']];
       if (game === 'shuerte') return [['score','normal'], ['score','record'], ['score','super_good'], ['score','shuerte_focus'], ['score','shuerte_regret'], ['score','long_run']];
       if (game === 'uyangle') return [['score','normal'], ['score','super_good'], ['score','uyangle_clutch'], ['score','bad_luck'], ['score','long_run']];
-      if (game === 'screw') return [['score','screw_success'], ['score','screw_fail'], ['score','record'], ['score','super_good'], ['score','screw_regret'], ['score','long_run']];
+      if (game === 'screw' || game === 'screwclassic') return [['score','screw_success'], ['score','screw_fail'], ['score','record'], ['score','super_good'], ['score','screw_regret'], ['score','long_run']];
       if (game === 'popstar') return [['score','normal'], ['score','record'], ['score','super_good'], ['score','super_bad'], ['score','popstar_clutch'], ['score','popstar_godmove'], ['score','popstar_clear_all'], ['score','long_run']];
       if (game === 'paopao') return [['score','normal'], ['score','record'], ['score','super_good'], ['score','paopao_clutch'], ['score','paopao_drop'], ['score','paopao_bomb_fail'], ['score','paopao_clear_all'], ['score','long_run']];
       if (game === 'zuma') return [['score','normal'], ['score','record'], ['score','zuma_chain_master'], ['score','zuma_clutch'], ['score','zuma_sharpshooter'], ['score','zuma_toolbox'], ['score','zuma_endurance'], ['score','long_run']];

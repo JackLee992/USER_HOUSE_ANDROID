@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "version": "1.0.4",
+  "version": "1.0.5",
   "locale": "en",
   "brand": "Nookcade",
   "strings": {
@@ -542,9 +542,13 @@
       "title": "Triple Tile Stack",
       "rules": "Tap uncovered tiles to place them in the seven-slot tray. Three matching tiles clear together. Do not fill the tray without a match. Endless mode adds more layers as you clear tiles."
     },
-    "screw": {
+    "screwclassic": {
       "title": "Screw Sort",
-      "rules": "Tap visible screws to sort them into matching toolboxes. Each box takes three screws; unmatched colors use the five-slot tray. Remove upper panels to reach lower screws. Choose a finite board or endless batches."
+      "rules": "The complete original launch version. Each run creates 21–23 layered panels. Upper panels cover lower screws. A panel with one screw pivots and swings from that anchor; after its last screw is removed, it accelerates under gravity and can be stopped by screws still fixed to panels in front. Three color toolboxes are open at first, each packing three matching screws. Other colors use a five-slot tray, and up to six boxes can be opened. Clear every panel to finish."
+    },
+    "screw": {
+      "title": "Crazy Screw Sort",
+      "rules": "The expanded workshop has 12 solvable campaign levels and an endless mode that keeps adding layers. Three color boxes start open and pack three matching screws; other colors use five temporary slots, where a matching move can still rescue a full tray. Hints, undo and extra capacity are available, up to six boxes. Layered panels, screw flights into boxes and falling pieces all retain full motion."
     },
     "popstar": {
       "title": "Pop Stars",

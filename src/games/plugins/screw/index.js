@@ -3,11 +3,13 @@ import {
   addEndlessBox,
   addTraySlot,
   advanceFallingPanel,
+  advanceHangingPanel,
   advanceFlight,
   allLiveScrews,
   applyScrew,
   beginNextScrewLevel,
   colorForScrew,
+  createHangingPanelMotion,
   createScrewState,
   endlessScore,
   progressPercent,
@@ -19,7 +21,7 @@ import {
 } from './model.js';
 
 export const GAME_ID = 'screw';
-export const GAME_VERSION = '1.2.3';
+export const GAME_VERSION = '1.3.0';
 export const HOST_API_VERSION = 1;
 export const REQUIRED_ENV = Object.freeze([
   'activeGameController','choiceForState','choiceSavePatch','clearProgress','currentGameDurationMs',
@@ -35,12 +37,20 @@ const PANEL_TINTS = [
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 const easeOutCubic = value => 1 - (1 - value) ** 3;
 const easeInCubic = value => value ** 3;
+const UNSCREW_LIFT_PHASE = .64;
 
 function performancePixelRatio(win) {
   let mode = 'normal';
   try { mode = win.localStorage?.getItem('wanba_performance_v1') || 'normal'; } catch {}
-  const cap = mode === 'eco' ? 1 : mode === 'game' ? 3 : 2;
-  return { mode, value:Math.max(1, Math.min(cap, Number(win.devicePixelRatio) || 1)) };
+  const cap = mode === 'eco' ? 1 : 2;
+  const targetFps = mode === 'eco' ? 30 : mode === 'game' ? 120 : 60;
+  return {
+    mode,
+    value:Math.max(1, Math.min(cap, Number(win.devicePixelRatio) || 1)),
+    frameInterval:1000 / targetFps,
+    targetFps,
+    particleCount:mode === 'eco' ? 5 : mode === 'game' ? 12 : 8,
+  };
 }
 
 function roundRectPath(ctx, x, y, width, height, radius) {
@@ -105,7 +115,6 @@ function drawScrew(ctx, colorId, x, y, radius = 14, rotation = 0, glow = false, 
 function drawPanel(ctx, panel, options = {}) {
   const tint = PANEL_TINTS[panel.tint % PANEL_TINTS.length];
   ctx.save(); ctx.translate(panel.x, panel.y); ctx.rotate(panel.a || 0); ctx.globalAlpha *= options.alpha ?? 1;
-  if (options.filter && 'filter' in ctx) ctx.filter = options.filter;
   const edgeAlpha = options.edgeAlpha ?? 1;
   ctx.shadowColor = `rgba(91,59,80,${options.shadowAlpha ?? .2})`; ctx.shadowBlur = options.shadowBlur ?? 12; ctx.shadowOffsetY = options.shadowOffsetY ?? 7;
   panelPath(ctx, panel); ctx.fillStyle = '#7f6174'; ctx.fill();
@@ -192,7 +201,7 @@ export function createGame(env, savedState) {
   const restored = restoreScrewState(savedState, choice.id);
   let state = restored.state, destroyed = false, frameId = 0, lastFrameAt = 0, drawCount = 0, staticBuildCount = 0;
   let focusStats = { priority:0, secondary:0, hidden:0 };
-  let hint = null, shake = null, flights = [], falling = [], particles = [];
+  let hint = null, shake = null, flights = [], falling = [], swings = [], particles = [];
   let statusText = state.mode === 'endless' ? '持续收纳，板件会自动补入' : '优先拧下与收纳盒同色的螺丝', resizeObserver = null;
 
   root.innerHTML = [
@@ -220,13 +229,59 @@ export function createGame(env, savedState) {
   const ctx = canvas.getContext('2d', { alpha:false, desynchronized:true });
   const renderProfile = performancePixelRatio(win);
   canvas.width = Math.round(W * renderProfile.value); canvas.height = Math.round(H * renderProfile.value);
-  canvas.dataset.screwArt = 'atelier-v3'; canvas.dataset.renderMode = renderProfile.mode; canvas.dataset.depthFocus = 'semantic-v2';
+  canvas.dataset.screwArt = 'atelier-v4'; canvas.dataset.renderMode = renderProfile.mode; canvas.dataset.depthFocus = 'semantic-v2';
+  canvas.dataset.physics = 'gravity-v1'; canvas.dataset.contactPhysics = 'collision-v1'; canvas.dataset.acceleration = 'hardware-canvas2d';
   ctx.setTransform(renderProfile.value, 0, 0, renderProfile.value, 0, 0); ctx.imageSmoothingEnabled = true;
   const staticLayer = doc.createElement('canvas');
   staticLayer.width = canvas.width; staticLayer.height = canvas.height;
   const staticCtx = staticLayer.getContext('2d', { alpha:false, desynchronized:true });
   staticCtx.imageSmoothingEnabled = true;
-  let staticDirty = true;
+  const movingScrewSprites = new Map(), movingPanelSprites = new Map();
+  function movingScrewSprite(colorId) {
+    if (movingScrewSprites.has(colorId)) return movingScrewSprites.get(colorId);
+    const sprite = doc.createElement('canvas'), size = 64;
+    sprite.width = Math.round(size * renderProfile.value); sprite.height = Math.round(size * renderProfile.value);
+    const spriteCtx = sprite.getContext('2d', { alpha:true, desynchronized:true });
+    spriteCtx.setTransform(renderProfile.value,0,0,renderProfile.value,0,0);
+    drawScrew(spriteCtx,colorId,size/2,size/2,16,0,true,1);
+    movingScrewSprites.set(colorId,sprite);
+    return sprite;
+  }
+  function drawMovingScrew(target, colorId, x, y, radius, rotation, alpha = 1) {
+    const sprite = movingScrewSprite(colorId), scale = radius / 16, size = 64;
+    target.save(); target.translate(x,y); target.rotate(rotation); target.globalAlpha *= alpha;
+    target.drawImage(sprite,-size*scale/2,-size*scale/2,size*scale,size*scale); target.restore();
+  }
+  function movingPanelSprite(panel) {
+    const holes = (panel.screws || []).map(item => `${Number(item.lx).toFixed(1)},${Number(item.ly).toFixed(1)}`).join(';');
+    const key = [panel.id,panel.shape,panel.material,panel.tint,Number(panel.w).toFixed(1),Number(panel.h).toFixed(1),holes,renderProfile.mode].join(':');
+    if (movingPanelSprites.has(key)) return movingPanelSprites.get(key);
+    while (movingPanelSprites.size >= 6) {
+      const oldestKey = movingPanelSprites.keys().next().value, oldest = movingPanelSprites.get(oldestKey);
+      if (oldest?.canvas) { oldest.canvas.width = 0; oldest.canvas.height = 0; }
+      movingPanelSprites.delete(oldestKey);
+    }
+    const padding = renderProfile.mode === 'eco' ? 8 : 24;
+    const width = Math.ceil(panel.w + padding * 2), height = Math.ceil(panel.h + padding * 2);
+    const sprite = doc.createElement('canvas');
+    sprite.width = Math.ceil(width * renderProfile.value); sprite.height = Math.ceil(height * renderProfile.value);
+    const spriteCtx = sprite.getContext('2d', { alpha:true, desynchronized:true });
+    spriteCtx.setTransform(renderProfile.value,0,0,renderProfile.value,0,0); spriteCtx.imageSmoothingEnabled = true;
+    drawPanel(spriteCtx, { ...panel, x:width / 2, y:height / 2, a:0 }, {
+      alpha:1, fog:0, edgeAlpha:1, outerWidth:3, innerWidth:1,
+      detail:renderProfile.mode !== 'eco', shadowAlpha:renderProfile.mode === 'eco' ? 0 : .18,
+      shadowBlur:renderProfile.mode === 'eco' ? 0 : 8, shadowOffsetY:5,
+    });
+    const record = { canvas:sprite, width, height, bytes:sprite.width * sprite.height * 4 };
+    movingPanelSprites.set(key, record);
+    return record;
+  }
+  function drawMovingPanel(target, panel, alpha = 1) {
+    const sprite = movingPanelSprite(panel);
+    target.save(); target.translate(panel.x,panel.y); target.rotate(panel.a || 0); target.globalAlpha *= alpha;
+    target.drawImage(sprite.canvas,-sprite.width/2,-sprite.height/2,sprite.width,sprite.height); target.restore();
+  }
+  let staticDirty = true, boxesSignature = '', traySignature = '';
   const invalidateBoard = () => { staticDirty = true; };
 
   const haptic = (pattern = 10) => { try { win.navigator?.vibrate?.(pattern); } catch {} };
@@ -249,6 +304,7 @@ export function createGame(env, savedState) {
   function showResult() {
     const overlay = root.querySelector('#wb-screw-result');
     if (state.status === 'playing') { overlay.hidden = true; return; }
+    if (flights.length || falling.length || swings.length) { overlay.hidden = true; return; }
     overlay.hidden = false;
     const won = state.status === 'level_complete', endless = state.mode === 'endless';
     root.querySelector('#wb-screw-result-stars').textContent = won ? '★'.repeat(state.levelStars || 1) + '☆'.repeat(3 - (state.levelStars || 1)) : endless ? '✦' : '⚙';
@@ -276,7 +332,9 @@ export function createGame(env, savedState) {
     root.querySelector('#wb-screw-level').textContent = String(displayLevel);
     root.querySelector('#wb-screw-mode').textContent = endless ? '无尽工坊' : '经典工坊 · ' + SCREW_CAMPAIGN_LEVELS + '关';
     const boxesEl = root.querySelector('#wb-screw-boxes');
-    boxesEl.classList.toggle('many', state.boxes.length > 3); boxesEl.innerHTML = state.boxes.map(boxMarkup).join('');
+    const nextBoxes = state.boxes.map(boxMarkup).join('');
+    boxesEl.classList.toggle('many', state.boxes.length > 3);
+    if (nextBoxes !== boxesSignature) { boxesEl.innerHTML = nextBoxes; boxesSignature = nextBoxes; }
     const next = state.boxQueue[state.boxIndex], nextEl = root.querySelector('#wb-screw-next-color');
     if (next) {
       const color = colorForScrew(next);
@@ -285,11 +343,12 @@ export function createGame(env, savedState) {
     const continuousProgress = (state.details.boxesCompleted % 5) * 20;
     root.querySelector('#wb-screw-progress-fill').style.width = (endless ? continuousProgress : progress) + '%';
     root.querySelector('#wb-screw-progress-text').textContent = endless ? '已收纳 ' + state.details.boxesCompleted + ' 盒 · 持续补充' : progress + '%';
-    root.querySelector('#wb-screw-tray').innerHTML = Array.from({ length:state.trayCapacity }, (_, index) => {
+    const nextTray = Array.from({ length:state.trayCapacity }, (_, index) => {
       const item = state.tray[index], color = item ? colorForScrew(item.color) : null;
       return '<i class="wb-screw-slot ' + (item ? 'occupied' : '') + '">' +
         (item ? '<span style="--c:' + color.hex + ';--d:' + color.dark + ';--l:' + color.light + '"></span>' : '') + '</i>';
     }).join('');
+    if (nextTray !== traySignature) { root.querySelector('#wb-screw-tray').innerHTML = nextTray; traySignature = nextTray; }
     for (const name of ['undo','hint','extra']) {
       root.querySelector('#wb-screw-' + name + '-left').textContent = String(state.tools[name]);
       const button = root.querySelector('#wb-screw-' + name);
@@ -304,19 +363,20 @@ export function createGame(env, savedState) {
 
   function depthStyle(index, count, focus) {
     const frontness = count <= 1 ? 1 : index / (count - 1);
+    const shadowScale = renderProfile.mode === 'eco' ? 0 : 1;
     if (focus === 'priority') return {
-      alpha:1, filter:'none', fog:0, edgeAlpha:1, outerWidth:3, innerWidth:1,
-      detail:true, shadowAlpha:.2, shadowBlur:12, shadowOffsetY:7,
+      alpha:1, fog:0, edgeAlpha:1, outerWidth:3, innerWidth:1,
+      detail:renderProfile.mode !== 'eco', shadowAlpha:.2*shadowScale, shadowBlur:12*shadowScale, shadowOffsetY:7*shadowScale,
     };
     if (focus === 'secondary') return {
-      alpha:.78, filter:'saturate(.66) contrast(.96)', fog:.04, edgeAlpha:.62, outerWidth:2, innerWidth:.7,
-      detail:true, shadowAlpha:.12, shadowBlur:8, shadowOffsetY:5,
+      alpha:.76, fog:.08, edgeAlpha:.62, outerWidth:2, innerWidth:.7,
+      detail:renderProfile.mode !== 'eco', shadowAlpha:.12*shadowScale, shadowBlur:8*shadowScale, shadowOffsetY:5*shadowScale,
     };
     return {
       alpha:frontness >= .62 ? .48 : .36,
-      filter:'saturate(.3) brightness(1.05)', fog:frontness >= .62 ? .14 : .2,
+      fog:frontness >= .62 ? .2 : .28,
       edgeAlpha:.28, outerWidth:1, innerWidth:0, detail:false,
-      shadowAlpha:.06, shadowBlur:4, shadowOffsetY:3,
+      shadowAlpha:.06*shadowScale, shadowBlur:4*shadowScale, shadowOffsetY:3*shadowScale,
     };
   }
 
@@ -335,8 +395,10 @@ export function createGame(env, savedState) {
     }
     focusStats = nextFocusStats;
     const panels = state.panels.filter(item => !item.gone).sort((a, b) => a.z - b.z);
+    const dynamicPanelIds = new Set(swings.map(item => item.panelId));
     for (let index = 0; index < panels.length; index += 1) {
       const panel = panels[index];
+      if (dynamicPanelIds.has(panel.id)) continue;
       const offset = activeShake?.panelId === panel.id ? Math.sin(activeShake.phase * Math.PI * 8) * 4 * (1 - activeShake.phase) : 0;
       const visual = offset ? { ...panel, x:panel.x + offset } : panel;
       const focus = priorityPanels.has(panel.id) ? 'priority' : secondaryPanels.has(panel.id) ? 'secondary' : 'hidden';
@@ -368,26 +430,41 @@ export function createGame(env, savedState) {
       ctx.save(); ctx.setTransform(1,0,0,1,0,0); ctx.drawImage(staticLayer,0,0); ctx.restore();
     }
     ctx.save(); ctx.setTransform(renderProfile.value, 0, 0, renderProfile.value, 0, 0);
+    for (const motion of swings) {
+      const panel = state.panels.find(item => item.id === motion.panelId && !item.gone);
+      if (!panel) continue;
+      drawMovingPanel(ctx, panel, 1);
+      const anchor = panel.screws.find(item => item.id === motion.anchorId && !item.gone);
+      if (anchor) drawMovingScrew(ctx, anchor.color, motion.pivotX, motion.pivotY, 14, -panel.a * 1.8, 1);
+    }
     if (hint) {
       const highlighted = allLiveScrews(state).find(hit => hit.screw.id === hint.id);
       if (highlighted) {
         const pulse = 1 + Math.sin(hint.phase * Math.PI * 6) * .1;
-        drawScrew(ctx, highlighted.screw.color, highlighted.point.x, highlighted.point.y, 17 * pulse, 0, true, 1);
+        drawMovingScrew(ctx, highlighted.screw.color, highlighted.point.x, highlighted.point.y, 17 * pulse, 0, 1);
         ctx.strokeStyle = 'rgba(255,244,164,.94)'; ctx.lineWidth = 3; ctx.beginPath();
         ctx.arc(highlighted.point.x,highlighted.point.y,25+Math.sin(hint.phase*Math.PI*6)*3,0,Math.PI*2); ctx.stroke();
       }
     }
-    for (const panel of falling) drawPanel(ctx, panel, { alpha:clamp(1 - Math.max(0, panel.time - .55) / .45, 0, 1) });
+    for (const panel of falling) {
+      const fadeAt = panel.settled ? Math.max(1.55, (panel.firstContactAt || 0) + .85) : 1.52;
+      drawMovingPanel(ctx, panel, clamp(1 - Math.max(0, panel.time - fadeAt) / .28, 0, 1));
+    }
     for (const flight of flights) {
       const t = clamp(flight.time / flight.duration, 0, 1);
       let x, y, scale;
-      if (t < .28) {
-        const p = easeOutCubic(t / .28); x = flight.x; y = flight.y - 30 * p; scale = 1 + .36 * p;
+      if (t < UNSCREW_LIFT_PHASE) {
+        const p = easeOutCubic(t / UNSCREW_LIFT_PHASE); x = flight.x; y = flight.y - 24 * p; scale = 1 + .22 * p;
+        ctx.save(); ctx.globalAlpha = (1 - p) * .72;
+        const stem = 5 + 20 * p;
+        const metal = ctx.createLinearGradient(x-5,y,x+5,y);
+        metal.addColorStop(0,'#73566a'); metal.addColorStop(.45,'#f8eee8'); metal.addColorStop(1,'#68475d');
+        ctx.fillStyle=metal; roundRectPath(ctx,x-5,y+4,10,stem,4); ctx.fill(); ctx.restore();
       } else {
-        const p = (t - .28) / .72, eased = easeInCubic(p), sx = flight.x, sy = flight.y - 30;
-        x = sx + (flight.destX - sx) * eased; y = sy + (flight.destY - sy) * eased - Math.sin(p * Math.PI) * 58; scale = 1.36 - p * .56;
+        const p = (t - UNSCREW_LIFT_PHASE) / (1 - UNSCREW_LIFT_PHASE), eased = easeInCubic(p), sx = flight.x, sy = flight.y - 24;
+        x = sx + (flight.destX - sx) * eased; y = sy + (flight.destY - sy) * eased - Math.sin(p * Math.PI) * 52; scale = 1.22 - p * .46;
       }
-      drawScrew(ctx, flight.color, x, y, 14 * scale, t * Math.PI * 7, true, 1 - Math.max(0, t - .82) / .18);
+      drawMovingScrew(ctx, flight.color, x, y, 14 * scale, t * Math.PI * 9, 1 - Math.max(0, t - .86) / .14);
     }
     for (const particle of particles) {
       const alpha = clamp(1 - particle.time / particle.duration, 0, 1);
@@ -397,29 +474,59 @@ export function createGame(env, savedState) {
     ctx.restore();
   }
 
-  const hasAnimation = () => !!(flights.length || falling.length || particles.length || hint || shake);
+  const hasAnimation = () => !!(flights.length || falling.length || swings.length || particles.length || hint || shake);
   function scheduleFrame() {
     if (!destroyed && !frameId && hasAnimation() && !env.gamePaused) frameId = win.requestAnimationFrame(frame);
+  }
+  function activeMotionElapsed(item, amount) {
+    const delay = Math.max(0, Number(item.delay) || 0);
+    if (!delay) return amount;
+    item.delay = Math.max(0, delay - amount);
+    return Math.max(0, amount - delay);
   }
   function frame(now) {
     frameId = 0;
     if (destroyed || env.gamePaused) { lastFrameAt = 0; return; }
     if (!lastFrameAt) { lastFrameAt = now; drawBoard(); scheduleFrame(); return; }
-    const elapsed = clamp((now - lastFrameAt) / 1000, 0, .25); lastFrameAt = now;
-    flights.forEach(item => advanceFlight(item, elapsed)); falling.forEach(item => advanceFallingPanel(item, elapsed));
+    const pendingMs = now - lastFrameAt;
+    if (pendingMs + 1 < renderProfile.frameInterval) { scheduleFrame(); return; }
+    const frameSteps = Math.max(1, Math.floor((pendingMs + 1) / renderProfile.frameInterval));
+    const elapsed = clamp(frameSteps * renderProfile.frameInterval / 1000, 0, .25);
+    lastFrameAt += frameSteps * renderProfile.frameInterval;
+    if (now - lastFrameAt > renderProfile.frameInterval * 2) lastFrameAt = now;
+    flights.forEach(item => advanceFlight(item, elapsed));
+    for (const item of falling) {
+      const colliders = state.panels.filter(panel => !panel.gone && panel.z < item.z);
+      const amount = activeMotionElapsed(item, elapsed);
+      if (amount) advanceFallingPanel(item, amount, colliders);
+    }
+    let swingSettled = false;
+    for (const motion of swings) {
+      const panel = state.panels.find(item => item.id === motion.panelId && !item.gone);
+      if (!panel) { motion.finished = true; continue; }
+      const amount = activeMotionElapsed(motion, elapsed);
+      if (amount) advanceHangingPanel(panel, motion, amount);
+      if (motion.finished) swingSettled = true;
+    }
+    swings = swings.filter(item => !item.finished);
+    if (swingSettled) { invalidateBoard(); save(true); haptic(6); }
     particles.forEach(item => { item.time += elapsed; item.x += item.vx * elapsed; item.y += item.vy * elapsed; item.vy += 260 * elapsed; });
     if (hint) { hint.phase += elapsed; if (hint.phase >= 1.35) hint = null; }
     if (shake) { shake.phase += elapsed / .42; if (shake.phase >= 1) shake = null; }
     flights = flights.filter(item => item.time < item.duration);
-    falling = falling.filter(item => item.y - item.h / 2 < H + 90 && item.time < 1.1);
+    falling = falling.filter(item => {
+      const fadeAt = Math.max(1.55, (item.firstContactAt || 0) + .85);
+      const expiresAt = item.settled ? fadeAt + .28 : 2.15;
+      return item.y - item.h / 2 < H + 36 && item.time < expiresAt;
+    });
     particles = particles.filter(item => item.time < item.duration);
     drawBoard();
-    if (hasAnimation()) scheduleFrame(); else lastFrameAt = 0;
+    if (hasAnimation()) scheduleFrame(); else { lastFrameAt = 0; renderUI(); }
   }
 
   function confetti(point, color) {
     const random = index => ((Math.imul(index + state.moves * 17, 2654435761) >>> 8) % 1000) / 1000;
-    for (let index = 0; index < 12; index += 1) {
+    for (let index = 0; index < renderProfile.particleCount; index += 1) {
       const angle = random(index) * Math.PI * 2, speed = 42 + random(index + 20) * 86;
       particles.push({ x:point.x, y:point.y, vx:Math.cos(angle)*speed, vy:Math.sin(angle)*speed-50,
         size:2+random(index+40)*3, time:0, duration:.45+random(index+60)*.35, color });
@@ -460,10 +567,19 @@ export function createGame(env, savedState) {
     const boxSpan = beforeBoxes.length > 1 ? 264 / (beforeBoxes.length - 1) : 0;
     flights.push({ x:hit.point.x, y:hit.point.y, color:hit.screw.color,
       destX:result.route === 'box' ? 78 + boxPosition * boxSpan : 140 + Math.min(state.tray.length, 5) * 28,
-      destY:-28, time:0, duration:.48 });
+      destY:-28, time:0, duration:.58 });
     if (result.panelReleased) {
       beforePanel.screws.forEach(screw => { screw.gone = true; });
-      falling.push({ ...beforePanel, vx:(beforePanel.x-W/2)*.34, vy:-48, va:beforePanel.x < W/2 ? -.75 : .75, time:0 });
+      const lever = clamp((hit.screw.lx || 0) / Math.max(1, beforePanel.w / 2), -1, 1);
+      falling.push({ ...beforePanel, vx:-lever * 52, vy:18, va:-lever * 1.45 || (beforePanel.x < W/2 ? -.55 : .55), delay:.24, time:0 });
+    } else {
+      const panel = state.panels.find(item => item.id === hit.panel.id);
+      const swing = createHangingPanelMotion(panel, { removedLocalX:hit.screw.lx });
+      if (swing) {
+        swing.delay = .24;
+        swings.push(swing);
+        statusText = '板件失去支点，正在随重力下摆';
+      }
     }
     const color = colorForScrew(hit.screw.color);
     if (result.endlessExtended) {
@@ -489,7 +605,7 @@ export function createGame(env, savedState) {
   function onUndo() {
     if (env.gamePaused || !undoScrew(state)) return;
     invalidateBoard();
-    flights=[]; falling=[]; particles=[]; hint=null; shake=null; statusText='已撤销上一步';
+    flights=[]; falling=[]; swings=[]; particles=[]; hint=null; shake=null; statusText='已撤销上一步';
     haptic(8); save(true); renderUI(); drawBoard();
   }
   function onHint() {
@@ -513,14 +629,14 @@ export function createGame(env, savedState) {
       campaignStars:state.campaignStars, details:endless ? undefined : state.details });
     invalidateBoard();
     statusText = endless ? '新的无尽收纳开始，板件会持续补入' : '重新规划顺序，这次一定能解开';
-    flights=[]; falling=[]; particles=[]; hint=null; shake=null;
+    flights=[]; falling=[]; swings=[]; particles=[]; hint=null; shake=null;
     save(true); renderUI(); drawBoard();
   }
   function nextLevel() {
     state=beginNextScrewLevel(state);
     invalidateBoard();
     statusText=state.level >= 4 ? '留意被遮住的螺丝与下一箱颜色' : '优先拧下与收纳盒同色的螺丝';
-    flights=[]; falling=[]; particles=[]; hint=null; shake=null;
+    flights=[]; falling=[]; swings=[]; particles=[]; hint=null; shake=null;
     save(true); renderUI(); drawBoard(); env.speak('screw','start');
   }
   function finishCampaign() {
@@ -547,7 +663,12 @@ export function createGame(env, savedState) {
   function onResume() { if (!destroyed) { lastFrameAt=0; drawBoard(); scheduleFrame(); } }
   function getState() {
     return Object.assign(structuredClone(state), {
-      fullscreen:false, render:{mode:renderProfile.mode,pixelRatio:renderProfile.value,drawCount,staticBuildCount,depthFocus:canvas.dataset.depthFocus,focus:structuredClone(focusStats),idle:!frameId&&!hasAnimation()},
+      fullscreen:false, render:{mode:renderProfile.mode,pixelRatio:renderProfile.value,targetFps:renderProfile.targetFps,drawCount,staticBuildCount,
+        depthFocus:canvas.dataset.depthFocus,physics:canvas.dataset.physics,contactPhysics:canvas.dataset.contactPhysics,acceleration:canvas.dataset.acceleration,
+        canvasBytes:canvas.width*canvas.height*4,staticBytes:staticLayer.width*staticLayer.height*4,
+        spriteBytes:[...movingScrewSprites.values()].reduce((sum,item) => sum + item.width*item.height*4,0) +
+          [...movingPanelSprites.values()].reduce((sum,item) => sum + item.bytes,0),filterFree:true,focus:structuredClone(focusStats),
+        motion:{flights:flights.length,falling:falling.length,swings:swings.length},idle:!frameId&&!hasAnimation()},
       liveScrews:allLiveScrews(state).length,
     });
   }
@@ -557,9 +678,13 @@ export function createGame(env, savedState) {
     if (frameId) win.cancelAnimationFrame(frameId);
     frameId=0; resizeObserver?.disconnect();
     staticLayer.width=0; staticLayer.height=0;
+    for (const sprite of movingScrewSprites.values()) { sprite.width=0; sprite.height=0; }
+    movingScrewSprites.clear();
+    for (const sprite of movingPanelSprites.values()) { sprite.canvas.width=0; sprite.canvas.height=0; }
+    movingPanelSprites.clear();
     canvas.removeEventListener('pointerdown',handleTap); canvas.removeEventListener('contextmenu',onContextMenu);
     doc.removeEventListener('visibilitychange',onVisibility);
-    flights=[]; falling=[]; particles=[]; hint=null; shake=null;
+    flights=[]; falling=[]; swings=[]; particles=[]; hint=null; shake=null;
   }
 
   const controller={save,destroy,getState,onPause,onResume};

@@ -25,10 +25,10 @@ try {
   await send('Page.navigate',{url}); await until('!!window.wanbaApp');
   await evaluate('localStorage.clear();localStorage.setItem("wanba_locale_v1","zh-CN")'); await send('Page.reload'); await until('!!window.wanbaApp');
   assert.deepEqual(await evaluate('[typeof jQuery,typeof $,typeof SillyTavern,typeof wbTest]'),['undefined','undefined','undefined','undefined']);
-  assert.equal(await evaluate('wanbaApp.inspect().games.length'),37);
+  assert.equal(await evaluate('wanbaApp.inspect().games.length'),38);
   assert.deepEqual(await evaluate('[...document.querySelectorAll(".wb-tab")].map(e=>e.dataset.tab)'),['single','double','settings']);
   assert.equal(await evaluate('document.documentElement.scrollWidth <= innerWidth'),true);
-  checks.push('starts all 37-game catalog without host globals or test hooks');
+  checks.push('starts all 38-game catalog without host globals or test hooks');
   await click('[data-tab="settings"]');
   assert.equal(await evaluate('!!document.querySelector("#wb-api-url,#wb-companion-toggle,#wb-message-notify")'),false);
   await evaluate('document.querySelector("#wb-theme").value="cyber";document.querySelector("#wb-theme").dispatchEvent(new Event("change"))');

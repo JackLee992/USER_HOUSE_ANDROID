@@ -40,7 +40,7 @@ export async function syncSillyTavernPlugin({targetRoot,pluginVersion,sourceComm
   manifest.homePage='https://github.com/JackLee992/USER_HOUSE';
   manifest.auto_update=true;
   await writeFile(manifestPath,JSON.stringify(manifest,null,2)+'\n');
-  const releaseSource={schema:1,pluginVersion,sourceRepository:'JackLee992/USER_HOUSE_ANDROID',sourceCommit,gameCount:37};
+  const releaseSource={schema:1,pluginVersion,sourceRepository:'JackLee992/USER_HOUSE_ANDROID',sourceCommit,gameCount:38};
   await writeFile(join(target,'release-source.json'),JSON.stringify(releaseSource,null,2)+'\n');
   const changed=git(target,['status','--short']).split('\n').filter(Boolean);
   return {target:relative(dirname(target),target)||target,pluginVersion,sourceCommit,changed};

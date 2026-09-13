@@ -1,5 +1,5 @@
 // Individually illustrated directory icons; immutable source-rectangle sampling.
-export const GAME_ICON_ART_VERSION = '1.0.1';
+export const GAME_ICON_ART_VERSION = '1.0.2';
 export const GAME_ICON_ART_V2 = Object.freeze({
   "tetris": {
     "sheet": "sheet-01",
@@ -181,7 +181,7 @@ export const GAME_ICON_ART_V2 = Object.freeze({
     ],
     "subject": "Triple matched tiles and sheep"
   },
-  "screw": {
+  "screwclassic": {
     "sheet": "sheet-02",
     "path": "assets/game-art/icons-v2/sheet-02.png",
     "cell": 1,
@@ -198,6 +198,24 @@ export const GAME_ICON_ART_V2 = Object.freeze({
       1254
     ],
     "subject": "Crossed metal strips and lifted screw"
+  },
+  "screw": {
+    "sheet": "screw-crazy",
+    "path": "assets/game-art/screw/crazy-icon.png",
+    "cell": 0,
+    "column": 0,
+    "row": 0,
+    "sourceRect": [
+      0,
+      0,
+      512,
+      512
+    ],
+    "sourceSize": [
+      512,
+      512
+    ],
+    "subject": "Crossed metal strips, lifted screw, and lightning edition badge"
   },
   "popstar": {
     "sheet": "sheet-02",

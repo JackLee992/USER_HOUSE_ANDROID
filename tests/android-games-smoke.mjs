@@ -5,7 +5,7 @@ const c=await connect(),out=process.env.QA_OUT||'docs/evidence/android-1.0';cons
 try{
  await c.send('Page.reload');await c.wait(600);await c.until('!!window.wanbaApp');
  for(let i=0;i<3;i++)await c.evaluate('wanbaApp.back()');
- const games=await c.evaluate('wanbaApp.inspect().games');assert.equal(games.length,37);
+ const games=await c.evaluate('wanbaApp.inspect().games');assert.equal(games.length,38);
  for(const g of games.slice(Number(process.env.START_AT||0))){
   await c.click(`[data-tab="${g.mode}"]`);await c.click(`[data-game="${g.id}"]`);await c.wait(130);
   for(let n=0;n<25;n++){

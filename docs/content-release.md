@@ -1,6 +1,6 @@
 # 独立内容版本与发布
 
-APK 与内容分开：原生宿主在本仓库发行；37 款游戏的代码、美术、共享 core 和五种语言在 [USER_HOUSE_GAME_PACKS](https://github.com/JackLee992/USER_HOUSE_GAME_PACKS) 发布。固定协议见 [game-update-design.md](game-update-design.md)。
+APK 与内容分开：原生宿主在本仓库发行；38 款游戏的代码、美术、共享 core 和五种语言在 [USER_HOUSE_GAME_PACKS](https://github.com/JackLee992/USER_HOUSE_GAME_PACKS) 发布。固定协议见 [game-update-design.md](game-update-design.md)。
 
 ## 日常更新
 

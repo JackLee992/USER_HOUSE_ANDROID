@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import {GAME_PLUGINS, GAME_HOST_API_VERSION, gamePlugin} from '../src/games/plugins/registry.js';
 import {createGame as createTicTacToe} from '../src/games/plugins/tictactoe/index.js';
 
-test('all 37 independently loadable factories retain their stable game IDs and host contract', () => {
-  const ids = ['tetris','snake','game2048','watermelon','memory','jump','plank','sudoku','minesweeper','uyangle','screw','popstar','paopao','game1010','turkey','spider','linklink','shuerte','pinball','match3','freecell','zuma','watersort','ludo','guessnumber','wordguess','tictactoe','gomoku','territory','oldmaid','reversi','bombnumber','connect4d','draughts','blackjack','westernchess','chinesechess'];
+test('all 38 independently loadable factories retain their stable game IDs and host contract', () => {
+  const ids = ['tetris','snake','game2048','watermelon','memory','jump','plank','sudoku','minesweeper','uyangle','screwclassic','screw','popstar','paopao','game1010','turkey','spider','linklink','shuerte','pinball','match3','freecell','zuma','watersort','ludo','guessnumber','wordguess','tictactoe','gomoku','territory','oldmaid','reversi','bombnumber','connect4d','draughts','blackjack','westernchess','chinesechess'];
   assert.deepEqual(Object.keys(GAME_PLUGINS).sort(), ids.sort());
   for (const id of ids) {
     const plugin = gamePlugin(id);

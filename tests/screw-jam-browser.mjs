@@ -5,7 +5,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 
 const port = Number(process.env.CDP_PORT || 9357);
 const origin = process.env.QA_ORIGIN || 'http://127.0.0.1:8877';
-const out = process.env.QA_OUT || '.local/qa-screw-jam-1.2.3/browser';
+const out = process.env.QA_OUT || '.local/qa-screw-jam-1.3.0/browser';
 mkdirSync(out, { recursive:true });
 
 const tabs = await (await fetch(`http://127.0.0.1:${port}/json`)).json();
@@ -105,6 +105,7 @@ async function safeMovePoint() {
   return evaluate(`(async()=>{const model=await import('/src/games/plugins/screw/model.js');const state=wanbaApp.inspect().controller,active=new Set(state.boxes.map(box=>box.color)),hits=model.reachableScrews(state).filter(item=>item.reachable).sort((a,b)=>b.panel.z-a.panel.z),hit=hits.find(item=>active.has(item.screw.color))||hits[0];if(!hit)return null;const rect=document.querySelector('#wb-screw-canvas').getBoundingClientRect();return{id:hit.screw.id,x:rect.x+hit.point.x/420*rect.width,y:rect.y+hit.point.y/560*rect.height};})()`);
 }
 async function playSafeMove() {
+  await until('!wanbaApp.inspect().controller?.render?.motion?.swings');
   const before = await evaluate('wanbaApp.inspect().controller.moves');
   const move = await safeMovePoint();
   assert.ok(move, 'a safe reachable screw is exposed');
@@ -143,6 +144,29 @@ async function storeEndlessFixture(kind) {
   })()`);
 }
 
+async function storeSwingFixture() {
+  return evaluate(`(async()=>{
+    const model=await import('/src/games/plugins/screw/model.js');
+    const state=model.createScrewState({level:1,mode:'normal'}),panel=state.panels[0];
+    state.panels=[panel];panel.z=0;panel.screws[0].gone=true;
+    state.details.removed=1;state.details.progress=0;state.history=[];
+    state.choice='normal';state.difficulty='normal';state.savedAt=Date.now();state.startedAt=Date.now();
+    const key='wanbanXiaowu_progress_v1',all=JSON.parse(localStorage.getItem(key)||'{}');
+    all.screw=state;localStorage.setItem(key,JSON.stringify(all));
+    return{panelId:panel.id,tapId:panel.screws[1].id,anchorId:panel.screws[2].id};
+  })()`);
+}
+async function screwPoint(screwId) {
+  return evaluate(`(async()=>{const model=await import('/src/games/plugins/screw/model.js'),state=wanbaApp.inspect().controller,
+    hit=model.allLiveScrews(state).find(item=>item.screw.id===${JSON.stringify(screwId)}),rect=document.querySelector('#wb-screw-canvas').getBoundingClientRect();
+    if(!hit)throw Error('Missing fixture screw');return{x:rect.x+hit.point.x/420*rect.width,y:rect.y+hit.point.y/560*rect.height};})()`);
+}
+async function panelPose(panelId, anchorId) {
+  return evaluate(`(async()=>{const model=await import('/src/games/plugins/screw/model.js'),state=wanbaApp.inspect().controller,
+    panel=state.panels.find(item=>item.id===${JSON.stringify(panelId)}),anchor=panel?.screws.find(item=>item.id===${JSON.stringify(anchorId)}),pivot=model.screwWorld(panel,anchor);
+    return{x:panel.x,y:panel.y,a:panel.a,pivot,staticBuildCount:state.render.staticBuildCount,swings:state.render.motion.swings};})()`);
+}
+
 try {
   console.log('PHASE connect');
   await send('Runtime.enable');
@@ -161,12 +185,20 @@ try {
     await navigate();
     await openScrew();
     await until('wanbaApp.inspect().controller?.render?.idle');
-    const current = await layout(), ratio = mode === 'eco' ? 1 : 3;
+    const current = await layout(), ratio = mode === 'eco' ? 1 : 2;
     assert.equal(current.state.render.pixelRatio, ratio);
     assert.equal(current.raw.width, 420 * ratio);
     assert.equal(current.raw.height, 560 * ratio);
-    assert.equal(current.art, 'atelier-v3');
+    assert.equal(current.art, 'atelier-v4');
     assert.equal(current.state.render.depthFocus, 'semantic-v2');
+    assert.equal(current.state.render.physics, 'gravity-v1');
+    assert.equal(current.state.render.contactPhysics, 'collision-v1');
+    assert.equal(current.state.render.acceleration, 'hardware-canvas2d');
+    assert.equal(current.state.render.targetFps, mode === 'eco' ? 30 : 120);
+    assert.equal(current.state.render.filterFree, true);
+    assert.equal(current.state.render.canvasBytes, 420 * 560 * ratio * ratio * 4);
+    assert.equal(current.state.render.staticBytes, current.state.render.canvasBytes);
+    assert.ok(current.state.render.spriteBytes >= 0);
     assert.ok(current.state.render.focus.priority > 0, 'active-box screws remain the primary visual focus');
     assert.ok(current.state.render.focus.hidden > 0, 'covered screws are tracked as hidden visual noise');
     assert.equal(current.boxes, 3);
@@ -183,6 +215,28 @@ try {
     });
     await evaluate('wanbaApp.pause();wanbaApp.back();true');
   }
+
+  console.log('PHASE gravity-swing');
+  await clearScrewProgress();
+  const swingFixture = await storeSwingFixture();
+  await navigate();
+  await openScrew({ continueSaved:true });
+  const swingBefore = await panelPose(swingFixture.panelId,swingFixture.anchorId), swingTap = await screwPoint(swingFixture.tapId);
+  await touchPoint(swingTap.x,swingTap.y);
+  await until('wanbaApp.inspect().controller.moves===1');
+  const swingDelayed = await panelPose(swingFixture.panelId,swingFixture.anchorId);
+  assert.equal(swingDelayed.swings, 1);
+  assert.ok(Math.abs(swingDelayed.a-swingBefore.a)<.002, 'board release waits until the screw visibly leaves its hole');
+  await wait(330);
+  const swingMoving = await panelPose(swingFixture.panelId,swingFixture.anchorId);
+  assert.ok(Math.abs(swingMoving.a-swingBefore.a)>.02, 'board rotates after the delayed release');
+  assert.ok(Math.hypot(swingMoving.pivot.x-swingBefore.pivot.x,swingMoving.pivot.y-swingBefore.pivot.y)<.05, 'remaining screw is a fixed pivot');
+  await until('wanbaApp.inspect().controller.render.motion.swings===0', 3000);
+  const swingSettled = await panelPose(swingFixture.panelId,swingFixture.anchorId);
+  assert.ok(swingSettled.y>swingSettled.pivot.y, 'centre of mass settles below the remaining screw');
+  assert.ok(swingSettled.staticBuildCount-swingBefore.staticBuildCount<=2, 'swing reuses the static board between start and settle');
+  checks.push({check:'delayed release performs a fixed-pivot gravity swing with one damped settle',duration:'1.02-1.15s'});
+  await evaluate('wanbaApp.pause();wanbaApp.back();true');
 
   await evaluate(`localStorage.setItem('wanba_performance_v1','normal')`);
   console.log('PHASE gameplay-normal');
@@ -318,6 +372,7 @@ try {
   assert.ok(sixth, 'another future-colour screw is exposed');
   await touchPoint(sixth.x, sixth.y);
   await until('wanbaApp.inspect().controller.status==="failed"');
+  await until('wanbaApp.inspect().controller.render.idle&&!document.querySelector("#wb-screw-result").hidden', 3000);
   assert.equal(await evaluate('document.querySelector("#wb-screw-result").hidden'), false);
   await screenshot('endless-five-hole-pressure');
   checks.push({ check:'the fifth temporary hole remains recoverable and only the next unmatched screw ends the run',

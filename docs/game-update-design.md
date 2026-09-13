@@ -4,7 +4,7 @@
 
 ## 现状与必须完成的拆分
 
-- `src/runtime/wanban-app.js` 的 `GAME_META` 有 37 款游戏；只有 match3、zuma、water-sort、freecell、space-cadet 五个外部模块，其余 32 款是同一运行时闭包中的工厂。`src/games/index.js` 目前是占位。根代理负责将 32 个工厂抽出并统一注册器和 env API；不得用空 JSON 冒充独立代码包。
+- `src/runtime/wanban-app.js` 的 `GAME_META` 有 38 款游戏；只有 match3、zuma、water-sort、freecell、space-cadet 五个外部模块，其余 33 款是同一运行时闭包中的工厂。`src/games/index.js` 目前是占位。根代理负责将 33 个工厂抽出并统一注册器和 env API；不得用空 JSON 冒充独立代码包。
 - `startCurrentGame` 是分发点，`modularGameEnvironment` 已提供 save/clear/finish/pause 等服务。统一导出和 controller 生命周期后，core 只拥有壳、目录、共享服务与加载器，各 game 包拥有实际工厂代码及其专属帮助模块。
 - Space Cadet 通过同源 iframe 加载 `host.html → host.js → display.js/space-cadet.js → wasm/data`，依赖 `import.meta.url` 和同源消息检查。其 iframe/WeakMap/ESM 缓存必须随页面重建，不做运行中模块替换。用户导入的 DAT/WAV 位于 IndexedDB `wanban-space-cadet-assets`，不属于发行资源，清包不能碰它。
 - 现有存档、成绩、历史是相同 origin 下的 localStorage；稳定 game ID 保留，尤其 `pinball` 不改为 `space-cadet`。两个 flavor 仍各自独立保存，用户通过现有 JSON 备份互通。
@@ -138,7 +138,7 @@ Gecko 真机持久化验证需要区分正常生命周期和强制进程终止�
 | 负责人 | 文件/职责 |
 |---|---|
 | native worker | 新增 `ContentManifest.java`、`ContentUpdateManager.java`、`ContentResourceStore.java` 等共享 Java；`LocalAssetPolicy.java`；两 Activity 的有限更新桥/生命周期/入口路由；compat asset server/bridge；更新器行为测试 |
-| root | `USER_HOUSE_GAME_PACKS` 创建、固定 release 发布、签名私钥和 CI secrets；内容打包/版本维护/签名工具；32 工厂抽模块；GAME_META/动态加载器/env；首页刷新/更新 UI；i18n 加载、五种语言；APK 1.2.0/code3、system INTERNET manifest 与 Gradle配置 |
+| root | `USER_HOUSE_GAME_PACKS` 创建、固定 release 发布、签名私钥和 CI secrets；内容打包/版本维护/签名工具；33 工厂抽模块；GAME_META/动态加载器/env；首页刷新/更新 UI；i18n 加载、五种语言；APK 1.2.0/code3、system INTERNET manifest 与 Gradle配置 |
 | art worker（root分配） | imagegen 逐游戏素材、视觉验收、发行图与美术包清单；不改 native/runtime |
 
 system 必须新增 INTERNET 供原生更新器；WebView 自身仍 `blockNetworkLoads`、固定可信入口、原 CSP。`shouldInterceptRequest` 改用验证后的 store 获取流；`shouldOverrideUrlLoading/onPageStarted` 和桥信任条件识别当前已安装快照入口。compat server 同样从 store 读取，仍只 bind loopback；NavigationDelegate、content-script 匹配和 sender 校验同步识别快照入口。`NativeBridge` 不接收 JS/native eval 命令。
@@ -146,7 +146,7 @@ system 必须新增 INTERNET 供原生更新器；WebView 自身仍 `blockNetwor
 ## 必须通过的真实验证
 
 1. 使用两组签名 fixture：只改一个 game 包，其它 game/core/art/i18n 版本和摘要不变；记录 HTTP 下载，仅拉新包，激活后仅该游戏版本变化。另测只改 art、只改 ja 语言包。
-2. 37 款模块在 system 和 compat 首次离线启动；五种语言切换、缺译回退；不同 art 版本真实截图。独立代码包不能用空占位代替。
+2. 38 款模块在 system 和 compat 首次离线启动；五种语言切换、缺译回退；不同 art 版本真实截图。独立代码包不能用空占位代替。
 3. 上一版正在玩时下载新包：旧页面 URL 和所有 iframe/WASM 仍旧快照；回首页保存后切换，查实际网络请求无混版。弹球真实发射/分数与暂停测试。
 4. 原生 Java 验证：错签名、改 payload、改 ZIP/文件、坏长度、遗漏/多余/重名文件、Zip Slip、链接、超配额、越仓库/越 host redirect、过旧 sequence、host API不兼容、游戏依赖或版本不一致全部拒绝。
 5. 下载中断、网络断开、磁盘满、进程被杀在每个 staging/rename/active 指针边界后，重新打开仍为完整旧版或完整新版；不能半安装。

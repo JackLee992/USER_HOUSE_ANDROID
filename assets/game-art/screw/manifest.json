@@ -1,37 +1,39 @@
 {
   "schema": 1,
   "gameId": "screw",
-  "artVersion": "1.2.0",
+  "artVersion": "1.2.1",
   "sharedArtVersion": "1.0.1",
   "stylesheet": "standalone/game-art.css",
   "rendererHelper": "standalone/game-art.js",
   "assetRefs": [
-    "assets/game-art/icons-v2/sheet-02.png"
+    "assets/game-art/icons-v2/sheet-02.png",
+    "assets/game-art/screw/crazy-icon.png"
   ],
   "appliedSurfaces": [
     "Low-saturation pearl screws with accessible coral, blue, yellow, green, violet, orange, teal, and rose colors",
     "Blonde wood, frosted acrylic, satin metal, and pastel painted boards",
     "Continuous endless layers with three-to-six collection boxes and the original capacity score multipliers",
     "Soft craft-atelier HUD, five-hole temporary tray, and three-stage collection flight",
-    "Individually illustrated game directory icon"
+    "Lightning-badged directory icon that distinguishes the expanded edition from the original game"
   ],
   "retainedPresentation": [
-    "Directory icon retained; game board is rendered procedurally for crisp scaling"
+    "Original directory icon retained for 拧螺丝; lightning badge added only to 疯狂拧螺丝",
+    "Game board is rendered procedurally for crisp scaling"
   ],
   "directoryIcon": {
-    "atlas": "assets/game-art/icons-v2/sheet-02.png",
+    "atlas": "assets/game-art/screw/crazy-icon.png",
     "sourceSize": [
-      1254,
-      1254
+      512,
+      512
     ],
     "sourceRect": [
-      419,
       0,
-      418,
-      407
+      0,
+      512,
+      512
     ],
-    "cell": 1,
-    "subject": "Crossed metal strips and lifted screw",
+    "cell": 0,
+    "subject": "Crossed metal strips, lifted screw, and lightning edition badge",
     "rendererHelper": "standalone/game-icons.js"
   }
 }

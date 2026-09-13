@@ -313,6 +313,63 @@ export function screwWorld(panel, screw) {
   return { x:panel.x + point.x, y:panel.y + point.y };
 }
 
+function normalizeAngle(angle) {
+  let value = angle;
+  while (value > Math.PI) value -= Math.PI * 2;
+  while (value < -Math.PI) value += Math.PI * 2;
+  return value;
+}
+
+export function createHangingPanelMotion(panel, { removedLocalX = 0 } = {}) {
+  const anchors = (panel?.screws || []).filter(screw => !screw.gone);
+  if (anchors.length !== 1) return null;
+  const anchor = anchors[0], pivot = screwWorld(panel, anchor);
+  const startAngle = Number(panel.a) || 0;
+  // Gravity settles the centre of mass directly below the remaining screw.
+  const hangingAngle = -Math.PI / 2 - Math.atan2(anchor.ly, anchor.lx);
+  const angleDelta = normalizeAngle(hangingAngle - startAngle);
+  return {
+    panelId:panel.id,
+    anchorId:anchor.id,
+    anchorX:anchor.lx,
+    anchorY:anchor.ly,
+    pivotX:pivot.x,
+    pivotY:pivot.y,
+    startAngle,
+    targetAngle:startAngle + angleDelta,
+    angleDelta,
+    kickDirection:removedLocalX === 0 ? Math.sign(angleDelta || 1) : Math.sign(anchor.lx - removedLocalX),
+    // Recorded reference play settles in about 1.0-1.15 seconds. Keep the
+    // motion time-based so a 30 Hz power profile does not turn it into slow
+    // motion on Android WebView.
+    duration:1.02 + Math.min(.13, Math.abs(angleDelta) * .045),
+    time:0,
+    finished:false,
+  };
+}
+
+export function advanceHangingPanel(panel, motion, elapsedSeconds) {
+  if (!panel || !motion || motion.finished) return motion;
+  const elapsed = Math.max(0, Math.min(.25, Number(elapsedSeconds) || 0));
+  motion.time = Math.min(motion.duration, motion.time + elapsed);
+  const phase = motion.duration ? motion.time / motion.duration : 1;
+  if (phase >= 1) {
+    panel.a = motion.targetAngle;
+    motion.finished = true;
+  } else {
+    // A damped gravity swing gives one readable overshoot without requiring a
+    // permanent physics loop. It is derived from elapsed time, so low FPS does
+    // not slow the animation down.
+    const settle = 1 - Math.exp(-5.8 * phase) * Math.cos(8.4 * phase);
+    const kick = motion.kickDirection * Math.sin(Math.PI * phase) * Math.exp(-4.2 * phase) * .075;
+    panel.a = motion.startAngle + motion.angleDelta * settle + kick;
+  }
+  const local = rotatePoint(motion.anchorX, motion.anchorY, panel.a || 0);
+  panel.x = motion.pivotX - local.x;
+  panel.y = motion.pivotY - local.y;
+  return motion;
+}
+
 export function panelContains(panel, x, y) {
   const local = rotatePoint(x - panel.x, y - panel.y, -(panel.a || 0));
   const lx = local.x, ly = local.y, w = panel.w, h = panel.h;
@@ -595,13 +652,77 @@ export function advanceFlight(flight, elapsedSeconds) {
   return flight;
 }
 
-export function advanceFallingPanel(panel, elapsedSeconds) {
+function panelVisualExtents(panel) {
+  const angle = Number(panel?.a) || 0;
+  const cosine = Math.abs(Math.cos(angle)), sine = Math.abs(Math.sin(angle));
+  return {
+    x:cosine * Math.max(0, Number(panel?.w) || 0) / 2 + sine * Math.max(0, Number(panel?.h) || 0) / 2,
+    y:sine * Math.max(0, Number(panel?.w) || 0) / 2 + cosine * Math.max(0, Number(panel?.h) || 0) / 2,
+  };
+}
+
+export function advanceFallingPanel(panel, elapsedSeconds, colliders = []) {
   const elapsed = Math.max(0, Math.min(.25, Number(elapsedSeconds) || 0));
-  const gravity = 980;
-  panel.y += panel.vy * elapsed + gravity * elapsed * elapsed / 2;
-  panel.vy += gravity * elapsed;
-  panel.x += panel.vx * elapsed;
-  panel.a += panel.va * elapsed;
+  const gravity = 1400;
+  const available = Array.isArray(colliders) ? colliders.filter(item => item && !item.gone && item !== panel && Number(item.z) < Number(panel.z)) : [];
+  if (!available.length) {
+    panel.y += panel.vy * elapsed + gravity * elapsed * elapsed / 2;
+    panel.vy += gravity * elapsed;
+    panel.x += panel.vx * elapsed;
+    panel.a += panel.va * elapsed;
+    panel.time = (panel.time || 0) + elapsed;
+    return panel;
+  }
+
+  // Use small internal steps only while a released board is near other boards.
+  // This keeps contact timing stable across 30/60/120 Hz without running a
+  // permanent physics engine while the game is idle.
+  let remaining = elapsed;
+  while (remaining > 1e-7) {
+    const step = Math.min(1 / 120, remaining);
+    remaining -= step;
+    if (panel.settled) {
+      const linear = Math.exp(-7 * step), angular = Math.exp(-8.5 * step);
+      panel.vx *= linear; panel.va *= angular;
+      panel.x += panel.vx * step; panel.a += panel.va * step;
+      const extents = panelVisualExtents(panel);
+      if (Number.isFinite(panel.supportTop)) panel.y = panel.supportTop - extents.y - .5;
+      continue;
+    }
+
+    const beforeExtents = panelVisualExtents(panel), beforeBottom = panel.y + beforeExtents.y;
+    panel.y += panel.vy * step + gravity * step * step / 2;
+    panel.vy += gravity * step;
+    panel.x += panel.vx * step;
+    panel.a += panel.va * step;
+    const afterExtents = panelVisualExtents(panel), afterBottom = panel.y + afterExtents.y;
+    let support = null, supportTop = Infinity;
+    for (const candidate of available) {
+      const candidateExtents = panelVisualExtents(candidate);
+      const top = candidate.y - candidateExtents.y;
+      const horizontalOverlap = afterExtents.x + candidateExtents.x - Math.abs(panel.x - candidate.x);
+      if (horizontalOverlap < 10 || panel.y >= candidate.y) continue;
+      if (beforeBottom <= top + 5 && afterBottom >= top && top < supportTop) {
+        support = candidate; supportTop = top;
+      }
+    }
+    if (!support) continue;
+
+    const impact = Math.max(0, panel.vy);
+    panel.y = supportTop - afterExtents.y - .5;
+    panel.contacts = (panel.contacts || 0) + 1;
+    if (!Number.isFinite(panel.firstContactAt)) panel.firstContactAt = (panel.time || 0) + elapsed - remaining;
+    const lateral = Math.max(-1, Math.min(1, (panel.x - support.x) / Math.max(1, (panel.w + support.w) * .28)));
+    panel.vx += lateral * Math.min(72, 22 + impact * .08);
+    panel.va += lateral * Math.min(1.25, .28 + impact * .0018);
+    if (panel.contacts === 1 && impact > 145) {
+      panel.vy = -Math.min(92, impact * .19);
+    } else {
+      panel.vy = 0;
+      panel.settled = true;
+      panel.supportTop = supportTop;
+    }
+  }
   panel.time = (panel.time || 0) + elapsed;
   return panel;
 }

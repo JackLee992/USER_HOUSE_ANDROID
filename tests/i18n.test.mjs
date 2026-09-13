@@ -10,8 +10,8 @@ const memory=()=>{const map=new Map();return {getItem:key=>map.get(key),setItem:
 test('locale selection recognizes device regions and script variants',()=>{
   for(const [input,expected] of [['zh-CN','zh-CN'],['zh-Hans','zh-CN'],['zh-Hant-HK','zh-TW'],['zh_HK','zh-TW'],['zh-MO','zh-TW'],['en-GB','en'],['ja-JP','ja'],['ko-KR','ko'],['fr-FR','en']])assert.equal(normalizeLocale(input),expected,input);
 });
-test('every shipped locale contains all 37 titles, rule summaries and the same complete UI key set',()=>{
-  const base=data['zh-CN'];assert.equal(Object.keys(base.games).length,37);
+test('every shipped locale contains all 38 titles, rule summaries and the same complete UI key set',()=>{
+  const base=data['zh-CN'];assert.equal(Object.keys(base.games).length,38);
   for(const locale of LOCALES){const catalog=data[locale.id];assert.equal(catalog.locale,locale.id);assert.equal(catalog.version,versions.packages['i18n.'+locale.id]);assert.deepEqual(Object.keys(catalog.games).sort(),Object.keys(base.games).sort());assert.deepEqual(Object.keys(catalog.strings).sort(),Object.keys(base.strings).sort());assert.deepEqual(Object.keys(catalog.templates).sort(),Object.keys(base.templates).sort());for(const item of Object.values(catalog.games)){assert.ok(item.title.length>0);assert.ok(item.rules.length>20);}}
 });
 test('language changes translate real controls and dynamic status while keeping source text available',async()=>{

@@ -5,6 +5,7 @@ import * as sudoku from './sudoku/index.js';
 import * as minesweeper from './minesweeper/index.js';
 import * as shuerte from './shuerte/index.js';
 import * as uyangle from './uyangle/index.js';
+import * as screwclassic from './screwclassic/index.js';
 import * as screw from './screw/index.js';
 import * as popstar from './popstar/index.js';
 import * as paopao from './paopao/index.js';
@@ -37,7 +38,7 @@ import * as match3 from './match3/index.js';
 import * as freecell from './freecell/index.js';
 
 export const GAME_HOST_API_VERSION = 1;
-export const GAME_PLUGINS = Object.freeze({ snake, jump, plank, sudoku, minesweeper, shuerte, uyangle, screw, popstar, paopao, game1010, turkey, spider, linklink, blackjack, game2048, watermelon, memory, ludo, guessnumber, wordguess, tictactoe, gomoku, territory, oldmaid, reversi, bombnumber, connect4d, draughts, westernchess, chinesechess, tetris, zuma, watersort, pinball, match3, freecell });
+export const GAME_PLUGINS = Object.freeze({ snake, jump, plank, sudoku, minesweeper, shuerte, uyangle, screwclassic, screw, popstar, paopao, game1010, turkey, spider, linklink, blackjack, game2048, watermelon, memory, ludo, guessnumber, wordguess, tictactoe, gomoku, territory, oldmaid, reversi, bombnumber, connect4d, draughts, westernchess, chinesechess, tetris, zuma, watersort, pinball, match3, freecell });
 export function gamePlugin(id) {
   const plugin = GAME_PLUGINS[id];
   if (!plugin) throw new Error('Unknown game plugin: ' + id);

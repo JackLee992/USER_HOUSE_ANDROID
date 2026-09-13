@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "snapshotVersion": "1.6.4",
+  "snapshotVersion": "1.6.5",
   "packages": {
-    "core": "1.4.3",
+    "core": "1.4.4",
     "art.shared": "1.0.1",
     "art.blackjack": "1.0.1",
     "art.bombnumber": "1.0.1",
@@ -26,7 +26,8 @@
     "art.plank": "1.0.1",
     "art.popstar": "1.0.1",
     "art.reversi": "1.0.1",
-    "art.screw": "1.2.0",
+    "art.screw": "1.2.1",
+    "art.screwclassic": "1.0.0",
     "art.shuerte": "1.0.1",
     "art.snake": "1.0.1",
     "art.spider": "1.0.1",
@@ -41,11 +42,11 @@
     "art.westernchess": "1.0.1",
     "art.wordguess": "1.0.1",
     "art.zuma": "1.1.0",
-    "i18n.zh-CN": "1.0.4",
-    "i18n.zh-TW": "1.0.4",
-    "i18n.en": "1.0.4",
-    "i18n.ja": "1.0.4",
-    "i18n.ko": "1.0.4"
+    "i18n.zh-CN": "1.0.5",
+    "i18n.zh-TW": "1.0.5",
+    "i18n.en": "1.0.5",
+    "i18n.ja": "1.0.5",
+    "i18n.ko": "1.0.5"
   },
   "saveSchemas": {
     "blackjack": 1,
@@ -71,6 +72,7 @@
     "popstar": 1,
     "reversi": 1,
     "screw": 1,
+    "screwclassic": 1,
     "shuerte": 1,
     "snake": 1,
     "spider": 1,

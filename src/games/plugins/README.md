@@ -1,6 +1,6 @@
 # Game plugin host API v1
 
-Each of the 37 stable game IDs has an ES-module entry at `<id>/index.js` that exports:
+Each of the 38 stable game IDs has an ES-module entry at `<id>/index.js` that exports:
 
 - `GAME_ID`: the existing catalog and save ID, never a translated display name.
 - `GAME_VERSION`: independently maintained semantic version, initially `1.0.0`.
@@ -27,4 +27,4 @@ No save IDs, schemas, rule constants, rewards, or game behavior are intentionall
 
 `tools/extract-game-modules.cjs` is a one-time migration utility for a pre-module runtime. It uses Acorn and eslint-scope bindings, not textual name substitution. Install those optional development tools in ignored `.local/game-extractor` as documented in the script. Do not run the migration again to overwrite later plugin edits.
 
-Run `node --test tests/*.test.mjs` for logic and lifecycle regression, including direct plugin pause/AI/save checks. `tests/game-plugin-browser.mjs` opens all 37 games plus endless Gomoku in an isolated local development browser. `tests/helpers/paopao-harness.mjs` and the Android A/B fixture both instrument the production bubble-shooter module only within the test harness.
+Run `node --test tests/*.test.mjs` for logic and lifecycle regression, including direct plugin pause/AI/save checks. `tests/game-plugin-browser.mjs` opens all 38 games plus endless Gomoku in an isolated local development browser. `tests/helpers/paopao-harness.mjs` and the Android A/B fixture both instrument the production bubble-shooter module only within the test harness.

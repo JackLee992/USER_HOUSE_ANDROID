@@ -1,0 +1,35 @@
+{
+  "schema": 1,
+  "gameId": "screwclassic",
+  "artVersion": "1.0.0",
+  "sharedArtVersion": "1.0.1",
+  "stylesheet": "standalone/game-art.css",
+  "rendererHelper": "standalone/game-art.js",
+  "assetRefs": [
+    "assets/game-art/icons-v2/sheet-02.png"
+  ],
+  "appliedSurfaces": [
+    "First-release procedural panel, screw, tray, tool-box, and background rendering",
+    "First-release pivot swing and gravity-driven panel motion",
+    "Original crossed metal strips and lifted screw directory icon"
+  ],
+  "retainedPresentation": [
+    "Gameplay presentation is frozen to the first independently packaged Screw 1.0.0 release from 2026-09-08"
+  ],
+  "directoryIcon": {
+    "atlas": "assets/game-art/icons-v2/sheet-02.png",
+    "sourceSize": [
+      1254,
+      1254
+    ],
+    "sourceRect": [
+      419,
+      0,
+      418,
+      407
+    ],
+    "cell": 1,
+    "subject": "Crossed metal strips and lifted screw",
+    "rendererHelper": "standalone/game-icons.js"
+  }
+}
