@@ -1,5 +1,6 @@
 import {
   SCREW_CAMPAIGN_LEVELS,
+  addEndlessBox,
   addTraySlot,
   advanceFallingPanel,
   advanceFlight,
@@ -8,6 +9,7 @@ import {
   beginNextScrewLevel,
   colorForScrew,
   createScrewState,
+  endlessScore,
   progressPercent,
   reachableScrews,
   restoreScrewState,
@@ -17,7 +19,7 @@ import {
 } from './model.js';
 
 export const GAME_ID = 'screw';
-export const GAME_VERSION = '1.1.0';
+export const GAME_VERSION = '1.2.0';
 export const HOST_API_VERSION = 1;
 export const REQUIRED_ENV = Object.freeze([
   'activeGameController','choiceForState','choiceSavePatch','clearProgress','currentGameDurationMs',
@@ -27,8 +29,8 @@ export const REQUIRED_ENV = Object.freeze([
 
 const W = 420, H = 560;
 const PANEL_TINTS = [
-  ['#e96f68','#a63f4a'], ['#5d8fdd','#31579f'], ['#e7b746','#a8741d'], ['#62af78','#34764d'],
-  ['#9a71d2','#62439a'], ['#dd8350','#9a4b29'], ['#4eafb4','#236e76'],
+  ['#f2aaa6','#d77c7b'], ['#afccef','#7199c8'], ['#f2d889','#d0ac54'], ['#b5d7bb','#78ad86'],
+  ['#cfbde7','#9c7fc1'], ['#edbd9d','#d28c66'], ['#afd9d7','#6daaaa'],
 ];
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 const easeOutCubic = value => 1 - (1 - value) ** 3;
@@ -81,17 +83,17 @@ function panelPath(ctx, panel) {
 function drawScrew(ctx, colorId, x, y, radius = 14, rotation = 0, glow = false, alpha = 1) {
   const color = colorForScrew(colorId);
   ctx.save(); ctx.translate(x, y); ctx.rotate(rotation); ctx.globalAlpha *= alpha;
-  if (glow) { ctx.shadowColor = color.light; ctx.shadowBlur = 16; }
-  const outer = ctx.createRadialGradient(-radius * .32, -radius * .42, radius * .08, 0, 0, radius * 1.08);
-  outer.addColorStop(0, '#ffffff'); outer.addColorStop(.12, color.light); outer.addColorStop(.48, color.hex);
-  outer.addColorStop(.83, color.dark); outer.addColorStop(1, '#17233a');
+  ctx.shadowColor = glow ? color.light : 'rgba(83,55,75,.28)'; ctx.shadowBlur = glow ? 18 : 6; ctx.shadowOffsetY = glow ? 0 : 3;
+  const outer = ctx.createRadialGradient(-radius * .34, -radius * .42, radius * .05, 0, 0, radius * 1.08);
+  outer.addColorStop(0, '#fffefa'); outer.addColorStop(.16, color.light); outer.addColorStop(.5, color.hex);
+  outer.addColorStop(.86, color.dark); outer.addColorStop(1, '#68475d');
   ctx.fillStyle = outer; ctx.beginPath(); ctx.arc(0, 0, radius, 0, Math.PI * 2); ctx.fill();
-  ctx.shadowBlur = 0; ctx.strokeStyle = 'rgba(255,255,255,.72)'; ctx.lineWidth = Math.max(1.2, radius * .1);
-  ctx.beginPath(); ctx.arc(-radius*.08, -radius*.1, radius*.72, Math.PI*1.08, Math.PI*1.75); ctx.stroke();
-  ctx.strokeStyle = 'rgba(18,27,52,.82)'; ctx.lineWidth = Math.max(2.2, radius * .2); ctx.lineCap = 'round';
+  ctx.shadowBlur = 0; ctx.shadowOffsetY = 0; ctx.strokeStyle = 'rgba(255,255,255,.78)'; ctx.lineWidth = Math.max(1.2, radius * .1);
+  ctx.beginPath(); ctx.arc(-radius*.08, -radius*.1, radius*.73, Math.PI*1.08, Math.PI*1.76); ctx.stroke();
+  ctx.strokeStyle = '#5e3a52'; ctx.lineWidth = Math.max(2.2, radius * .2); ctx.lineCap = 'round';
   const slot = radius * .42; ctx.beginPath(); ctx.moveTo(-slot,-slot); ctx.lineTo(slot,slot);
   ctx.moveTo(slot,-slot); ctx.lineTo(-slot,slot); ctx.stroke();
-  ctx.strokeStyle = 'rgba(255,255,255,.20)'; ctx.lineWidth = Math.max(1, radius * .07);
+  ctx.strokeStyle = 'rgba(255,255,255,.36)'; ctx.lineWidth = Math.max(1, radius * .07);
   ctx.beginPath(); ctx.arc(0, 0, radius * .92, 0, Math.PI * 2); ctx.stroke();
   ctx.restore();
 }
@@ -99,36 +101,36 @@ function drawScrew(ctx, colorId, x, y, radius = 14, rotation = 0, glow = false, 
 function drawPanel(ctx, panel, options = {}) {
   const tint = PANEL_TINTS[panel.tint % PANEL_TINTS.length];
   ctx.save(); ctx.translate(panel.x, panel.y); ctx.rotate(panel.a || 0); ctx.globalAlpha *= options.alpha ?? 1;
-  ctx.shadowColor = 'rgba(2,8,24,.58)'; ctx.shadowBlur = 18; ctx.shadowOffsetY = 11;
-  panelPath(ctx, panel); ctx.fillStyle = '#0c1425'; ctx.fill();
+  ctx.shadowColor = 'rgba(91,59,80,.24)'; ctx.shadowBlur = 15; ctx.shadowOffsetY = 9;
+  panelPath(ctx, panel); ctx.fillStyle = '#7f6174'; ctx.fill();
   ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
   panelPath(ctx, panel);
   const gradient = ctx.createLinearGradient(-panel.w * .4, -panel.h / 2, panel.w * .35, panel.h / 2);
   if (panel.material === 'hardwood') {
-    gradient.addColorStop(0, '#f2b86b'); gradient.addColorStop(.46, '#c7783f'); gradient.addColorStop(1, '#86452f');
+    gradient.addColorStop(0, '#fff0dc'); gradient.addColorStop(.48, '#edcfaa'); gradient.addColorStop(1, '#d9aa7b');
   } else if (panel.material === 'brushed-steel') {
-    gradient.addColorStop(0, '#e8eef4'); gradient.addColorStop(.25, '#8795a4');
-    gradient.addColorStop(.52, '#d4dde5'); gradient.addColorStop(1, '#627181');
+    gradient.addColorStop(0, '#fffefe'); gradient.addColorStop(.27, '#e7e2e8');
+    gradient.addColorStop(.56, '#f5f1f5'); gradient.addColorStop(1, '#beb8c4');
   } else if (panel.material === 'acrylic') {
-    gradient.addColorStop(0, tint[0] + 'e8'); gradient.addColorStop(.55, tint[0] + 'b8'); gradient.addColorStop(1, tint[1] + 'dc');
+    gradient.addColorStop(0, tint[0] + 'dc'); gradient.addColorStop(.55, tint[0] + 'a8'); gradient.addColorStop(1, tint[1] + 'c9');
   } else {
     gradient.addColorStop(0, tint[0]); gradient.addColorStop(.55, tint[0]); gradient.addColorStop(1, tint[1]);
   }
   ctx.fillStyle = gradient; ctx.fill();
-  ctx.lineWidth = 5; ctx.strokeStyle = 'rgba(255,255,255,.82)'; ctx.stroke();
-  ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(12,22,45,.48)'; panelPath(ctx, panel); ctx.stroke();
+  ctx.lineWidth = 5; ctx.strokeStyle = 'rgba(255,255,255,.88)'; ctx.stroke();
+  ctx.lineWidth = 1.8; ctx.strokeStyle = 'rgba(104,72,91,.46)'; panelPath(ctx, panel); ctx.stroke();
   ctx.save(); panelPath(ctx, panel); ctx.clip();
   const shine = ctx.createLinearGradient(0, -panel.h / 2, 0, panel.h / 2);
-  shine.addColorStop(0, 'rgba(255,255,255,.45)'); shine.addColorStop(.22, 'rgba(255,255,255,.13)');
-  shine.addColorStop(.5, 'rgba(255,255,255,0)'); shine.addColorStop(1, 'rgba(0,0,0,.18)');
+  shine.addColorStop(0, 'rgba(255,255,255,.52)'); shine.addColorStop(.24, 'rgba(255,255,255,.16)');
+  shine.addColorStop(.58, 'rgba(255,255,255,0)'); shine.addColorStop(1, 'rgba(91,54,77,.11)');
   ctx.fillStyle = shine; ctx.fillRect(-panel.w / 2, -panel.h / 2, panel.w, panel.h);
   if (panel.material === 'hardwood') {
-    ctx.strokeStyle = 'rgba(105,49,27,.23)'; ctx.lineWidth = 2;
+    ctx.strokeStyle = 'rgba(148,91,56,.16)'; ctx.lineWidth = 1.5;
     for (let line = -panel.h / 2 + 19; line < panel.h / 2; line += 19) {
       ctx.beginPath(); ctx.moveTo(-panel.w / 2, line); ctx.bezierCurveTo(-60,line-8,60,line+8,panel.w/2,line-3); ctx.stroke();
     }
   } else if (panel.material === 'brushed-steel') {
-    ctx.strokeStyle = 'rgba(255,255,255,.16)'; ctx.lineWidth = 1;
+    ctx.strokeStyle = 'rgba(255,255,255,.32)'; ctx.lineWidth = 1;
     for (let line = -panel.h / 2 + 8; line < panel.h / 2; line += 7) {
       ctx.beginPath(); ctx.moveTo(-panel.w / 2, line); ctx.lineTo(panel.w / 2, line); ctx.stroke();
     }
@@ -139,9 +141,9 @@ function drawPanel(ctx, panel, options = {}) {
   ctx.restore();
   for (const screw of panel.screws || []) {
     ctx.save(); ctx.translate(screw.lx, screw.ly);
-    ctx.fillStyle = 'rgba(3,8,20,.74)'; ctx.shadowColor = 'rgba(0,0,0,.65)'; ctx.shadowBlur = 7;
+    ctx.fillStyle = '#d3c4bd'; ctx.shadowColor = 'rgba(91,57,76,.24)'; ctx.shadowBlur = 6;
     ctx.beginPath(); ctx.arc(0, 2, 17, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
-    ctx.strokeStyle = 'rgba(255,255,255,.34)'; ctx.lineWidth = 2;
+    ctx.strokeStyle = 'rgba(255,255,255,.82)'; ctx.lineWidth = 2;
     ctx.beginPath(); ctx.arc(0, 1, 16, Math.PI*1.05, Math.PI*1.82); ctx.stroke(); ctx.restore();
   }
   ctx.restore();
@@ -149,21 +151,24 @@ function drawPanel(ctx, panel, options = {}) {
 
 function drawBackground(ctx) {
   const background = ctx.createLinearGradient(0, 0, 0, H);
-  background.addColorStop(0, '#101d37'); background.addColorStop(.52, '#0a1730'); background.addColorStop(1, '#071225');
+  background.addColorStop(0, '#fffaf8'); background.addColorStop(.54, '#f8f0f5'); background.addColorStop(1, '#eef6f2');
   ctx.fillStyle = background; ctx.fillRect(0, 0, W, H);
-  const halo = ctx.createRadialGradient(W*.5,H*.42,20,W*.5,H*.42,310);
-  halo.addColorStop(0,'rgba(78,139,208,.24)'); halo.addColorStop(.65,'rgba(34,78,137,.07)');
-  halo.addColorStop(1,'rgba(0,0,0,0)'); ctx.fillStyle = halo; ctx.fillRect(0,0,W,H);
-  ctx.fillStyle = 'rgba(129,179,228,.12)';
-  for (let y = 24; y < H; y += 34) for (let x = 21 + (Math.floor(y / 34) % 2) * 16; x < W; x += 34) {
-    ctx.beginPath(); ctx.arc(x,y,1.2,0,Math.PI*2); ctx.fill();
+  ctx.save(); ctx.shadowColor='rgba(114,74,89,.18)'; ctx.shadowBlur=18; ctx.shadowOffsetY=8;
+  roundRectPath(ctx,12,10,W-24,H-20,30); ctx.fillStyle='#f5ddbf'; ctx.fill(); ctx.restore();
+  const desk = ctx.createLinearGradient(15, 10, W-12, H);
+  desk.addColorStop(0, '#fff0dc'); desk.addColorStop(.48, '#efd3b1'); desk.addColorStop(1, '#e3bd93');
+  roundRectPath(ctx,12,10,W-24,H-20,30); ctx.fillStyle=desk; ctx.fill();
+  ctx.save(); roundRectPath(ctx,12,10,W-24,H-20,30); ctx.clip();
+  ctx.strokeStyle='rgba(153,100,66,.11)'; ctx.lineWidth=1.2;
+  for (let y=30; y<H; y+=25) {
+    ctx.beginPath(); ctx.moveTo(4,y); ctx.bezierCurveTo(112,y-7,292,y+8,W+8,y-3); ctx.stroke();
   }
-  ctx.save(); ctx.globalAlpha = .08; ctx.strokeStyle = '#a9d4ff'; ctx.lineWidth = 8; ctx.lineCap = 'round';
-  ctx.beginPath(); ctx.moveTo(-20,H*.14); ctx.lineTo(105,H*.03); ctx.stroke();
-  ctx.beginPath(); ctx.arc(W+20,H*.72,74,Math.PI*.65,Math.PI*1.55); ctx.stroke(); ctx.restore();
-  const vignette = ctx.createRadialGradient(W/2,H/2,170,W/2,H/2,390);
-  vignette.addColorStop(.45,'rgba(0,0,0,0)'); vignette.addColorStop(1,'rgba(0,2,12,.55)');
-  ctx.fillStyle = vignette; ctx.fillRect(0,0,W,H);
+  const center = ctx.createRadialGradient(W*.5,H*.42,24,W*.5,H*.42,255);
+  center.addColorStop(0,'rgba(255,255,255,.5)'); center.addColorStop(.72,'rgba(255,255,255,.08)'); center.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle=center; ctx.fillRect(0,0,W,H); ctx.restore();
+  ctx.strokeStyle='rgba(255,255,255,.72)'; ctx.lineWidth=2; roundRectPath(ctx,15,13,W-30,H-26,27); ctx.stroke();
+  ctx.fillStyle='rgba(111,77,96,.16)';
+  for (const [x,y] of [[28,29],[392,29],[28,531],[392,531]]) { ctx.beginPath(); ctx.arc(x,y,2.2,0,Math.PI*2); ctx.fill(); }
 }
 
 export function createGame(env, savedState) {
@@ -172,20 +177,20 @@ export function createGame(env, savedState) {
   const restored = restoreScrewState(savedState, choice.id);
   let state = restored.state, destroyed = false, frameId = 0, lastFrameAt = 0, drawCount = 0;
   let hint = null, shake = null, flights = [], falling = [], particles = [];
-  let statusText = '优先拧下与收纳盒同色的螺丝', resizeObserver = null;
+  let statusText = state.mode === 'endless' ? '持续收纳，板件会自动补入' : '优先拧下与收纳盒同色的螺丝', resizeObserver = null;
 
   root.innerHTML = [
-    '<section class="wb-screw-panel" data-screw-version="workshop-v2">',
+    '<section class="wb-screw-panel" data-screw-version="atelier-v3">',
     '<header class="wb-screw-top">',
-    '<div class="wb-screw-level"><span>LEVEL</span><strong id="wb-screw-level">1</strong><small id="wb-screw-mode">经典闯关</small></div>',
+    '<div class="wb-screw-level"><span id="wb-screw-level-label">关卡</span><strong id="wb-screw-level">1</strong><small id="wb-screw-mode">经典工坊</small></div>',
     '<div class="wb-screw-boxes" id="wb-screw-boxes" aria-label="当前收纳盒"></div>',
-    '<div class="wb-screw-next"><span>下一箱</span><i id="wb-screw-next-color"></i></div>',
+    '<div class="wb-screw-next"><span>下一盒</span><i id="wb-screw-next-color"></i></div>',
     '<div class="wb-screw-progress"><div id="wb-screw-progress-fill"></div><span id="wb-screw-progress-text">0%</span></div>',
-    '<div class="wb-screw-tray-wrap"><span>临时孔位</span><div class="wb-screw-tray" id="wb-screw-tray"></div></div>',
+    '<div class="wb-screw-tray-wrap"><span>暂存</span><div class="wb-screw-tray" id="wb-screw-tray"></div></div>',
     '<div class="wb-screw-toolbelt" aria-label="解谜工具">',
     '<button type="button" class="wb-screw-tool" id="wb-screw-undo"><b>↶</b><span>撤销</span><em id="wb-screw-undo-left">3</em></button>',
-    '<button type="button" class="wb-screw-tool" id="wb-screw-hint"><b>⌖</b><span>提示</span><em id="wb-screw-hint-left">3</em></button>',
-    '<button type="button" class="wb-screw-tool" id="wb-screw-extra"><b>＋</b><span>加孔</span><em id="wb-screw-extra-left">1</em></button>',
+    '<button type="button" class="wb-screw-tool" id="wb-screw-hint"><b>◉</b><span>提示</span><em id="wb-screw-hint-left">3</em></button>',
+    '<button type="button" class="wb-screw-tool" id="wb-screw-extra"><b>＋</b><span id="wb-screw-extra-label">加孔</span><em id="wb-screw-extra-left">1</em></button>',
     '</div></header>',
     '<div class="wb-screw-stage"><canvas class="wb-screw-canvas" id="wb-screw-canvas" aria-label="拧螺丝游戏板"></canvas>',
     '<div class="wb-screw-callout" id="wb-screw-callout" role="status"></div>',
@@ -199,14 +204,14 @@ export function createGame(env, savedState) {
   const ctx = canvas.getContext('2d', { alpha:false, desynchronized:true });
   const renderProfile = performancePixelRatio(win);
   canvas.width = Math.round(W * renderProfile.value); canvas.height = Math.round(H * renderProfile.value);
-  canvas.dataset.screwArt = 'workshop-v2'; canvas.dataset.renderMode = renderProfile.mode;
+  canvas.dataset.screwArt = 'atelier-v3'; canvas.dataset.renderMode = renderProfile.mode;
   ctx.setTransform(renderProfile.value, 0, 0, renderProfile.value, 0, 0); ctx.imageSmoothingEnabled = true;
 
   const haptic = (pattern = 10) => { try { win.navigator?.vibrate?.(pattern); } catch {} };
   function save(force = false) {
     if (!destroyed) env.saveProgress('screw', Object.assign(structuredClone(state), env.choiceSavePatch('screw', choice)), force ? { immediate:true } : undefined);
   }
-  const scoreNow = () => state.score + Math.round(progressPercent(state) * (4 + Math.min(6, state.level)));
+  const scoreNow = () => state.mode === 'endless' ? state.score + endlessScore(state) : state.score + Math.round(progressPercent(state) * (4 + Math.min(6, state.level)));
   const updateScore = () => env.setScore('screw', scoreNow());
 
   function boxMarkup(box) {
@@ -223,34 +228,41 @@ export function createGame(env, savedState) {
     const overlay = root.querySelector('#wb-screw-result');
     if (state.status === 'playing') { overlay.hidden = true; return; }
     overlay.hidden = false;
-    const won = state.status === 'level_complete';
-    root.querySelector('#wb-screw-result-stars').textContent = won ? '★'.repeat(state.levelStars || 1) + '☆'.repeat(3 - (state.levelStars || 1)) : '⚙';
-    root.querySelector('#wb-screw-result-title').textContent = won ? '第 ' + state.level + ' 关完成' : '临时孔位已满';
+    const won = state.status === 'level_complete', endless = state.mode === 'endless';
+    root.querySelector('#wb-screw-result-stars').textContent = won ? '★'.repeat(state.levelStars || 1) + '☆'.repeat(3 - (state.levelStars || 1)) : endless ? '✦' : '⚙';
+    root.querySelector('#wb-screw-result-title').textContent = won ? '第 ' + state.level + ' 关完成' : endless ? '本次收纳结束' : '临时孔位已满';
     root.querySelector('#wb-screw-result-copy').textContent = won ?
-      '本关奖励 ' + state.reward + ' 分 · ' + state.moves + ' 步完成' : '已完成 ' + progressPercent(state) + '%，调整顺序就能解开。';
+      '本关奖励 ' + state.reward + ' 分 · ' + state.moves + ' 步完成' : endless ?
+      '坚持到第 ' + state.details.endlessLayers + ' 层 · 收纳 ' + state.details.boxesCompleted + ' 盒 · ' + scoreNow() + ' 分' :
+      '已完成 ' + progressPercent(state) + '%，调整顺序就能解开。';
     const primary = root.querySelector('#wb-screw-result-primary'), secondary = root.querySelector('#wb-screw-result-secondary');
     if (won) {
       const campaignDone = state.mode === 'normal' && state.level >= SCREW_CAMPAIGN_LEVELS;
       primary.textContent = campaignDone ? '完成经典工坊' : '进入第 ' + (state.level + 1) + ' 关';
       primary.onclick = campaignDone ? finishCampaign : nextLevel; secondary.hidden = true;
     } else {
-      primary.textContent = '重试本关'; primary.onclick = retryLevel;
-      secondary.hidden = false; secondary.textContent = '结算本局'; secondary.onclick = settleFailure;
+      primary.textContent = endless ? '重新开始' : '重试本关'; primary.onclick = retryLevel;
+      secondary.hidden = false; secondary.textContent = endless ? '结束并结算' : '结算本局'; secondary.onclick = settleFailure;
     }
   }
 
   function renderUI() {
     const progress = progressPercent(state);
-    root.querySelector('#wb-screw-level').textContent = String(state.level);
-    root.querySelector('#wb-screw-mode').textContent = state.mode === 'endless' ? '无尽工坊' : '经典闯关 · ' + SCREW_CAMPAIGN_LEVELS + '关';
-    root.querySelector('#wb-screw-boxes').innerHTML = state.boxes.map(boxMarkup).join('');
+    const endless = state.mode === 'endless', displayLevel = endless ? state.details.endlessLayers : state.level;
+    root.querySelector('.wb-screw-panel').classList.toggle('is-endless', endless);
+    root.querySelector('#wb-screw-level-label').textContent = endless ? '层数' : '关卡';
+    root.querySelector('#wb-screw-level').textContent = String(displayLevel);
+    root.querySelector('#wb-screw-mode').textContent = endless ? '无尽工坊' : '经典工坊 · ' + SCREW_CAMPAIGN_LEVELS + '关';
+    const boxesEl = root.querySelector('#wb-screw-boxes');
+    boxesEl.classList.toggle('many', state.boxes.length > 3); boxesEl.innerHTML = state.boxes.map(boxMarkup).join('');
     const next = state.boxQueue[state.boxIndex], nextEl = root.querySelector('#wb-screw-next-color');
     if (next) {
       const color = colorForScrew(next);
       nextEl.style.setProperty('--c', color.hex); nextEl.style.setProperty('--d', color.dark); nextEl.hidden = false;
     } else nextEl.hidden = true;
-    root.querySelector('#wb-screw-progress-fill').style.width = progress + '%';
-    root.querySelector('#wb-screw-progress-text').textContent = progress + '%';
+    const continuousProgress = (state.details.boxesCompleted % 5) * 20;
+    root.querySelector('#wb-screw-progress-fill').style.width = (endless ? continuousProgress : progress) + '%';
+    root.querySelector('#wb-screw-progress-text').textContent = endless ? '已收纳 ' + state.details.boxesCompleted + ' 盒 · 持续补充' : progress + '%';
     root.querySelector('#wb-screw-tray').innerHTML = Array.from({ length:state.trayCapacity }, (_, index) => {
       const item = state.tray[index], color = item ? colorForScrew(item.color) : null;
       return '<i class="wb-screw-slot ' + (item ? 'occupied' : '') + '">' +
@@ -259,8 +271,10 @@ export function createGame(env, savedState) {
     for (const name of ['undo','hint','extra']) {
       root.querySelector('#wb-screw-' + name + '-left').textContent = String(state.tools[name]);
       const button = root.querySelector('#wb-screw-' + name);
-      button.disabled = state.status !== 'playing' || state.tools[name] <= 0 || (name === 'undo' && !state.history.length);
+      const extraBlocked = name === 'extra' && (endless ? state.boxCapacity >= 6 || state.boxIndex >= state.boxQueue.length : state.trayCapacity >= 7);
+      button.disabled = state.status !== 'playing' || state.tools[name] <= 0 || (name === 'undo' && !state.history.length) || extraBlocked;
     }
+    root.querySelector('#wb-screw-extra-label').textContent = endless ? '加盒' : '加孔';
     const callout = root.querySelector('#wb-screw-callout');
     callout.textContent = statusText; callout.classList.toggle('warn', state.tray.length >= state.trayCapacity - 1);
     showResult(); updateScore();
@@ -337,7 +351,7 @@ export function createGame(env, savedState) {
   }
 
   function awardLevel() {
-    if (state.status !== 'level_complete' || state.reward > 0) return;
+    if (state.mode !== 'normal' || state.status !== 'level_complete' || state.reward > 0) return;
     const toolsUsed = (3 - state.tools.hint) + (3 - state.tools.undo) + (1 - state.tools.extra);
     const cleanBonus = (state.levelMaxTray || 0) <= 1 ? 220 : (state.levelMaxTray || 0) <= 3 ? 90 : 0;
     state.reward = Math.max(360, 1180 + state.level * 55 + cleanBonus - state.moves * 14 - toolsUsed * 80);
@@ -363,15 +377,18 @@ export function createGame(env, savedState) {
       haptic([10,30,10]); renderUI(); return;
     }
     const boxPosition = Math.max(0, beforeBoxes.indexOf(hit.screw.color));
+    const boxSpan = beforeBoxes.length > 1 ? 264 / (beforeBoxes.length - 1) : 0;
     flights.push({ x:hit.point.x, y:hit.point.y, color:hit.screw.color,
-      destX:result.route === 'box' ? 132 + boxPosition * 78 : 140 + Math.min(state.tray.length, 5) * 28,
+      destX:result.route === 'box' ? 78 + boxPosition * boxSpan : 140 + Math.min(state.tray.length, 5) * 28,
       destY:-28, time:0, duration:.48 });
     if (result.panelReleased) {
       beforePanel.screws.forEach(screw => { screw.gone = true; });
       falling.push({ ...beforePanel, vx:(beforePanel.x-W/2)*.34, vy:-48, va:beforePanel.x < W/2 ? -.75 : .75, time:0 });
     }
     const color = colorForScrew(hit.screw.color);
-    if (result.completedBoxes.length) {
+    if (result.endlessExtended) {
+      statusText = '新的板件已接入，继续收纳'; confetti({ x:W / 2, y:84 }, '#fff1ae'); haptic([10,18,14]);
+    } else if (result.completedBoxes.length) {
       statusText = color.name + '收纳完成，下一箱已就位'; confetti(hit.point, color.light); haptic([10,20,18]);
     } else if (result.route === 'box') {
       statusText = color.name + '螺丝收入收纳盒'; haptic(9); env.speak('screw','match');
@@ -400,13 +417,19 @@ export function createGame(env, savedState) {
     haptic(7); save(true); renderUI(); drawBoard(); scheduleFrame();
   }
   function onExtra() {
-    if (env.gamePaused || !addTraySlot(state)) return;
-    statusText='增加了一个临时孔位'; haptic([8,18,8]); env.speak('screw','add_box');
+    if (env.gamePaused) return;
+    const added = state.mode === 'endless' ? addEndlessBox(state) : addTraySlot(state);
+    if (!added) return;
+    statusText = state.mode === 'endless' ? '增加了一个收纳盒，计分倍率已调整' : '增加了一个临时孔位';
+    haptic([8,18,8]); env.speak('screw','add_box');
     save(true); renderUI(); drawBoard();
   }
   function retryLevel() {
-    state = createScrewState({ level:state.level, mode:state.mode, score:state.score, campaignStars:state.campaignStars, details:state.details });
-    statusText='重新规划顺序，这次一定能解开'; flights=[]; falling=[]; particles=[]; hint=null; shake=null;
+    const endless = state.mode === 'endless';
+    state = createScrewState({ level:endless ? 1 : state.level, mode:state.mode, score:endless ? 0 : state.score,
+      campaignStars:state.campaignStars, details:endless ? undefined : state.details });
+    statusText = endless ? '新的无尽收纳开始，板件会持续补入' : '重新规划顺序，这次一定能解开';
+    flights=[]; falling=[]; particles=[]; hint=null; shake=null;
     save(true); renderUI(); drawBoard();
   }
   function nextLevel() {
@@ -424,8 +447,11 @@ export function createGame(env, savedState) {
   function settleFailure() {
     if (destroyed) return;
     const final=scoreNow(); state.details.completed=false; env.clearProgress('screw');
-    env.showGameOver('screw','本局结束','本局分数：'+final+'分，完成'+progressPercent(state)+'%',
-      null,{completed:false,score:final,progress:progressPercent(state),details:structuredClone(state.details)});
+    const endless = state.mode === 'endless';
+    const summary = endless ? '本局分数：'+final+'分 · 第'+state.details.endlessLayers+'层 · 收纳'+state.details.boxesCompleted+'盒' :
+      '本局分数：'+final+'分，完成'+progressPercent(state)+'%';
+    env.showGameOver('screw','本局结束',summary,
+      null,{completed:false,endless,score:final,progress:progressPercent(state),details:structuredClone(state.details)});
   }
   function onContextMenu(event) { if (event.target === canvas || canvas.contains?.(event.target)) event.preventDefault(); }
   function onVisibility() { if (doc.hidden) onPause(); else if (!env.gamePaused) onResume(); }
@@ -463,8 +489,8 @@ export function createGame(env, savedState) {
     resizeObserver.observe(canvas);
   }
   if (restored.migrated) {
-    statusText='关卡系统已升级，旧进度已转换为公平新关卡';
-    env.toast?.('拧螺丝已升级为经典关卡，原分数已保留');
+    statusText=state.mode === 'endless' ? '旧分数已保留，无尽模式已恢复连续补层' : '旧进度已转换为公平新关卡';
+    env.toast?.(state.mode === 'endless' ? '无尽模式已恢复连续游玩，原分数已保留' : '拧螺丝经典关卡已升级，原分数已保留');
   }
   awardLevel(); renderUI(); drawBoard(); save(true); env.scheduleFitGameSurface?.();
   return controller;

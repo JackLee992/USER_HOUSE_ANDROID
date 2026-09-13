@@ -5,7 +5,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 
 const port = Number(process.env.CDP_PORT || 9357);
 const origin = process.env.QA_ORIGIN || 'http://127.0.0.1:8877';
-const out = process.env.QA_OUT || '.local/qa-screw-jam-1.1.0/browser';
+const out = process.env.QA_OUT || '.local/qa-screw-jam-1.2.0/browser';
 mkdirSync(out, { recursive:true });
 
 const tabs = await (await fetch(`http://127.0.0.1:${port}/json`)).json();
@@ -88,7 +88,7 @@ async function layout() {
   return evaluate(`(()=>{const rect=element=>{const r=element.getBoundingClientRect();return{x:r.x,y:r.y,width:r.width,height:r.height,right:r.right,bottom:r.bottom}};const canvas=document.querySelector('#wb-screw-canvas'),box=document.querySelector('#wb-gamebox'),panel=document.querySelector('.wb-screw-panel'),top=document.querySelector('.wb-screw-top');return{viewport:{width:innerWidth,height:innerHeight},canvas:rect(canvas),gamebox:rect(box),panel:rect(panel),top:rect(top),raw:{width:canvas.width,height:canvas.height},art:canvas.dataset.screwArt,mode:canvas.dataset.renderMode,boxes:document.querySelectorAll('.wb-screw-box').length,slots:document.querySelectorAll('.wb-screw-slot').length,tools:[...document.querySelectorAll('.wb-screw-tool')].map(rect),overflow:document.documentElement.scrollWidth-innerWidth,state:wanbaApp.inspect().controller}})()`);
 }
 async function safeMovePoint() {
-  return evaluate(`(async()=>{const model=await import('/src/games/plugins/screw/model.js');const state=wanbaApp.inspect().controller,active=new Set(state.boxes.map(box=>box.color));const hit=model.reachableScrews(state).filter(item=>item.reachable&&active.has(item.screw.color)).sort((a,b)=>b.panel.z-a.panel.z)[0];if(!hit)return null;const rect=document.querySelector('#wb-screw-canvas').getBoundingClientRect();return{id:hit.screw.id,x:rect.x+hit.point.x/420*rect.width,y:rect.y+hit.point.y/560*rect.height};})()`);
+  return evaluate(`(async()=>{const model=await import('/src/games/plugins/screw/model.js');const state=wanbaApp.inspect().controller,active=new Set(state.boxes.map(box=>box.color)),hits=model.reachableScrews(state).filter(item=>item.reachable).sort((a,b)=>b.panel.z-a.panel.z),hit=hits.find(item=>active.has(item.screw.color))||hits[0];if(!hit)return null;const rect=document.querySelector('#wb-screw-canvas').getBoundingClientRect();return{id:hit.screw.id,x:rect.x+hit.point.x/420*rect.width,y:rect.y+hit.point.y/560*rect.height};})()`);
 }
 async function playSafeMove() {
   const before = await evaluate('wanbaApp.inspect().controller.moves');
@@ -121,7 +121,7 @@ try {
     assert.equal(current.state.render.pixelRatio, ratio);
     assert.equal(current.raw.width, 420 * ratio);
     assert.equal(current.raw.height, 560 * ratio);
-    assert.equal(current.art, 'workshop-v2');
+    assert.equal(current.art, 'atelier-v3');
     assert.equal(current.boxes, 3);
     assert.equal(current.slots, 5);
     assert.ok(current.canvas.x >= current.gamebox.x - 1 && current.canvas.right <= current.gamebox.right + 1);
@@ -217,6 +217,38 @@ try {
   assert.equal(secondLevel.boxes.length, 3);
   await screenshot('level-2-ready');
   checks.push({ check:'result action advances to the larger second level', level:secondLevel.level, liveScrews:secondLevel.liveScrews });
+
+  console.log('PHASE gameplay-endless');
+  await evaluate('wanbaApp.pause();wanbaApp.back();true');
+  await clearScrewProgress();
+  await navigate();
+  await openScrew({ choice:'endless' });
+  await until('wanbaApp.inspect().controller?.render?.idle');
+  let endless = (await layout()).state;
+  assert.equal(endless.mode, 'endless');
+  assert.equal(endless.details.endlessLayers, 1);
+  assert.equal(endless.status, 'playing');
+  for (let move = 0; move < 40 && endless.details.endlessLayers < 2; move += 1) {
+    await playSafeMove();
+    endless = (await layout()).state;
+  }
+  assert.equal(endless.details.endlessLayers, 2);
+  assert.equal(endless.status, 'playing');
+  assert.ok(endless.liveScrews >= 50, 'new layer arrives before the board clears');
+  assert.equal(await evaluate('document.querySelector("#wb-screw-result").hidden'), true);
+  assert.match(await evaluate('document.querySelector("#wb-screw-progress-text").textContent'), /已收纳 .*盒 · 持续补充/);
+  await screenshot('endless-continuous-layer-2');
+  const boxesBefore = endless.boxes.length;
+  await touch('#wb-screw-extra');
+  endless = (await layout()).state;
+  assert.equal(boxesBefore, 3);
+  assert.equal(endless.boxCapacity, 4);
+  assert.equal(endless.boxes.length, 4);
+  assert.equal(await evaluate('document.querySelector("#wb-screw-extra-label").textContent'), '加盒');
+  await screenshot('endless-add-box');
+  checks.push({ check:'endless mode adds a new layer without a level result and expands from three to four collection boxes',
+    state:{ layers:endless.details.endlessLayers, status:endless.status, boxes:endless.boxes.length, capacity:endless.boxCapacity,
+      liveScrews:endless.liveScrews, boxesCompleted:endless.details.boxesCompleted } });
 
   assert.deepEqual(errors, []);
   console.log(JSON.stringify({ passed:true, checks, errors }, null, 2));

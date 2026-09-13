@@ -1,10 +1,10 @@
-// Installed Android app regression for Screw Jam 1.1.0.
+// Installed Android app regression for Screw Jam 1.2.0.
 // CDP only reads state; every game and tool interaction is sent through Android input.
 import assert from 'node:assert/strict';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { connect, adb, screenshot, activity } from './android-driver.mjs';
 
-const out = process.env.QA_OUT || 'docs/evidence/screw-jam-1.1.0/android-emulator';
+const out = process.env.QA_OUT || 'docs/evidence/screw-jam-1.2.0/android-emulator';
 mkdirSync(out, { recursive:true });
 const packageName = activity.split('/')[0], checks = [];
 let client, failure = null, inputOffsetY = 0;
@@ -37,7 +37,7 @@ async function adbTap(selector) {
 async function clearScrewProgress() {
   await client.evaluate(`(()=>{const key='wanbanXiaowu_progress_v1',all=JSON.parse(localStorage.getItem(key)||'{}');delete all.screw;localStorage.setItem(key,JSON.stringify(all));return true})()`);
 }
-async function openScrew(continueSaved = false) {
+async function openScrew({ continueSaved = false, choice = 'normal' } = {}) {
   await client.evaluate('wanbaApp.openShellTab("single")');
   await until(() => client.evaluate('!wanbaApp.inspect().game'), 'catalog');
   const launch = await client.evaluate('wanbaApp.launch("screw","single")');
@@ -46,7 +46,7 @@ async function openScrew(continueSaved = false) {
     if (await client.evaluate('wanbaApp.inspect().started')) return;
     const selector = await client.evaluate(`(()=>{
       if(document.querySelector('#wb-progress-continue'))return ${JSON.stringify(continueSaved ? '#wb-progress-continue' : '#wb-progress-new')};
-      if(document.querySelector('[data-choice="normal"]'))return '[data-choice="normal"]';
+      if(document.querySelector('[data-choice="${choice}"]'))return '[data-choice="${choice}"]';
       if(document.querySelector('#wb-start-cover-btn'))return '#wb-start-cover-btn';
       return null;
     })()`);
@@ -56,7 +56,7 @@ async function openScrew(continueSaved = false) {
   throw Error('Screw Jam did not start');
 }
 async function safeMovePoint() {
-  return client.evaluate(`(async()=>{const model=await import(new URL('../src/games/plugins/screw/model.js',location.href).href);const state=wanbaApp.inspect().controller,active=new Set(state.boxes.map(box=>box.color));const hit=model.reachableScrews(state).filter(item=>item.reachable&&active.has(item.screw.color)).sort((a,b)=>b.panel.z-a.panel.z)[0];if(!hit)return null;const rect=document.querySelector('#wb-screw-canvas').getBoundingClientRect();return{id:hit.screw.id,x:rect.x+hit.point.x/420*rect.width,y:rect.y+hit.point.y/560*rect.height,dpr:devicePixelRatio};})()`);
+  return client.evaluate(`(async()=>{const model=await import(new URL('../src/games/plugins/screw/model.js',location.href).href);const state=wanbaApp.inspect().controller,active=new Set(state.boxes.map(box=>box.color)),hits=model.reachableScrews(state).filter(item=>item.reachable).sort((a,b)=>b.panel.z-a.panel.z),hit=hits.find(item=>active.has(item.screw.color))||hits[0];if(!hit)return null;const rect=document.querySelector('#wb-screw-canvas').getBoundingClientRect();return{id:hit.screw.id,x:rect.x+hit.point.x/420*rect.width,y:rect.y+hit.point.y/560*rect.height,dpr:devicePixelRatio};})()`);
 }
 async function playSafeMove() {
   const before = (await state()).moves, point = await safeMovePoint();
@@ -77,11 +77,11 @@ try {
   await client.evaluate('wanbaApp.setLocale("zh-CN")');
   await clearScrewProgress();
   await client.evaluate('wanbaApp.setPerformance("normal")');
-  await openScrew(false);
+  await openScrew();
   await until(async () => (await state())?.render?.idle, 'initial idle');
   const ready = await layout();
-  assert.equal(ready.codeVersion, '1.1.0');
-  assert.equal(ready.art, 'workshop-v2');
+  assert.equal(ready.codeVersion, '1.2.0');
+  assert.equal(ready.art, 'atelier-v3');
   assert.equal(ready.boxes, 3);
   assert.equal(ready.slots, 5);
   assert.ok(ready.canvas.x >= ready.gamebox.x - 1 && ready.canvas.right <= ready.gamebox.right + 1);
@@ -90,7 +90,7 @@ try {
   for (const button of ready.tools) assert.ok(button.width >= 44 && button.height >= 44);
   await client.wait(350);
   screenshot(`${out}/ready.png`);
-  checks.push({ check:'installed APK opens Screw Jam 1.1.0 with a fitted mobile board', layout:{ viewport:ready.viewport, gamebox:ready.gamebox, canvas:ready.canvas, top:ready.top, tools:ready.tools } });
+  checks.push({ check:'installed APK opens Screw Jam 1.2.0 with the fitted atelier interface', layout:{ viewport:ready.viewport, gamebox:ready.gamebox, canvas:ready.canvas, top:ready.top, tools:ready.tools } });
 
   const idleDraws = ready.state.render.drawCount;
   await client.wait(650);
@@ -127,7 +127,7 @@ try {
   adb('shell', 'am', 'start', '-n', activity);
   client = await connect();
   inputOffsetY = readStatusBarOffset();
-  await openScrew(true);
+  await openScrew({ continueSaved:true });
   const restored = await state();
   assert.equal(restored.moves, beforeRestart.moves);
   assert.equal(restored.liveScrews, beforeRestart.liveScrews);
@@ -148,6 +148,31 @@ try {
   assert.equal((await state()).liveScrews, 18);
   screenshot(`${out}/level-2.png`);
   checks.push({ check:'nine Android taps complete level 1 and advance to level 2', score:completed.score, stars:completed.levelStars });
+
+  await client.evaluate('wanbaApp.pause();wanbaApp.back();true');
+  await clearScrewProgress();
+  await openScrew({ choice:'endless' });
+  await until(async () => (await state())?.render?.idle, 'endless initial idle');
+  let endless = await state();
+  assert.equal(endless.mode, 'endless');
+  assert.equal(endless.details.endlessLayers, 1);
+  for (let move = 0; move < 40 && endless.details.endlessLayers < 2; move += 1) {
+    await playSafeMove();
+    endless = await state();
+  }
+  assert.equal(endless.details.endlessLayers, 2);
+  assert.equal(endless.status, 'playing');
+  assert.ok(endless.liveScrews >= 50);
+  assert.equal(await client.evaluate('document.querySelector("#wb-screw-result").hidden'), true);
+  screenshot(`${out}/endless-continuous-layer-2.png`);
+  await adbTap('#wb-screw-extra');
+  endless = await state();
+  assert.equal(endless.boxCapacity, 4);
+  assert.equal(endless.boxes.length, 4);
+  assert.equal(await client.evaluate('document.querySelector("#wb-screw-extra-label").textContent'), '加盒');
+  screenshot(`${out}/endless-add-box.png`);
+  checks.push({ check:'Android input verifies continuous endless refill and add-box capacity', layers:endless.details.endlessLayers,
+    boxes:endless.boxes.length, capacity:endless.boxCapacity, liveScrews:endless.liveScrews });
   assert.deepEqual(client.errors, []);
   console.log(JSON.stringify({ passed:true, checks }, null, 2));
 } catch (error) {

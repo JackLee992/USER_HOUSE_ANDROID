@@ -452,83 +452,92 @@
   .wb-popstar-shard { width:7px; height:7px; box-shadow:none; animation-duration:.48s; }
   .wb-popstar-settle-card { box-shadow:0 6px 16px rgba(79,141,247,.14); }
 }
-.wb-board-wrap.wb-gamebox-screw { height:100%; flex:1 1 0; align-items:stretch; justify-items:center; padding:4px; background:radial-gradient(circle at 50% 18%,rgba(83,136,208,.12),transparent 45%); }
-.wb-screw-panel { width:min(100%, 620px); height:100%; max-height:100%; min-height:0; display:grid; grid-template-rows:186px minmax(0,1fr); gap:6px; justify-items:center; align-items:stretch; overflow:hidden; box-sizing:border-box; color:#f5f8ff; }
-.wb-screw-top { width:100%; min-height:0; display:grid; grid-template-columns:72px minmax(0,1fr) 58px; grid-template-rows:72px 18px 28px 42px; grid-template-areas:'level boxes next' 'progress progress progress' 'tray tray tray' 'tools tools tools'; gap:4px 8px; align-items:center; padding:6px 10px; overflow:hidden; border:1px solid rgba(129,168,224,.28); border-radius:18px; background:linear-gradient(150deg,rgba(19,35,66,.98),rgba(8,20,43,.98)); box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 8px 24px rgba(5,12,29,.25); }
-.wb-screw-level { grid-area:level; display:grid; place-items:center; align-content:center; height:62px; border-radius:14px; background:linear-gradient(160deg,#2b4777,#152a51); border:1px solid rgba(164,200,255,.25); box-shadow:inset 0 1px 0 rgba(255,255,255,.14); }
-.wb-screw-level span { font-size:8px; letter-spacing:.16em; color:#9fb9df; font-weight:900; }
-.wb-screw-level strong { font-size:25px; line-height:24px; color:#fff; font-variant-numeric:tabular-nums; text-shadow:0 2px 8px rgba(0,0,0,.35); }
-.wb-screw-level small { max-width:64px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:8px; color:#b9c9e4; }
-.wb-screw-boxes { grid-area:boxes; height:66px; min-width:0; display:flex; gap:7px; align-items:center; justify-content:center; overflow:hidden; }
-.wb-screw-box { --c:#7c91b4; --d:#394b6a; position:relative; flex:0 0 62px; width:62px; height:55px; display:grid; grid-template-columns:repeat(3,14px); grid-template-rows:24px 13px; align-content:center; justify-content:center; gap:2px 3px; border:3px solid var(--c); border-radius:12px; color:#fff; background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(221,228,236,.90)); box-shadow:inset 0 -5px 0 rgba(0,0,0,.10),0 4px 10px rgba(0,0,0,.30),0 0 0 1px var(--d); }
-.wb-screw-box::before { content:''; position:absolute; top:-8px; left:18px; width:22px; height:9px; border-radius:6px 6px 1px 1px; background:linear-gradient(180deg,var(--l),var(--c)); border:2px solid var(--d); border-bottom:0; }
-.wb-screw-box::after { content:''; position:absolute; inset:3px 5px auto; height:8px; border-radius:7px; background:rgba(255,255,255,.55); pointer-events:none; }
-.wb-screw-box small { grid-column:1/4; justify-self:center; font-size:9px; line-height:1; color:var(--d); font-weight:900; font-style:normal; }
-.wb-screw-box-hole { position:relative; z-index:1; width:14px; height:14px; border-radius:50%; background:#27344a; box-shadow:inset 0 2px 3px rgba(0,0,0,.60),0 1px 0 rgba(255,255,255,.55); }
-.wb-screw-box-hole span,.wb-screw-slot span,.wb-screw-next i { display:block; width:100%; height:100%; border-radius:50%; background:radial-gradient(circle at 33% 25%,#fff 0 8%,var(--l) 11%,var(--c) 48%,var(--d) 88%); box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 1px 3px rgba(0,0,0,.35); }
+.wb-board-wrap.wb-gamebox-screw { height:100%; flex:1 1 0; align-items:stretch; justify-items:center; padding:4px; background:radial-gradient(circle at 50% 12%,rgba(255,255,255,.92),transparent 48%),linear-gradient(160deg,#fff8f7,#f5eff8 54%,#eef7f3); }
+.wb-screw-panel { width:min(100%,620px); height:100%; max-height:100%; min-height:0; display:grid; grid-template-rows:178px minmax(0,1fr); gap:6px; justify-items:center; align-items:stretch; overflow:hidden; box-sizing:border-box; color:#5d3e52; }
+.wb-screw-top { width:100%; min-height:0; display:grid; grid-template-columns:70px minmax(0,1fr) 54px; grid-template-rows:62px 16px 30px 42px; grid-template-areas:'level boxes next' 'progress progress progress' 'tray tray tray' 'tools tools tools'; gap:4px 8px; align-items:center; padding:7px 10px; overflow:hidden; border:1px solid rgba(123,83,109,.16); border-radius:22px; background:linear-gradient(145deg,rgba(255,253,251,.98),rgba(249,238,244,.98)); box-shadow:inset 0 1px 0 #fff,0 9px 24px rgba(111,73,94,.13); }
+.wb-screw-level { grid-area:level; display:grid; place-items:center; align-content:center; height:58px; border-radius:16px; background:linear-gradient(155deg,#fff7f4,#f2dbe5); border:1px solid rgba(146,91,119,.17); box-shadow:inset 0 1px 0 #fff,0 4px 10px rgba(126,80,104,.1); }
+.wb-screw-level span { font-size:8px; letter-spacing:.12em; color:#9a7589; font-weight:900; }
+.wb-screw-level strong { font-size:24px; line-height:23px; color:#69425c; font-variant-numeric:tabular-nums; text-shadow:0 1px 0 #fff; }
+.wb-screw-level small { max-width:65px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:8px; color:#8d6a7d; font-weight:750; }
+.wb-screw-boxes { grid-area:boxes; height:62px; min-width:0; display:flex; gap:6px; align-items:center; justify-content:center; overflow:hidden; }
+.wb-screw-box { --c:#9d8ca0; --d:#5d485c; --l:#d7cbd8; position:relative; flex:0 0 60px; width:60px; height:52px; display:grid; grid-template-columns:repeat(3,13px); grid-template-rows:22px 12px; align-content:center; justify-content:center; gap:2px 3px; border:2px solid var(--c); border-radius:14px; color:#5d3e52; background:linear-gradient(180deg,#fff,#f4eef1); box-shadow:inset 0 -4px 0 rgba(106,73,91,.07),inset 0 1px 0 #fff,0 4px 9px rgba(99,61,82,.14); }
+.wb-screw-box::before { content:''; position:absolute; top:-7px; left:50%; transform:translateX(-50%); width:22px; height:8px; border-radius:7px 7px 2px 2px; background:linear-gradient(180deg,var(--l),var(--c)); border:1.5px solid var(--d); border-bottom:0; }
+.wb-screw-box::after { content:''; position:absolute; inset:3px 6px auto; height:7px; border-radius:7px; background:rgba(255,255,255,.68); pointer-events:none; }
+.wb-screw-box small { grid-column:1/4; justify-self:center; font-size:8px; line-height:1; color:var(--d); font-weight:900; font-style:normal; }
+.wb-screw-box-hole { position:relative; z-index:1; width:13px; height:13px; border-radius:50%; background:#d9cfd1; box-shadow:inset 0 2px 3px rgba(95,64,82,.27),0 1px 0 #fff; }
+.wb-screw-box-hole span,.wb-screw-slot span,.wb-screw-next i { display:block; width:100%; height:100%; border-radius:50%; background:radial-gradient(circle at 33% 25%,#fff 0 8%,var(--l) 12%,var(--c) 51%,var(--d) 90%); box-shadow:inset 0 1px 0 rgba(255,255,255,.72),0 1px 3px rgba(88,52,73,.22); }
 .wb-screw-box-hole.filled { animation:wb-screw-pack .24s ease-out; }
-@keyframes wb-screw-pack { 0%{transform:scale(.35)} 72%{transform:scale(1.18)} 100%{transform:scale(1)} }
-.wb-screw-next { grid-area:next; display:grid; justify-items:center; align-content:center; gap:3px; height:58px; border-radius:13px; color:#9fb9df; background:rgba(36,58,95,.72); border:1px solid rgba(139,177,230,.20); }
-.wb-screw-next span { font-size:9px; font-weight:800; }
-.wb-screw-next i { --c:#8091ad; --d:#34435d; width:25px; height:25px; border:2px solid rgba(255,255,255,.68); }
-.wb-screw-progress { grid-area:progress; position:relative; width:100%; height:14px; overflow:hidden; border:1px solid rgba(141,174,222,.25); border-radius:999px; background:#071327; box-shadow:inset 0 2px 5px rgba(0,0,0,.48); }
-#wb-screw-progress-fill { height:100%; width:0; border-radius:inherit; background:linear-gradient(90deg,#48b7c7,#65d49a,#ffd166); box-shadow:0 0 12px rgba(101,212,154,.42); transition:width .24s ease; }
-#wb-screw-progress-text { position:absolute; inset:0; display:grid; place-items:center; color:#f7fbff; font-size:9px; font-weight:900; line-height:1; text-shadow:0 1px 3px #000; }
+@keyframes wb-screw-pack { 0%{transform:scale(.35)} 72%{transform:scale(1.14)} 100%{transform:scale(1)} }
+.wb-screw-boxes.many { gap:3px; }
+.wb-screw-boxes.many .wb-screw-box { flex-basis:50px; width:50px; }
+.wb-screw-next { grid-area:next; display:grid; justify-items:center; align-content:center; gap:3px; height:54px; border-radius:15px; color:#927084; background:linear-gradient(160deg,#fff,#eee6f1); border:1px solid rgba(130,91,113,.14); box-shadow:inset 0 1px 0 #fff; }
+.wb-screw-next span { font-size:8px; font-weight:850; }
+.wb-screw-next i { --c:#9d8ca0; --d:#5d485c; --l:#d7cbd8; width:24px; height:24px; border:2px solid #fff; }
+.wb-screw-progress { grid-area:progress; position:relative; width:100%; height:14px; overflow:hidden; border:1px solid rgba(122,86,108,.14); border-radius:999px; background:#e8dfe8; box-shadow:inset 0 2px 4px rgba(98,63,83,.13),0 1px 0 #fff; }
+#wb-screw-progress-fill { height:100%; width:0; border-radius:inherit; background:linear-gradient(90deg,#9fc8bd,#aebfe1,#d8b8db); box-shadow:0 0 8px rgba(157,124,165,.2); transition:width .24s ease; }
+#wb-screw-progress-text { position:absolute; inset:0; display:grid; place-items:center; color:#604257; font-size:8.5px; font-weight:900; line-height:1; text-shadow:0 1px 0 rgba(255,255,255,.72); }
 .wb-screw-tray-wrap { grid-area:tray; min-width:0; display:flex; align-items:center; justify-content:center; gap:8px; }
-.wb-screw-tray-wrap>span { flex:0 0 auto; color:#aabbd5; font-size:10px; font-weight:800; }
-.wb-screw-tray { min-width:0; display:flex; align-items:center; justify-content:center; gap:6px; }
-.wb-screw-slot { width:25px; height:25px; padding:4px; border-radius:50%; background:radial-gradient(circle at 48% 55%,#081426,#273b5d); border:2px solid #61779a; box-shadow:inset 0 3px 6px rgba(0,0,0,.72),0 1px 0 rgba(255,255,255,.13); }
-.wb-screw-slot.occupied { padding:2px; border-color:#91a8ca; }
+.wb-screw-tray-wrap>span { flex:0 0 auto; color:#8d6c7e; font-size:9px; font-weight:850; }
+.wb-screw-tray { min-width:0; display:flex; align-items:center; justify-content:center; gap:6px; padding:2px 8px; border-radius:999px; background:rgba(255,255,255,.55); box-shadow:inset 0 1px 3px rgba(105,68,89,.08); }
+.wb-screw-slot { width:24px; height:24px; padding:4px; border-radius:50%; background:radial-gradient(circle at 48% 55%,#cfc3c3,#e8dede); border:1.5px solid rgba(105,73,91,.3); box-shadow:inset 0 3px 5px rgba(92,60,78,.2),0 1px 0 #fff; }
+.wb-screw-slot.occupied { padding:2px; border-color:#9e8595; }
 .wb-screw-toolbelt { grid-area:tools; display:flex; align-items:center; justify-content:center; gap:7px; }
-.wb-screw-tool { position:relative; min-width:82px; min-height:44px; padding:4px 23px 4px 8px; display:grid; grid-template-columns:22px 1fr; align-items:center; gap:5px; border:1px solid rgba(141,178,229,.34); border-radius:12px; background:linear-gradient(180deg,#2c4774,#172b50); color:#f7f9ff; box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 2px 6px rgba(0,0,0,.28); font:inherit; cursor:pointer; touch-action:manipulation; }
-.wb-screw-tool:active:not(:disabled) { transform:translateY(1px) scale(.98); filter:brightness(1.1); }
-.wb-screw-tool:disabled { opacity:.42; cursor:default; }
-.wb-screw-tool b { display:grid; place-items:center; width:21px; height:21px; border-radius:7px; color:#173056; background:linear-gradient(180deg,#fff3a1,#e7b842); font-size:15px; }
+.wb-screw-tool { position:relative; min-width:86px; min-height:44px; padding:4px 24px 4px 8px; display:grid; grid-template-columns:24px 1fr; align-items:center; gap:5px; border:1px solid rgba(109,75,95,.16); border-radius:14px; background:linear-gradient(180deg,#f4f8ff,#dceafb); color:#553c4d; box-shadow:inset 0 1px 0 #fff,0 3px 8px rgba(92,59,78,.12); font:inherit; cursor:pointer; touch-action:manipulation; transition:transform .12s ease,filter .12s ease,box-shadow .12s ease; }
+.wb-screw-tool:nth-child(2) { background:linear-gradient(180deg,#fff9df,#f3df9f); }
+.wb-screw-tool:nth-child(3) { background:linear-gradient(180deg,#f6edff,#ddc8f0); }
+.wb-screw-tool:active:not(:disabled) { transform:translateY(1px) scale(.97); filter:brightness(1.02); box-shadow:inset 0 1px 0 #fff,0 1px 3px rgba(92,59,78,.12); }
+.wb-screw-tool:disabled { opacity:.4; cursor:default; filter:saturate(.6); }
+.wb-screw-tool b { display:grid; place-items:center; width:23px; height:23px; border-radius:8px; color:#65445a; background:rgba(255,255,255,.7); box-shadow:inset 0 1px 0 #fff,0 1px 3px rgba(94,60,80,.1); font-size:16px; }
 .wb-screw-tool span { font-size:11px; font-weight:850; white-space:nowrap; }
-.wb-screw-tool em { position:absolute; right:5px; top:5px; min-width:16px; height:16px; display:grid; place-items:center; padding:0 3px; border-radius:999px; color:#fff; background:#e55e6b; font-size:9px; font-weight:900; font-style:normal; }
-.wb-screw-stage { position:relative; min-width:0; min-height:0; width:100%; height:100%; display:grid; place-items:center; overflow:hidden; border:1px solid rgba(126,166,221,.25); border-radius:20px; background:#071225; box-shadow:0 9px 26px rgba(3,10,25,.25); }
-.wb-screw-canvas { display:block; height:100%; width:auto; max-width:100%; max-height:100%; aspect-ratio:3/4; border:0; border-radius:18px; background:#08152c; box-shadow:inset 0 0 0 1px rgba(255,255,255,.07); touch-action:none; user-select:none; -webkit-user-select:none; }
-.wb-screw-callout { position:absolute; z-index:3; left:50%; bottom:10px; max-width:calc(100% - 24px); min-height:28px; transform:translateX(-50%); display:grid; place-items:center; padding:6px 13px; border:1px solid rgba(173,204,244,.22); border-radius:999px; background:rgba(5,15,34,.76); color:#e9f2ff; box-shadow:0 5px 18px rgba(0,0,0,.30); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); font-size:11px; font-weight:750; line-height:1.3; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; pointer-events:none; }
-.wb-screw-callout.warn { color:#fff0b0; border-color:rgba(255,209,102,.48); }
-.wb-screw-result { position:absolute; z-index:7; inset:0; display:grid; place-items:center; padding:20px; background:rgba(2,8,22,.65); backdrop-filter:blur(7px); -webkit-backdrop-filter:blur(7px); }
+.wb-screw-tool em { position:absolute; right:5px; top:5px; min-width:16px; height:16px; display:grid; place-items:center; padding:0 3px; border-radius:999px; color:#fff; background:#bd6b8c; box-shadow:0 1px 3px rgba(96,54,75,.18); font-size:9px; font-weight:900; font-style:normal; }
+.wb-screw-stage { position:relative; min-width:0; min-height:0; width:100%; height:100%; display:grid; place-items:center; overflow:hidden; border:1px solid rgba(113,78,98,.15); border-radius:24px; background:linear-gradient(160deg,#fff8f5,#efe6ee); box-shadow:0 10px 26px rgba(99,66,84,.14); }
+.wb-screw-canvas { display:block; height:100%; width:auto; max-width:100%; max-height:100%; aspect-ratio:3/4; border:0; border-radius:22px; background:#f5ddbf; box-shadow:inset 0 0 0 1px rgba(255,255,255,.68); touch-action:none; user-select:none; -webkit-user-select:none; }
+.wb-screw-callout { position:absolute; z-index:3; left:50%; bottom:10px; max-width:calc(100% - 24px); min-height:28px; transform:translateX(-50%); display:grid; place-items:center; padding:6px 13px; border:1px solid rgba(132,92,115,.15); border-radius:999px; background:rgba(255,252,250,.84); color:#604257; box-shadow:0 5px 16px rgba(94,61,79,.13); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); font-size:10px; font-weight:800; line-height:1.3; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; pointer-events:none; }
+.wb-screw-callout.warn { color:#8b4b42; border-color:rgba(183,100,88,.32); background:rgba(255,244,237,.92); }
+.wb-screw-result { position:absolute; z-index:7; inset:0; display:grid; place-items:center; padding:20px; background:rgba(85,57,75,.32); backdrop-filter:blur(7px); -webkit-backdrop-filter:blur(7px); }
 .wb-screw-result[hidden] { display:none; }
-.wb-screw-result-card { width:min(330px,94%); padding:24px 20px 20px; display:grid; justify-items:center; gap:10px; border:1px solid rgba(184,213,255,.34); border-radius:24px; background:linear-gradient(155deg,#213a67,#0e2142); color:#f8fbff; box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 20px 48px rgba(0,0,0,.48); text-align:center; }
-.wb-screw-result-stars { min-height:34px; color:#ffd45f; font-size:30px; letter-spacing:5px; text-shadow:0 2px 12px rgba(255,188,43,.34); }
+.wb-screw-result-card { width:min(330px,94%); padding:24px 20px 20px; display:grid; justify-items:center; gap:10px; border:1px solid rgba(116,78,100,.16); border-radius:26px; background:linear-gradient(155deg,#fffdfb,#f5e9ef); color:#5a3d50; box-shadow:inset 0 1px 0 #fff,0 20px 48px rgba(75,48,64,.25); text-align:center; }
+.wb-screw-result-stars { min-height:34px; color:#d3a642; font-size:30px; letter-spacing:5px; text-shadow:0 2px 10px rgba(197,145,44,.22); }
 .wb-screw-result h3 { margin:0; font-size:22px; }
-.wb-screw-result p { margin:0 0 4px; color:#bdcee8; font-size:12px; }
+.wb-screw-result p { margin:0 0 4px; color:#88697b; font-size:12px; }
 .wb-screw-result .wb-btn { width:min(220px,100%); min-height:38px; }
 #wanbanXiaowu-popup.wb-mono .wb-screw-top,#wanbanXiaowu-popup.wb-mono .wb-screw-canvas { filter:none; image-rendering:auto; }
 @media (max-width:768px) {
   .wb-board-wrap:has(.wb-screw-panel) { padding:0; }
-  .wb-screw-panel { width:100%; grid-template-rows:160px minmax(0,1fr); gap:3px; }
-  .wb-screw-top { grid-template-columns:54px minmax(0,1fr) 43px; grid-template-rows:58px 14px 25px 44px; gap:2px 4px; padding:5px 6px; border-radius:14px; }
-  .wb-screw-level { width:52px; height:52px; border-radius:11px; }
+  .wb-screw-panel { width:100%; grid-template-rows:156px minmax(0,1fr); gap:3px; }
+  .wb-screw-top { grid-template-columns:52px minmax(0,1fr) 43px; grid-template-rows:54px 13px 25px 44px; gap:3px 4px; padding:5px 6px; border-radius:17px; }
+  .wb-screw-level { width:50px; height:50px; border-radius:13px; }
   .wb-screw-level strong { font-size:21px; line-height:20px; }
-  .wb-screw-level small { max-width:49px; font-size:6.8px; }
-  .wb-screw-boxes { height:56px; gap:4px; }
-  .wb-screw-box { flex-basis:clamp(50px,15vw,58px); width:clamp(50px,15vw,58px); height:49px; grid-template-columns:repeat(3,12px); grid-template-rows:20px 11px; gap:2px; border-width:2px; border-radius:10px; }
-  .wb-screw-box::before { top:-6px; left:50%; transform:translateX(-50%); width:19px; height:7px; border-width:1px; }
-  .wb-screw-box-hole { width:12px; height:12px; }
-  .wb-screw-next { height:50px; border-radius:10px; }
+  .wb-screw-level small { max-width:48px; font-size:6.8px; }
+  .wb-screw-boxes { height:53px; gap:4px; }
+  .wb-screw-box { flex-basis:clamp(49px,14.2vw,56px); width:clamp(49px,14.2vw,56px); height:46px; grid-template-columns:repeat(3,11px); grid-template-rows:18px 10px; gap:2px; border-width:2px; border-radius:11px; }
+  .wb-screw-box::before { top:-6px; width:18px; height:7px; border-width:1px; }
+  .wb-screw-box-hole { width:11px; height:11px; }
+  .wb-screw-boxes.many { gap:2px; }
+  .wb-screw-boxes.many .wb-screw-box { flex-basis:clamp(36px,10.1vw,42px); width:clamp(36px,10.1vw,42px); grid-template-columns:repeat(3,8px); gap:1px; }
+  .wb-screw-boxes.many .wb-screw-box-hole { width:8px; height:8px; }
+  .wb-screw-boxes.many .wb-screw-box small { font-size:7px; }
+  .wb-screw-next { height:48px; border-radius:12px; }
   .wb-screw-next span { font-size:7px; }
   .wb-screw-next i { width:21px; height:21px; }
   .wb-screw-progress { height:12px; }
+  #wb-screw-progress-text { font-size:7.8px; }
   .wb-screw-tray-wrap { gap:5px; }
   .wb-screw-tray-wrap>span { font-size:8px; }
-  .wb-screw-tray { gap:4px; }
+  .wb-screw-tray { gap:4px; padding:1px 6px; }
   .wb-screw-slot { width:22px; height:22px; padding:4px; border-width:1.5px; }
   .wb-screw-toolbelt { gap:5px; }
-  .wb-screw-tool { min-width:72px; min-height:44px; padding-right:21px; border-radius:10px; }
+  .wb-screw-tool { min-width:72px; min-height:44px; padding-right:21px; border-radius:12px; }
   .wb-screw-tool span { font-size:10px; }
-  .wb-screw-stage,.wb-screw-canvas { border-radius:12px; }
+  .wb-screw-stage,.wb-screw-canvas { border-radius:15px; }
   .wb-screw-callout { bottom:7px; min-height:25px; padding:5px 10px; font-size:9px; }
 }
 @media (max-height:720px) and (max-width:768px) {
-  .wb-screw-panel { grid-template-rows:138px minmax(0,1fr); }
-  .wb-screw-top { grid-template-rows:48px 12px 22px 42px; padding:3px 5px; }
-  .wb-screw-level { height:45px; }
-  .wb-screw-boxes { height:47px; }
-  .wb-screw-box { height:42px; grid-template-rows:17px 9px; }
+  .wb-screw-panel { grid-template-rows:136px minmax(0,1fr); }
+  .wb-screw-top { grid-template-rows:44px 11px 23px 42px; padding:3px 5px; gap:2px 4px; }
+  .wb-screw-level { height:42px; }
+  .wb-screw-boxes { height:43px; }
+  .wb-screw-box { height:38px; grid-template-rows:15px 8px; }
   .wb-screw-tool { min-height:42px; }
 }
 .wb-reversi-panel, .wb-c4d-panel { width:100%; height:100%; min-height:0; display:grid; grid-template-rows:auto minmax(0,1fr); gap:8px; place-items:center; overflow:hidden; }

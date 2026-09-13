@@ -1,15 +1,17 @@
 export const SCREW_STATE_SCHEMA = 2;
 export const SCREW_CAMPAIGN_LEVELS = 12;
 export const SCREW_TRAY_SIZE = 5;
+export const SCREW_ENDLESS_WAVE_PANELS = 12;
+export const SCREW_ENDLESS_REFILL_SCREWS = 24;
 export const SCREW_COLORS = Object.freeze([
-  Object.freeze({ id:'ruby', name:'珊瑚红', hex:'#e75d68', dark:'#9d2f42', light:'#ff9ba3' }),
-  Object.freeze({ id:'ocean', name:'海湾蓝', hex:'#467fd6', dark:'#244a96', light:'#8bb5ff' }),
-  Object.freeze({ id:'sun', name:'琥珀黄', hex:'#e6ad31', dark:'#956613', light:'#ffe082' }),
-  Object.freeze({ id:'leaf', name:'青叶绿', hex:'#54a66b', dark:'#28713f', light:'#9be3aa' }),
-  Object.freeze({ id:'violet', name:'鸢尾紫', hex:'#8b61c8', dark:'#54328e', light:'#c6a7f4' }),
-  Object.freeze({ id:'tangerine', name:'暖橙', hex:'#dc7840', dark:'#96401d', light:'#ffb080' }),
-  Object.freeze({ id:'lagoon', name:'湖水青', hex:'#3da6ad', dark:'#176a72', light:'#8cdee0' }),
-  Object.freeze({ id:'rose', name:'玫瑰粉', hex:'#d45f91', dark:'#93355f', light:'#f7a2c5' }),
+  Object.freeze({ id:'ruby', name:'珊瑚红', hex:'#d96872', dark:'#8f354a', light:'#f5abb1' }),
+  Object.freeze({ id:'ocean', name:'海湾蓝', hex:'#4f82c7', dark:'#2f568c', light:'#9fc0ed' }),
+  Object.freeze({ id:'sun', name:'琥珀黄', hex:'#d5a73c', dark:'#89671c', light:'#f4dc8a' }),
+  Object.freeze({ id:'leaf', name:'青叶绿', hex:'#63a77a', dark:'#356f4c', light:'#acd9b8' }),
+  Object.freeze({ id:'violet', name:'鸢尾紫', hex:'#8f72bd', dark:'#5d4785', light:'#c8b4e4' }),
+  Object.freeze({ id:'tangerine', name:'暖橙', hex:'#d68655', dark:'#95512f', light:'#efb08b' }),
+  Object.freeze({ id:'lagoon', name:'湖水青', hex:'#57a3a5', dark:'#326c70', light:'#a5d6d5' }),
+  Object.freeze({ id:'rose', name:'玫瑰粉', hex:'#c96f91', dark:'#8b3d5d', light:'#eab0c4' }),
 ]);
 
 const SHAPES = Object.freeze([
@@ -125,6 +127,7 @@ function baseDetails(previous = {}) {
     hints:Number(previous.hints || 0),
     undos:Number(previous.undos || 0),
     levels:Number(previous.levels || 0),
+    boxesCompleted:Number(previous.boxesCompleted ?? Math.floor(Number(previous.packed || 0) / 3)),
     progress:0,
     completed:false,
     endlessLayers:Number(previous.endlessLayers || 1),
@@ -133,13 +136,15 @@ function baseDetails(previous = {}) {
 
 export function createScrewState({ level = 1, mode = 'normal', score = 0, details, campaignStars = 0 } = {}) {
   const safeLevel = Math.max(1, Math.floor(Number(level) || 1));
-  const seed = (0x51f15e5d ^ Math.imul(safeLevel, 0x45d9f3b) ^ (mode === 'endless' ? 0x7f4a7c15 : 0)) >>> 0;
-  const panelCount = panelCountForLevel(safeLevel);
-  const made = makePanels(safeLevel, seed, panelCount);
+  const endless = mode === 'endless';
+  const seed = (0x51f15e5d ^ Math.imul(safeLevel, 0x45d9f3b) ^ (endless ? 0x7f4a7c15 : 0)) >>> 0;
+  const panelCount = endless ? SCREW_ENDLESS_WAVE_PANELS : panelCountForLevel(safeLevel);
+  const made = makePanels(endless ? Math.max(9, safeLevel) : safeLevel, seed, panelCount);
   const boxQueue = made.groups.flat();
   return {
     screwSchema:SCREW_STATE_SCHEMA,
-    mode:mode === 'endless' ? 'endless' : 'normal',
+    mode:endless ? 'endless' : 'normal',
+    endlessRulesVersion:endless ? 1 : 0,
     level:safeLevel,
     seed,
     score:Math.max(0, Math.floor(Number(score) || 0)),
@@ -148,9 +153,10 @@ export function createScrewState({ level = 1, mode = 'normal', score = 0, detail
     boxQueue,
     boxes:boxQueue.slice(0, 3).map((color, index) => ({ id:`box-${index}`, color, fill:0 })),
     boxIndex:Math.min(3, boxQueue.length),
+    boxCapacity:3,
     tray:[],
     trayCapacity:SCREW_TRAY_SIZE,
-    tools:{ undo:3, hint:3, extra:1 },
+    tools:{ undo:3, hint:3, extra:endless ? 3 : 1 },
     history:[],
     moves:0,
     levelMaxTray:0,
@@ -171,15 +177,25 @@ export function restoreScrewState(saved, mode = 'normal') {
   state.level = Math.max(1, Math.floor(Number(state.level) || 1));
   state.score = Math.max(0, Math.floor(Number(state.score) || 0));
   state.trayCapacity = Math.max(SCREW_TRAY_SIZE, Math.min(7, Math.floor(Number(state.trayCapacity) || SCREW_TRAY_SIZE)));
-  state.tools = { undo:Math.max(0, Number(state.tools?.undo ?? 3)), hint:Math.max(0, Number(state.tools?.hint ?? 3)), extra:Math.max(0, Number(state.tools?.extra ?? 1)) };
+  const restoringOldEndless = state.mode === 'endless' && state.endlessRulesVersion !== 1;
+  state.tools = { undo:Math.max(0, Number(state.tools?.undo ?? 3)), hint:Math.max(0, Number(state.tools?.hint ?? 3)), extra:Math.max(0, Number(state.tools?.extra ?? (state.mode === 'endless' ? 3 : 1))) };
+  if (restoringOldEndless) state.tools.extra = 3;
+  state.endlessRulesVersion = state.mode === 'endless' ? 1 : 0;
+  state.boxQueue = Array.isArray(state.boxQueue) ? state.boxQueue.slice() : state.boxes.map(box => box.color);
+  state.boxIndex = Math.max(0, Math.min(state.boxQueue.length, Math.floor(Number(state.boxIndex) || state.boxes.length)));
+  state.boxCapacity = state.mode === 'endless' ? Math.max(3, Math.min(6, Math.floor(Number(state.boxCapacity || state.maxBoxes) || state.boxes.length || 3))) : 3;
   state.history = Array.isArray(state.history) ? state.history.slice(-3) : [];
   state.moves = Math.max(0, Number(state.moves) || 0);
   state.levelMaxTray = Math.max(0, Number(state.levelMaxTray) || 0);
   state.status = ['playing','level_complete','failed'].includes(state.status) ? state.status : 'playing';
   state.reward = Math.max(0, Number(state.reward) || 0);
   state.details = baseDetails(state.details);
+  if (state.mode === 'endless' && state.status === 'level_complete') {
+    state.status = 'playing';
+    extendEndlessState(state, true);
+  }
   state.details.progress = progressPercent(state);
-  return { state, migrated:false };
+  return { state, migrated:restoringOldEndless };
 }
 
 export function rotatePoint(x, y, angle = 0) {
@@ -241,8 +257,13 @@ export function reachableScrews(state) {
 function coreSnapshot(state) {
   return {
     panels:structuredClone(state.panels),
+    boxQueue:state.boxQueue.slice(),
     boxes:structuredClone(state.boxes),
     boxIndex:state.boxIndex,
+    boxCapacity:state.boxCapacity,
+    endlessRulesVersion:state.endlessRulesVersion,
+    level:state.level,
+    seed:state.seed,
     tray:structuredClone(state.tray),
     trayCapacity:state.trayCapacity,
     tools:structuredClone(state.tools),
@@ -260,14 +281,24 @@ function activeBox(state, color) {
   return state.boxes.find(box => box.color === color);
 }
 
+function refillBoxes(state) {
+  const capacity = state.mode === 'endless' ? state.boxCapacity : 3;
+  while (state.boxes.length < capacity && state.boxIndex < state.boxQueue.length) {
+    state.boxes.push({ id:`box-${state.boxIndex}`, color:state.boxQueue[state.boxIndex], fill:0 });
+    state.boxIndex += 1;
+  }
+}
+
 function replaceCompletedBox(state, box, events) {
   const index = state.boxes.indexOf(box);
   events.completedBoxes.push(box.color);
+  state.details.boxesCompleted += 1;
   state.boxes.splice(index, 1);
   if (state.boxIndex < state.boxQueue.length) {
     state.boxes.splice(index, 0, { id:`box-${state.boxIndex}`, color:state.boxQueue[state.boxIndex], fill:0 });
     state.boxIndex += 1;
   }
+  refillBoxes(state);
 }
 
 function packIntoBox(state, color, events, source) {
@@ -303,7 +334,7 @@ export function progressPercent(state) {
 }
 
 export function applyScrew(state, screwId) {
-  const events = { ok:false, reason:'missing', route:null, panelReleased:null, packed:[], completedBoxes:[], completed:false, failed:false };
+  const events = { ok:false, reason:'missing', route:null, panelReleased:null, packed:[], completedBoxes:[], completed:false, failed:false, endlessExtended:false };
   if (!isScrewState(state) || state.status !== 'playing') { events.reason = 'inactive'; return events; }
   const hit = reachableScrews(state).find(item => item.screw.id === screwId);
   if (!hit) return events;
@@ -336,6 +367,8 @@ export function applyScrew(state, screwId) {
     state.status = 'failed';
     state.details.completed = false;
     events.failed = true;
+  } else if (state.mode === 'endless') {
+    events.endlessExtended = extendEndlessState(state);
   } else if (allLiveScrews(state).length === 0 && state.tray.length === 0 && state.boxes.length === 0) {
     state.status = 'level_complete';
     state.details.completed = true;
@@ -376,6 +409,52 @@ export function addTraySlot(state) {
   state.tools.extra -= 1;
   state.trayCapacity += 1;
   state.details.addBoxUses += 1;
+  return true;
+}
+
+export function addEndlessBox(state) {
+  if (!isScrewState(state) || state.mode !== 'endless' || state.status !== 'playing' || state.tools.extra <= 0 || state.boxCapacity >= 6) return false;
+  if (state.boxIndex >= state.boxQueue.length) return false;
+  state.tools.extra -= 1;
+  state.boxCapacity += 1;
+  state.details.addBoxUses += 1;
+  refillBoxes(state);
+  drainTray(state, { packed:[], completedBoxes:[] });
+  return true;
+}
+
+export function endlessScore(state) {
+  const capacity = Math.max(3, Math.min(6, Number(state?.boxCapacity) || 3));
+  const multiplier = ({ 3:2.2, 4:1.75, 5:1.35, 6:1.05 })[capacity];
+  return Math.round(Math.max(0, Number(state?.details?.boxesCompleted) || 0) * 120 * multiplier);
+}
+
+export function extendEndlessState(state, force = false) {
+  if (!isScrewState(state) || state.mode !== 'endless' || state.status !== 'playing') return false;
+  const active = state.panels.filter(panel => !panel.gone);
+  const live = allLiveScrews(state).length;
+  if (!force && live > SCREW_ENDLESS_REFILL_SCREWS && active.length > 8) return false;
+  const nextLayer = Math.max(1, Number(state.details?.endlessLayers) || 1) + 1;
+  const seed = (state.seed ^ Math.imul(nextLayer, 0x6d2b79f5) ^ 0xa511e9b3) >>> 0;
+  const made = makePanels(Math.min(24, 8 + nextLayer), seed, SCREW_ENDLESS_WAVE_PANELS);
+  const zLift = SCREW_ENDLESS_WAVE_PANELS + 1;
+  const prefix = `e${nextLayer}-`;
+  const fresh = made.panels.map(panel => ({
+    ...panel,
+    id:prefix + panel.id,
+    screws:panel.screws.map(screw => ({ ...screw, id:prefix + screw.id })),
+  }));
+  state.panels = fresh.concat(active.map(panel => ({ ...panel, z:(Number(panel.z) || 0) + zLift })));
+  state.boxQueue = state.boxQueue.concat(made.groups.flat());
+  state.seed = seed;
+  state.level = nextLayer;
+  state.details.endlessLayers = nextLayer;
+  state.details.completed = false;
+  state.status = 'playing';
+  state.reward = 0;
+  refillBoxes(state);
+  drainTray(state, { packed:[], completedBoxes:[] });
+  state.details.progress = progressPercent(state);
   return true;
 }
 

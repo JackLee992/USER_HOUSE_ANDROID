@@ -2,10 +2,12 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   SCREW_CAMPAIGN_LEVELS,
+  addEndlessBox,
   addTraySlot,
   advanceFallingPanel,
   applyScrew,
   createScrewState,
+  endlessScore,
   progressPercent,
   reachableScrews,
   restoreScrewState,
@@ -109,6 +111,77 @@ test('legacy random-board saves migrate to the deterministic campaign while keep
   assert.equal(restored.state.mode, 'endless');
   assert.equal(restored.state.score, 860);
   assert.equal(restored.state.screwSchema, 2);
+});
+
+test('endless mode continuously adds new layers instead of completing a level', () => {
+  const state = createScrewState({ mode:'endless' });
+  const initialPanels = state.panels.length;
+  assert.equal(state.status, 'playing');
+  assert.equal(state.details.endlessLayers, 1);
+  assert.equal(state.tools.extra, 3);
+
+  let extended = false;
+  for (let turn = 0; turn < 100 && !extended; turn += 1) {
+    const id = useHint(state);
+    assert.ok(id, 'endless mode always exposes a safe move');
+    state.tools.hint += 1;
+    const result = applyScrew(state, id);
+    assert.equal(result.ok, true);
+    extended ||= result.endlessExtended;
+  }
+
+  assert.equal(extended, true);
+  assert.equal(state.status, 'playing');
+  assert.equal(state.details.endlessLayers, 2);
+  assert.ok(state.panels.length > initialPanels);
+  assert.ok(state.panels.some(panel => panel.id.startsWith('e2-')));
+});
+
+test('endless add-box tool restores the original capacity and score multiplier rules', () => {
+  const state = createScrewState({ mode:'endless' });
+  state.details.boxesCompleted = 10;
+  assert.equal(endlessScore(state), 2640);
+  assert.equal(addEndlessBox(state), true);
+  assert.equal(state.boxCapacity, 4);
+  assert.equal(state.boxes.length, 4);
+  assert.equal(addEndlessBox(state), true);
+  assert.equal(addEndlessBox(state), true);
+  assert.equal(state.boxCapacity, 6);
+  assert.equal(state.boxes.length, 6);
+  assert.equal(state.tools.extra, 0);
+  assert.equal(addEndlessBox(state), false);
+  assert.equal(endlessScore(state), 1260);
+});
+
+test('undo restores an endless move that triggered a new layer', () => {
+  const state = createScrewState({ mode:'endless' });
+  let result;
+  let before;
+  for (let turn = 0; turn < 100; turn += 1) {
+    const id = useHint(state);
+    assert.ok(id);
+    state.tools.hint += 1;
+    before = structuredClone(state);
+    result = applyScrew(state, id);
+    if (result.endlessExtended) break;
+  }
+  assert.equal(result?.endlessExtended, true);
+  assert.equal(undoScrew(state), true);
+  assert.equal(state.details.endlessLayers, before.details.endlessLayers);
+  assert.deepEqual(state.panels, before.panels);
+  assert.deepEqual(state.boxQueue, before.boxQueue);
+  assert.deepEqual(state.boxes, before.boxes);
+});
+
+test('completed saves from the short-lived endless campaign resume as a continuous run', () => {
+  const old = createScrewState({ mode:'endless' });
+  delete old.endlessRulesVersion;
+  old.status = 'level_complete';
+  const { state, migrated } = restoreScrewState(old, 'endless');
+  assert.equal(migrated, true);
+  assert.equal(state.status, 'playing');
+  assert.equal(state.details.endlessLayers, 2);
+  assert.ok(state.panels.some(panel => panel.id.startsWith('e2-')));
 });
 
 function fallingAt(fps, milliseconds = 800) {
