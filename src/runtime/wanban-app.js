@@ -313,7 +313,7 @@ export async function initWanbanXiaowu(options = {}) {
     minesweeper: '每局会先选择难度：简单9×9、10雷；中等12×12、25雷；困难16×16、50雷。下方按钮可在“翻开”和“插旗”之间切换；数字格周围旗数等于数字时会按正式扫雷规则翻开周围未插旗格，旗插错会直接失败。',
     shuerte: '每局会先选择难度：简单4×4、中等5×5、困难6×6，并可选择“盲点”模式。数字会随机打散在方格里，点击1开始计时，并按1、2、3……一路点到最后一个数字。普通模式点对后数字会变淡；盲点模式点对后不变色，难度更高且有少量倍率加成。点错会扣分并出现红色反馈；下方道具可以提示下一个数字、短暂聚焦目标所在行列或重排未点击数字。完成全部数字后按难度基础分、连击、速度和道具使用结算。',
     uyangle: '三消叠牌小游戏。普通模式可通关；无尽模式会在剩余牌较少时自动追加下一批牌层，失败时统计已消除数量。点击没有被上层遮挡的卡牌放入下方7格槽，同图标凑满3张会消除；槽位超过7格且没有消除时失败。',
-    screw: '每局会选择普通模式或无尽模式，并保证每种颜色螺丝数量为3的倍数、工具盒数量正确。顶部同时出现3个随机颜色工具盒，点击可见螺丝后，同色螺丝进入对应工具盒；非当前盒颜色会进入5格临时托盘。任意工具盒收满3颗会自动打包并刷新下一个颜色。上层面板会遮挡下层螺丝；板件剩一个螺丝时会悬挂摆动，失去全部螺丝后受重力下落。普通模式清空全部面板即可过关，无尽模式会在快结束时续上下一批。',
+    screw: '经典工坊包含12个逐步加深的关卡，也可选择无尽工坊。顶部同时启用3个颜色收纳盒，每盒装满3颗同色螺丝后自动封箱，并补上“下一箱”预告的颜色。点击未被上层板件遮挡的螺丝：匹配当前收纳盒时直接入盒，否则进入5个临时孔位；临时孔位全部占满即失败。每关都由确定性可解关卡生成器验证，不会依赖付费道具才能通关。板件失去全部螺丝后会按物理效果掉落。可使用撤销、提示和一次加孔，刷新或退出会保留本关。',
     popstar: '10×10彩色星星棋盘。点击2个及以上上下左右相连的同色星星即可消除，得分为消除数量×消除数量×5，8/12/16个以上大块会有额外奖励。困难模式每关有步数限制，消除、打乱、单消都会消耗1步；简单模式没有步数限制，可以一直消到没有可消除组合。无可消除组合或困难模式步数用完时本关结算，剩余10个以内有少量奖励；如果无可消除组合且还剩步数，会按未用步数奖励。累计分数达到当前关目标就进入下一关，否则游戏结束。',
     paopao: '交错网格泡泡射击。按住或拖动瞄准，松开发射；泡泡会在左右墙反弹，撞到天花板或现有泡泡后吸附到最近空槽。3个及以上同色相连会消除，不再连着顶部的泡泡会掉落得分。初始每发射10次顶部压下一行，每下压3行后间隔减少1次，最低固定为5次；场上只剩5个以内会立刻补压一行。任意泡泡越过红色警戒线即结束。每局有5个炸弹，炸弹会消除落点周围3格泡泡。',
     pinball: '完整 Space Cadet 球台：长按约3秒蓄力，松手发射；左右触控按钮或方向键控制挡板，空格发射。击中任务靶后上左侧坡道接受任务，利用虫洞、超空间和燃料通道得分晋级。连续震台会 TILT。可放大画面、切换高清／经典显示。三球用尽结算；同页返回可继续完整球局，刷新后只保留分数、常规球数和军衔，从新球开始。',
@@ -382,8 +382,8 @@ export async function initWanbanXiaowu(options = {}) {
       { id:'endless', title:'无尽模式', sub:'一直玩就会一直爽！', multiplier:1 }
     ],
     screw: [
-      { id:'normal', title:'普通模式', sub:'可通关的正常关卡', multiplier:1 },
-      { id:'endless', title:'无尽模式', sub:'一直玩就会一直爽！', multiplier:1 }
+      { id:'normal', title:'经典工坊', sub:'12关 · 每关保证可解', multiplier:1 },
+      { id:'endless', title:'无尽工坊', sub:'关卡持续升级 · 随时保存', multiplier:1 }
     ],
     draughts: [
       { id:'fool', title:'傻瓜模式', sub:'自动跳到合适的点', multiplier:1 },
@@ -425,7 +425,7 @@ export async function initWanbanXiaowu(options = {}) {
     minesweeper: { start:'扫雷开局，16×16棋盘里藏着50个雷。', number:'玩家翻开安全格并出现数字。', flag:'玩家进行插旗或问号标记。', chord:'玩家点击已翻开的数字格，周围标记数量符合数字，成功试探并翻开新格。', big_open:'一次翻开超过5个安全格。', half:'安全格已经翻开一半。', last_5:'按剩余雷数和插旗数计算，显示只剩最后5个雷以内。', record:'扫雷刷新历史最高分。', gameover:'玩家踩到雷，本局失败。', random:'观看扫雷时的待机碎碎念。' },
     shuerte: { start:'舒尔特方格开局，玩家需要按升序寻找随机数字。', first:'玩家点中数字1，计时开始。', combo:'玩家达成5连击或更高连击。', half:'已经按顺序点完一半数字。', last:'只剩最后5个以内数字。', wrong:'玩家点到非目标数字。', hint:'玩家使用提示，高亮下一个目标数字。', focus:'玩家使用聚焦，突出目标所在行列。', shuffle:'玩家使用重排，打散剩余未点击数字。', record:'舒尔特方格刷新历史最高分。', gameover:'玩家点完最后一个数字，挑战完成。', random:'观看舒尔特方格时的待机碎碎念。' },
     uyangle: { start:'U了个U开局。这是一个三消叠牌小游戏，玩家点击未被遮挡的卡牌放入7格槽，同图标3张会消除。', match:'玩家累计每完成3次三消时触发一次普通三消语录；如果同一步触发危险、最后10张、失败或完成等特殊事件，则优先特殊事件。', shuffle:'玩家使用打乱，重新随机排列剩余牌面。', moveout:'玩家使用移出，把槽内一张卡牌移到上方暂存区。', danger:'下方槽位已经占满6个以上，距离失败很近。', last_10:'场上剩余最后10张以内卡牌。', record:'U了个U刷新历史最高分。', gameover:'下方7格槽已满，玩家再放入一张卡牌后没有形成三消，槽位溢出导致失败。', random:'观看U了个U三消叠牌时的碎碎念。' },
-    screw: { start:'拧螺丝开局，玩家需要按颜色盒子收集螺丝并清空玻璃面板。', match:'玩家完成一次三颗同色螺丝打包；每次打包后有30%概率触发。', add_box:'玩家点击增加盒子按钮，本局盒子上限增加但最终分数降低。', progress_50:'拧螺丝进度首次达到50%。', progress_80:'拧螺丝进度首次达到80%。', tray_4:'5个候补槽已经填满，下一颗不能进盒的螺丝会导致失败。', record:'拧螺丝刷新历史最高分。', gameover:'候补槽已满后又点击了无法直接进入工具盒的螺丝，拧螺丝失败。', random:'观看拧螺丝时的碎碎念。' },
+    screw: { start:'拧螺丝经典关卡开局，玩家需要按当前三个颜色收纳盒清理分层板件。', match:'玩家把一颗同色螺丝直接收入当前收纳盒。', add_box:'玩家使用一次加孔，把临时孔位由5格扩展到6格。', progress_50:'拧螺丝进度首次达到50%。', progress_80:'玩家完成当前经典关卡。', tray_4:'临时孔位已占4格，只剩最后一格安全空间。', record:'拧螺丝刷新历史最高分。', gameover:'临时孔位全部占满，当前关卡失败。', random:'观看拧螺丝时的碎碎念。' },
     popstar: { start:'消灭星星开局，10×10彩色星星棋盘已生成。', first_clear:'当前关第一次消除星星。', small_clear:'玩家只消除了2个星星。', high_clear:'玩家一次消除4个及以上星星，获得较高分数。', level_clear:'玩家通过当前关。', record:'消灭星星刷新历史最高分。', cheat:'玩家使用打乱或单消道具。', target_met:'玩家当前累计分数首次达到本关通关分数。', gameover:'消灭星星没有可消除组合且分数未达到本关目标。', random:'观看消灭星星时的碎碎念。' },
     paopao: { start:'泡泡龙开局，顶部已有5行泡泡，玩家准备瞄准发射。', aim:'玩家按住并拖动，虚线轨迹正在根据墙壁反弹预测落点。', clear:'玩家成功消除同色泡泡。', clear_5:'玩家一次性消除超过5个泡泡。', drop:'失去顶部连接的泡泡悬空掉落。', danger:'泡泡群快要接近红色警戒线。', score_1000:'泡泡龙本局分数每增加1000分时触发。', bomb:'玩家使用炸弹泡泡，炸掉落点周围3格泡泡。', record:'泡泡龙刷新历史最高分。', gameover:'泡泡越过红色警戒线，泡泡龙本局结束。', random:'观看泡泡龙时的待机碎碎念。' },
     zuma: { start:'祖玛无尽模式开局，青蛙准备向持续移动的珠链发射彩珠。', resume:'继续祖玛无尽模式存档。', shoot:'玩家从青蛙口中发射普通彩珠。', swap:'玩家交换当前珠和下一颗珠。', clear:'玩家消除3到4颗同色珠，彩珠播放爆裂淡出后珠链开始回退。', clear_5:'玩家一次消除5颗以上同色珠，彩珠播放爆裂淡出后珠链开始回退。', chain:'珠链平滑回退接合后再次形成同色三消，继续播放爆裂和回退连锁。', miss:'玩家发射的珠子没有击中珠链。', danger:'珠链前端已经接近终点洞口。', bomb:'炸弹命中但只清除少量珠子。', bomb_big:'炸弹命中并清除5颗珠子。', slow:'玩家使用减速道具，珠链减速8秒。', rainbow:'彩虹珠命中后变为目标颜色。', spawn_pressure:'珠链入口累计生成的珠子跨过新的50颗节点。', clear_all:'玩家清空整条珠链获得600分，入口仍会继续生成新珠子。', speed_up:'祖玛动态速度跨过新的阶段。', record:'祖玛刷新历史最高分。', gameover:'珠链进入终点洞口，祖玛无尽模式结束。', random:'观看祖玛时的待机碎碎念。' },
@@ -1250,7 +1250,7 @@ export async function initWanbanXiaowu(options = {}) {
     if (game === 'minesweeper') return '字段说明：胜负是user的扫雷结果；排对雷表示插旗位置确实是雷的数量；成功时用时越短分数越高，失败时按已排对雷和已翻开安全格给少量分。';
     if (game === 'shuerte') return '字段说明：舒尔特方格是按顺序寻找数字的专注力游戏；尺寸表示本局选择的4×4、5×5或6×6关卡；错误是点到非目标数字次数；最高连击表示连续正确点击的最大次数。';
     if (game === 'uyangle') return '字段说明：U了个U是三消叠牌小游戏；分数由用时和打乱次数共同计算，用时越短、打乱越少，分数越高。';
-    if (game === 'screw') return '字段说明：拧螺丝是颜色盒子收集和玻璃层级解谜；普通模式分数由用时、候补槽压力和增加盒子次数共同计算；无尽模式失败时按当前盒子数量结算倍率，盒子越少倍率越高。';
+    if (game === 'screw') return '字段说明：拧螺丝是颜色收纳盒与分层板件解谜；经典工坊共12关，无尽工坊会继续生成可解关卡。每关按步数、临时孔位压力和道具使用结算1至3星与奖励分。';
     if (game === 'popstar') return '字段说明：消灭星星是10×10连通消除游戏；一次消除n个星星得分n×n×5，并对8个以上大块追加奖励；困难模式每关有步数限制，消除和使用道具都会消耗步数；简单模式没有步数限制，可以一直消到没有可消除组合；结算时累计分数达到关卡目标进入下一关。';
     if (game === 'paopao') return '字段说明：泡泡龙是交错网格射击生存游戏；发射表示本局射出的泡泡数量；下压表示顶部新增行并整体下移的次数，下压间隔会从10发逐步缩短到5发。';
     if (game === 'zuma') return '字段说明：祖玛神庙冒险包含关卡、生命、三连消除、同色吸回连锁、连续命中、穿隙奖励与四种标记珠能力。消除为累计清除彩珠，最高连锁为连续命中纪录。';
@@ -1302,7 +1302,7 @@ export async function initWanbanXiaowu(options = {}) {
     if (game === 'sudoku') return '分数：' + sudokuRecordPoints(rec) + '；提示次数：' + (d.hints || 0) + '次；修改次数：' + (d.edits || 0) + '次；修改最多的格子修改次数：' + (d.maxEditsOneCell || 0) + '次；全部完成后错误次数：' + (d.finalErrors || 0) + '格。';
     if (game === 'minesweeper') return '结果：' + (d.won ? '成功' : '失败') + '；插旗数量：' + (d.flags || 0) + '；排对的雷：' + (d.correctFlags || 0) + '个；未插旗扫雷数量：' + (d.unflaggedMines || 0) + '个；踩雷时已开格子：' + (d.openedAtBlast || d.openedSafe || 0) + '格；犹豫次数：' + (d.hesitations || 0) + '次；数字试探成功次数：' + (d.chordSuccesses || 0) + '次；不确定试探成功次数：' + (d.riskyChordSuccesses || 0) + '次。';
     if (game === 'shuerte') return '尺寸：' + (d.size || 0) + '×' + (d.size || 0) + (d.noFade ? '（盲点）' : '') + '；最终分数：' + (d.score || singleRecordPoints(rec)) + '分；用时：' + ((d.durationMs || 0) / 1000).toFixed(2) + '秒；正确点击：' + (d.correct || 0) + '次；错误点击：' + (d.wrong || 0) + '次；最高连击：' + (d.maxCombo || 0) + '；提示/聚焦/重排：' + (d.hintUsed || 0) + '/' + (d.focusUsed || 0) + '/' + (d.shuffleUsed || 0) + '次；平均反应：' + ((d.avgReactionMs || 0) / 1000).toFixed(2) + '秒。';
-    if (game === 'screw') return (d.endless ? '模式：无尽模式；收纳盒子：' + (d.matches || Math.floor((d.packed || 0) / 3) || 0) + '个；结算盒子数：' + (d.endlessBoxCount || (3 + (d.addBoxUses || 0))) + '个；基础分：' + (d.endlessBaseScore == null ? '未记录' : d.endlessBaseScore) + '；结算倍率：×' + (d.endlessScoreMultiplier || '未记录') + '；' : '结果：' + (d.completed ? '成功' : '失败') + '；最终进度：' + (d.progress || 0) + '%；打包次数：' + (d.matches || Math.floor((d.packed || 0) / 3) || 0) + '次；') + '候补槽最大占用：' + (d.maxTray || 0) + '格；候补槽填满5个次数：' + (d.trayFullCount || d.trayFourCount || 0) + '次；使用增加盒子次数：' + (d.addBoxUses || 0) + '次；被遮挡螺丝点击次数：' + (d.blocked || 0) + '次；掉落玻璃数量：' + (d.fallen || 0) + '块。';
+    if (game === 'screw') return '结果：' + (d.completed ? '成功' : '失败') + '；完成关卡：' + (d.levels || 0) + '关；最终进度：' + (d.progress || 0) + '%；收入螺丝：' + (d.packed || 0) + '颗；临时孔位最大占用：' + (d.maxTray || 0) + '格；满孔失败：' + (d.trayFullCount || 0) + '次；撤销/提示/加孔：' + (d.undos || 0) + '/' + (d.hints || 0) + '/' + (d.addBoxUses || 0) + '次；误点遮挡螺丝：' + (d.blocked || 0) + '次；掉落板件：' + (d.fallen || 0) + '块。';
     if (game === 'popstar') return '模式：' + (d.mode === 'easy' ? '简单模式' : d.mode === 'hard' ? '困难模式' : '未记录') + '；最终关卡：第' + (d.level || 1) + '关；最终分数：' + (d.score || 0) + '分；消除星星总数：' + (d.removedTotal || 0) + '个；高分方块统计：5个' + (d.highClears?.['5'] || 0) + '次，6个' + (d.highClears?.['6'] || 0) + '次，7个' + (d.highClears?.['7'] || 0) + '次，8个及以上' + (d.highClears?.['8plus'] || 0) + '次；大块额外奖励：' + (d.bigBonusTotal || 0) + '分；余步奖励：' + (d.unusedMoveBonusTotal || 0) + '分；命悬一线次数：' + (d.clutchCount || 0) + '次；连消高分次数：' + (d.highComboCount || 0) + '次；连续高分消除最大次数：' + (d.maxHighStreak || 0) + '次；使用打乱：' + (d.shuffleUsed || 0) + '次；使用单消：' + (d.singleUsed || 0) + '次；剩余方块统计：' + finalCountText(d.remainingCounts, '剩余') + '；竟然全部消除：' + (d.clearAllCount || 0) + '次。';
     if (game === 'paopao') return '最终分数：' + (d.score || singleRecordPoints(rec)) + '分；发射：' + (d.shots || 0) + '次；下压：' + (d.pushes || 0) + '行；主动消除：' + (d.cleared || 0) + '个；悬空掉落：' + (d.dropTotal || 0) + '个；接近警戒线：' + (d.dangerCount || 0) + '次；炸弹使用：' + (d.bombUsed || 0) + '次；炸弹低收益：' + (d.bombBad ? '是' : '否') + '；连续高分最大次数：' + (d.maxHighStreak || 0) + '次；竟然全部消除：' + (d.clearAllCount || 0) + '次。';
     if (game === 'zuma') return '最终分数：' + (d.score || singleRecordPoints(rec)) + '分；发射：' + (d.shots || 0) + '次；射失：' + (d.misses || 0) + '次；消除彩珠：' + (d.cleared || 0) + '颗；累计生成彩珠：' + (d.totalBallsGenerated || 0) + '颗；清空珠链：' + (d.clearAllCount || 0) + '次；最高速度：' + (d.maxSpeed || 0) + '；最高连锁：×' + (d.maxCombo || 0) + '；接近洞口：' + (d.dangerCount || 0) + '次；炸弹/减速/彩虹：' + (d.bombUsed || 0) + '/' + (d.slowUsed || 0) + '/' + (d.rainbowUsed || 0) + '次。';
@@ -3612,46 +3612,86 @@ export async function initWanbanXiaowu(options = {}) {
         .wb-popstar-shard { width:7px; height:7px; box-shadow:none; animation-duration:.48s; }
         .wb-popstar-settle-card { box-shadow:0 6px 16px rgba(79,141,247,.14); }
       }
-      .wb-board-wrap.wb-gamebox-screw { height:100%; flex:1 1 0; align-items:stretch; justify-items:center; }
-      .wb-screw-panel { width:min(100%, 560px); height:100%; max-height:100%; min-height:0; display:grid; grid-template-rows:124px minmax(0,1fr); gap:8px; justify-items:center; align-items:stretch; overflow:hidden; box-sizing:border-box; }
-      .wb-screw-top { width:100%; height:124px; min-height:124px; display:grid; grid-template-rows:70px 32px; grid-template-columns:minmax(0,1fr); gap:8px; align-items:center; padding:8px; box-sizing:border-box; overflow:hidden; background:var(--wb-soft); border:1px solid var(--wb-border); color:var(--wb-text); box-shadow:inset 0 1px 0 rgba(255,255,255,.28); }
-      .wb-screw-boxes { height:70px; min-height:0; display:flex; gap:8px; align-items:center; justify-content:center; min-width:0; max-width:100%; overflow:hidden; flex-wrap:nowrap; }
-      .wb-screw-tools { width:100%; height:32px; min-width:0; display:grid; grid-template-columns:minmax(150px,1fr) auto auto; gap:8px; align-items:center; justify-content:center; overflow:hidden; }
-      .wb-screw-box { position:relative; flex:0 0 64px; width:64px; height:58px; border:1px solid color-mix(in srgb, var(--c) 68%, var(--wb-border) 32%); border-radius:8px; background:linear-gradient(180deg, color-mix(in srgb, var(--c) 20%, var(--wb-panel) 80%), color-mix(in srgb, var(--c) 46%, var(--wb-soft) 54%)); box-shadow:inset 0 1px 0 rgba(255,255,255,.42), 0 3px 8px rgba(0,0,0,.10); display:grid; grid-template-columns:repeat(2, 20px); grid-template-rows:repeat(2, 20px); justify-content:center; align-content:center; gap:1px 8px; color:var(--wb-text); }
-      .wb-screw-box::before { content:''; position:absolute; top:-8px; left:22px; width:20px; height:9px; border-radius:4px 4px 0 0; background:linear-gradient(90deg,var(--wb-border) 0 24%, color-mix(in srgb, var(--c) 68%, #fff 32%) 25% 75%, var(--wb-border) 76%); }
-      .wb-screw-box-hole { position:relative; z-index:1; width:18px; height:18px; border-radius:50%; background:color-mix(in srgb, var(--wb-border) 65%, #777 35%); box-shadow:inset 0 2px 1px rgba(255,255,255,.28), inset 0 -2px 2px rgba(0,0,0,.18); }
-      .wb-screw-box-hole:first-child { grid-column:1 / 3; justify-self:center; }
-      .wb-screw-box-hole i { display:block; width:100%; height:100%; border-radius:50%; box-shadow:inset 0 2px 0 rgba(255,255,255,.36), 0 1px 2px rgba(0,0,0,.24); }
-      .wb-screw-box.active { outline:2px solid color-mix(in srgb, var(--c) 55%, #fff 45%); outline-offset:2px; }
-      .wb-screw-progress { position:relative; height:18px; border:1px solid var(--wb-border); border-radius:999px; background:var(--wb-panel); overflow:hidden; min-width:150px; }
-      #wb-screw-progress-fill { display:block; height:100%; width:0; background:linear-gradient(90deg,var(--wb-accent),var(--wb-accent2)); }
-      #wb-screw-progress-text { position:absolute; inset:0; display:grid; place-items:center; font-size:10px; font-weight:900; color:var(--wb-text); text-shadow:0 1px 0 rgba(255,255,255,.45); }
-      .wb-screw-tray { display:grid; grid-template-columns:repeat(5,24px); gap:6px; justify-self:center; }
-      .wb-screw-slot { width:24px; height:24px; border:1px solid var(--wb-border); border-radius:50%; background:var(--wb-panel); box-shadow:inset 0 1px 0 rgba(255,255,255,.32), 0 1px 3px rgba(0,0,0,.08); display:grid; place-items:center; }
-      .wb-screw-slot span { width:17px; height:17px; border-radius:50%; box-shadow:inset 0 2px 0 rgba(255,255,255,.35), 0 1px 3px rgba(0,0,0,.18); }
-      .wb-screw-canvas { height:100%; width:auto; max-width:100%; aspect-ratio:3 / 4; align-self:center; justify-self:center; background:var(--wb-board); border-radius:0; box-shadow:inset 0 0 0 1px rgba(255,255,255,.08); touch-action:none; }
-      .wb-screw-addbox { justify-self:center; min-width:132px; margin-bottom:2px; }
-      .wb-screw-addbox span { display:inline-grid; place-items:center; min-width:18px; height:18px; margin-left:4px; border-radius:999px; background:var(--wb-soft); border:1px solid var(--wb-border); font-size:11px; }
-      @media (max-width: 768px) {
+            .wb-board-wrap.wb-gamebox-screw { height:100%; flex:1 1 0; align-items:stretch; justify-items:center; padding:4px; background:radial-gradient(circle at 50% 18%,rgba(83,136,208,.12),transparent 45%); }
+      .wb-screw-panel { width:min(100%, 620px); height:100%; max-height:100%; min-height:0; display:grid; grid-template-rows:186px minmax(0,1fr); gap:6px; justify-items:center; align-items:stretch; overflow:hidden; box-sizing:border-box; color:#f5f8ff; }
+      .wb-screw-top { width:100%; min-height:0; display:grid; grid-template-columns:72px minmax(0,1fr) 58px; grid-template-rows:72px 18px 28px 42px; grid-template-areas:'level boxes next' 'progress progress progress' 'tray tray tray' 'tools tools tools'; gap:4px 8px; align-items:center; padding:6px 10px; overflow:hidden; border:1px solid rgba(129,168,224,.28); border-radius:18px; background:linear-gradient(150deg,rgba(19,35,66,.98),rgba(8,20,43,.98)); box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 8px 24px rgba(5,12,29,.25); }
+      .wb-screw-level { grid-area:level; display:grid; place-items:center; align-content:center; height:62px; border-radius:14px; background:linear-gradient(160deg,#2b4777,#152a51); border:1px solid rgba(164,200,255,.25); box-shadow:inset 0 1px 0 rgba(255,255,255,.14); }
+      .wb-screw-level span { font-size:8px; letter-spacing:.16em; color:#9fb9df; font-weight:900; }
+      .wb-screw-level strong { font-size:25px; line-height:24px; color:#fff; font-variant-numeric:tabular-nums; text-shadow:0 2px 8px rgba(0,0,0,.35); }
+      .wb-screw-level small { max-width:64px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:8px; color:#b9c9e4; }
+      .wb-screw-boxes { grid-area:boxes; height:66px; min-width:0; display:flex; gap:7px; align-items:center; justify-content:center; overflow:hidden; }
+      .wb-screw-box { --c:#7c91b4; --d:#394b6a; position:relative; flex:0 0 62px; width:62px; height:55px; display:grid; grid-template-columns:repeat(3,14px); grid-template-rows:24px 13px; align-content:center; justify-content:center; gap:2px 3px; border:3px solid var(--c); border-radius:12px; color:#fff; background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(221,228,236,.90)); box-shadow:inset 0 -5px 0 rgba(0,0,0,.10),0 4px 10px rgba(0,0,0,.30),0 0 0 1px var(--d); }
+      .wb-screw-box::before { content:''; position:absolute; top:-8px; left:18px; width:22px; height:9px; border-radius:6px 6px 1px 1px; background:linear-gradient(180deg,var(--l),var(--c)); border:2px solid var(--d); border-bottom:0; }
+      .wb-screw-box::after { content:''; position:absolute; inset:3px 5px auto; height:8px; border-radius:7px; background:rgba(255,255,255,.55); pointer-events:none; }
+      .wb-screw-box small { grid-column:1/4; justify-self:center; font-size:9px; line-height:1; color:var(--d); font-weight:900; font-style:normal; }
+      .wb-screw-box-hole { position:relative; z-index:1; width:14px; height:14px; border-radius:50%; background:#27344a; box-shadow:inset 0 2px 3px rgba(0,0,0,.60),0 1px 0 rgba(255,255,255,.55); }
+      .wb-screw-box-hole span,.wb-screw-slot span,.wb-screw-next i { display:block; width:100%; height:100%; border-radius:50%; background:radial-gradient(circle at 33% 25%,#fff 0 8%,var(--l) 11%,var(--c) 48%,var(--d) 88%); box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 1px 3px rgba(0,0,0,.35); }
+      .wb-screw-box-hole.filled { animation:wb-screw-pack .24s ease-out; }
+      @keyframes wb-screw-pack { 0%{transform:scale(.35)} 72%{transform:scale(1.18)} 100%{transform:scale(1)} }
+      .wb-screw-next { grid-area:next; display:grid; justify-items:center; align-content:center; gap:3px; height:58px; border-radius:13px; color:#9fb9df; background:rgba(36,58,95,.72); border:1px solid rgba(139,177,230,.20); }
+      .wb-screw-next span { font-size:9px; font-weight:800; }
+      .wb-screw-next i { --c:#8091ad; --d:#34435d; width:25px; height:25px; border:2px solid rgba(255,255,255,.68); }
+      .wb-screw-progress { grid-area:progress; position:relative; width:100%; height:14px; overflow:hidden; border:1px solid rgba(141,174,222,.25); border-radius:999px; background:#071327; box-shadow:inset 0 2px 5px rgba(0,0,0,.48); }
+      #wb-screw-progress-fill { height:100%; width:0; border-radius:inherit; background:linear-gradient(90deg,#48b7c7,#65d49a,#ffd166); box-shadow:0 0 12px rgba(101,212,154,.42); transition:width .24s ease; }
+      #wb-screw-progress-text { position:absolute; inset:0; display:grid; place-items:center; color:#f7fbff; font-size:9px; font-weight:900; line-height:1; text-shadow:0 1px 3px #000; }
+      .wb-screw-tray-wrap { grid-area:tray; min-width:0; display:flex; align-items:center; justify-content:center; gap:8px; }
+      .wb-screw-tray-wrap>span { flex:0 0 auto; color:#aabbd5; font-size:10px; font-weight:800; }
+      .wb-screw-tray { min-width:0; display:flex; align-items:center; justify-content:center; gap:6px; }
+      .wb-screw-slot { width:25px; height:25px; padding:4px; border-radius:50%; background:radial-gradient(circle at 48% 55%,#081426,#273b5d); border:2px solid #61779a; box-shadow:inset 0 3px 6px rgba(0,0,0,.72),0 1px 0 rgba(255,255,255,.13); }
+      .wb-screw-slot.occupied { padding:2px; border-color:#91a8ca; }
+      .wb-screw-toolbelt { grid-area:tools; display:flex; align-items:center; justify-content:center; gap:7px; }
+      .wb-screw-tool { position:relative; min-width:82px; min-height:44px; padding:4px 23px 4px 8px; display:grid; grid-template-columns:22px 1fr; align-items:center; gap:5px; border:1px solid rgba(141,178,229,.34); border-radius:12px; background:linear-gradient(180deg,#2c4774,#172b50); color:#f7f9ff; box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 2px 6px rgba(0,0,0,.28); font:inherit; cursor:pointer; touch-action:manipulation; }
+      .wb-screw-tool:active:not(:disabled) { transform:translateY(1px) scale(.98); filter:brightness(1.1); }
+      .wb-screw-tool:disabled { opacity:.42; cursor:default; }
+      .wb-screw-tool b { display:grid; place-items:center; width:21px; height:21px; border-radius:7px; color:#173056; background:linear-gradient(180deg,#fff3a1,#e7b842); font-size:15px; }
+      .wb-screw-tool span { font-size:11px; font-weight:850; white-space:nowrap; }
+      .wb-screw-tool em { position:absolute; right:5px; top:5px; min-width:16px; height:16px; display:grid; place-items:center; padding:0 3px; border-radius:999px; color:#fff; background:#e55e6b; font-size:9px; font-weight:900; font-style:normal; }
+      .wb-screw-stage { position:relative; min-width:0; min-height:0; width:100%; height:100%; display:grid; place-items:center; overflow:hidden; border:1px solid rgba(126,166,221,.25); border-radius:20px; background:#071225; box-shadow:0 9px 26px rgba(3,10,25,.25); }
+      .wb-screw-canvas { display:block; height:100%; width:auto; max-width:100%; max-height:100%; aspect-ratio:3/4; border:0; border-radius:18px; background:#08152c; box-shadow:inset 0 0 0 1px rgba(255,255,255,.07); touch-action:none; user-select:none; -webkit-user-select:none; }
+      .wb-screw-callout { position:absolute; z-index:3; left:50%; bottom:10px; max-width:calc(100% - 24px); min-height:28px; transform:translateX(-50%); display:grid; place-items:center; padding:6px 13px; border:1px solid rgba(173,204,244,.22); border-radius:999px; background:rgba(5,15,34,.76); color:#e9f2ff; box-shadow:0 5px 18px rgba(0,0,0,.30); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); font-size:11px; font-weight:750; line-height:1.3; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; pointer-events:none; }
+      .wb-screw-callout.warn { color:#fff0b0; border-color:rgba(255,209,102,.48); }
+      .wb-screw-result { position:absolute; z-index:7; inset:0; display:grid; place-items:center; padding:20px; background:rgba(2,8,22,.65); backdrop-filter:blur(7px); -webkit-backdrop-filter:blur(7px); }
+      .wb-screw-result[hidden] { display:none; }
+      .wb-screw-result-card { width:min(330px,94%); padding:24px 20px 20px; display:grid; justify-items:center; gap:10px; border:1px solid rgba(184,213,255,.34); border-radius:24px; background:linear-gradient(155deg,#213a67,#0e2142); color:#f8fbff; box-shadow:inset 0 1px 0 rgba(255,255,255,.16),0 20px 48px rgba(0,0,0,.48); text-align:center; }
+      .wb-screw-result-stars { min-height:34px; color:#ffd45f; font-size:30px; letter-spacing:5px; text-shadow:0 2px 12px rgba(255,188,43,.34); }
+      .wb-screw-result h3 { margin:0; font-size:22px; }
+      .wb-screw-result p { margin:0 0 4px; color:#bdcee8; font-size:12px; }
+      .wb-screw-result .wb-btn { width:min(220px,100%); min-height:38px; }
+      #wanbanXiaowu-popup.wb-mono .wb-screw-top,#wanbanXiaowu-popup.wb-mono .wb-screw-canvas { filter:none; image-rendering:auto; }
+      @media (max-width:768px) {
         .wb-board-wrap:has(.wb-screw-panel) { padding:0; }
-        .wb-screw-panel { width:100%; grid-template-rows:78px minmax(0,1fr); gap:2px; }
-        .wb-screw-top { height:78px; min-height:78px; grid-template-rows:40px 29px; gap:2px; padding:3px 4px; }
-        .wb-screw-boxes { height:40px; gap:4px; }
-        .wb-screw-tools { height:29px; grid-template-columns:minmax(66px, 1fr) auto auto; gap:4px; }
-        .wb-screw-box { flex-basis:clamp(38px, 11.4vw, 46px); width:clamp(38px, 11.4vw, 46px); height:clamp(32px, 9.8vw, 38px); grid-template-columns:repeat(2, 12px); grid-template-rows:repeat(2, 12px); gap:0 4px; border-radius:5px; }
-        .wb-screw-box::before { top:-6px; left:50%; transform:translateX(-50%); width:16px; height:7px; border-radius:3px 3px 0 0; }
+        .wb-screw-panel { width:100%; grid-template-rows:160px minmax(0,1fr); gap:3px; }
+        .wb-screw-top { grid-template-columns:54px minmax(0,1fr) 43px; grid-template-rows:58px 14px 25px 44px; gap:2px 4px; padding:5px 6px; border-radius:14px; }
+        .wb-screw-level { width:52px; height:52px; border-radius:11px; }
+        .wb-screw-level strong { font-size:21px; line-height:20px; }
+        .wb-screw-level small { max-width:49px; font-size:6.8px; }
+        .wb-screw-boxes { height:56px; gap:4px; }
+        .wb-screw-box { flex-basis:clamp(50px,15vw,58px); width:clamp(50px,15vw,58px); height:49px; grid-template-columns:repeat(3,12px); grid-template-rows:20px 11px; gap:2px; border-width:2px; border-radius:10px; }
+        .wb-screw-box::before { top:-6px; left:50%; transform:translateX(-50%); width:19px; height:7px; border-width:1px; }
         .wb-screw-box-hole { width:12px; height:12px; }
-        .wb-screw-box.active { outline-width:1px; outline-offset:1px; }
-        .wb-screw-progress { width:100%; min-width:0; height:13px; justify-self:stretch; }
-        #wb-screw-progress-text { font-size:8px; }
-        .wb-screw-tray { grid-template-columns:repeat(5,17px); gap:3px; }
-        .wb-screw-slot { width:17px; height:17px; }
-        .wb-screw-slot span { width:12px; height:12px; }
-        .wb-screw-canvas { height:100%; width:auto; max-width:100%; align-self:center; justify-self:center; }
-        .wb-screw-addbox { min-width:54px; min-height:21px; margin-bottom:0; padding:2px 5px; font-size:9px; }
-        .wb-screw-addbox span { min-width:13px; height:13px; font-size:8px; margin-left:2px; }
+        .wb-screw-next { height:50px; border-radius:10px; }
+        .wb-screw-next span { font-size:7px; }
+        .wb-screw-next i { width:21px; height:21px; }
+        .wb-screw-progress { height:12px; }
+        .wb-screw-tray-wrap { gap:5px; }
+        .wb-screw-tray-wrap>span { font-size:8px; }
+        .wb-screw-tray { gap:4px; }
+        .wb-screw-slot { width:22px; height:22px; padding:4px; border-width:1.5px; }
+        .wb-screw-toolbelt { gap:5px; }
+        .wb-screw-tool { min-width:72px; min-height:44px; padding-right:21px; border-radius:10px; }
+        .wb-screw-tool span { font-size:10px; }
+        .wb-screw-stage,.wb-screw-canvas { border-radius:12px; }
+        .wb-screw-callout { bottom:7px; min-height:25px; padding:5px 10px; font-size:9px; }
       }
-      .wb-reversi-panel, .wb-c4d-panel { width:100%; height:100%; min-height:0; display:grid; grid-template-rows:auto minmax(0,1fr); gap:8px; place-items:center; overflow:hidden; }
+      @media (max-height:720px) and (max-width:768px) {
+        .wb-screw-panel { grid-template-rows:138px minmax(0,1fr); }
+        .wb-screw-top { grid-template-rows:48px 12px 22px 42px; padding:3px 5px; }
+        .wb-screw-level { height:45px; }
+        .wb-screw-boxes { height:47px; }
+        .wb-screw-box { height:42px; grid-template-rows:17px 9px; }
+        .wb-screw-tool { min-height:42px; }
+      }
+.wb-reversi-panel, .wb-c4d-panel { width:100%; height:100%; min-height:0; display:grid; grid-template-rows:auto minmax(0,1fr); gap:8px; place-items:center; overflow:hidden; }
       .wb-bomb-panel { width:100%; height:100%; min-height:0; display:grid; grid-template-rows:auto minmax(0,1fr) 54px; gap:6px; place-items:center; overflow:hidden; }
       .wb-bomb-info, .wb-reversi-info, .wb-c4d-info { min-height:34px; display:flex; align-items:center; justify-content:center; gap:6px; text-align:center; font-weight:800; color:var(--wb-text); max-width:100%; min-width:0; flex-wrap:wrap; }
       .wb-bomb-info > span, .wb-reversi-info > span, .wb-c4d-info > span { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -5477,35 +5517,10 @@ export async function initWanbanXiaowu(options = {}) {
         filter:grayscale(1) contrast(1.12);
         image-rendering:pixelated;
       }
-      #${POPUP_ID}.wb-mono .wb-screw-top {
-        background:linear-gradient(180deg, #e8f6ff, #fff2f8);
-        border-color:#7DB9D8;
-        box-shadow:inset 0 1px 0 rgba(255,255,255,.72), 0 2px 8px rgba(79,141,247,.14);
-      }
-      #${POPUP_ID}.wb-mono .wb-screw-canvas {
-        background:linear-gradient(180deg, #c9ebff 0%, #a9d7f5 55%, #bfe4ff 100%);
-        border:4px solid #5FA8D7;
-        box-shadow:inset 0 0 0 1px rgba(255,255,255,.42), 0 6px 16px rgba(79,141,247,.18);
-        filter:none;
-        image-rendering:auto;
-      }
-      #${POPUP_ID}.wb-mono .wb-screw-box {
-        border-color:color-mix(in srgb, var(--c) 76%, #24536f 24%);
-        background:linear-gradient(180deg, color-mix(in srgb, var(--c) 22%, #fff 78%), color-mix(in srgb, var(--c) 58%, #f5fbff 42%));
-        box-shadow:inset 0 1px 0 rgba(255,255,255,.58), 0 4px 10px rgba(79,141,247,.14);
-        filter:none;
-      }
-      #${POPUP_ID}.wb-mono .wb-screw-box::before {
-        background:linear-gradient(90deg, color-mix(in srgb, var(--c) 42%, #24536f 58%) 0 24%, color-mix(in srgb, var(--c) 74%, #fff 26%) 25% 75%, color-mix(in srgb, var(--c) 42%, #24536f 58%) 76%);
-      }
-      #${POPUP_ID}.wb-mono .wb-screw-box-hole {
-        background:#eef5f8;
-        border:1px solid rgba(36,83,111,.32);
-      }
-      #${POPUP_ID}.wb-mono .wb-screw-box-hole i,
-      #${POPUP_ID}.wb-mono .wb-screw-slot span {
-        filter:none;
-      }
+      #${POPUP_ID}.wb-mono .wb-screw-top,
+      #${POPUP_ID}.wb-mono .wb-screw-canvas,
+      #${POPUP_ID}.wb-mono .wb-screw-box,
+      #${POPUP_ID}.wb-mono .wb-screw-slot span { filter:none; image-rendering:auto; }
       #${POPUP_ID}.wb-mono :is(.wb-cell,.wb-gcell,.wb-ludo-cell,.wb-reversi-cell,.wb-c4d-cell,.wb-memory-front,.wb-memory-back,.wb-tile) {
         background:#fff;
         background-image:none;
@@ -10980,6 +10995,7 @@ export async function initWanbanXiaowu(options = {}) {
       gameActiveStartedAt = Date.now();
       startGameDurationRewardTimer();
       hideGamePauseOverlay();
+      activeGameController?.onResume?.();
       const btn = qs('#wb-pause'); if (btn) btn.textContent = '暂停';
     };
     qs('#wb-resume-cancel', mask).onclick = () => {
@@ -11902,10 +11918,12 @@ export async function initWanbanXiaowu(options = {}) {
         if (paused) {
           commitGameActiveDuration(true);
           gamePaused = true;
+          activeGameController?.onPause?.();
         } else {
           hideGamePauseOverlay();
           gamePaused = false;
           gameActiveStartedAt = Date.now();
+          activeGameController?.onResume?.();
         }
         const button = qs('#wb-pause');
         if (button) button.textContent = paused ? '继续' : '暂停';
@@ -11918,6 +11936,7 @@ export async function initWanbanXiaowu(options = {}) {
     if (!gamePaused) {
       commitGameActiveDuration(true);
       gamePaused = true;
+      activeGameController?.onPause?.();
       showGamePauseOverlay();
       const pbtn = qs('#wb-pause'); if (pbtn) pbtn.textContent = '继续';
       return;

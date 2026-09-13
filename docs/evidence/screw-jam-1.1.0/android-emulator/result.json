@@ -1,0 +1,84 @@
+{
+  "passed": true,
+  "testedAt": "2026-09-13T03:59:43.243Z",
+  "device": "emulator-5554",
+  "input": "Android shell input tap; CDP read-only inspection",
+  "checks": [
+    {
+      "check": "installed APK opens Screw Jam 1.1.0 with a fitted mobile board",
+      "layout": {
+        "viewport": {
+          "width": 412,
+          "height": 842,
+          "dpr": 2.625
+        },
+        "gamebox": {
+          "x": 12.7619047164917,
+          "y": 102.28571319580078,
+          "width": 386.66668701171875,
+          "height": 727.2380981445312,
+          "right": 399.42859172821045,
+          "bottom": 829.523811340332
+        },
+        "canvas": {
+          "x": 14.285714149475098,
+          "y": 266.8095397949219,
+          "width": 383.6190490722656,
+          "height": 561.1904907226562,
+          "right": 397.9047632217407,
+          "bottom": 828.0000305175781
+        },
+        "top": {
+          "x": 13.523809432983398,
+          "y": 103.04762268066406,
+          "width": 385.1428527832031,
+          "height": 160,
+          "right": 398.6666622161865,
+          "bottom": 263.04762268066406
+        },
+        "tools": [
+          {
+            "x": 84.80952453613281,
+            "y": 211.8095245361328,
+            "width": 77.52381134033203,
+            "height": 44,
+            "right": 162.33333587646484,
+            "bottom": 255.8095245361328
+          },
+          {
+            "x": 167.33334350585938,
+            "y": 211.8095245361328,
+            "width": 77.52381134033203,
+            "height": 44,
+            "right": 244.8571548461914,
+            "bottom": 255.8095245361328
+          },
+          {
+            "x": 249.85714721679688,
+            "y": 211.8095245361328,
+            "width": 77.52381134033203,
+            "height": 44,
+            "right": 327.3809585571289,
+            "bottom": 255.8095245361328
+          }
+        ]
+      }
+    },
+    {
+      "check": "Android input drives hint, screw, pause, resume, and undo",
+      "first": "l1-p0-s0",
+      "undoRemaining": 2
+    },
+    {
+      "check": "Android process death restores exact progress",
+      "moves": 3,
+      "liveScrews": 6
+    },
+    {
+      "check": "nine Android taps complete level 1 and advance to level 2",
+      "score": 1169,
+      "stars": 2
+    }
+  ],
+  "error": null
+}

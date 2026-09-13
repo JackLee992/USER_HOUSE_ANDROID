@@ -1,615 +1,471 @@
-import { drawGameSprite, drawGameMaterial } from '../../../../standalone/game-art.js';
-// Independently versioned game plugin. Keep imports relative to this immutable snapshot.
-export const GAME_ID = 'screw';
-export const GAME_VERSION = '1.0.0';
-export const HOST_API_VERSION = 1;
-export const REQUIRED_ENV = Object.freeze(["choiceForState","choiceSavePatch","clearProgress","currentGameDurationMs","gamePaused","getHostWindow","isMobileHost","qs","saveProgress","screwTimer","setScore","showGameOver","speak"]);
+import {
+  SCREW_CAMPAIGN_LEVELS,
+  addTraySlot,
+  advanceFallingPanel,
+  advanceFlight,
+  allLiveScrews,
+  applyScrew,
+  beginNextScrewLevel,
+  colorForScrew,
+  createScrewState,
+  progressPercent,
+  reachableScrews,
+  restoreScrewState,
+  screwWorld,
+  undoScrew,
+  useHint,
+} from './model.js';
 
-// Host state is read through env getters on every callback, never snapshotted by destructuring.
-export function createGame(env, state) {
-  function startScrew(state) {
-    const box = env.qs('#wb-gamebox');
-    box.innerHTML = '<div class="wb-screw-panel"><div class="wb-screw-top"><div class="wb-screw-boxes" id="wb-screw-boxes"></div><div class="wb-screw-tools"><div class="wb-screw-progress"><div id="wb-screw-progress-fill"></div><span id="wb-screw-progress-text">0%</span></div><div class="wb-screw-tray" id="wb-screw-tray"></div><button type="button" class="wb-btn wb-screw-addbox" id="wb-screw-addbox">增加盒子 <span id="wb-screw-addbox-left">3</span></button></div></div><canvas class="wb-canvas wb-screw-canvas" id="wb-screw-canvas" width="420" height="560"></canvas></div>';
-    const choice = env.choiceForState('screw', state);
-    const endless = choice.id === 'endless';
-    const c = env.qs('#wb-screw-canvas'), ctx = c.getContext('2d'), W=420, H=560;
-    const colors = [
-      { id:'red', hex:'#ef3030' }, { id:'cyan', hex:'#20cce3' }, { id:'green', hex:'#9df043' },
-      { id:'purple', hex:'#9b45ec' }, { id:'pink', hex:'#ec4eb2' }, { id:'brown', hex:'#8b5337' }, { id:'gray', hex:'#9b9b9b' },
-      { id:'blue', hex:'#4f8df7' }
-    ];
-    const panelTints = ['rgba(153,105,241,.58)','rgba(108,213,247,.48)','rgba(236,77,165,.48)','rgba(238,194,118,.62)','rgba(195,244,83,.58)','rgba(249,92,108,.50)','rgba(167,197,228,.42)'];
-    const shapes = ['capsule','capsule','l','tri','circle','crescent','heart','flower','square','wing','diamond'];
-    const colorById = id => colors.find(col => col.id === id) || colors[0];
-    const colorIndex = id => Math.max(0, colors.findIndex(col => col.id === id));
-    const rngFromSeed = seed => {
-      let t = seed >>> 0;
-      return () => {
-        t += 0x6D2B79F5;
-        let r = Math.imul(t ^ (t >>> 15), 1 | t);
-        r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
-        return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
-      };
-    };
-    const rnd = (rand, min, max) => min + rand() * (max - min);
-    const pick = (rand, arr) => arr[Math.floor(rand() * arr.length)];
-    const shuffle = (rand, arr) => {
-      const out = arr.slice();
-      for(let i=out.length-1;i>0;i--){ const j=Math.floor(rand()*(i+1)); const tmp=out[i]; out[i]=out[j]; out[j]=tmp; }
-      return out;
-    };
-    function makeLocalHoles(rand, shape, w, h){
-      if(shape === 'capsule') return [[-w*.32,-h*.2],[w*.32,-h*.18],[rnd(rand,-w*.08,w*.08),h*.2]];
-      if(shape === 'square') return [[-w*.26,-h*.25],[w*.28,-h*.25],[rnd(rand,-w*.14,w*.14),h*.26]];
-      if(shape === 'wing') return [[-w*.28,-h*.2],[w*.28,-h*.12],[rnd(rand,-w*.08,w*.1),h*.2]];
-      if(shape === 'diamond') return [[0,-h*.28],[-w*.26,h*.08],[w*.25,h*.1]];
-      if(shape === 'crescent') return [[-w*.24,-h*.18],[w*.18,-h*.03],[-w*.12,h*.24]];
-      if(shape === 'ring') return [[-w*.28,-h*.16],[w*.3,-h*.18],[w*.02,h*.34]];
-      if(shape === 'tri') return [[0,-h*.24],[-w*.24,h*.18],[w*.25,h*.2]];
-      if(shape === 'l') return [[-w*.28,-h*.2],[-w*.27,h*.28],[w*.2,h*.25]];
-      if(shape === 'heart') return [[-w*.22,-h*.12],[w*.22,-h*.12],[0,h*.24]];
-      if(shape === 'flower') return [[0,-h*.28],[-w*.25,h*.16],[w*.25,h*.16]];
-      if(shape === 'circle') return [[-w*.22,-h*.2],[w*.22,-h*.16],[0,h*.26]];
-      return [[-w*.32,-h*.18],[w*.3,-h*.16],[rnd(rand,-w*.14,w*.16),h*.2]];
+export const GAME_ID = 'screw';
+export const GAME_VERSION = '1.1.0';
+export const HOST_API_VERSION = 1;
+export const REQUIRED_ENV = Object.freeze([
+  'activeGameController','choiceForState','choiceSavePatch','clearProgress','currentGameDurationMs',
+  'gamePaused','getHostDocument','getHostWindow','qs','saveProgress','scheduleFitGameSurface',
+  'setScore','showGameOver','speak','toast',
+]);
+
+const W = 420, H = 560;
+const PANEL_TINTS = [
+  ['#e96f68','#a63f4a'], ['#5d8fdd','#31579f'], ['#e7b746','#a8741d'], ['#62af78','#34764d'],
+  ['#9a71d2','#62439a'], ['#dd8350','#9a4b29'], ['#4eafb4','#236e76'],
+];
+const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+const easeOutCubic = value => 1 - (1 - value) ** 3;
+const easeInCubic = value => value ** 3;
+
+function performancePixelRatio(win) {
+  let mode = 'normal';
+  try { mode = win.localStorage?.getItem('wanba_performance_v1') || 'normal'; } catch {}
+  const cap = mode === 'eco' ? 1 : mode === 'game' ? 3 : 2;
+  return { mode, value:Math.max(1, Math.min(cap, Number(win.devicePixelRatio) || 1)) };
+}
+
+function roundRectPath(ctx, x, y, width, height, radius) {
+  const r = Math.min(radius, width / 2, height / 2);
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.arcTo(x + width, y, x + width, y + height, r);
+  ctx.arcTo(x + width, y + height, x, y + height, r);
+  ctx.arcTo(x, y + height, x, y, r);
+  ctx.arcTo(x, y, x + width, y, r);
+  ctx.closePath();
+}
+
+function panelPath(ctx, panel) {
+  const w = panel.w, h = panel.h;
+  if (panel.shape === 'disc') {
+    ctx.beginPath(); ctx.arc(0, 0, w / 2, 0, Math.PI * 2); ctx.closePath(); return;
+  }
+  if (panel.shape === 'capsule' || panel.shape === 'bar') {
+    roundRectPath(ctx, -w / 2, -h / 2, w, h, h / 2); return;
+  }
+  if (panel.shape === 'triangle') {
+    ctx.beginPath(); ctx.moveTo(0, -h / 2); ctx.lineTo(w / 2, h / 2); ctx.lineTo(-w / 2, h / 2); ctx.closePath(); return;
+  }
+  if (panel.shape === 'shield') {
+    ctx.beginPath();
+    ctx.moveTo(-w / 2, -h / 2 + 24); ctx.quadraticCurveTo(0, -h / 2 - 8, w / 2, -h / 2 + 24);
+    ctx.lineTo(w * .43, h * .16); ctx.quadraticCurveTo(w * .25, h * .42, 0, h / 2);
+    ctx.quadraticCurveTo(-w * .25, h * .42, -w * .43, h * .16); ctx.closePath(); return;
+  }
+  if (panel.shape === 'cross') {
+    const x = w * .19, y = h * .22;
+    ctx.beginPath(); ctx.moveTo(-x,-h/2); ctx.lineTo(x,-h/2); ctx.lineTo(x,-y); ctx.lineTo(w/2,-y);
+    ctx.lineTo(w/2,y); ctx.lineTo(x,y); ctx.lineTo(x,h/2); ctx.lineTo(-x,h/2); ctx.lineTo(-x,y);
+    ctx.lineTo(-w/2,y); ctx.lineTo(-w/2,-y); ctx.lineTo(-x,-y); ctx.closePath(); return;
+  }
+  roundRectPath(ctx, -w / 2, -h / 2, w, h, 28);
+}
+
+function drawScrew(ctx, colorId, x, y, radius = 14, rotation = 0, glow = false, alpha = 1) {
+  const color = colorForScrew(colorId);
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rotation); ctx.globalAlpha *= alpha;
+  if (glow) { ctx.shadowColor = color.light; ctx.shadowBlur = 16; }
+  const outer = ctx.createRadialGradient(-radius * .32, -radius * .42, radius * .08, 0, 0, radius * 1.08);
+  outer.addColorStop(0, '#ffffff'); outer.addColorStop(.12, color.light); outer.addColorStop(.48, color.hex);
+  outer.addColorStop(.83, color.dark); outer.addColorStop(1, '#17233a');
+  ctx.fillStyle = outer; ctx.beginPath(); ctx.arc(0, 0, radius, 0, Math.PI * 2); ctx.fill();
+  ctx.shadowBlur = 0; ctx.strokeStyle = 'rgba(255,255,255,.72)'; ctx.lineWidth = Math.max(1.2, radius * .1);
+  ctx.beginPath(); ctx.arc(-radius*.08, -radius*.1, radius*.72, Math.PI*1.08, Math.PI*1.75); ctx.stroke();
+  ctx.strokeStyle = 'rgba(18,27,52,.82)'; ctx.lineWidth = Math.max(2.2, radius * .2); ctx.lineCap = 'round';
+  const slot = radius * .42; ctx.beginPath(); ctx.moveTo(-slot,-slot); ctx.lineTo(slot,slot);
+  ctx.moveTo(slot,-slot); ctx.lineTo(-slot,slot); ctx.stroke();
+  ctx.strokeStyle = 'rgba(255,255,255,.20)'; ctx.lineWidth = Math.max(1, radius * .07);
+  ctx.beginPath(); ctx.arc(0, 0, radius * .92, 0, Math.PI * 2); ctx.stroke();
+  ctx.restore();
+}
+
+function drawPanel(ctx, panel, options = {}) {
+  const tint = PANEL_TINTS[panel.tint % PANEL_TINTS.length];
+  ctx.save(); ctx.translate(panel.x, panel.y); ctx.rotate(panel.a || 0); ctx.globalAlpha *= options.alpha ?? 1;
+  ctx.shadowColor = 'rgba(2,8,24,.58)'; ctx.shadowBlur = 18; ctx.shadowOffsetY = 11;
+  panelPath(ctx, panel); ctx.fillStyle = '#0c1425'; ctx.fill();
+  ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+  panelPath(ctx, panel);
+  const gradient = ctx.createLinearGradient(-panel.w * .4, -panel.h / 2, panel.w * .35, panel.h / 2);
+  if (panel.material === 'hardwood') {
+    gradient.addColorStop(0, '#f2b86b'); gradient.addColorStop(.46, '#c7783f'); gradient.addColorStop(1, '#86452f');
+  } else if (panel.material === 'brushed-steel') {
+    gradient.addColorStop(0, '#e8eef4'); gradient.addColorStop(.25, '#8795a4');
+    gradient.addColorStop(.52, '#d4dde5'); gradient.addColorStop(1, '#627181');
+  } else if (panel.material === 'acrylic') {
+    gradient.addColorStop(0, tint[0] + 'e8'); gradient.addColorStop(.55, tint[0] + 'b8'); gradient.addColorStop(1, tint[1] + 'dc');
+  } else {
+    gradient.addColorStop(0, tint[0]); gradient.addColorStop(.55, tint[0]); gradient.addColorStop(1, tint[1]);
+  }
+  ctx.fillStyle = gradient; ctx.fill();
+  ctx.lineWidth = 5; ctx.strokeStyle = 'rgba(255,255,255,.82)'; ctx.stroke();
+  ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(12,22,45,.48)'; panelPath(ctx, panel); ctx.stroke();
+  ctx.save(); panelPath(ctx, panel); ctx.clip();
+  const shine = ctx.createLinearGradient(0, -panel.h / 2, 0, panel.h / 2);
+  shine.addColorStop(0, 'rgba(255,255,255,.45)'); shine.addColorStop(.22, 'rgba(255,255,255,.13)');
+  shine.addColorStop(.5, 'rgba(255,255,255,0)'); shine.addColorStop(1, 'rgba(0,0,0,.18)');
+  ctx.fillStyle = shine; ctx.fillRect(-panel.w / 2, -panel.h / 2, panel.w, panel.h);
+  if (panel.material === 'hardwood') {
+    ctx.strokeStyle = 'rgba(105,49,27,.23)'; ctx.lineWidth = 2;
+    for (let line = -panel.h / 2 + 19; line < panel.h / 2; line += 19) {
+      ctx.beginPath(); ctx.moveTo(-panel.w / 2, line); ctx.bezierCurveTo(-60,line-8,60,line+8,panel.w/2,line-3); ctx.stroke();
     }
-    function localHoleInside(shape, lx, ly, w, h){
-      if(shape === 'circle') return lx*lx + ly*ly <= (w*.42)*(w*.42);
-      if(shape === 'capsule') return Math.abs(lx) <= w/2 - h/2 && Math.abs(ly) <= h*.38 || Math.hypot(Math.abs(lx) - (w/2 - h/2), ly) <= h*.38;
-      if(shape === 'square') return Math.abs(lx) <= w*.42 && Math.abs(ly) <= h*.42;
-      if(shape === 'diamond') return Math.abs(lx) / (w*.43) + Math.abs(ly) / (h*.43) <= 1;
-      if(shape === 'wing') return Math.abs(lx) <= w*.42 && Math.abs(ly) <= h*.28 && ly > -h*.36 + Math.abs(lx) * .18;
-      if(shape === 'crescent'){ const d=Math.hypot(lx, ly); return d <= w*.42 && d >= w*.27 && !(lx > w*.08 && ly < h*.18 && ly > -h*.24); }
-      if(shape === 'ring'){ const d=lx*lx + ly*ly; return d <= (w*.42)*(w*.42) && d >= (w*.29)*(w*.29); }
-      if(shape === 'tri'){
-        const x1=0, y1=-h*.42, x2=w*.42, y2=h*.42, x3=-w*.42, y3=h*.42;
-        const d = (y2-y3)*(x1-x3)+(x3-x2)*(y1-y3);
-        const a = ((y2-y3)*(lx-x3)+(x3-x2)*(ly-y3))/d;
-        const b = ((y3-y1)*(lx-x3)+(x1-x3)*(ly-y3))/d;
-        const g = 1 - a - b;
-        return a >= .05 && b >= .05 && g >= .05;
-      }
-      if(shape === 'l') return (lx >= -w*.42 && lx <= -w*.12 && ly >= -h*.42 && ly <= h*.42) || (lx >= -w*.42 && lx <= w*.42 && ly >= h*.12 && ly <= h*.42);
-      if(shape === 'heart'){
-        const nx = lx / (w*.42), ny = (ly + h*.05) / (h*.43);
-        return Math.pow(nx*nx + ny*ny - 1, 3) - nx*nx * Math.pow(ny, 3) <= .16 && ly <= h*.32;
-      }
-      if(shape === 'flower'){
-        if(lx*lx + ly*ly <= (w*.17)*(w*.17)) return true;
-        for(let i=0;i<6;i++){
-          const r=rotatePoint(lx, ly, -i * Math.PI / 3), dx=r.x, dy=r.y + h*.22;
-          if((dx*dx)/(w*.13*w*.13) + (dy*dy)/(h*.23*h*.23) <= 1) return true;
-        }
-        return false;
-      }
-      return Math.abs(lx) <= w*.42 && Math.abs(ly) <= h*.42;
+  } else if (panel.material === 'brushed-steel') {
+    ctx.strokeStyle = 'rgba(255,255,255,.16)'; ctx.lineWidth = 1;
+    for (let line = -panel.h / 2 + 8; line < panel.h / 2; line += 7) {
+      ctx.beginPath(); ctx.moveTo(-panel.w / 2, line); ctx.lineTo(panel.w / 2, line); ctx.stroke();
     }
-    function fitHoleCount(rand, shape, holes, count, w, h){
-      const dist = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
-      const minTarget = Math.max(42, Math.min(w, h) * .34);
-      const candidates = holes.filter(pt => localHoleInside(shape, pt[0], pt[1], w, h));
-      for(let i=0;i<36;i++){
-        const a = i / 36 * Math.PI * 2 + rnd(rand, -.18, .18);
-        const pt = [Math.cos(a) * w * rnd(rand, .18, .36), Math.sin(a) * h * rnd(rand, .18, .36)];
-        if(localHoleInside(shape, pt[0], pt[1], w, h)) candidates.push(pt);
-      }
-      for(let i=0;i<80 && candidates.length < count;i++){
-        const pt = [rnd(rand, -w*.4, w*.4), rnd(rand, -h*.4, h*.4)];
-        if(localHoleInside(shape, pt[0], pt[1], w, h)) candidates.push(pt);
-      }
-      if(!candidates.length) candidates.push([0, 0]);
-      let best = candidates[0] || [0, 0];
-      candidates.forEach(pt => { if(Math.hypot(pt[0], pt[1]) > Math.hypot(best[0], best[1])) best = pt; });
-      const out = [best];
-      while(out.length < count && candidates.length){
-        let chosen = null, chosenScore = -1;
-        candidates.forEach(pt => {
-          if(out.some(existing => existing === pt)) return;
-          const nearest = Math.min(...out.map(existing => dist(existing, pt)));
-          const edgeBonus = Math.hypot(pt[0] / Math.max(1, w), pt[1] / Math.max(1, h)) * 18;
-          const score = nearest + edgeBonus;
-          if(nearest >= minTarget * .82 && score > chosenScore){ chosen = pt; chosenScore = score; }
-        });
-        if(!chosen){
-          candidates.forEach(pt => {
-            if(out.some(existing => existing === pt)) return;
-            const nearest = Math.min(...out.map(existing => dist(existing, pt)));
-            if(nearest > chosenScore){ chosen = pt; chosenScore = nearest; }
-          });
-        }
-        if(!chosen) break;
-        out.push(chosen);
-      }
-      return out.slice(0, count);
-    }
-    const makeLevel = () => {
-      const seed = (Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0;
-      const rand = rngFromSeed(seed);
-      const panelCount = (endless ? 28 : 42) + Math.floor(rand() * (endless ? 5 : 6));
-      const panels = [];
-      const layout = Math.floor(rand() * 4);
-      function template(i){
-        const col = i % 5, row = Math.floor(i / 5) % 7;
-        const ring = i / panelCount * Math.PI * 2;
-        if(layout === 0) return { x:38 + col * 86 + rnd(rand,-18,18), y:46 + row * 118 + rnd(rand,-20,20), a:(i % 2 ? .58 : -.58) + rnd(rand,-.28,.28), shape:i % 6 === 0 ? 'l' : (i % 4 === 0 ? 'circle' : pick(rand, shapes)) };
-        if(layout === 1) return { x:36 + (i % 6) * 70 + rnd(rand,-18,18), y:52 + Math.floor(i / 6) * 124 + (i % 2 ? 24 : -8) + rnd(rand,-16,16), a:(i % 2 ? 1 : -1) * rnd(rand,.16,.62), shape:i % 4 === 0 ? 'wing' : (i % 5 === 0 ? 'capsule' : pick(rand, shapes)) };
-        if(layout === 2){
-          const slots = [[52,58],[210,54],[366,62],[56,190],[188,174],[342,188],[68,324],[214,316],[360,328],[52,462],[204,456],[366,464]];
-          const s = slots[i % slots.length];
-          return { x:s[0] + rnd(rand,-24,24), y:s[1] + rnd(rand,-20,20) + Math.floor(i / slots.length) * 20, a:(i % 2 ? .82 : -.82) + rnd(rand,-.22,.22), shape:i % 6 === 0 ? 'l' : (i % 3 === 0 ? 'square' : pick(rand, shapes)) };
-        }
-        return { x:210 + Math.cos(ring) * (116 + (i % 4) * 28) + rnd(rand,-14,14), y:268 + Math.sin(ring) * (176 + (i % 3) * 28) + rnd(rand,-14,14), a:ring + rnd(rand,-.42,.42), shape:i % 7 === 0 ? 'heart' : pick(rand, shapes) };
-      }
-      const templates = Array.from({ length:panelCount }, (_, i) => template(i));
-      const fixedTwoScrewShapes = ['flower','star','heart'];
-      const screwCounts = templates.map(t => fixedTwoScrewShapes.includes(t.shape) ? 2 : 2 + Math.floor(rand() * 3));
-      let screwTotal = screwCounts.reduce((sum, n) => sum + n, 0);
-      while(screwTotal % 3){
-        if(screwTotal % 3 === 1){
-          const idx = screwCounts.findIndex((n, i) => n > 2 && !fixedTwoScrewShapes.includes(templates[i].shape));
-          if(idx >= 0){ screwCounts[idx]--; screwTotal--; }
-          else { const addIdx = screwCounts.findIndex((n, i) => n < 4 && !fixedTwoScrewShapes.includes(templates[i].shape)); if(addIdx >= 0){ screwCounts[addIdx]++; screwTotal++; } else break; }
-        } else {
-          const idx = screwCounts.findIndex((n, i) => n < 4 && !fixedTwoScrewShapes.includes(templates[i].shape));
-          if(idx >= 0){ screwCounts[idx]++; screwTotal++; }
-          else { const dropIdx = screwCounts.findIndex((n, i) => n > 2 && !fixedTwoScrewShapes.includes(templates[i].shape)); if(dropIdx >= 0){ screwCounts[dropIdx]--; screwTotal--; } else break; }
-        }
-      }
-      const boxCount = Math.max(3, screwTotal / 3);
-      const topColors = [];
-      for(let i=0;i<boxCount;i+=3){
-        const batch = shuffle(rand, colors).slice(0, Math.min(3, boxCount - i)).map(col => col.id);
-        topColors.push(...batch);
-      }
-      const boxQueue = topColors.slice();
-      const screwColors = shuffle(rand, topColors.flatMap(color => [color, color, color]));
-      let colorOffset = 0;
-      for(let i=0;i<panelCount;i++){
-        const count = screwCounts[i], slice = screwColors.slice(colorOffset, colorOffset + count);
-        if(count >= 3 && slice.every(color => color === slice[0])){
-          const swapAt = screwColors.findIndex((color, idx) => idx >= colorOffset + count && color !== slice[0]);
-          if(swapAt >= 0){ const tmp = screwColors[colorOffset + count - 1]; screwColors[colorOffset + count - 1] = screwColors[swapAt]; screwColors[swapAt] = tmp; }
-        }
-        colorOffset += count;
-      }
-      for(let i=0;i<panelCount;i++){
-        const t = templates[i], shape = t.shape;
-        const w = shape === 'capsule' ? rnd(rand, 150, 222) : shape === 'l' ? rnd(rand, 132, 174) : shape === 'square' ? rnd(rand, 108, 148) : shape === 'wing' ? rnd(rand, 150, 210) : rnd(rand, 104, 158);
-        const h = shape === 'capsule' ? rnd(rand, 48, 66) : shape === 'l' ? rnd(rand, 118, 160) : (shape === 'circle' || shape === 'flower' || shape === 'crescent' ? w : shape === 'wing' ? rnd(rand, 76, 112) : rnd(rand, 86, 132));
-        const a = t.a;
-        const ca = Math.abs(Math.cos(a || 0)), sa = Math.abs(Math.sin(a || 0));
-        const marginX = Math.min(W / 2 - 14, ca * w / 2 + sa * h / 2 + 14);
-        const marginY = Math.min(H / 2 - 14, sa * w / 2 + ca * h / 2 + 14);
-        const x = Math.max(marginX, Math.min(W - marginX, t.x));
-        const y = Math.max(marginY, Math.min(H - marginY, t.y));
-        const count = screwCounts[i];
-        const holes = fitHoleCount(rand, shape, makeLocalHoles(rand, shape, w, h), count, w, h);
-        const offset = screwCounts.slice(0, i).reduce((sum, n) => sum + n, 0);
-        panels.push({
-          id:'p'+i, z:i, shape, x, y, w, h, a, color:panelTints[i % panelTints.length],
-          screws:holes.map((pt, j) => ({ id:'p'+i+'s'+j, lx:pt[0], ly:pt[1], color:screwColors[offset + j] || topColors[(i + j) % topColors.length], gone:false })),
-          vx:0, vy:0, va:0, gone:false, falling:false, hanging:false
-        });
-      }
-      return { seed, panels, boxQueue, boxes:boxQueue.slice(0, 3).map(color => ({ color, fill:0 })), boxIndex:Math.min(3, boxQueue.length) };
-    };
-    const generatedFresh = !(state?.panels && state?.boxQueue);
-    let made = generatedFresh ? makeLevel() : state;
-    let panels = made.panels.map(p => Object.assign({ vx:0, vy:0, va:0, gone:false, falling:false, hanging:false }, p, { screws:(p.screws || []).map(s => Object.assign({}, s)) }));
-    let boxQueue = Array.isArray(made.boxQueue) ? made.boxQueue.slice() : [];
-    let boxes = Array.isArray(made.boxes) ? made.boxes.map(b => Object.assign({}, b)) : boxQueue.slice(0, 3).map(color => ({ color, fill:0 }));
-    let boxIndex = Number.isInteger(made.boxIndex) ? made.boxIndex : boxes.length;
-    let maxBoxes = Math.min(6, Math.max(3, Number(state?.maxBoxes || made.maxBoxes || 3)));
-    let addBoxUses = Math.min(3, Math.max(0, Number(state?.addBoxUses || made.addBoxUses || Math.max(0, maxBoxes - 3))));
-    let tray = Array.isArray(state?.tray) ? state.tray.slice(0, 5) : [];
-    let over=false, seen = state?.seen || {};
-    let details = Object.assign({ removed:0, packed:0, matches:0, fallen:0, maxTray:0, trayFourCount:0, trayFullCount:0, addBoxUses:0, blocked:0, progress:0, completed:false, endlessLayers:1 }, state?.details || {});
-    if(generatedFresh){
-      for(let attempt=0; attempt<6 && currentScrews().filter(h => h.reachable).length < 10; attempt++){
-        made = makeLevel();
-        panels = made.panels.map(p => Object.assign({ vx:0, vy:0, va:0, gone:false, falling:false, hanging:false }, p, { screws:(p.screws || []).map(s => Object.assign({}, s)) }));
-        boxQueue = Array.isArray(made.boxQueue) ? made.boxQueue.slice() : [];
-        boxes = Array.isArray(made.boxes) ? made.boxes.map(b => Object.assign({}, b)) : boxQueue.slice(0, 3).map(color => ({ color, fill:0 }));
-        boxIndex = Number.isInteger(made.boxIndex) ? made.boxIndex : boxes.length;
-      }
-    }
-    drawUI(); draw(); save();
-    function save(){ if(!over) env.saveProgress('screw', Object.assign({ panels, boxQueue, boxes, boxIndex, maxBoxes, addBoxUses, tray, seen, details }, env.choiceSavePatch('screw', choice))); }
-    function rotatePoint(x,y,a){ const ca=Math.cos(a||0), sa=Math.sin(a||0); return { x:x*ca-y*sa, y:x*sa+y*ca }; }
-    function localToWorld(p, lx, ly){ const r=rotatePoint(lx, ly, p.a || 0); return { x:p.x + r.x, y:p.y + r.y }; }
-    function worldToLocal(p, x, y){ return rotatePoint(x - p.x, y - p.y, -(p.a || 0)); }
-    function normAngle(a){ while(a > Math.PI) a -= Math.PI * 2; while(a < -Math.PI) a += Math.PI * 2; return a; }
-    function panelVisualExtents(p){
-      const ca = Math.abs(Math.cos(p.a || 0)), sa = Math.abs(Math.sin(p.a || 0));
-      return {
-        x: Math.min(W / 2 - 14, ca * (p.w || 0) / 2 + sa * (p.h || 0) / 2 + 14),
-        y: Math.min(H / 2 - 14, sa * (p.w || 0) / 2 + ca * (p.h || 0) / 2 + 14)
-      };
-    }
-    function clampPanelInsideCanvas(p, allowBottomExit){
-      const e = panelVisualExtents(p);
-      p.x = Math.max(e.x, Math.min(W - e.x, p.x));
-      p.y = allowBottomExit ? Math.max(e.y, p.y) : Math.max(e.y, Math.min(H - e.y, p.y));
-    }
-    function panelContains(p, x, y){
-      const q = worldToLocal(p, x, y), lx=q.x, ly=q.y, w=p.w, h=p.h;
-      if(p.shape === 'circle') return lx*lx + ly*ly <= (w*.5)*(w*.5);
-      if(p.shape === 'capsule') return Math.abs(lx) <= w/2 - h/2 && Math.abs(ly) <= h/2 || Math.hypot(Math.abs(lx) - (w/2 - h/2), ly) <= h/2;
-      if(p.shape === 'square') return Math.abs(lx) <= w/2 && Math.abs(ly) <= h/2;
-      if(p.shape === 'diamond') return Math.abs(lx) / (w/2) + Math.abs(ly) / (h/2) <= 1;
-      if(p.shape === 'wing') return Math.abs(lx) <= w/2 && Math.abs(ly) <= h*.34 && ly > -h*.44 + Math.abs(lx) * .18;
-      if(p.shape === 'crescent'){ const d=Math.hypot(lx, ly); return d <= w*.5 && d >= w*.22 && !(lx > w*.1 && ly < h*.22 && ly > -h*.28); }
-      if(p.shape === 'ring'){ const d=lx*lx + ly*ly; return d <= (w*.5)*(w*.5) && d >= (w*.23)*(w*.23); }
-      if(p.shape === 'tri'){
-        const x1=0, y1=-h/2, x2=w/2, y2=h/2, x3=-w/2, y3=h/2;
-        const d = (y2-y3)*(x1-x3)+(x3-x2)*(y1-y3);
-        const a = ((y2-y3)*(lx-x3)+(x3-x2)*(ly-y3))/d;
-        const b = ((y3-y1)*(lx-x3)+(x1-x3)*(ly-y3))/d;
-        const g = 1 - a - b;
-        return a >= 0 && b >= 0 && g >= 0;
-      }
-      if(p.shape === 'l') return (lx >= -w/2 && lx <= -w*.08 && ly >= -h/2 && ly <= h/2) || (lx >= -w/2 && lx <= w/2 && ly >= h*.08 && ly <= h/2);
-      if(p.shape === 'heart'){
-        const nx = lx / (w*.46), ny = (ly + h*.05) / (h*.48);
-        return Math.pow(nx*nx + ny*ny - 1, 3) - nx*nx * Math.pow(ny, 3) <= .35 && ly <= h*.38;
-      }
-      if(p.shape === 'flower'){
-        if(lx*lx + ly*ly <= (w*.2)*(w*.2)) return true;
-        for(let i=0;i<6;i++){
-          const r=rotatePoint(lx, ly, -i * Math.PI / 3), dx=r.x, dy=r.y + h*.22;
-          if((dx*dx)/(w*.17*w*.17) + (dy*dy)/(h*.28*h*.28) <= 1) return true;
-        }
-        return false;
-      }
-      return Math.abs(lx) <= w/2 && Math.abs(ly) <= h/2;
-    }
-    function liveAnchors(p){ return (p.screws || []).filter(s => !s.gone); }
-    function screwWorld(p, s){ return s.anchor ? { x:s.anchor.x, y:s.anchor.y } : localToWorld(p, s.lx, s.ly); }
-    function panelCoversScrew(panel, pt){
-      const r = 10;
-      return [[0,0],[-r,0],[r,0],[0,-r],[0,r],[-r*.65,-r*.65],[r*.65,-r*.65],[-r*.65,r*.65],[r*.65,r*.65]]
-        .some(d => panelContains(panel, pt.x + d[0], pt.y + d[1]));
-    }
-    function isScrewReachable(p, s){
-      if(p.gone || p.falling || s.gone) return false;
-      const pt = screwWorld(p, s);
-      return !panels.some(o => o !== p && !o.gone && o.z > p.z && panelCoversScrew(o, pt));
-    }
-    function currentScrews(){
-      const hits = [];
-      panels.forEach(p => (p.screws || []).forEach(s => { if(!s.gone) hits.push({ p, s, pt:screwWorld(p, s), reachable:isScrewReachable(p, s) }); }));
-      return hits.sort((a,b) => a.p.z - b.p.z);
-    }
-    function blockingFrontScrewForPanel(p, oldX, oldY){
-      for(const o of panels){
-        if(o === p || o.gone || o.z <= p.z) continue;
-        for(const s of (o.screws || [])){
-          if(s.gone) continue;
-          const pt = screwWorld(o, s);
-          if(!panelContains(p, pt.x, pt.y)) continue;
-          if(Number.isFinite(oldX) && Number.isFinite(oldY)){
-            const px = p.x, py = p.y;
-            p.x = oldX; p.y = oldY;
-            const alreadyCovered = panelContains(p, pt.x, pt.y);
-            p.x = px; p.y = py;
-            if(alreadyCovered) continue;
-          }
-          return { p:o, s, pt };
-        }
-      }
-      return null;
-    }
-    function refillBoxes(){
-      while(boxes.length < maxBoxes && boxIndex < boxQueue.length) boxes.push({ color:boxQueue[boxIndex++], fill:0 });
-      let moved = false;
-      for(let i=0;i<tray.length;i++) if(boxes.some(b => b.color === tray[i] && b.fill < 3)){ moved = true; break; }
-      return moved;
-    }
-    function acceptBox(color){
-      return boxes.find(b => b.color === color && b.fill < 3);
-    }
-    function addToBox(color){
-      const b = acceptBox(color);
-      if(!b) return false;
-      b.fill++;
-      if(b.fill >= 3){
-        const idx = boxes.indexOf(b);
-        if(idx >= 0) boxes.splice(idx, 1);
-        details.packed += 3;
-        details.matches = (details.matches || 0) + 1;
-        if(Math.random() < .3) env.speak('screw','match');
-        if(refillBoxes()) setTimeout(() => { if(!over){ drainTray(); drawUI(); save(); } }, 0);
-      }
-      return true;
-    }
-    function drainTray(){
-      let moved = true;
-      while(moved){
-        moved = false;
-        for(let i=0;i<tray.length;i++){
-          if(acceptBox(tray[i])){
-            const color = tray.splice(i, 1)[0];
-            addToBox(color);
-            moved = true;
-            break;
-          }
-        }
-      }
-    }
-    function updatePanelState(p){
-      if(p.gone || p.falling) return;
-      if(p.stuck){
-        if(blockingFrontScrewForPanel(p)){ p.vx = 0; p.vy = 0; p.va = 0; p.hanging = false; return; }
-        p.stuck = false;
-      }
-      const anchors = liveAnchors(p);
-      if(!anchors.length){
-        p.falling = true; p.stuck = false; p.hanging = false; p.vy = Math.max(1.8, p.vy || 0); p.vx = 0; p.va = 0;
-      } else if(anchors.length === 1){
-        const a = anchors[0], pt = a.anchor || screwWorld(p, a);
-        a.anchor = { x:pt.x, y:pt.y };
-        if(p.pivot !== a.id){ p.hangTicks = 0; p.hangSettled = false; }
-        p.hanging = true; p.pivot = a.id; p.va = p.va || ((p.x < pt.x) ? -.015 : .015);
-      } else {
-        p.hanging = false;
-      }
-    }
-    function removeScrew(hit){
-      const color = hit.s.color;
-      const wasFull = tray.length >= 5;
-      hit.s.gone = true;
-      details.removed++;
-      details.maxTray = Math.max(details.maxTray || 0, tray.length);
-      if(acceptBox(color)) addToBox(color);
-      else {
-        if(wasFull){ fail(); return; }
-        tray.push(color);
-      }
-      panels.forEach(updatePanelState);
-      drainTray();
-      details.maxTray = Math.max(details.maxTray || 0, tray.length);
-      if(tray.length >= 5 && !wasFull){
-        details.trayFullCount = (details.trayFullCount || 0) + 1;
-        details.trayFourCount = details.trayFullCount;
-        env.speak('screw','tray_4');
-      }
-      if(!seen.first){ seen.first=1; }
-      drawUI(); draw(); save();
-    }
-    function clickAt(x,y){
-      if(env.gamePaused||over) return;
-      const mobileTouch = env.isMobileHost() || (env.getHostWindow().innerWidth || 800) <= 768;
-      const hitRadius = mobileTouch ? 28 : 15;
-      const blockedRadius = mobileTouch ? 30 : 15;
-      const hit = currentScrews().reverse().find(h => h.reachable && Math.hypot(h.pt.x-x,h.pt.y-y) <= hitRadius);
-      if(hit) removeScrew(hit);
-      else {
-        if(currentScrews().some(h => !h.reachable && Math.hypot(h.pt.x-x,h.pt.y-y) <= blockedRadius)) details.blocked++;
-        draw();
-      }
-    }
-    function handleCanvasClientPoint(clientX, clientY){
-      const r=c.getBoundingClientRect();
-      clickAt((clientX-r.left) * W / r.width, (clientY-r.top) * H / r.height);
-    }
-    c.onpointerdown = e => {
-      e.preventDefault();
-      handleCanvasClientPoint(e.clientX, e.clientY);
-    };
-    c.onclick = e => {
-      if(env.getHostWindow().PointerEvent) return;
-      handleCanvasClientPoint(e.clientX, e.clientY);
-    };
-	    function fail(){
-	      over=true; env.clearProgress('screw');
-	      details.completed = false; details.progress = progressPct(); details.addBoxUses = addBoxUses;
-	      env.speak('screw','gameover');
-	      if(endless){
-	        const boxCount = 3 + Math.max(0, Math.min(3, addBoxUses || 0));
-	        const multipliers = { 3:2.2, 4:1.75, 5:1.35, 6:1.05 };
-	        const multiplier = multipliers[boxCount] || 1.05;
-	        const baseScore = Math.max(0, (details.matches || 0) * 120);
-	        const score = Math.round(baseScore * multiplier);
-	        details.endlessBoxCount = boxCount;
-	        details.endlessBaseScore = baseScore;
-	        details.endlessScoreMultiplier = multiplier;
-	        env.setScore('screw', score);
-	        env.showGameOver('screw','游戏结束','本局分数：'+score+'分，基础分'+baseScore+'，盒子'+boxCount+'个，倍率×'+multiplier+'，托盘已满', null, { completed:false, endless:true, progress:details.progress, addBoxUses, details:Object.assign({}, details, { completed:false, endless:true, endlessBoxCount:boxCount, endlessBaseScore:baseScore, endlessScoreMultiplier:multiplier }) });
-	      } else {
-	        env.showGameOver('screw','游戏结束','本局分数：0分，托盘已满', null, { completed:false, progress:details.progress, addBoxUses, details });
-	      }
-	    }
-    function finish(){
-      over=true; env.clearProgress('screw');
-      details.completed = true; details.progress = 100; details.addBoxUses = addBoxUses;
-      const score = Math.max(800, 5200 - Math.round(env.currentGameDurationMs()/1000)*7 - details.maxTray*90 - addBoxUses * 650);
-      env.setScore('screw', score);
-      env.showGameOver('screw','拧螺丝完成','本局分数：'+score+'分，打包'+details.packed+'颗螺丝' + (addBoxUses ? '，增加盒子扣分' : ''), null, { completed:true, score, progress:100, addBoxUses, details:Object.assign({}, details, { addBoxUses }) });
-    }
-    function livePanelCount(){
-      return panels.filter(p => !p.gone).length;
-    }
-    function liveScrewCount(){
-      return currentScrews().length;
-    }
-    function extendEndless(){
-      const next = makeLevel();
-      const active = panels.filter(p => !p.gone);
-      const zLift = next.panels.length + 1;
-      const layer = details.endlessLayers || 1;
-      const nextPanels = next.panels.map((p, i) => Object.assign(
-        { vx:0, vy:0, va:0, gone:false, falling:false, hanging:false },
-        p,
-        {
-          id:'e' + layer + '_' + (p.id || i),
-          z:i,
-          screws:(p.screws || []).map((s, j) => Object.assign({}, s, { id:'e' + layer + '_' + (s.id || (i + 's' + j)) }))
-        }
-      ));
-      panels = nextPanels.concat(active.map(p => Object.assign({}, p, { z:(Number(p.z) || 0) + zLift })));
-      boxQueue = boxQueue.concat(next.boxQueue || []);
-      seen.progress50 = 0;
-      seen.progress80 = 0;
-      details.endlessLayers = (details.endlessLayers || 1) + 1;
-      refillBoxes();
-      drainTray();
-      drawUI();
-      draw();
-      save();
-    }
-    function maybeExtendEndless(){
-      if(!endless || over) return;
-      if(liveScrewCount() <= 24 || livePanelCount() <= 8) extendEndless();
-    }
-    function step(){
-      if(over || env.gamePaused) return;
-      panels.forEach(p => {
-        if(p.gone) return;
-        const anchors = liveAnchors(p);
-        if(p.stuck){
-          if(blockingFrontScrewForPanel(p)){ p.vx = 0; p.vy = 0; p.va = 0; return; }
-          p.stuck = false;
-          if(!anchors.length){ p.falling = true; p.hanging = false; p.vy = Math.max(1.8, p.vy || 0); p.vx = 0; p.va = 0; }
-        }
-        if(p.falling){
-          const oldX = p.x, oldY = p.y;
-          const noScrewDrop = anchors.length === 0;
-          p.vy = Math.min(noScrewDrop ? 15 : 11.5, (p.vy || 0) + (noScrewDrop ? .72 : .48));
-          p.vx = noScrewDrop ? 0 : (p.vx || 0) * .992;
-          p.y += p.vy; p.x += p.vx || 0;
-          clampPanelInsideCanvas(p, true);
-          const blocker = blockingFrontScrewForPanel(p, oldX, oldY);
-          if(blocker){
-            p.x = oldX; p.y = oldY; p.vx = 0; p.vy = 0; p.va = 0; p.falling = false; p.hanging = false; p.stuck = true; return;
-          }
-          if(!noScrewDrop) panels.forEach(o => {
-            if(o === p || o.gone || o.falling) return;
-            const hitW = (p.w + o.w) * .32, hitH = (p.h + o.h) * .32;
-            const dx = p.x - o.x, dy = p.y - o.y;
-            const overlapX = hitW - Math.abs(dx), overlapY = hitH - Math.abs(dy);
-            if(overlapX > 0 && overlapY > 0){
-              const side = dx < 0 ? -1 : 1;
-              if(overlapX < overlapY){
-                p.x += side * (overlapX + .8);
-                clampPanelInsideCanvas(p, true);
-                p.vx = side * Math.max(1.18, Math.abs(p.vx || 0) * .82);
-              } else {
-                p.y += (dy < 0 ? -1 : 1) * (overlapY + .8);
-                clampPanelInsideCanvas(p, true);
-                p.vy = dy < 0 ? Math.max(.85, p.vy * .26) : Math.max(1.7, p.vy * .62);
-                p.vx += side * .52;
-              }
-            }
-          });
-          const ext = panelVisualExtents(p);
-          if((noScrewDrop && p.y - ext.y > H + 20) || p.y > H + 120){ p.gone=true; details.fallen++; }
-        } else if(!p.stuck && anchors.length === 1){
-          const s = anchors[0], pivot = s.anchor || screwWorld(p, s);
-          const target = Math.PI / 2 - Math.atan2(-s.ly, -s.lx);
-          const delta = normAngle((p.a || 0) - target);
-          p.hangTicks = (p.hangTicks || 0) + 1;
-          if(p.hangSettled || (p.hangTicks > 18 && Math.abs(delta) < .018 && Math.abs(p.va || 0) < .012) || (p.hangTicks > 105 && Math.abs(p.va || 0) < .04)){
-            p.a = target; p.va = 0; p.hangSettled = true;
-          } else {
-            p.va = ((p.va || 0) - delta * .018) * .88;
-            p.a += p.va;
-          }
-          const local = rotatePoint(s.lx, s.ly, p.a || 0);
-          p.x = pivot.x - local.x; p.y = pivot.y - local.y;
-        }
-      });
-      if(panels.every(p => p.gone)) { if(endless) extendEndless(); else finish(); return; }
-      maybeExtendEndless();
-      drawUI(); draw(); save();
-    }
-    env.screwTimer = setInterval(step, 33);
-    function progressPct(){ return Math.round(panels.filter(p=>p.gone).length / panels.length * 100); }
-    function drawUI(){
-      const pct = progressPct();
-      details.progress = pct;
-      if(!endless && pct >= 50 && !seen.progress50){ seen.progress50 = 1; env.speak('screw','progress_50'); }
-      if(!endless && pct >= 80 && !seen.progress80){ seen.progress80 = 1; env.speak('screw','progress_80'); }
-      const progressWrap = env.qs('.wb-screw-progress', box);
-      if(progressWrap) progressWrap.classList.toggle('wb-endless-counter', endless);
-      env.qs('#wb-screw-progress-fill', box).style.width = endless ? '0%' : (pct + '%');
-      env.qs('#wb-screw-progress-text', box).textContent = endless ? ('收纳盒子 ' + (details.matches || 0) + ' 个') : ('进度 ' + pct + '%');
-      env.qs('#wb-screw-boxes', box).innerHTML = boxes.map((b,i) => {
-        const col = colorById(b.color);
-        return '<div class="wb-screw-box'+(i===0?' active':'')+'" style="--c:'+col.hex+'">' + [0,1,2].map(n => '<span class="wb-screw-box-hole">' + (n < b.fill ? '<i style="background:'+col.hex+'"></i>' : '') + '</span>').join('') + '</div>';
-      }).join('');
-      env.qs('#wb-screw-tray', box).innerHTML = Array.from({length:5},(_,i)=>'<div class="wb-screw-slot">' + (tray[i] ? '<span style="background:'+colorById(tray[i]).hex+'"></span>' : '') + '</div>').join('');
-      const addBtn = env.qs('#wb-screw-addbox', box), left = Math.max(0, 3 - addBoxUses);
-      if(addBtn){
-        addBtn.disabled = left <= 0 || boxes.length >= 6 || boxIndex >= boxQueue.length;
-        addBtn.classList.toggle('disabled', addBtn.disabled);
-      }
-      const leftEl = env.qs('#wb-screw-addbox-left', box);
-      if(leftEl) leftEl.textContent = left;
-    }
-    const addBoxBtn = env.qs('#wb-screw-addbox', box);
-    if(addBoxBtn) addBoxBtn.onclick = () => {
-      if(env.gamePaused || over || addBoxUses >= 3 || maxBoxes >= 6) return;
-      maxBoxes++;
-      addBoxUses++;
-      details.addBoxUses = addBoxUses;
-      env.speak('screw','add_box');
-      refillBoxes();
-      drainTray();
-      drawUI(); save();
-    };
-    function drawPanel(p){
-      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.a || 0); ctx.fillStyle=p.color; ctx.strokeStyle='rgba(255,255,255,.96)'; ctx.lineWidth=7; ctx.lineJoin='round'; ctx.lineCap='round';
-      if(p.shape==='tri'){ ctx.beginPath(); ctx.moveTo(0,-p.h/2); ctx.lineTo(p.w/2,p.h/2); ctx.lineTo(-p.w/2,p.h/2); ctx.closePath(); ctx.fill(); ctx.stroke(); }
-      else if(p.shape==='l'){ ctx.beginPath(); ctx.moveTo(-p.w/2,-p.h/2); ctx.lineTo(-p.w*.08,-p.h/2); ctx.lineTo(-p.w*.08,p.h*.08); ctx.lineTo(p.w/2,p.h*.08); ctx.lineTo(p.w/2,p.h/2); ctx.lineTo(-p.w/2,p.h/2); ctx.closePath(); ctx.fill(); ctx.stroke(); }
-      else if(p.shape==='capsule'){ ctx.beginPath(); ctx.roundRect(-p.w/2,-p.h/2,p.w,p.h,p.h/2); ctx.fill(); ctx.stroke(); }
-      else if(p.shape==='square'){ ctx.beginPath(); ctx.roundRect(-p.w/2,-p.h/2,p.w,p.h,10); ctx.fill(); ctx.stroke(); }
-      else if(p.shape==='diamond'){ ctx.beginPath(); ctx.moveTo(0,-p.h/2); ctx.lineTo(p.w/2,0); ctx.lineTo(0,p.h/2); ctx.lineTo(-p.w/2,0); ctx.closePath(); ctx.fill(); ctx.stroke(); }
-      else if(p.shape==='wing'){ ctx.beginPath(); ctx.moveTo(-p.w/2,p.h*.2); ctx.bezierCurveTo(-p.w*.42,-p.h*.5,-p.w*.1,-p.h*.18,0,-p.h*.1); ctx.bezierCurveTo(p.w*.18,-p.h*.48,p.w*.5,-p.h*.28,p.w/2,p.h*.14); ctx.bezierCurveTo(p.w*.18,p.h*.34,-p.w*.18,p.h*.36,-p.w/2,p.h*.2); ctx.closePath(); ctx.fill(); ctx.stroke(); }
-      else if(p.shape==='crescent'){ ctx.beginPath(); ctx.arc(0,0,p.w/2,.18*Math.PI,1.82*Math.PI); ctx.bezierCurveTo(p.w*.04,p.h*.12,p.w*.05,-p.h*.18,p.w*.38,-p.h*.31); ctx.bezierCurveTo(p.w*.08,-p.h*.02,p.w*.08,p.h*.14,p.w*.36,p.h*.32); ctx.closePath(); ctx.fill(); ctx.stroke(); }
-      else if(p.shape==='ring'){ ctx.beginPath(); ctx.arc(0,0,p.w/2,0,Math.PI*2); ctx.arc(0,0,p.w/4,0,Math.PI*2,true); ctx.fill('evenodd'); ctx.beginPath(); ctx.arc(0,0,p.w/2,0,Math.PI*2); ctx.stroke(); }
-      else if(p.shape==='heart'){ ctx.beginPath(); ctx.moveTo(0,p.h*.35); ctx.bezierCurveTo(-p.w*.52,0,-p.w*.36,-p.h*.46,0,-p.h*.18); ctx.bezierCurveTo(p.w*.36,-p.h*.46,p.w*.52,0,0,p.h*.35); ctx.fill(); ctx.stroke(); }
-      else if(p.shape==='flower'){
-        for(let i=0;i<6;i++){ ctx.save(); ctx.rotate(i * Math.PI / 3); ctx.beginPath(); ctx.ellipse(0,-p.h*.22,p.w*.16,p.h*.28,0,0,Math.PI*2); ctx.stroke(); ctx.restore(); }
-        for(let i=0;i<6;i++){ ctx.save(); ctx.rotate(i * Math.PI / 3); ctx.beginPath(); ctx.ellipse(0,-p.h*.22,p.w*.16,p.h*.28,0,0,Math.PI*2); ctx.fill(); ctx.restore(); }
-        ctx.beginPath(); ctx.arc(0,0,p.w*.18,0,Math.PI*2); ctx.fill();
-      }
-      else { ctx.beginPath(); ctx.roundRect(-p.w/2,-p.h/2,p.w,p.h,12); ctx.fill(); ctx.stroke(); }
-      ctx.restore();
-    }
-    function drawScrew(pt, colorId, reachable){
-      const col=colorById(colorId).hex;
-      ctx.save();
-      ctx.globalAlpha = reachable ? 1 : .52;
-      ctx.fillStyle=col; ctx.strokeStyle=reachable ? 'rgba(20,20,20,.55)' : 'rgba(20,20,20,.34)'; ctx.lineWidth=2;
-      ctx.beginPath(); ctx.arc(pt.x,pt.y,reachable ? 13 : 11,0,Math.PI*2); ctx.fill(); ctx.stroke();
-      const g=ctx.createRadialGradient(pt.x-4,pt.y-5,2,pt.x,pt.y,14);
-      g.addColorStop(0,'rgba(255,255,255,.75)'); g.addColorStop(1,'rgba(0,0,0,.12)');
-      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(pt.x,pt.y,reachable ? 12 : 10,0,Math.PI*2); ctx.fill();
-      ctx.strokeStyle='rgba(255,255,255,.82)'; ctx.lineWidth=2;
-      ctx.beginPath();
-      if(colorIndex(colorId) % 2){ ctx.moveTo(pt.x-6,pt.y); ctx.lineTo(pt.x+6,pt.y); }
-      else { ctx.moveTo(pt.x-5,pt.y); ctx.lineTo(pt.x+5,pt.y); ctx.moveTo(pt.x,pt.y-5); ctx.lineTo(pt.x,pt.y+5); }
-      ctx.stroke();
-      drawGameSprite(ctx,'pieces',12,pt.x-10,pt.y-10,20,20,.65);
-      if(reachable){ ctx.strokeStyle='rgba(255,255,255,.45)'; ctx.lineWidth=1; ctx.beginPath(); ctx.arc(pt.x,pt.y,15,0,Math.PI*2); ctx.stroke(); }
-      ctx.restore();
-    }
-    function draw(){
-      const bg=ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#c9ebff'); bg.addColorStop(.55,'#a9d7f5'); bg.addColorStop(1,'#bfe4ff'); ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);drawGameMaterial(ctx,3,0,0,W,H,.25);
-      ctx.save();
-      ctx.globalAlpha=.18; ctx.fillStyle='#ffffff';
-      ctx.beginPath(); ctx.moveTo(220,20); ctx.lineTo(380,90); ctx.lineTo(292,150); ctx.closePath(); ctx.fill();
-      ctx.beginPath(); ctx.moveTo(110,270); ctx.lineTo(230,330); ctx.lineTo(120,380); ctx.closePath(); ctx.fill();
-      ctx.restore();
-      const activePanels = panels.filter(p=>!p.gone).sort((a,b)=>a.z-b.z);
-      activePanels.forEach(p => {
-        drawPanel(p);
-        (p.screws || []).filter(s=>!s.gone).forEach(s => drawScrew(screwWorld(p, s), s.color, isScrewReachable(p, s)));
-      });
-      activePanels.forEach(p => {
-        (p.screws || []).filter(s=>!s.gone && isScrewReachable(p, s)).forEach(s => drawScrew(screwWorld(p, s), s.color, true));
-      });
+  } else if (panel.material === 'acrylic') {
+    ctx.fillStyle = 'rgba(255,255,255,.22)'; ctx.beginPath();
+    ctx.ellipse(-panel.w*.16,-panel.h*.2,panel.w*.28,panel.h*.08,-.12,0,Math.PI*2); ctx.fill();
+  }
+  ctx.restore();
+  for (const screw of panel.screws || []) {
+    ctx.save(); ctx.translate(screw.lx, screw.ly);
+    ctx.fillStyle = 'rgba(3,8,20,.74)'; ctx.shadowColor = 'rgba(0,0,0,.65)'; ctx.shadowBlur = 7;
+    ctx.beginPath(); ctx.arc(0, 2, 17, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
+    ctx.strokeStyle = 'rgba(255,255,255,.34)'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(0, 1, 16, Math.PI*1.05, Math.PI*1.82); ctx.stroke(); ctx.restore();
+  }
+  ctx.restore();
+}
+
+function drawBackground(ctx) {
+  const background = ctx.createLinearGradient(0, 0, 0, H);
+  background.addColorStop(0, '#101d37'); background.addColorStop(.52, '#0a1730'); background.addColorStop(1, '#071225');
+  ctx.fillStyle = background; ctx.fillRect(0, 0, W, H);
+  const halo = ctx.createRadialGradient(W*.5,H*.42,20,W*.5,H*.42,310);
+  halo.addColorStop(0,'rgba(78,139,208,.24)'); halo.addColorStop(.65,'rgba(34,78,137,.07)');
+  halo.addColorStop(1,'rgba(0,0,0,0)'); ctx.fillStyle = halo; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle = 'rgba(129,179,228,.12)';
+  for (let y = 24; y < H; y += 34) for (let x = 21 + (Math.floor(y / 34) % 2) * 16; x < W; x += 34) {
+    ctx.beginPath(); ctx.arc(x,y,1.2,0,Math.PI*2); ctx.fill();
+  }
+  ctx.save(); ctx.globalAlpha = .08; ctx.strokeStyle = '#a9d4ff'; ctx.lineWidth = 8; ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(-20,H*.14); ctx.lineTo(105,H*.03); ctx.stroke();
+  ctx.beginPath(); ctx.arc(W+20,H*.72,74,Math.PI*.65,Math.PI*1.55); ctx.stroke(); ctx.restore();
+  const vignette = ctx.createRadialGradient(W/2,H/2,170,W/2,H/2,390);
+  vignette.addColorStop(.45,'rgba(0,0,0,0)'); vignette.addColorStop(1,'rgba(0,2,12,.55)');
+  ctx.fillStyle = vignette; ctx.fillRect(0,0,W,H);
+}
+
+export function createGame(env, savedState) {
+  const win = env.getHostWindow(), doc = env.getHostDocument(), root = env.qs('#wb-gamebox');
+  const choice = env.choiceForState('screw', savedState);
+  const restored = restoreScrewState(savedState, choice.id);
+  let state = restored.state, destroyed = false, frameId = 0, lastFrameAt = 0, drawCount = 0;
+  let hint = null, shake = null, flights = [], falling = [], particles = [];
+  let statusText = '优先拧下与收纳盒同色的螺丝', resizeObserver = null;
+
+  root.innerHTML = [
+    '<section class="wb-screw-panel" data-screw-version="workshop-v2">',
+    '<header class="wb-screw-top">',
+    '<div class="wb-screw-level"><span>LEVEL</span><strong id="wb-screw-level">1</strong><small id="wb-screw-mode">经典闯关</small></div>',
+    '<div class="wb-screw-boxes" id="wb-screw-boxes" aria-label="当前收纳盒"></div>',
+    '<div class="wb-screw-next"><span>下一箱</span><i id="wb-screw-next-color"></i></div>',
+    '<div class="wb-screw-progress"><div id="wb-screw-progress-fill"></div><span id="wb-screw-progress-text">0%</span></div>',
+    '<div class="wb-screw-tray-wrap"><span>临时孔位</span><div class="wb-screw-tray" id="wb-screw-tray"></div></div>',
+    '<div class="wb-screw-toolbelt" aria-label="解谜工具">',
+    '<button type="button" class="wb-screw-tool" id="wb-screw-undo"><b>↶</b><span>撤销</span><em id="wb-screw-undo-left">3</em></button>',
+    '<button type="button" class="wb-screw-tool" id="wb-screw-hint"><b>⌖</b><span>提示</span><em id="wb-screw-hint-left">3</em></button>',
+    '<button type="button" class="wb-screw-tool" id="wb-screw-extra"><b>＋</b><span>加孔</span><em id="wb-screw-extra-left">1</em></button>',
+    '</div></header>',
+    '<div class="wb-screw-stage"><canvas class="wb-screw-canvas" id="wb-screw-canvas" aria-label="拧螺丝游戏板"></canvas>',
+    '<div class="wb-screw-callout" id="wb-screw-callout" role="status"></div>',
+    '<div class="wb-screw-result" id="wb-screw-result" hidden><div class="wb-screw-result-card">',
+    '<div class="wb-screw-result-stars" id="wb-screw-result-stars"></div><h3 id="wb-screw-result-title"></h3>',
+    '<p id="wb-screw-result-copy"></p><button type="button" class="wb-btn primary" id="wb-screw-result-primary"></button>',
+    '<button type="button" class="wb-btn" id="wb-screw-result-secondary"></button></div></div></div></section>',
+  ].join('');
+
+  const canvas = root.querySelector('#wb-screw-canvas');
+  const ctx = canvas.getContext('2d', { alpha:false, desynchronized:true });
+  const renderProfile = performancePixelRatio(win);
+  canvas.width = Math.round(W * renderProfile.value); canvas.height = Math.round(H * renderProfile.value);
+  canvas.dataset.screwArt = 'workshop-v2'; canvas.dataset.renderMode = renderProfile.mode;
+  ctx.setTransform(renderProfile.value, 0, 0, renderProfile.value, 0, 0); ctx.imageSmoothingEnabled = true;
+
+  const haptic = (pattern = 10) => { try { win.navigator?.vibrate?.(pattern); } catch {} };
+  function save(force = false) {
+    if (!destroyed) env.saveProgress('screw', Object.assign(structuredClone(state), env.choiceSavePatch('screw', choice)), force ? { immediate:true } : undefined);
+  }
+  const scoreNow = () => state.score + Math.round(progressPercent(state) * (4 + Math.min(6, state.level)));
+  const updateScore = () => env.setScore('screw', scoreNow());
+
+  function boxMarkup(box) {
+    const color = colorForScrew(box.color);
+    const holes = Array.from({ length:3 }, (_, index) =>
+      '<i class="wb-screw-box-hole ' + (index < box.fill ? 'filled' : '') + '">' +
+      (index < box.fill ? '<span style="--c:' + color.hex + ';--d:' + color.dark + ';--l:' + color.light + '"></span>' : '') + '</i>'
+    ).join('');
+    return '<div class="wb-screw-box" style="--c:' + color.hex + ';--d:' + color.dark + ';--l:' + color.light +
+      '" aria-label="' + color.name + ' ' + box.fill + '/3">' + holes + '<small>' + box.fill + '/3</small></div>';
+  }
+
+  function showResult() {
+    const overlay = root.querySelector('#wb-screw-result');
+    if (state.status === 'playing') { overlay.hidden = true; return; }
+    overlay.hidden = false;
+    const won = state.status === 'level_complete';
+    root.querySelector('#wb-screw-result-stars').textContent = won ? '★'.repeat(state.levelStars || 1) + '☆'.repeat(3 - (state.levelStars || 1)) : '⚙';
+    root.querySelector('#wb-screw-result-title').textContent = won ? '第 ' + state.level + ' 关完成' : '临时孔位已满';
+    root.querySelector('#wb-screw-result-copy').textContent = won ?
+      '本关奖励 ' + state.reward + ' 分 · ' + state.moves + ' 步完成' : '已完成 ' + progressPercent(state) + '%，调整顺序就能解开。';
+    const primary = root.querySelector('#wb-screw-result-primary'), secondary = root.querySelector('#wb-screw-result-secondary');
+    if (won) {
+      const campaignDone = state.mode === 'normal' && state.level >= SCREW_CAMPAIGN_LEVELS;
+      primary.textContent = campaignDone ? '完成经典工坊' : '进入第 ' + (state.level + 1) + ' 关';
+      primary.onclick = campaignDone ? finishCampaign : nextLevel; secondary.hidden = true;
+    } else {
+      primary.textContent = '重试本关'; primary.onclick = retryLevel;
+      secondary.hidden = false; secondary.textContent = '结算本局'; secondary.onclick = settleFailure;
     }
   }
-  startScrew(state);
-  return env.activeGameController || null;
+
+  function renderUI() {
+    const progress = progressPercent(state);
+    root.querySelector('#wb-screw-level').textContent = String(state.level);
+    root.querySelector('#wb-screw-mode').textContent = state.mode === 'endless' ? '无尽工坊' : '经典闯关 · ' + SCREW_CAMPAIGN_LEVELS + '关';
+    root.querySelector('#wb-screw-boxes').innerHTML = state.boxes.map(boxMarkup).join('');
+    const next = state.boxQueue[state.boxIndex], nextEl = root.querySelector('#wb-screw-next-color');
+    if (next) {
+      const color = colorForScrew(next);
+      nextEl.style.setProperty('--c', color.hex); nextEl.style.setProperty('--d', color.dark); nextEl.hidden = false;
+    } else nextEl.hidden = true;
+    root.querySelector('#wb-screw-progress-fill').style.width = progress + '%';
+    root.querySelector('#wb-screw-progress-text').textContent = progress + '%';
+    root.querySelector('#wb-screw-tray').innerHTML = Array.from({ length:state.trayCapacity }, (_, index) => {
+      const item = state.tray[index], color = item ? colorForScrew(item.color) : null;
+      return '<i class="wb-screw-slot ' + (item ? 'occupied' : '') + '">' +
+        (item ? '<span style="--c:' + color.hex + ';--d:' + color.dark + ';--l:' + color.light + '"></span>' : '') + '</i>';
+    }).join('');
+    for (const name of ['undo','hint','extra']) {
+      root.querySelector('#wb-screw-' + name + '-left').textContent = String(state.tools[name]);
+      const button = root.querySelector('#wb-screw-' + name);
+      button.disabled = state.status !== 'playing' || state.tools[name] <= 0 || (name === 'undo' && !state.history.length);
+    }
+    const callout = root.querySelector('#wb-screw-callout');
+    callout.textContent = statusText; callout.classList.toggle('warn', state.tray.length >= state.trayCapacity - 1);
+    showResult(); updateScore();
+  }
+
+  function drawBoard() {
+    drawCount += 1; canvas.dataset.drawCount = String(drawCount);
+    ctx.save(); ctx.setTransform(renderProfile.value, 0, 0, renderProfile.value, 0, 0); drawBackground(ctx);
+    const hits = reachableScrews(state), reachability = new Map(hits.map(hit => [hit.screw.id, hit.reachable]));
+    const active = new Set(state.boxes.map(box => box.color));
+    for (const panel of state.panels.filter(item => !item.gone).sort((a, b) => a.z - b.z)) {
+      const offset = shake?.panelId === panel.id ? Math.sin(shake.phase * Math.PI * 8) * 4 * (1 - shake.phase) : 0;
+      const visual = offset ? { ...panel, x:panel.x + offset } : panel;
+      drawPanel(ctx, visual);
+      for (const screw of panel.screws || []) {
+        if (screw.gone) continue;
+        const point = screwWorld(visual, screw), reachable = reachability.get(screw.id), highlighted = hint?.id === screw.id;
+        const pulse = highlighted ? 1 + Math.sin(hint.phase * Math.PI * 6) * .1 : 1;
+        drawScrew(ctx, screw.color, point.x, point.y, (highlighted ? 17 : 14) * pulse, 0,
+          highlighted || (reachable && active.has(screw.color)), reachable ? 1 : .9);
+        if (highlighted) {
+          ctx.strokeStyle = 'rgba(255,244,164,.94)'; ctx.lineWidth = 3; ctx.beginPath();
+          ctx.arc(point.x,point.y,25+Math.sin(hint.phase*Math.PI*6)*3,0,Math.PI*2); ctx.stroke();
+        }
+      }
+    }
+    for (const panel of falling) drawPanel(ctx, panel, { alpha:clamp(1 - Math.max(0, panel.time - .55) / .45, 0, 1) });
+    for (const flight of flights) {
+      const t = clamp(flight.time / flight.duration, 0, 1);
+      let x, y, scale;
+      if (t < .28) {
+        const p = easeOutCubic(t / .28); x = flight.x; y = flight.y - 30 * p; scale = 1 + .36 * p;
+      } else {
+        const p = (t - .28) / .72, eased = easeInCubic(p), sx = flight.x, sy = flight.y - 30;
+        x = sx + (flight.destX - sx) * eased; y = sy + (flight.destY - sy) * eased - Math.sin(p * Math.PI) * 58; scale = 1.36 - p * .56;
+      }
+      drawScrew(ctx, flight.color, x, y, 14 * scale, t * Math.PI * 7, true, 1 - Math.max(0, t - .82) / .18);
+    }
+    for (const particle of particles) {
+      const alpha = clamp(1 - particle.time / particle.duration, 0, 1);
+      ctx.globalAlpha = alpha; ctx.fillStyle = particle.color; ctx.beginPath();
+      ctx.arc(particle.x,particle.y,particle.size*alpha,0,Math.PI*2); ctx.fill(); ctx.globalAlpha = 1;
+    }
+    ctx.restore();
+  }
+
+  const hasAnimation = () => !!(flights.length || falling.length || particles.length || hint || shake);
+  function scheduleFrame() {
+    if (!destroyed && !frameId && hasAnimation() && !env.gamePaused) frameId = win.requestAnimationFrame(frame);
+  }
+  function frame(now) {
+    frameId = 0;
+    if (destroyed || env.gamePaused) { lastFrameAt = 0; return; }
+    if (!lastFrameAt) { lastFrameAt = now; drawBoard(); scheduleFrame(); return; }
+    const elapsed = clamp((now - lastFrameAt) / 1000, 0, .25); lastFrameAt = now;
+    flights.forEach(item => advanceFlight(item, elapsed)); falling.forEach(item => advanceFallingPanel(item, elapsed));
+    particles.forEach(item => { item.time += elapsed; item.x += item.vx * elapsed; item.y += item.vy * elapsed; item.vy += 260 * elapsed; });
+    if (hint) { hint.phase += elapsed; if (hint.phase >= 1.35) hint = null; }
+    if (shake) { shake.phase += elapsed / .42; if (shake.phase >= 1) shake = null; }
+    flights = flights.filter(item => item.time < item.duration);
+    falling = falling.filter(item => item.y - item.h / 2 < H + 90 && item.time < 1.1);
+    particles = particles.filter(item => item.time < item.duration);
+    drawBoard();
+    if (hasAnimation()) scheduleFrame(); else lastFrameAt = 0;
+  }
+
+  function confetti(point, color) {
+    const random = index => ((Math.imul(index + state.moves * 17, 2654435761) >>> 8) % 1000) / 1000;
+    for (let index = 0; index < 12; index += 1) {
+      const angle = random(index) * Math.PI * 2, speed = 42 + random(index + 20) * 86;
+      particles.push({ x:point.x, y:point.y, vx:Math.cos(angle)*speed, vy:Math.sin(angle)*speed-50,
+        size:2+random(index+40)*3, time:0, duration:.45+random(index+60)*.35, color });
+    }
+  }
+
+  function awardLevel() {
+    if (state.status !== 'level_complete' || state.reward > 0) return;
+    const toolsUsed = (3 - state.tools.hint) + (3 - state.tools.undo) + (1 - state.tools.extra);
+    const cleanBonus = (state.levelMaxTray || 0) <= 1 ? 220 : (state.levelMaxTray || 0) <= 3 ? 90 : 0;
+    state.reward = Math.max(360, 1180 + state.level * 55 + cleanBonus - state.moves * 14 - toolsUsed * 80);
+    state.levelStars = (state.levelMaxTray || 0) <= 1 && toolsUsed === 0 ? 3 : (state.levelMaxTray || 0) <= 3 ? 2 : 1;
+    state.score += state.reward; state.campaignStars += state.levelStars;
+  }
+
+  function handleTap(event) {
+    if (destroyed || env.gamePaused || state.status !== 'playing') return;
+    event.preventDefault();
+    const rect = canvas.getBoundingClientRect(), x = (event.clientX - rect.left) * W / rect.width, y = (event.clientY - rect.top) * H / rect.height;
+    const hit = reachableScrews(state).map(item => ({ ...item, distance:Math.hypot(item.point.x-x,item.point.y-y) }))
+      .filter(item => item.distance <= 28).sort((a,b) => a.distance-b.distance || b.panel.z-a.panel.z)[0];
+    if (!hit) return;
+    if (!hit.reachable) {
+      state.details.blocked += 1; shake = { panelId:hit.panel.id, phase:0 }; statusText = '这颗螺丝被上层板件压住了';
+      haptic([8,25,8]); renderUI(); drawBoard(); scheduleFrame(); return;
+    }
+    const beforePanel = structuredClone(hit.panel), beforeBoxes = state.boxes.map(box => box.color);
+    const result = applyScrew(state, hit.screw.id);
+    if (!result.ok) {
+      statusText = result.reason === 'tray_full' ? '临时孔位已满，先完成一个颜色盒' : '这颗螺丝暂时不能取下';
+      haptic([10,30,10]); renderUI(); return;
+    }
+    const boxPosition = Math.max(0, beforeBoxes.indexOf(hit.screw.color));
+    flights.push({ x:hit.point.x, y:hit.point.y, color:hit.screw.color,
+      destX:result.route === 'box' ? 132 + boxPosition * 78 : 140 + Math.min(state.tray.length, 5) * 28,
+      destY:-28, time:0, duration:.48 });
+    if (result.panelReleased) {
+      beforePanel.screws.forEach(screw => { screw.gone = true; });
+      falling.push({ ...beforePanel, vx:(beforePanel.x-W/2)*.34, vy:-48, va:beforePanel.x < W/2 ? -.75 : .75, time:0 });
+    }
+    const color = colorForScrew(hit.screw.color);
+    if (result.completedBoxes.length) {
+      statusText = color.name + '收纳完成，下一箱已就位'; confetti(hit.point, color.light); haptic([10,20,18]);
+    } else if (result.route === 'box') {
+      statusText = color.name + '螺丝收入收纳盒'; haptic(9); env.speak('screw','match');
+    } else {
+      statusText = color.name + '先放入临时孔位'; haptic(7);
+    }
+    if (state.tray.length === 4) env.speak('screw','tray_4');
+    if (result.completed) {
+      awardLevel(); statusText = '第 ' + state.level + ' 关完成'; env.speak('screw','progress_80'); haptic([18,40,25]);
+    }
+    if (result.failed) {
+      statusText = '临时孔位已满，换个顺序再试'; env.speak('screw','gameover'); haptic([25,45,25]);
+    }
+    save(true); renderUI(); drawBoard(); scheduleFrame();
+  }
+
+  function onUndo() {
+    if (env.gamePaused || !undoScrew(state)) return;
+    flights=[]; falling=[]; particles=[]; hint=null; shake=null; statusText='已撤销上一步';
+    haptic(8); save(true); renderUI(); drawBoard();
+  }
+  function onHint() {
+    if (env.gamePaused) return;
+    const id = useHint(state); if (!id) return;
+    hint={id,phase:0}; statusText='发光的螺丝可以安全取下';
+    haptic(7); save(true); renderUI(); drawBoard(); scheduleFrame();
+  }
+  function onExtra() {
+    if (env.gamePaused || !addTraySlot(state)) return;
+    statusText='增加了一个临时孔位'; haptic([8,18,8]); env.speak('screw','add_box');
+    save(true); renderUI(); drawBoard();
+  }
+  function retryLevel() {
+    state = createScrewState({ level:state.level, mode:state.mode, score:state.score, campaignStars:state.campaignStars, details:state.details });
+    statusText='重新规划顺序，这次一定能解开'; flights=[]; falling=[]; particles=[]; hint=null; shake=null;
+    save(true); renderUI(); drawBoard();
+  }
+  function nextLevel() {
+    state=beginNextScrewLevel(state);
+    statusText=state.level >= 4 ? '留意被遮住的螺丝与下一箱颜色' : '优先拧下与收纳盒同色的螺丝';
+    flights=[]; falling=[]; particles=[]; hint=null; shake=null;
+    save(true); renderUI(); drawBoard(); env.speak('screw','start');
+  }
+  function finishCampaign() {
+    if (destroyed) return;
+    state.details.completed=true; state.details.progress=100; env.clearProgress('screw');
+    env.showGameOver('screw','经典工坊完成','总分：'+state.score+'分 · '+SCREW_CAMPAIGN_LEVELS+'关 · '+state.campaignStars+'颗星',
+      null,{completed:true,score:state.score,progress:100,levels:SCREW_CAMPAIGN_LEVELS,details:structuredClone(state.details)});
+  }
+  function settleFailure() {
+    if (destroyed) return;
+    const final=scoreNow(); state.details.completed=false; env.clearProgress('screw');
+    env.showGameOver('screw','本局结束','本局分数：'+final+'分，完成'+progressPercent(state)+'%',
+      null,{completed:false,score:final,progress:progressPercent(state),details:structuredClone(state.details)});
+  }
+  function onContextMenu(event) { if (event.target === canvas || canvas.contains?.(event.target)) event.preventDefault(); }
+  function onVisibility() { if (doc.hidden) onPause(); else if (!env.gamePaused) onResume(); }
+  function onPause() {
+    if (frameId) win.cancelAnimationFrame(frameId);
+    frameId=0; lastFrameAt=0; save(true);
+  }
+  function onResume() { if (!destroyed) { lastFrameAt=0; drawBoard(); scheduleFrame(); } }
+  function getState() {
+    return Object.assign(structuredClone(state), {
+      fullscreen:false, render:{mode:renderProfile.mode,pixelRatio:renderProfile.value,drawCount,idle:!frameId&&!hasAnimation()},
+      liveScrews:allLiveScrews(state).length,
+    });
+  }
+  function destroy() {
+    if (destroyed) return;
+    save(true); destroyed=true;
+    if (frameId) win.cancelAnimationFrame(frameId);
+    frameId=0; resizeObserver?.disconnect();
+    canvas.removeEventListener('pointerdown',handleTap); canvas.removeEventListener('contextmenu',onContextMenu);
+    doc.removeEventListener('visibilitychange',onVisibility);
+    flights=[]; falling=[]; particles=[]; hint=null; shake=null;
+  }
+
+  const controller={save,destroy,getState,onPause,onResume};
+  env.activeGameController=controller;
+  canvas.addEventListener('pointerdown',handleTap,{passive:false});
+  canvas.addEventListener('contextmenu',onContextMenu);
+  doc.addEventListener('visibilitychange',onVisibility);
+  root.querySelector('#wb-screw-undo').onclick=onUndo;
+  root.querySelector('#wb-screw-hint').onclick=onHint;
+  root.querySelector('#wb-screw-extra').onclick=onExtra;
+  if (win.ResizeObserver) {
+    resizeObserver=new win.ResizeObserver(() => { if (!destroyed) drawBoard(); });
+    resizeObserver.observe(canvas);
+  }
+  if (restored.migrated) {
+    statusText='关卡系统已升级，旧进度已转换为公平新关卡';
+    env.toast?.('拧螺丝已升级为经典关卡，原分数已保留');
+  }
+  awardLevel(); renderUI(); drawBoard(); save(true); env.scheduleFitGameSurface?.();
+  return controller;
 }
