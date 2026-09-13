@@ -1,11 +1,11 @@
-// Installed Android regression for the preserved Screw 1.0.0 package.
+// Installed Android regression for the Screw game preserved from our fork baseline.
 // Launch/setup state is inspected through CDP; every visible control and screw
 // interaction uses Android shell input against the real system WebView.
 import assert from 'node:assert/strict';
 import {mkdirSync,writeFileSync} from 'node:fs';
 import {connect,adb,screenshot,activity} from './android-driver.mjs';
 
-const out=process.env.QA_OUT||'docs/evidence/screw-classic-1.0.0/android-emulator';
+const out=process.env.QA_OUT||'docs/evidence/screw-classic-1.0.1/android-emulator';
 mkdirSync(out,{recursive:true});
 const packageName=activity.split('/')[0],checks=[];
 let client,inputOffsetY=0,failure=null;
@@ -80,7 +80,7 @@ try{
   state=await until(stored,'endless save');
   assert.equal(state.choice,'endless');assert.ok(state.panels.length>=28&&state.panels.length<=32);assert.equal(state.details.endlessLayers,1);
   screenshot(`${out}/endless-original.png`);
-  checks.push({check:'original endless mode restores its first-package board and continuous-layer state',panels:state.panels.length,layers:state.details.endlessLayers});
+  checks.push({check:'original endless mode restores its fork-baseline board and continuous-layer state',panels:state.panels.length,layers:state.details.endlessLayers});
   assert.deepEqual(client.errors,[]);
   console.log(JSON.stringify({passed:true,checks},null,2));
 }catch(error){

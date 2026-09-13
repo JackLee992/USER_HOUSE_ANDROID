@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "snapshotVersion": "1.6.6",
+  "snapshotVersion": "1.6.7",
   "packages": {
-    "core": "1.4.4",
+    "core": "1.4.5",
     "art.shared": "1.0.1",
     "art.blackjack": "1.0.1",
     "art.bombnumber": "1.0.1",
@@ -27,7 +27,7 @@
     "art.popstar": "1.0.1",
     "art.reversi": "1.0.1",
     "art.screw": "1.2.1",
-    "art.screwclassic": "1.0.0",
+    "art.screwclassic": "1.0.1",
     "art.shuerte": "1.0.1",
     "art.snake": "1.0.1",
     "art.spider": "1.0.1",
