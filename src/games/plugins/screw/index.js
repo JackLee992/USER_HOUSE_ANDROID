@@ -19,7 +19,7 @@ import {
 } from './model.js';
 
 export const GAME_ID = 'screw';
-export const GAME_VERSION = '1.2.1';
+export const GAME_VERSION = '1.2.2';
 export const HOST_API_VERSION = 1;
 export const REQUIRED_ENV = Object.freeze([
   'activeGameController','choiceForState','choiceSavePatch','clearProgress','currentGameDurationMs',
@@ -101,6 +101,7 @@ function drawScrew(ctx, colorId, x, y, radius = 14, rotation = 0, glow = false, 
 function drawPanel(ctx, panel, options = {}) {
   const tint = PANEL_TINTS[panel.tint % PANEL_TINTS.length];
   ctx.save(); ctx.translate(panel.x, panel.y); ctx.rotate(panel.a || 0); ctx.globalAlpha *= options.alpha ?? 1;
+  if (options.filter && 'filter' in ctx) ctx.filter = options.filter;
   ctx.shadowColor = 'rgba(91,59,80,.24)'; ctx.shadowBlur = 15; ctx.shadowOffsetY = 9;
   panelPath(ctx, panel); ctx.fillStyle = '#7f6174'; ctx.fill();
   ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
@@ -137,6 +138,10 @@ function drawPanel(ctx, panel, options = {}) {
   } else if (panel.material === 'acrylic') {
     ctx.fillStyle = 'rgba(255,255,255,.22)'; ctx.beginPath();
     ctx.ellipse(-panel.w*.16,-panel.h*.2,panel.w*.28,panel.h*.08,-.12,0,Math.PI*2); ctx.fill();
+  }
+  if (options.fog) {
+    ctx.fillStyle = `rgba(250,247,248,${options.fog})`;
+    panelPath(ctx, panel); ctx.fill();
   }
   ctx.restore();
   for (const screw of panel.screws || []) {
@@ -175,7 +180,7 @@ export function createGame(env, savedState) {
   const win = env.getHostWindow(), doc = env.getHostDocument(), root = env.qs('#wb-gamebox');
   const choice = env.choiceForState('screw', savedState);
   const restored = restoreScrewState(savedState, choice.id);
-  let state = restored.state, destroyed = false, frameId = 0, lastFrameAt = 0, drawCount = 0;
+  let state = restored.state, destroyed = false, frameId = 0, lastFrameAt = 0, drawCount = 0, staticBuildCount = 0;
   let hint = null, shake = null, flights = [], falling = [], particles = [];
   let statusText = state.mode === 'endless' ? '持续收纳，板件会自动补入' : '优先拧下与收纳盒同色的螺丝', resizeObserver = null;
 
@@ -204,8 +209,14 @@ export function createGame(env, savedState) {
   const ctx = canvas.getContext('2d', { alpha:false, desynchronized:true });
   const renderProfile = performancePixelRatio(win);
   canvas.width = Math.round(W * renderProfile.value); canvas.height = Math.round(H * renderProfile.value);
-  canvas.dataset.screwArt = 'atelier-v3'; canvas.dataset.renderMode = renderProfile.mode;
+  canvas.dataset.screwArt = 'atelier-v3'; canvas.dataset.renderMode = renderProfile.mode; canvas.dataset.depthFocus = 'layered-v1';
   ctx.setTransform(renderProfile.value, 0, 0, renderProfile.value, 0, 0); ctx.imageSmoothingEnabled = true;
+  const staticLayer = doc.createElement('canvas');
+  staticLayer.width = canvas.width; staticLayer.height = canvas.height;
+  const staticCtx = staticLayer.getContext('2d', { alpha:false, desynchronized:true });
+  staticCtx.imageSmoothingEnabled = true;
+  let staticDirty = true;
+  const invalidateBoard = () => { staticDirty = true; };
 
   const haptic = (pattern = 10) => { try { win.navigator?.vibrate?.(pattern); } catch {} };
   function save(force = false) {
@@ -280,25 +291,68 @@ export function createGame(env, savedState) {
     showResult(); updateScore();
   }
 
-  function drawBoard() {
-    drawCount += 1; canvas.dataset.drawCount = String(drawCount);
-    ctx.save(); ctx.setTransform(renderProfile.value, 0, 0, renderProfile.value, 0, 0); drawBackground(ctx);
+  function depthStyle(index, count, reachablePanel) {
+    const frontness = count <= 1 ? 1 : index / (count - 1);
+    if (frontness >= .72) return { alpha:1, filter:'none', fog:0 };
+    if (frontness >= .38) return {
+      alpha:reachablePanel ? .82 : .62,
+      filter:'saturate(.72) contrast(.94) blur(.35px)',
+      fog:reachablePanel ? .04 : .1,
+    };
+    return {
+      alpha:reachablePanel ? .66 : .4,
+      filter:'saturate(.5) brightness(1.08) blur(1.05px)',
+      fog:reachablePanel ? .1 : .18,
+    };
+  }
+
+  function paintStaticBoard(target, activeShake = null) {
+    target.save(); target.setTransform(renderProfile.value, 0, 0, renderProfile.value, 0, 0); drawBackground(target);
     const hits = reachableScrews(state), reachability = new Map(hits.map(hit => [hit.screw.id, hit.reachable]));
+    const reachablePanels = new Set(hits.filter(hit => hit.reachable).map(hit => hit.panel.id));
     const active = new Set(state.boxes.map(box => box.color));
-    for (const panel of state.panels.filter(item => !item.gone).sort((a, b) => a.z - b.z)) {
-      const offset = shake?.panelId === panel.id ? Math.sin(shake.phase * Math.PI * 8) * 4 * (1 - shake.phase) : 0;
+    const panels = state.panels.filter(item => !item.gone).sort((a, b) => a.z - b.z);
+    for (let index = 0; index < panels.length; index += 1) {
+      const panel = panels[index];
+      const offset = activeShake?.panelId === panel.id ? Math.sin(activeShake.phase * Math.PI * 8) * 4 * (1 - activeShake.phase) : 0;
       const visual = offset ? { ...panel, x:panel.x + offset } : panel;
-      drawPanel(ctx, visual);
+      const depth = depthStyle(index, panels.length, reachablePanels.has(panel.id));
+      drawPanel(target, visual, depth);
       for (const screw of panel.screws || []) {
         if (screw.gone) continue;
-        const point = screwWorld(visual, screw), reachable = reachability.get(screw.id), highlighted = hint?.id === screw.id;
-        const pulse = highlighted ? 1 + Math.sin(hint.phase * Math.PI * 6) * .1 : 1;
-        drawScrew(ctx, screw.color, point.x, point.y, (highlighted ? 17 : 14) * pulse, 0,
-          highlighted || (reachable && active.has(screw.color)), reachable ? 1 : .9);
-        if (highlighted) {
-          ctx.strokeStyle = 'rgba(255,244,164,.94)'; ctx.lineWidth = 3; ctx.beginPath();
-          ctx.arc(point.x,point.y,25+Math.sin(hint.phase*Math.PI*6)*3,0,Math.PI*2); ctx.stroke();
-        }
+        const point = screwWorld(visual, screw), reachable = !!reachability.get(screw.id);
+        target.save();
+        if (!reachable && 'filter' in target) target.filter = 'grayscale(.72) saturate(.35) brightness(1.08)';
+        drawScrew(target, screw.color, point.x, point.y, reachable ? 14 : 12.5, 0,
+          reachable && active.has(screw.color), reachable ? 1 : Math.max(.22, depth.alpha * .5));
+        target.restore();
+      }
+    }
+    target.restore();
+  }
+
+  function ensureStaticBoard() {
+    if (!staticDirty) return;
+    staticCtx.save(); staticCtx.setTransform(1,0,0,1,0,0); staticCtx.clearRect(0,0,staticLayer.width,staticLayer.height); staticCtx.restore();
+    paintStaticBoard(staticCtx);
+    staticDirty = false; staticBuildCount += 1;
+  }
+
+  function drawBoard() {
+    drawCount += 1; canvas.dataset.drawCount = String(drawCount);
+    if (shake) paintStaticBoard(ctx, shake);
+    else {
+      ensureStaticBoard();
+      ctx.save(); ctx.setTransform(1,0,0,1,0,0); ctx.drawImage(staticLayer,0,0); ctx.restore();
+    }
+    ctx.save(); ctx.setTransform(renderProfile.value, 0, 0, renderProfile.value, 0, 0);
+    if (hint) {
+      const highlighted = allLiveScrews(state).find(hit => hit.screw.id === hint.id);
+      if (highlighted) {
+        const pulse = 1 + Math.sin(hint.phase * Math.PI * 6) * .1;
+        drawScrew(ctx, highlighted.screw.color, highlighted.point.x, highlighted.point.y, 17 * pulse, 0, true, 1);
+        ctx.strokeStyle = 'rgba(255,244,164,.94)'; ctx.lineWidth = 3; ctx.beginPath();
+        ctx.arc(highlighted.point.x,highlighted.point.y,25+Math.sin(hint.phase*Math.PI*6)*3,0,Math.PI*2); ctx.stroke();
       }
     }
     for (const panel of falling) drawPanel(ctx, panel, { alpha:clamp(1 - Math.max(0, panel.time - .55) / .45, 0, 1) });
@@ -379,6 +433,7 @@ export function createGame(env, savedState) {
       } else statusText = result.reason === 'tray_full' ? '临时孔位已满，先完成一个颜色盒' : '这颗螺丝暂时不能取下';
       haptic([10,30,10]); renderUI(); drawBoard(); return;
     }
+    invalidateBoard();
     const boxPosition = Math.max(0, beforeBoxes.indexOf(hit.screw.color));
     const boxSpan = beforeBoxes.length > 1 ? 264 / (beforeBoxes.length - 1) : 0;
     flights.push({ x:hit.point.x, y:hit.point.y, color:hit.screw.color,
@@ -411,6 +466,7 @@ export function createGame(env, savedState) {
 
   function onUndo() {
     if (env.gamePaused || !undoScrew(state)) return;
+    invalidateBoard();
     flights=[]; falling=[]; particles=[]; hint=null; shake=null; statusText='已撤销上一步';
     haptic(8); save(true); renderUI(); drawBoard();
   }
@@ -424,6 +480,7 @@ export function createGame(env, savedState) {
     if (env.gamePaused) return;
     const added = state.mode === 'endless' ? addEndlessBox(state) : addTraySlot(state);
     if (!added) return;
+    invalidateBoard();
     statusText = state.mode === 'endless' ? '增加了一个收纳盒，计分倍率已调整' : '增加了一个临时孔位';
     haptic([8,18,8]); env.speak('screw','add_box');
     save(true); renderUI(); drawBoard();
@@ -432,12 +489,14 @@ export function createGame(env, savedState) {
     const endless = state.mode === 'endless';
     state = createScrewState({ level:endless ? 1 : state.level, mode:state.mode, score:endless ? 0 : state.score,
       campaignStars:state.campaignStars, details:endless ? undefined : state.details });
+    invalidateBoard();
     statusText = endless ? '新的无尽收纳开始，板件会持续补入' : '重新规划顺序，这次一定能解开';
     flights=[]; falling=[]; particles=[]; hint=null; shake=null;
     save(true); renderUI(); drawBoard();
   }
   function nextLevel() {
     state=beginNextScrewLevel(state);
+    invalidateBoard();
     statusText=state.level >= 4 ? '留意被遮住的螺丝与下一箱颜色' : '优先拧下与收纳盒同色的螺丝';
     flights=[]; falling=[]; particles=[]; hint=null; shake=null;
     save(true); renderUI(); drawBoard(); env.speak('screw','start');
@@ -466,7 +525,7 @@ export function createGame(env, savedState) {
   function onResume() { if (!destroyed) { lastFrameAt=0; drawBoard(); scheduleFrame(); } }
   function getState() {
     return Object.assign(structuredClone(state), {
-      fullscreen:false, render:{mode:renderProfile.mode,pixelRatio:renderProfile.value,drawCount,idle:!frameId&&!hasAnimation()},
+      fullscreen:false, render:{mode:renderProfile.mode,pixelRatio:renderProfile.value,drawCount,staticBuildCount,depthFocus:canvas.dataset.depthFocus,idle:!frameId&&!hasAnimation()},
       liveScrews:allLiveScrews(state).length,
     });
   }
@@ -475,6 +534,7 @@ export function createGame(env, savedState) {
     save(true); destroyed=true;
     if (frameId) win.cancelAnimationFrame(frameId);
     frameId=0; resizeObserver?.disconnect();
+    staticLayer.width=0; staticLayer.height=0;
     canvas.removeEventListener('pointerdown',handleTap); canvas.removeEventListener('contextmenu',onContextMenu);
     doc.removeEventListener('visibilitychange',onVisibility);
     flights=[]; falling=[]; particles=[]; hint=null; shake=null;

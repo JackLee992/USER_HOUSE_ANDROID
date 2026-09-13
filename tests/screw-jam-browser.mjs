@@ -5,7 +5,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 
 const port = Number(process.env.CDP_PORT || 9357);
 const origin = process.env.QA_ORIGIN || 'http://127.0.0.1:8877';
-const out = process.env.QA_OUT || '.local/qa-screw-jam-1.2.1/browser';
+const out = process.env.QA_OUT || '.local/qa-screw-jam-1.2.2/browser';
 mkdirSync(out, { recursive:true });
 
 const tabs = await (await fetch(`http://127.0.0.1:${port}/json`)).json();
@@ -160,6 +160,7 @@ try {
     assert.equal(current.raw.width, 420 * ratio);
     assert.equal(current.raw.height, 560 * ratio);
     assert.equal(current.art, 'atelier-v3');
+    assert.equal(current.state.render.depthFocus, 'layered-v1');
     assert.equal(current.boxes, 3);
     assert.equal(current.slots, 5);
     assert.ok(current.canvas.x >= current.gamebox.x - 1 && current.canvas.right <= current.gamebox.right + 1);
@@ -191,10 +192,12 @@ try {
   assert.equal((await layout()).state.render.drawCount, idleDrawCount, 'idle board stops requesting frames');
 
   const hintBefore = initial.state.tools.hint;
+  const staticBuildsBeforeHint = initial.state.render.staticBuildCount;
   await touch('#wb-screw-hint');
   assert.equal((await layout()).state.tools.hint, hintBefore - 1);
   await until('wanbaApp.inspect().controller.render.idle', 4000);
-  checks.push({ check:'hint uses a real touch and animation returns to idle' });
+  assert.equal((await layout()).state.render.staticBuildCount, staticBuildsBeforeHint, 'hint animation reuses the cached board');
+  checks.push({ check:'hint uses a real touch, retains layered depth focus, and reuses the cached board' });
 
   const first = await playSafeMove();
   console.log('PHASE pause-undo');
