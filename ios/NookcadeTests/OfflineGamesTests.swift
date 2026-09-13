@@ -154,6 +154,74 @@ final class OfflineGamesTests: XCTestCase {
         _ = try await value("wanbaApp.openShellTab('single')")
         _ = try await value("wanbaApp.importBackup(\(quotedBackup)[0],true)")
     }
+    func testClassicAndCrazyScrewModesAndStorageIsolation() async throws {
+        try await waitFor("!!window.wanbaApp", seconds: 45)
+        continueAfterFailure = false
+        let backup = try await value("wanbaApp.backupData()") as! String
+        let quotedBackup = String(data: try JSONSerialization.data(withJSONObject: [backup]), encoding: .utf8)!
+        func startClassic(_ choice: String) async throws {
+            _ = try await value("wanbaApp.launch('screwclassic','single')")
+            try await waitFor("!!document.querySelector('#wb-start-cover-btn')", seconds: 5)
+            _ = try await value("(()=>{document.querySelector('#wb-start-cover-btn').click();return true})()")
+            try await waitFor("!!document.querySelector('[data-choice=\"\(choice)\"]')", seconds: 5)
+            _ = try await value("(()=>{document.querySelector('[data-choice=\"\(choice)\"]').click();return true})()")
+            try await waitFor("wanbaApp.inspect().started&&!!document.querySelector('#wb-screw-canvas')", seconds: 5)
+            _ = try await value("(wanbaApp.save(),true)")
+        }
+        do {
+            _ = try await value("wanbaApp.openShellTab('single')")
+            let cleared = try await value("(()=>{const data=JSON.parse(\(quotedBackup)[0]);data.items.wanbanXiaowu_progress_v1={};return wanbaApp.importBackup(JSON.stringify(data),true)})()") as! [String: Any]
+            XCTAssertEqual(cleared["ok"] as? Bool, true)
+            try await startClassic("normal")
+            let normal = try await value("JSON.parse(localStorage.getItem('wanbanXiaowu_progress_v1')).screwclassic") as! [String: Any]
+            XCTAssertEqual(normal["choice"] as? String, "normal")
+            XCTAssertTrue((42...47).contains((normal["panels"] as! [[String: Any]]).count))
+            let pointer = try await value("""
+                (()=>{wanbaApp.save();const key='wanbanXiaowu_progress_v1',before=JSON.parse(localStorage.getItem(key)).screwclassic;
+                const panel=before.panels.filter(item=>!item.gone&&!item.falling).sort((a,b)=>b.z-a.z)[0],screw=panel.screws.find(item=>!item.gone);
+                const ca=Math.cos(panel.a||0),sa=Math.sin(panel.a||0),x=panel.x+screw.lx*ca-screw.ly*sa,y=panel.y+screw.lx*sa+screw.ly*ca;
+                const canvas=document.querySelector('#wb-screw-canvas'),rect=canvas.getBoundingClientRect(),clientX=rect.left+x/420*rect.width,clientY=rect.top+y/560*rect.height;
+                const targetIsCanvas=document.elementFromPoint(clientX,clientY)===canvas,removed=before.details.removed||0;
+                canvas.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true,cancelable:true,clientX,clientY,pointerId:31,pointerType:'touch',isPrimary:true}));wanbaApp.save();
+                const after=JSON.parse(localStorage.getItem(key)).screwclassic;
+                window.__classicScrewFormal=JSON.stringify({choice:after.choice,removed:after.details.removed,panels:after.panels.map(panel=>({id:panel.id,z:panel.z,gone:panel.gone,screws:panel.screws.map(s=>[s.id,s.gone])})),tray:after.tray,boxes:after.boxes.map(box=>[box.color,box.fill])});
+                return {targetIsCanvas,before:removed,after:after.details.removed||0};})()
+                """) as! [String: Any]
+            XCTAssertEqual(pointer["targetIsCanvas"] as? Bool, true)
+            XCTAssertEqual(pointer["after"] as? Int, (pointer["before"] as! Int) + 1)
+
+            _ = try await value("wanbaApp.openShellTab('single')")
+            _ = try await value("wanbaApp.launch('screw','single')")
+            _ = try await value("(()=>{document.querySelector('#wb-start-cover-btn').click();return true})()")
+            try await waitFor("!!document.querySelector('[data-choice=normal]')", seconds: 5)
+            _ = try await value("(()=>{document.querySelector('[data-choice=normal]').click();return true})()")
+            try await waitFor("wanbaApp.inspect().started&&!!wanbaApp.inspect().controller", seconds: 5)
+            let isolated = try await value("(()=>{wanbaApp.save();const all=JSON.parse(localStorage.getItem('wanbanXiaowu_progress_v1')),classic=all.screwclassic;const classicFormal=JSON.stringify({choice:classic.choice,removed:classic.details.removed,panels:classic.panels.map(panel=>({id:panel.id,z:panel.z,gone:panel.gone,screws:panel.screws.map(s=>[s.id,s.gone])})),tray:classic.tray,boxes:classic.boxes.map(box=>[box.color,box.fill])});return {classicSame:classicFormal===window.__classicScrewFormal,hasCrazy:!!all.screw,crazyVersion:wanbaApp.inspect().games.find(item=>item.id==='screw').content.gameVersion,classicVersion:wanbaApp.inspect().games.find(item=>item.id==='screwclassic').content.gameVersion};})()") as! [String: Any]
+            XCTAssertEqual(isolated["classicSame"] as? Bool, true)
+            XCTAssertEqual(isolated["hasCrazy"] as? Bool, true)
+            XCTAssertEqual(isolated["classicVersion"] as? String, "1.0.1")
+            XCTAssertEqual(isolated["crazyVersion"] as? String, "1.3.1")
+
+            _ = try await value("wanbaApp.openShellTab('single')")
+            _ = try await value("(()=>{const state=JSON.parse(localStorage.getItem('wanbanXiaowu_progress_v1')).screw;window.__crazyScrewFormal=JSON.stringify({choice:state.choice,mode:state.mode,level:state.level,moves:state.moves,panels:state.panels.map(panel=>({id:panel.id,z:panel.z,order:panel.order,screws:panel.screws.map(s=>[s.id,s.gone])})),removed:state.details.removed});return true})()")
+            let classicCleared = try await value("(()=>{const key='wanbanXiaowu_progress_v1',data=JSON.parse(wanbaApp.backupData());delete data.items[key].screwclassic;return wanbaApp.importBackup(JSON.stringify(data),true)})()") as! [String: Any]
+            XCTAssertEqual(classicCleared["ok"] as? Bool, true)
+            try await startClassic("endless")
+            let endless = try await value("(()=>{wanbaApp.save();const all=JSON.parse(localStorage.getItem('wanbanXiaowu_progress_v1')),state=all.screw;const crazyFormal=JSON.stringify({choice:state.choice,mode:state.mode,level:state.level,moves:state.moves,panels:state.panels.map(panel=>({id:panel.id,z:panel.z,order:panel.order,screws:panel.screws.map(s=>[s.id,s.gone])})),removed:state.details.removed});return {choice:all.screwclassic.choice,panels:all.screwclassic.panels.length,crazySame:crazyFormal===window.__crazyScrewFormal,label:document.querySelector('#wb-screw-progress-text').textContent};})()") as! [String: Any]
+            XCTAssertEqual(endless["choice"] as? String, "endless")
+            XCTAssertTrue((28...32).contains(endless["panels"] as! Int))
+            XCTAssertEqual(endless["crazySame"] as? Bool, true)
+            XCTAssertTrue((endless["label"] as! String).hasPrefix("收纳盒子 "))
+            let evidenceData = try JSONSerialization.data(withJSONObject: ["normalPanels": (normal["panels"] as! [[String: Any]]).count, "pointer": pointer, "isolation": isolated, "endless": endless], options: [.prettyPrinted, .sortedKeys])
+            let evidence = XCTAttachment(data: evidenceData, uniformTypeIdentifier: "public.json"); evidence.name = "ios-screwclassic-crazy-regression"; evidence.lifetime = .keepAlways; add(evidence)
+        } catch {
+            _ = try? await value("wanbaApp.openShellTab('single')")
+            _ = try? await value("wanbaApp.importBackup(\(quotedBackup)[0],true)")
+            throw error
+        }
+        _ = try await value("wanbaApp.openShellTab('single')")
+        _ = try await value("wanbaApp.importBackup(\(quotedBackup)[0],true)")
+    }
     func testAll38BundledGamesAndWasm() async throws {
         try await waitFor("!!window.wanbaApp", seconds: 45)
         let capability = try await value("({origin:location.origin, secure:isSecureContext, wasm:typeof WebAssembly.instantiate==='function', gl:!!document.createElement('canvas').getContext('webgl'), games:wanbaApp.catalog().games.length, app:wanbaApp.catalog().appInfo})") as! [String: Any]

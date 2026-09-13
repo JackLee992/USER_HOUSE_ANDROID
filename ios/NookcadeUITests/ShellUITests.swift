@@ -6,8 +6,16 @@ final class ShellUITests: XCTestCase {
     private let resumeLabels = ["继续", "繼續", "Resume", "Continue", "再開", "冒険を続ける", "계속", "계속하기"]
     private let saveExitLabels = ["保存并退出", "儲存並退出", "Save & exit", "保存して終了", "저장 후 나가기"]
     private let continueSavedLabels = ["继续上次", "繼續上次", "Continue saved game", "続きから", "이어 하기"]
+    private let startLabels = ["开始游戏", "開始遊戲", "Play", "ゲーム開始", "게임 시작"]
+    private let endlessLabels = ["无尽模式", "無盡模式", "Endless mode", "エンドレスモード", "무한 모드"]
+    private let screwCompleteLabels = ["拧螺丝完成", "擰螺絲完成", "Screw Sort complete", "ねじ外し完了", "나사 풀기 완료"]
+    private let classicWorkshopLabels = ["经典工坊", "經典工坊", "Classic workshop", "クラシック工房", "클래식 공방"]
+    private let levelHeaderLabels = ["关卡", "關卡", "Level", "レベル", "단계"]
     private func button(_ query: XCUIElementQuery, labels: [String]) -> XCUIElement {
         query.matching(NSPredicate(format: "label IN %@", labels)).firstMatch
+    }
+    private func buttonBeginning(_ query: XCUIElementQuery, labels: [String]) -> XCUIElement {
+        query.matching(NSCompoundPredicate(orPredicateWithSubpredicates: labels.map { NSPredicate(format: "label BEGINSWITH %@", $0) })).firstMatch
     }
     private func alert(_ app: XCUIApplication, labels: [String]) -> XCUIElement {
         app.alerts.matching(NSPredicate(format: "label IN %@", labels)).firstMatch
@@ -114,7 +122,7 @@ final class ShellUITests: XCTestCase {
         XCTAssertTrue(launch.isHittable); launch.tap()
         let restart = app.webViews.buttons.matching(NSPredicate(format: "label IN %@", ["重新开始", "Start over"])).firstMatch
         if restart.waitForExistence(timeout: 2) { restart.tap() }
-        let start = app.webViews.buttons.matching(NSPredicate(format: "label IN %@", ["开始游戏", "Play"])).firstMatch
+        let start = button(app.webViews.buttons, labels: startLabels)
         if start.waitForExistence(timeout: 8) { start.tap() }
     }
     func testSnakeAndTetrisRealControls() throws {
@@ -283,5 +291,69 @@ final class ShellUITests: XCTestCase {
         XCTAssertTrue(continueSaved.waitForExistence(timeout: 10)); capture("bubble-cold-continue-prompt", app: app); continueSaved.tap()
         XCTAssertTrue(app.webViews.buttons["切换当前泡泡和下一个泡泡"].waitForExistence(timeout: 15)); sleep(1)
         button(app.webViews.buttons, labels: pauseLabels).tap(); capture("bubble-cold-continued", app: app); button(app.webViews.buttons, labels: backLabels).tap()
+    }
+    func testClassicScrewRealTouchColdRestoreAndCrazyIsolation() throws {
+        continueAfterFailure = false
+        XCUIDevice.shared.orientation = .portrait
+        let fixture: [String: Any] = [
+            "screwclassic": [
+                "savedAt": 1, "choice": "normal", "difficulty": "normal",
+                "panels": [["id":"fixture", "z":0, "shape":"capsule", "x":210, "y":200, "w":160, "h":60, "a":0, "color":"rgba(153,105,241,.58)", "vx":0, "vy":0, "va":0, "gone":false, "falling":false, "hanging":false,
+                            "screws":[["id":"fixture-s0", "lx":-40, "ly":0, "color":"red", "gone":false], ["id":"fixture-s1", "lx":40, "ly":0, "color":"red", "gone":false]]]],
+                "boxQueue":["red","cyan","green"], "boxes":[["color":"red","fill":0],["color":"cyan","fill":0],["color":"green","fill":0]], "boxIndex":3, "maxBoxes":3, "addBoxUses":0, "tray":[], "seen":[:], "details":["removed":0,"packed":0,"matches":0,"fallen":0,"maxTray":0,"trayFourCount":0,"trayFullCount":0,"addBoxUses":0,"blocked":0,"progress":0,"completed":false,"endlessLayers":1]
+            ]
+        ]
+        let data = try JSONSerialization.data(withJSONObject: fixture)
+        let app = XCUIApplication()
+        app.launchEnvironment["NOOKCADE_UI_TEST_PROGRESS"] = String(data: data, encoding: .utf8)!
+        app.launchEnvironment["NOOKCADE_UI_TEST_SCREW_ACCESSIBILITY"] = "1"
+        app.launch()
+        XCTAssertTrue(app.buttons["native-games-tab"].waitForExistence(timeout: 30)); app.buttons["native-games-tab"].tap()
+        let catalog = app.collectionViews["native-catalog"]
+        func reveal(_ id: String) -> XCUIElement {
+            let launch = app.buttons["launch-" + id]
+            for _ in 0..<14 { if launch.exists && launch.isHittable { break }; catalog.swipeUp() }
+            return launch
+        }
+        XCTAssertTrue(reveal("screwclassic").isHittable)
+        XCTAssertTrue(reveal("screw").isHittable)
+        capture("screw-two-native-entries", app: app)
+        XCTAssertTrue(reveal("screwclassic").isHittable); reveal("screwclassic").tap()
+        let continueSaved = button(app.webViews.buttons, labels: continueSavedLabels)
+        XCTAssertTrue(continueSaved.waitForExistence(timeout: 10)); continueSaved.tap()
+        let board = app.webViews.descendants(matching: .any).matching(NSPredicate(format: "label == %@", "classic-screw-board")).firstMatch
+        XCTAssertTrue(board.waitForExistence(timeout: 10)); capture("screwclassic-fixture-before-touch", app: app)
+        board.coordinate(withNormalizedOffset: CGVector(dx: 170.0/420.0, dy: 200.0/560.0)).tap()
+        sleep(1); capture("screwclassic-after-first-real-touch", app: app)
+        app.terminate(); app.launch()
+        XCTAssertTrue(app.buttons["native-games-tab"].waitForExistence(timeout: 30)); app.buttons["native-games-tab"].tap()
+        XCTAssertTrue(reveal("screwclassic").isHittable); reveal("screwclassic").tap()
+        XCTAssertTrue(continueSaved.waitForExistence(timeout: 10)); capture("screwclassic-cold-continue", app: app); continueSaved.tap()
+        XCTAssertTrue(board.waitForExistence(timeout: 10))
+        board.coordinate(withNormalizedOffset: CGVector(dx: 250.0/420.0, dy: 200.0/560.0)).tap()
+        XCTAssertTrue(button(app.webViews.staticTexts, labels: screwCompleteLabels).waitForExistence(timeout: 8)); capture("screwclassic-real-touch-complete", app: app)
+
+        app.terminate(); app.launch()
+        XCTAssertTrue(app.buttons["native-games-tab"].waitForExistence(timeout: 30)); app.buttons["native-games-tab"].tap()
+        XCTAssertTrue(reveal("screwclassic").isHittable); reveal("screwclassic").tap()
+        let play = button(app.webViews.buttons, labels: startLabels)
+        XCTAssertTrue(play.waitForExistence(timeout: 10)); play.tap()
+        let endless = buttonBeginning(app.webViews.buttons, labels: endlessLabels)
+        XCTAssertTrue(endless.waitForExistence(timeout: 5)); endless.tap()
+        XCTAssertTrue(board.waitForExistence(timeout: 10)); capture("screwclassic-endless", app: app)
+        leaveWebGame(app)
+        startGame("screw", app: app)
+        let classicWorkshop = buttonBeginning(app.webViews.buttons, labels: classicWorkshopLabels)
+        XCTAssertTrue(classicWorkshop.waitForExistence(timeout: 10)); classicWorkshop.tap()
+        XCTAssertTrue(button(app.webViews.staticTexts, labels: levelHeaderLabels).waitForExistence(timeout: 10))
+        XCTAssertTrue(app.webViews.staticTexts["1"].waitForExistence(timeout: 5)); capture("crazy-screw-independent", app: app)
+        app.terminate(); app.launch()
+        XCTAssertTrue(app.buttons["native-games-tab"].waitForExistence(timeout: 30)); app.buttons["native-games-tab"].tap()
+        XCTAssertTrue(reveal("screwclassic").isHittable); reveal("screwclassic").tap()
+        XCTAssertTrue(continueSaved.waitForExistence(timeout: 10)); capture("screwclassic-survives-crazy-cold-launch", app: app)
+        button(app.webViews.buttons, labels: backLabels).tap()
+        XCTAssertTrue(app.buttons["native-games-tab"].waitForExistence(timeout: 10)); app.buttons["native-games-tab"].tap()
+        XCTAssertTrue(reveal("screw").isHittable); reveal("screw").tap()
+        XCTAssertTrue(continueSaved.waitForExistence(timeout: 10)); capture("crazy-screw-cold-continue", app: app)
     }
 }

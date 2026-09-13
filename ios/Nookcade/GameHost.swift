@@ -27,6 +27,20 @@ final class GameHost: NSObject, WKScriptMessageHandlerWithReply, WKNavigationDel
         content.addScriptMessageHandler(self, contentWorld: .page, name: "wanba")
         let bridge = try! String(contentsOf: Bundle.main.url(forResource: "Bridge", withExtension: "js")!, encoding: .utf8)
         content.addUserScript(WKUserScript(source: bridge, injectionTime: .atDocumentStart, forMainFrameOnly: true))
+        #if DEBUG
+        if let progress = ProcessInfo.processInfo.environment["NOOKCADE_UI_TEST_PROGRESS"],
+           let literalData = try? JSONSerialization.data(withJSONObject: [progress]),
+           let literal = String(data: literalData, encoding: .utf8) {
+            let source = "try{if(!localStorage.getItem('wanbanXiaowu_progress_v1'))localStorage.setItem('wanbanXiaowu_progress_v1',\(literal)[0]);}catch(error){}"
+            content.addUserScript(WKUserScript(source: source, injectionTime: .atDocumentStart, forMainFrameOnly: true))
+        }
+        if ProcessInfo.processInfo.environment["NOOKCADE_UI_TEST_SCREW_ACCESSIBILITY"] == "1" {
+            let source = """
+            (()=>{const tag=()=>{const canvas=document.querySelector('#wb-screw-canvas');if(canvas){canvas.setAttribute('role','button');canvas.setAttribute('aria-label','classic-screw-board');}};new MutationObserver(tag).observe(document.documentElement,{childList:true,subtree:true});addEventListener('DOMContentLoaded',tag);tag();})();
+            """
+            content.addUserScript(WKUserScript(source: source, injectionTime: .atDocumentStart, forMainFrameOnly: true))
+        }
+        #endif
         webView = WKWebView(frame: .zero, configuration: configuration)
         webView.navigationDelegate = self; webView.uiDelegate = self
         webView.isOpaque = false; webView.backgroundColor = UIColor.systemBackground
