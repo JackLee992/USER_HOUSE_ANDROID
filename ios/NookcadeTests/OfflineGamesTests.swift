@@ -59,12 +59,107 @@ final class OfflineGamesTests: XCTestCase {
         _ = try await value("wanbaApp.openShellTab('single')")
         _ = try await value("wanbaApp.importBackup(\(quoted)[0],true)")
     }
-    func testAll37BundledGamesAndWasm() async throws {
+    func testScrewStableZDuringPointerDrivenSwing() async throws {
+        try await waitFor("!!window.wanbaApp", seconds: 45)
+        continueAfterFailure = false
+        let backup = try await value("wanbaApp.backupData()") as! String
+        let quotedBackup = String(data: try JSONSerialization.data(withJSONObject: [backup]), encoding: .utf8)!
+
+        func stackState() async throws -> [String: Any] {
+            try await value("""
+                (async()=>{
+                  const module=await import('/src/games/plugins/screw/index.js');
+                  const state=wanbaApp.inspect().controller;
+                  return {
+                    panels:state.panels.map(panel=>({id:panel.id,z:panel.z,order:panel.order})),
+                    panelSignature:state.panels.map(panel=>`${panel.id}:${panel.z}:${panel.order}`),
+                    paintStack:module.stablePanelPaintStack(state.panels).map(entry=>entry.panel.id),
+                    layerCompositor:state.render.layerCompositor,
+                    swings:state.render.motion.swings
+                  };
+                })()
+                """) as! [String: Any]
+        }
+        func pointerTap(screwID: String) async throws {
+            let quotedID = String(data: try JSONSerialization.data(withJSONObject: [screwID]), encoding: .utf8)!
+            let result = try await value("""
+                (async()=>{
+                  const model=await import('/src/games/plugins/screw/model.js');
+                  const state=wanbaApp.inspect().controller;
+                  const hit=model.allLiveScrews(state).find(item=>item.screw.id===\(quotedID)[0]);
+                  const canvas=document.querySelector('#wb-screw-canvas'),rect=canvas.getBoundingClientRect();
+                  if(!hit||!canvas)throw Error('Missing screw pointer target');
+                  const clientX=rect.x+hit.point.x/420*rect.width;
+                  const clientY=rect.y+hit.point.y/560*rect.height;
+                  const before=state.moves;
+                  const targetIsCanvas=document.elementFromPoint(clientX,clientY)===canvas;
+                  canvas.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true,cancelable:true,clientX,clientY,pointerId:17,pointerType:'touch',isPrimary:true}));
+                  return {before,targetIsCanvas,clientX,clientY};
+                })()
+                """) as! [String: Any]
+            XCTAssertEqual(result["targetIsCanvas"] as? Bool, true, "The real canvas pointer path must be exposed")
+            let before = result["before"] as! Int
+            try await waitFor("wanbaApp.inspect().controller.moves>\(before)", seconds: 3)
+        }
+
+        do {
+            _ = try await value("(()=>{const key='wanbanXiaowu_progress_v1',all=JSON.parse(localStorage.getItem(key)||'{}');delete all.screw;localStorage.setItem(key,JSON.stringify(all));return true})()")
+            _ = try await value("wanbaApp.openShellTab('single')")
+            _ = try await value("wanbaApp.launch('screw','single')")
+            for _ in 0..<60 {
+                if (try await value("wanbaApp.inspect().started") as? Bool) == true { break }
+                _ = try await value("(()=>{const el=['#wb-progress-new','[data-choice=normal]','#wb-start-cover-btn'].map(selector=>document.querySelector(selector)).find(item=>item&&!item.disabled);if(el)el.click();return !!el})()")
+                try await Task.sleep(for: .milliseconds(120))
+            }
+            try await waitFor("wanbaApp.inspect().started&&!!wanbaApp.inspect().controller", seconds: 5)
+            let initial = try await stackState()
+            let initialPanels = initial["panels"] as! [[String: Any]]
+            let initialSignature = initial["panelSignature"] as! [String]
+            XCTAssertEqual(initialPanels.map { $0["id"] as! String }, ["l1-p0", "l1-p1", "l1-p2"])
+            XCTAssertEqual(initialPanels.map { $0["z"] as! Int }, [2, 1, 0])
+            XCTAssertEqual(initialPanels.map { $0["order"] as! Int }, [0, 1, 2])
+            XCTAssertEqual(initialSignature, ["l1-p0:2:0", "l1-p1:1:1", "l1-p2:0:2"])
+            XCTAssertEqual(initial["paintStack"] as? [String], ["l1-p2", "l1-p1", "l1-p0"])
+            XCTAssertEqual(initial["layerCompositor"] as? String, "stable-z-v1")
+            let initialAngle = try await value("wanbaApp.inspect().controller.panels.find(panel=>panel.id==='l1-p1').a") as! Double
+
+            try await pointerTap(screwID: "l1-p1-s0")
+            try await pointerTap(screwID: "l1-p1-s1")
+            try await waitFor("(()=>{const state=wanbaApp.inspect().controller,panel=state.panels.find(item=>item.id==='l1-p1');return state.render.motion.swings===1&&Math.abs(panel.a-\(initialAngle))>.02})()", seconds: 3)
+
+            let moving = try await stackState()
+            XCTAssertEqual(moving["panelSignature"] as? [String], initialSignature)
+            XCTAssertEqual(moving["paintStack"] as? [String], ["l1-p2", "l1-p1", "l1-p0"])
+            XCTAssertEqual(moving["layerCompositor"] as? String, "stable-z-v1")
+            XCTAssertEqual(moving["swings"] as? Int, 1)
+            let image = XCTAttachment(image: try await host.webView.takeSnapshot(configuration: nil))
+            image.name = "screw-stable-z-middle-disc-swing"
+            image.lifetime = .keepAlways
+            add(image)
+
+            try await waitFor("wanbaApp.inspect().controller.render.motion.swings===0", seconds: 4)
+            let settled = try await stackState()
+            XCTAssertEqual(settled["panelSignature"] as? [String], initialSignature)
+            XCTAssertEqual(settled["paintStack"] as? [String], ["l1-p2", "l1-p1", "l1-p0"])
+            let evidenceData = try JSONSerialization.data(withJSONObject: ["initial": initial, "moving": moving, "settled": settled], options: [.prettyPrinted, .sortedKeys])
+            let evidence = XCTAttachment(data: evidenceData, uniformTypeIdentifier: "public.json")
+            evidence.name = "screw-stable-z-pointer-evidence"
+            evidence.lifetime = .keepAlways
+            add(evidence)
+        } catch {
+            _ = try? await value("wanbaApp.openShellTab('single')")
+            _ = try? await value("wanbaApp.importBackup(\(quotedBackup)[0],true)")
+            throw error
+        }
+        _ = try await value("wanbaApp.openShellTab('single')")
+        _ = try await value("wanbaApp.importBackup(\(quotedBackup)[0],true)")
+    }
+    func testAll38BundledGamesAndWasm() async throws {
         try await waitFor("!!window.wanbaApp", seconds: 45)
         let capability = try await value("({origin:location.origin, secure:isSecureContext, wasm:typeof WebAssembly.instantiate==='function', gl:!!document.createElement('canvas').getContext('webgl'), games:wanbaApp.catalog().games.length, app:wanbaApp.catalog().appInfo})") as! [String: Any]
         XCTAssertEqual(capability["origin"] as? String, LoopbackServer.origin)
         XCTAssertEqual(capability["secure"] as? Bool, true); XCTAssertEqual(capability["wasm"] as? Bool, true); XCTAssertEqual(capability["gl"] as? Bool, true)
-        XCTAssertEqual(capability["games"] as? Int, 37)
+        XCTAssertEqual(capability["games"] as? Int, 38)
         let app = capability["app"] as! [String: Any]; XCTAssertEqual(app["flavor"] as? String, "ios"); XCTAssertEqual(app["gameUpdatesEnabled"] as? Bool, false)
         let backup = try await value("wanbaApp.backupData()") as! String
         _ = try await value("(window.__iosErrors=[],window.addEventListener('error',e=>window.__iosErrors.push(e.message)),true)")
@@ -91,7 +186,7 @@ final class OfflineGamesTests: XCTestCase {
         }
         let errors = try await value("window.__iosErrors") as! [String]; XCTAssertEqual(errors, [])
         let data = try JSONSerialization.data(withJSONObject: ["capability": capability, "results": results, "errors": errors], options: [.prettyPrinted, .sortedKeys])
-        let attachment = XCTAttachment(data: data, uniformTypeIdentifier: "public.json"); attachment.name = "ios-37-games"; attachment.lifetime = .keepAlways; add(attachment)
+        let attachment = XCTAttachment(data: data, uniformTypeIdentifier: "public.json"); attachment.name = "ios-38-games"; attachment.lifetime = .keepAlways; add(attachment)
         let quoted = String(data: try JSONSerialization.data(withJSONObject: [backup]), encoding: .utf8)!
         let imported = try await value("wanbaApp.importBackup(\(quoted)[0],true)") as! [String: Any]; XCTAssertEqual(imported["ok"] as? Bool, true)
         _ = try await value("wanbaApp.openShellTab('single')")
