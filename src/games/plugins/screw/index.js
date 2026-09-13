@@ -19,7 +19,7 @@ import {
 } from './model.js';
 
 export const GAME_ID = 'screw';
-export const GAME_VERSION = '1.2.2';
+export const GAME_VERSION = '1.2.3';
 export const HOST_API_VERSION = 1;
 export const REQUIRED_ENV = Object.freeze([
   'activeGameController','choiceForState','choiceSavePatch','clearProgress','currentGameDurationMs',
@@ -83,7 +83,7 @@ function panelPath(ctx, panel) {
 function drawScrew(ctx, colorId, x, y, radius = 14, rotation = 0, glow = false, alpha = 1) {
   const color = colorForScrew(colorId);
   ctx.save(); ctx.translate(x, y); ctx.rotate(rotation); ctx.globalAlpha *= alpha;
-  ctx.shadowColor = glow ? color.light : 'rgba(83,55,75,.28)'; ctx.shadowBlur = glow ? 18 : 6; ctx.shadowOffsetY = glow ? 0 : 3;
+  ctx.shadowColor = glow ? 'rgba(109,76,54,.28)' : 'rgba(83,55,75,.22)'; ctx.shadowBlur = glow ? 8 : 5; ctx.shadowOffsetY = glow ? 2 : 3;
   const outer = ctx.createRadialGradient(-radius * .34, -radius * .42, radius * .05, 0, 0, radius * 1.08);
   outer.addColorStop(0, '#fffefa'); outer.addColorStop(.16, color.light); outer.addColorStop(.5, color.hex);
   outer.addColorStop(.86, color.dark); outer.addColorStop(1, '#68475d');
@@ -95,6 +95,10 @@ function drawScrew(ctx, colorId, x, y, radius = 14, rotation = 0, glow = false, 
   ctx.moveTo(slot,-slot); ctx.lineTo(-slot,slot); ctx.stroke();
   ctx.strokeStyle = 'rgba(255,255,255,.36)'; ctx.lineWidth = Math.max(1, radius * .07);
   ctx.beginPath(); ctx.arc(0, 0, radius * .92, 0, Math.PI * 2); ctx.stroke();
+  if (glow) {
+    ctx.strokeStyle = 'rgba(255,249,226,.96)'; ctx.lineWidth = Math.max(2, radius * .16);
+    ctx.beginPath(); ctx.arc(0, 0, radius * 1.18, 0, Math.PI * 2); ctx.stroke();
+  }
   ctx.restore();
 }
 
@@ -102,7 +106,8 @@ function drawPanel(ctx, panel, options = {}) {
   const tint = PANEL_TINTS[panel.tint % PANEL_TINTS.length];
   ctx.save(); ctx.translate(panel.x, panel.y); ctx.rotate(panel.a || 0); ctx.globalAlpha *= options.alpha ?? 1;
   if (options.filter && 'filter' in ctx) ctx.filter = options.filter;
-  ctx.shadowColor = 'rgba(91,59,80,.24)'; ctx.shadowBlur = 15; ctx.shadowOffsetY = 9;
+  const edgeAlpha = options.edgeAlpha ?? 1;
+  ctx.shadowColor = `rgba(91,59,80,${options.shadowAlpha ?? .2})`; ctx.shadowBlur = options.shadowBlur ?? 12; ctx.shadowOffsetY = options.shadowOffsetY ?? 7;
   panelPath(ctx, panel); ctx.fillStyle = '#7f6174'; ctx.fill();
   ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
   panelPath(ctx, panel);
@@ -113,31 +118,37 @@ function drawPanel(ctx, panel, options = {}) {
     gradient.addColorStop(0, '#fffefe'); gradient.addColorStop(.27, '#e7e2e8');
     gradient.addColorStop(.56, '#f5f1f5'); gradient.addColorStop(1, '#beb8c4');
   } else if (panel.material === 'acrylic') {
-    gradient.addColorStop(0, tint[0] + 'dc'); gradient.addColorStop(.55, tint[0] + 'a8'); gradient.addColorStop(1, tint[1] + 'c9');
+    // Keep the glass-like palette opaque enough that buried pieces do not show
+    // through as false targets on an already dense endless board.
+    gradient.addColorStop(0, tint[0]); gradient.addColorStop(.55, tint[0]); gradient.addColorStop(1, tint[1]);
   } else {
     gradient.addColorStop(0, tint[0]); gradient.addColorStop(.55, tint[0]); gradient.addColorStop(1, tint[1]);
   }
   ctx.fillStyle = gradient; ctx.fill();
-  ctx.lineWidth = 5; ctx.strokeStyle = 'rgba(255,255,255,.88)'; ctx.stroke();
-  ctx.lineWidth = 1.8; ctx.strokeStyle = 'rgba(104,72,91,.46)'; panelPath(ctx, panel); ctx.stroke();
+  ctx.lineWidth = options.outerWidth ?? 3; ctx.strokeStyle = `rgba(255,255,255,${.76 * edgeAlpha})`; ctx.stroke();
+  if ((options.innerWidth ?? 1) > 0) {
+    ctx.lineWidth = options.innerWidth ?? 1; ctx.strokeStyle = `rgba(104,72,91,${.34 * edgeAlpha})`; panelPath(ctx, panel); ctx.stroke();
+  }
   ctx.save(); panelPath(ctx, panel); ctx.clip();
-  const shine = ctx.createLinearGradient(0, -panel.h / 2, 0, panel.h / 2);
-  shine.addColorStop(0, 'rgba(255,255,255,.52)'); shine.addColorStop(.24, 'rgba(255,255,255,.16)');
-  shine.addColorStop(.58, 'rgba(255,255,255,0)'); shine.addColorStop(1, 'rgba(91,54,77,.11)');
-  ctx.fillStyle = shine; ctx.fillRect(-panel.w / 2, -panel.h / 2, panel.w, panel.h);
-  if (panel.material === 'hardwood') {
-    ctx.strokeStyle = 'rgba(148,91,56,.16)'; ctx.lineWidth = 1.5;
-    for (let line = -panel.h / 2 + 19; line < panel.h / 2; line += 19) {
-      ctx.beginPath(); ctx.moveTo(-panel.w / 2, line); ctx.bezierCurveTo(-60,line-8,60,line+8,panel.w/2,line-3); ctx.stroke();
+  if (options.detail !== false) {
+    const shine = ctx.createLinearGradient(0, -panel.h / 2, 0, panel.h / 2);
+    shine.addColorStop(0, 'rgba(255,255,255,.38)'); shine.addColorStop(.24, 'rgba(255,255,255,.1)');
+    shine.addColorStop(.58, 'rgba(255,255,255,0)'); shine.addColorStop(1, 'rgba(91,54,77,.07)');
+    ctx.fillStyle = shine; ctx.fillRect(-panel.w / 2, -panel.h / 2, panel.w, panel.h);
+    if (panel.material === 'hardwood') {
+      ctx.strokeStyle = 'rgba(148,91,56,.08)'; ctx.lineWidth = 1;
+      for (let line = -panel.h / 2 + 28; line < panel.h / 2; line += 28) {
+        ctx.beginPath(); ctx.moveTo(-panel.w / 2, line); ctx.bezierCurveTo(-60,line-6,60,line+6,panel.w/2,line-2); ctx.stroke();
+      }
+    } else if (panel.material === 'brushed-steel') {
+      ctx.strokeStyle = 'rgba(255,255,255,.18)'; ctx.lineWidth = 1;
+      for (let line = -panel.h / 2 + 14; line < panel.h / 2; line += 14) {
+        ctx.beginPath(); ctx.moveTo(-panel.w / 2, line); ctx.lineTo(panel.w / 2, line); ctx.stroke();
+      }
+    } else if (panel.material === 'acrylic') {
+      ctx.fillStyle = 'rgba(255,255,255,.14)'; ctx.beginPath();
+      ctx.ellipse(-panel.w*.16,-panel.h*.2,panel.w*.28,panel.h*.08,-.12,0,Math.PI*2); ctx.fill();
     }
-  } else if (panel.material === 'brushed-steel') {
-    ctx.strokeStyle = 'rgba(255,255,255,.32)'; ctx.lineWidth = 1;
-    for (let line = -panel.h / 2 + 8; line < panel.h / 2; line += 7) {
-      ctx.beginPath(); ctx.moveTo(-panel.w / 2, line); ctx.lineTo(panel.w / 2, line); ctx.stroke();
-    }
-  } else if (panel.material === 'acrylic') {
-    ctx.fillStyle = 'rgba(255,255,255,.22)'; ctx.beginPath();
-    ctx.ellipse(-panel.w*.16,-panel.h*.2,panel.w*.28,panel.h*.08,-.12,0,Math.PI*2); ctx.fill();
   }
   if (options.fog) {
     ctx.fillStyle = `rgba(250,247,248,${options.fog})`;
@@ -145,8 +156,9 @@ function drawPanel(ctx, panel, options = {}) {
   }
   ctx.restore();
   for (const screw of panel.screws || []) {
+    if (options.visibleScrewIds && !options.visibleScrewIds.has(screw.id)) continue;
     ctx.save(); ctx.translate(screw.lx, screw.ly);
-    ctx.fillStyle = '#d3c4bd'; ctx.shadowColor = 'rgba(91,57,76,.24)'; ctx.shadowBlur = 6;
+    ctx.fillStyle = '#d8ceca'; ctx.shadowColor = 'rgba(91,57,76,.18)'; ctx.shadowBlur = 4;
     ctx.beginPath(); ctx.arc(0, 2, 17, 0, Math.PI * 2); ctx.fill(); ctx.shadowBlur = 0;
     ctx.strokeStyle = 'rgba(255,255,255,.82)'; ctx.lineWidth = 2;
     ctx.beginPath(); ctx.arc(0, 1, 16, Math.PI*1.05, Math.PI*1.82); ctx.stroke(); ctx.restore();
@@ -156,24 +168,22 @@ function drawPanel(ctx, panel, options = {}) {
 
 function drawBackground(ctx) {
   const background = ctx.createLinearGradient(0, 0, 0, H);
-  background.addColorStop(0, '#fffaf8'); background.addColorStop(.54, '#f8f0f5'); background.addColorStop(1, '#eef6f2');
+  background.addColorStop(0, '#faf8f6'); background.addColorStop(.54, '#f3efee'); background.addColorStop(1, '#ece9e7');
   ctx.fillStyle = background; ctx.fillRect(0, 0, W, H);
-  ctx.save(); ctx.shadowColor='rgba(114,74,89,.18)'; ctx.shadowBlur=18; ctx.shadowOffsetY=8;
-  roundRectPath(ctx,12,10,W-24,H-20,30); ctx.fillStyle='#f5ddbf'; ctx.fill(); ctx.restore();
+  ctx.save(); ctx.shadowColor='rgba(95,75,82,.12)'; ctx.shadowBlur=14; ctx.shadowOffsetY=6;
+  roundRectPath(ctx,12,10,W-24,H-20,30); ctx.fillStyle='#eee8e4'; ctx.fill(); ctx.restore();
   const desk = ctx.createLinearGradient(15, 10, W-12, H);
-  desk.addColorStop(0, '#fff0dc'); desk.addColorStop(.48, '#efd3b1'); desk.addColorStop(1, '#e3bd93');
+  desk.addColorStop(0, '#f8f5f1'); desk.addColorStop(.48, '#f1ece8'); desk.addColorStop(1, '#e9e3df');
   roundRectPath(ctx,12,10,W-24,H-20,30); ctx.fillStyle=desk; ctx.fill();
   ctx.save(); roundRectPath(ctx,12,10,W-24,H-20,30); ctx.clip();
-  ctx.strokeStyle='rgba(153,100,66,.11)'; ctx.lineWidth=1.2;
-  for (let y=30; y<H; y+=25) {
+  ctx.strokeStyle='rgba(137,105,93,.03)'; ctx.lineWidth=1;
+  for (let y=34; y<H; y+=50) {
     ctx.beginPath(); ctx.moveTo(4,y); ctx.bezierCurveTo(112,y-7,292,y+8,W+8,y-3); ctx.stroke();
   }
   const center = ctx.createRadialGradient(W*.5,H*.42,24,W*.5,H*.42,255);
-  center.addColorStop(0,'rgba(255,255,255,.5)'); center.addColorStop(.72,'rgba(255,255,255,.08)'); center.addColorStop(1,'rgba(255,255,255,0)');
+  center.addColorStop(0,'rgba(255,255,255,.18)'); center.addColorStop(.72,'rgba(255,255,255,.04)'); center.addColorStop(1,'rgba(255,255,255,0)');
   ctx.fillStyle=center; ctx.fillRect(0,0,W,H); ctx.restore();
-  ctx.strokeStyle='rgba(255,255,255,.72)'; ctx.lineWidth=2; roundRectPath(ctx,15,13,W-30,H-26,27); ctx.stroke();
-  ctx.fillStyle='rgba(111,77,96,.16)';
-  for (const [x,y] of [[28,29],[392,29],[28,531],[392,531]]) { ctx.beginPath(); ctx.arc(x,y,2.2,0,Math.PI*2); ctx.fill(); }
+  ctx.strokeStyle='rgba(255,255,255,.58)'; ctx.lineWidth=1.5; roundRectPath(ctx,15,13,W-30,H-26,27); ctx.stroke();
 }
 
 export function createGame(env, savedState) {
@@ -181,6 +191,7 @@ export function createGame(env, savedState) {
   const choice = env.choiceForState('screw', savedState);
   const restored = restoreScrewState(savedState, choice.id);
   let state = restored.state, destroyed = false, frameId = 0, lastFrameAt = 0, drawCount = 0, staticBuildCount = 0;
+  let focusStats = { priority:0, secondary:0, hidden:0 };
   let hint = null, shake = null, flights = [], falling = [], particles = [];
   let statusText = state.mode === 'endless' ? '持续收纳，板件会自动补入' : '优先拧下与收纳盒同色的螺丝', resizeObserver = null;
 
@@ -209,7 +220,7 @@ export function createGame(env, savedState) {
   const ctx = canvas.getContext('2d', { alpha:false, desynchronized:true });
   const renderProfile = performancePixelRatio(win);
   canvas.width = Math.round(W * renderProfile.value); canvas.height = Math.round(H * renderProfile.value);
-  canvas.dataset.screwArt = 'atelier-v3'; canvas.dataset.renderMode = renderProfile.mode; canvas.dataset.depthFocus = 'layered-v1';
+  canvas.dataset.screwArt = 'atelier-v3'; canvas.dataset.renderMode = renderProfile.mode; canvas.dataset.depthFocus = 'semantic-v2';
   ctx.setTransform(renderProfile.value, 0, 0, renderProfile.value, 0, 0); ctx.imageSmoothingEnabled = true;
   const staticLayer = doc.createElement('canvas');
   staticLayer.width = canvas.width; staticLayer.height = canvas.height;
@@ -291,41 +302,52 @@ export function createGame(env, savedState) {
     showResult(); updateScore();
   }
 
-  function depthStyle(index, count, reachablePanel) {
+  function depthStyle(index, count, focus) {
     const frontness = count <= 1 ? 1 : index / (count - 1);
-    if (frontness >= .72) return { alpha:1, filter:'none', fog:0 };
-    if (frontness >= .38) return {
-      alpha:reachablePanel ? .82 : .62,
-      filter:'saturate(.72) contrast(.94) blur(.35px)',
-      fog:reachablePanel ? .04 : .1,
+    if (focus === 'priority') return {
+      alpha:1, filter:'none', fog:0, edgeAlpha:1, outerWidth:3, innerWidth:1,
+      detail:true, shadowAlpha:.2, shadowBlur:12, shadowOffsetY:7,
+    };
+    if (focus === 'secondary') return {
+      alpha:.78, filter:'saturate(.66) contrast(.96)', fog:.04, edgeAlpha:.62, outerWidth:2, innerWidth:.7,
+      detail:true, shadowAlpha:.12, shadowBlur:8, shadowOffsetY:5,
     };
     return {
-      alpha:reachablePanel ? .66 : .4,
-      filter:'saturate(.5) brightness(1.08) blur(1.05px)',
-      fog:reachablePanel ? .1 : .18,
+      alpha:frontness >= .62 ? .48 : .36,
+      filter:'saturate(.3) brightness(1.05)', fog:frontness >= .62 ? .14 : .2,
+      edgeAlpha:.28, outerWidth:1, innerWidth:0, detail:false,
+      shadowAlpha:.06, shadowBlur:4, shadowOffsetY:3,
     };
   }
 
   function paintStaticBoard(target, activeShake = null) {
     target.save(); target.setTransform(renderProfile.value, 0, 0, renderProfile.value, 0, 0); drawBackground(target);
     const hits = reachableScrews(state), reachability = new Map(hits.map(hit => [hit.screw.id, hit.reachable]));
-    const reachablePanels = new Set(hits.filter(hit => hit.reachable).map(hit => hit.panel.id));
     const active = new Set(state.boxes.map(box => box.color));
+    const visibleScrewIds = new Set(hits.filter(hit => hit.reachable).map(hit => hit.screw.id));
+    const priorityPanels = new Set(hits.filter(hit => hit.reachable && active.has(hit.screw.color)).map(hit => hit.panel.id));
+    const secondaryPanels = new Set(hits.filter(hit => hit.reachable && !active.has(hit.screw.color)).map(hit => hit.panel.id));
+    const nextFocusStats = { priority:0, secondary:0, hidden:0 };
+    for (const hit of hits) {
+      if (!hit.reachable) nextFocusStats.hidden += 1;
+      else if (active.has(hit.screw.color)) nextFocusStats.priority += 1;
+      else nextFocusStats.secondary += 1;
+    }
+    focusStats = nextFocusStats;
     const panels = state.panels.filter(item => !item.gone).sort((a, b) => a.z - b.z);
     for (let index = 0; index < panels.length; index += 1) {
       const panel = panels[index];
       const offset = activeShake?.panelId === panel.id ? Math.sin(activeShake.phase * Math.PI * 8) * 4 * (1 - activeShake.phase) : 0;
       const visual = offset ? { ...panel, x:panel.x + offset } : panel;
-      const depth = depthStyle(index, panels.length, reachablePanels.has(panel.id));
-      drawPanel(target, visual, depth);
+      const focus = priorityPanels.has(panel.id) ? 'priority' : secondaryPanels.has(panel.id) ? 'secondary' : 'hidden';
+      const depth = depthStyle(index, panels.length, focus);
+      drawPanel(target, visual, { ...depth, visibleScrewIds });
       for (const screw of panel.screws || []) {
         if (screw.gone) continue;
         const point = screwWorld(visual, screw), reachable = !!reachability.get(screw.id);
-        target.save();
-        if (!reachable && 'filter' in target) target.filter = 'grayscale(.72) saturate(.35) brightness(1.08)';
-        drawScrew(target, screw.color, point.x, point.y, reachable ? 14 : 12.5, 0,
-          reachable && active.has(screw.color), reachable ? 1 : Math.max(.22, depth.alpha * .5));
-        target.restore();
+        if (!reachable) continue;
+        const priority = active.has(screw.color);
+        drawScrew(target, screw.color, point.x, point.y, priority ? 14 : 13, 0, priority, priority ? 1 : .76);
       }
     }
     target.restore();
@@ -525,7 +547,7 @@ export function createGame(env, savedState) {
   function onResume() { if (!destroyed) { lastFrameAt=0; drawBoard(); scheduleFrame(); } }
   function getState() {
     return Object.assign(structuredClone(state), {
-      fullscreen:false, render:{mode:renderProfile.mode,pixelRatio:renderProfile.value,drawCount,staticBuildCount,depthFocus:canvas.dataset.depthFocus,idle:!frameId&&!hasAnimation()},
+      fullscreen:false, render:{mode:renderProfile.mode,pixelRatio:renderProfile.value,drawCount,staticBuildCount,depthFocus:canvas.dataset.depthFocus,focus:structuredClone(focusStats),idle:!frameId&&!hasAnimation()},
       liveScrews:allLiveScrews(state).length,
     });
   }

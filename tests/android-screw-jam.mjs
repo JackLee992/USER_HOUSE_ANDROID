@@ -1,10 +1,10 @@
-// Installed Android app regression for Screw Jam 1.2.2.
+// Installed Android app regression for Screw Jam 1.2.3.
 // CDP only reads state; every game and tool interaction is sent through Android input.
 import assert from 'node:assert/strict';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { connect, adb, screenshot, activity } from './android-driver.mjs';
 
-const out = process.env.QA_OUT || 'docs/evidence/screw-jam-1.2.2/android-emulator';
+const out = process.env.QA_OUT || 'docs/evidence/screw-jam-1.2.3/android-emulator';
 mkdirSync(out, { recursive:true });
 const packageName = activity.split('/')[0], checks = [];
 let client, failure = null, inputOffsetY = 0;
@@ -80,7 +80,7 @@ try {
   await openScrew();
   await until(async () => (await state())?.render?.idle, 'initial idle');
   const ready = await layout();
-  assert.equal(ready.codeVersion, '1.2.2');
+  assert.equal(ready.codeVersion, '1.2.3');
   assert.equal(ready.art, 'atelier-v3');
   assert.equal(ready.boxes, 3);
   assert.equal(ready.slots, 5);
@@ -90,8 +90,10 @@ try {
   for (const button of ready.tools) assert.ok(button.width >= 44 && button.height >= 44);
   await client.wait(350);
   screenshot(`${out}/ready.png`);
-  assert.equal(ready.state.render.depthFocus, 'layered-v1');
-  checks.push({ check:'installed APK opens Screw Jam 1.2.2 with the layered-depth atelier interface', layout:{ viewport:ready.viewport, gamebox:ready.gamebox, canvas:ready.canvas, top:ready.top, tools:ready.tools } });
+  assert.equal(ready.state.render.depthFocus, 'semantic-v2');
+  assert.ok(ready.state.render.focus.priority > 0);
+  assert.ok(ready.state.render.focus.hidden > 0);
+  checks.push({ check:'installed APK opens Screw Jam 1.2.3 with semantic depth focus', layout:{ viewport:ready.viewport, gamebox:ready.gamebox, canvas:ready.canvas, top:ready.top, tools:ready.tools } });
 
   const idleDraws = ready.state.render.drawCount;
   await client.wait(650);

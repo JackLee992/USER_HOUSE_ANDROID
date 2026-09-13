@@ -5,7 +5,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 
 const port = Number(process.env.CDP_PORT || 9357);
 const origin = process.env.QA_ORIGIN || 'http://127.0.0.1:8877';
-const out = process.env.QA_OUT || '.local/qa-screw-jam-1.2.2/browser';
+const out = process.env.QA_OUT || '.local/qa-screw-jam-1.2.3/browser';
 mkdirSync(out, { recursive:true });
 
 const tabs = await (await fetch(`http://127.0.0.1:${port}/json`)).json();
@@ -56,6 +56,12 @@ async function touch(selector) {
   const point = await evaluate(`(()=>{const element=document.querySelector(${JSON.stringify(selector)});if(!element)throw Error('Missing '+${JSON.stringify(selector)});element.scrollIntoView({block:'nearest'});const rect=element.getBoundingClientRect();return{x:rect.x+rect.width/2,y:rect.y+rect.height/2}})()`);
   await touchPoint(point.x, point.y);
 }
+async function touchIfPresent(selector) {
+  const point = await evaluate(`(()=>{const element=document.querySelector(${JSON.stringify(selector)});if(!element)return null;element.scrollIntoView({block:'nearest'});const rect=element.getBoundingClientRect();return{x:rect.x+rect.width/2,y:rect.y+rect.height/2}})()`);
+  if (!point) return false;
+  await touchPoint(point.x, point.y);
+  return true;
+}
 async function screenshot(name) {
   const shot = await send('Page.captureScreenshot', { format:'png' });
   writeFileSync(`${out}/${name}.png`, Buffer.from(shot.data, 'base64'));
@@ -79,7 +85,7 @@ async function openScrew({ choice = 'normal', continueSaved = false } = {}) {
       if(document.querySelector('#wb-start-cover-btn'))return '#wb-start-cover-btn';
       return null;
     })()`);
-    if (next) await touch(next);
+    if (next) await touchIfPresent(next);
     await wait(120);
   }
   throw Error('Screw Jam did not start');
@@ -160,7 +166,9 @@ try {
     assert.equal(current.raw.width, 420 * ratio);
     assert.equal(current.raw.height, 560 * ratio);
     assert.equal(current.art, 'atelier-v3');
-    assert.equal(current.state.render.depthFocus, 'layered-v1');
+    assert.equal(current.state.render.depthFocus, 'semantic-v2');
+    assert.ok(current.state.render.focus.priority > 0, 'active-box screws remain the primary visual focus');
+    assert.ok(current.state.render.focus.hidden > 0, 'covered screws are tracked as hidden visual noise');
     assert.equal(current.boxes, 3);
     assert.equal(current.slots, 5);
     assert.ok(current.canvas.x >= current.gamebox.x - 1 && current.canvas.right <= current.gamebox.right + 1);
@@ -197,7 +205,7 @@ try {
   assert.equal((await layout()).state.tools.hint, hintBefore - 1);
   await until('wanbaApp.inspect().controller.render.idle', 4000);
   assert.equal((await layout()).state.render.staticBuildCount, staticBuildsBeforeHint, 'hint animation reuses the cached board');
-  checks.push({ check:'hint uses a real touch, retains layered depth focus, and reuses the cached board' });
+  checks.push({ check:'hint uses a real touch, retains semantic depth focus, and reuses the cached board' });
 
   const first = await playSafeMove();
   console.log('PHASE pause-undo');
