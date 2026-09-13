@@ -19,7 +19,7 @@ import {
 } from './model.js';
 
 export const GAME_ID = 'screw';
-export const GAME_VERSION = '1.2.0';
+export const GAME_VERSION = '1.2.1';
 export const HOST_API_VERSION = 1;
 export const REQUIRED_ENV = Object.freeze([
   'activeGameController','choiceForState','choiceSavePatch','clearProgress','currentGameDurationMs',
@@ -373,8 +373,11 @@ export function createGame(env, savedState) {
     const beforePanel = structuredClone(hit.panel), beforeBoxes = state.boxes.map(box => box.color);
     const result = applyScrew(state, hit.screw.id);
     if (!result.ok) {
-      statusText = result.reason === 'tray_full' ? '临时孔位已满，先完成一个颜色盒' : '这颗螺丝暂时不能取下';
-      haptic([10,30,10]); renderUI(); return;
+      if (result.failed) {
+        statusText = '5 个临时孔位已满，本次收纳结束'; env.speak('screw','gameover'); haptic([25,45,25]); save(true);
+        renderUI(); drawBoard(); return;
+      } else statusText = result.reason === 'tray_full' ? '临时孔位已满，先完成一个颜色盒' : '这颗螺丝暂时不能取下';
+      haptic([10,30,10]); renderUI(); drawBoard(); return;
     }
     const boxPosition = Math.max(0, beforeBoxes.indexOf(hit.screw.color));
     const boxSpan = beforeBoxes.length > 1 ? 264 / (beforeBoxes.length - 1) : 0;
@@ -393,9 +396,10 @@ export function createGame(env, savedState) {
     } else if (result.route === 'box') {
       statusText = color.name + '螺丝收入收纳盒'; haptic(9); env.speak('screw','match');
     } else {
-      statusText = color.name + '先放入临时孔位'; haptic(7);
+      statusText = state.mode === 'endless' && state.tray.length >= state.trayCapacity ?
+        '临时孔位已满，下一颗必须匹配当前收纳盒' : color.name + '先放入临时孔位'; haptic(7);
     }
-    if (state.tray.length === 4) env.speak('screw','tray_4');
+    if (state.tray.length === (state.mode === 'endless' ? state.trayCapacity : state.trayCapacity - 1)) env.speak('screw','tray_4');
     if (result.completed) {
       awardLevel(); statusText = '第 ' + state.level + ' 关完成'; env.speak('screw','progress_80'); haptic([18,40,25]);
     }

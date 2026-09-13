@@ -1,10 +1,10 @@
-// Installed Android app regression for Screw Jam 1.2.0.
+// Installed Android app regression for Screw Jam 1.2.1.
 // CDP only reads state; every game and tool interaction is sent through Android input.
 import assert from 'node:assert/strict';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { connect, adb, screenshot, activity } from './android-driver.mjs';
 
-const out = process.env.QA_OUT || 'docs/evidence/screw-jam-1.2.0/android-emulator';
+const out = process.env.QA_OUT || 'docs/evidence/screw-jam-1.2.1/android-emulator';
 mkdirSync(out, { recursive:true });
 const packageName = activity.split('/')[0], checks = [];
 let client, failure = null, inputOffsetY = 0;
@@ -80,7 +80,7 @@ try {
   await openScrew();
   await until(async () => (await state())?.render?.idle, 'initial idle');
   const ready = await layout();
-  assert.equal(ready.codeVersion, '1.2.0');
+  assert.equal(ready.codeVersion, '1.2.1');
   assert.equal(ready.art, 'atelier-v3');
   assert.equal(ready.boxes, 3);
   assert.equal(ready.slots, 5);
@@ -90,7 +90,7 @@ try {
   for (const button of ready.tools) assert.ok(button.width >= 44 && button.height >= 44);
   await client.wait(350);
   screenshot(`${out}/ready.png`);
-  checks.push({ check:'installed APK opens Screw Jam 1.2.0 with the fitted atelier interface', layout:{ viewport:ready.viewport, gamebox:ready.gamebox, canvas:ready.canvas, top:ready.top, tools:ready.tools } });
+  checks.push({ check:'installed APK opens Screw Jam 1.2.1 with the fitted atelier interface', layout:{ viewport:ready.viewport, gamebox:ready.gamebox, canvas:ready.canvas, top:ready.top, tools:ready.tools } });
 
   const idleDraws = ready.state.render.drawCount;
   await client.wait(650);
@@ -155,23 +155,22 @@ try {
   await until(async () => (await state())?.render?.idle, 'endless initial idle');
   let endless = await state();
   assert.equal(endless.mode, 'endless');
+  assert.equal(endless.endlessRulesVersion, 2);
   assert.equal(endless.details.endlessLayers, 1);
-  for (let move = 0; move < 40 && endless.details.endlessLayers < 2; move += 1) {
-    await playSafeMove();
-    endless = await state();
-  }
-  assert.equal(endless.details.endlessLayers, 2);
+  assert.ok(endless.panels.length >= 28 && endless.panels.length <= 32);
+  assert.ok(endless.panels.every(panel => panel.screws.length >= 2 && panel.screws.length <= 4));
   assert.equal(endless.status, 'playing');
-  assert.ok(endless.liveScrews >= 50);
+  assert.equal(endless.trayCapacity, 5);
+  assert.equal(endless.boxCapacity, 3);
   assert.equal(await client.evaluate('document.querySelector("#wb-screw-result").hidden'), true);
-  screenshot(`${out}/endless-continuous-layer-2.png`);
+  screenshot(`${out}/endless-original-board.png`);
   await adbTap('#wb-screw-extra');
   endless = await state();
   assert.equal(endless.boxCapacity, 4);
   assert.equal(endless.boxes.length, 4);
   assert.equal(await client.evaluate('document.querySelector("#wb-screw-extra-label").textContent'), '加盒');
   screenshot(`${out}/endless-add-box.png`);
-  checks.push({ check:'Android input verifies continuous endless refill and add-box capacity', layers:endless.details.endlessLayers,
+  checks.push({ check:'Android input verifies the original large endless board and add-box capacity', panels:endless.panels.length,
     boxes:endless.boxes.length, capacity:endless.boxCapacity, liveScrews:endless.liveScrews });
   assert.deepEqual(client.errors, []);
   console.log(JSON.stringify({ passed:true, checks }, null, 2));

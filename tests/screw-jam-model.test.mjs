@@ -2,12 +2,16 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   SCREW_CAMPAIGN_LEVELS,
+  SCREW_ENDLESS_MAX_PANELS,
+  SCREW_ENDLESS_MIN_PANELS,
+  SCREW_ENDLESS_RULES_VERSION,
   addEndlessBox,
   addTraySlot,
   advanceFallingPanel,
   applyScrew,
   createScrewState,
   endlessScore,
+  extendEndlessState,
   progressPercent,
   reachableScrews,
   restoreScrewState,
@@ -78,6 +82,30 @@ test('a full tray never deletes an additional screw', () => {
   assert.deepEqual(state.panels, before);
 });
 
+test('original endless rules keep the fifth temporary hole playable and fail on the next unmatched choice', () => {
+  const state = createScrewState({ mode:'endless', seed:0x13572468 });
+  const reachable = reachableScrews(state).filter(hit => hit.reachable);
+  const top = reachable.find(hit => !state.boxes.some(box => box.color === hit.screw.color));
+  assert.ok(top, 'fixture exposes a future-colour screw');
+  state.tray = Array.from({ length:state.trayCapacity - 1 }, (_, index) => ({ id:`held-${index}`, color:'future' }));
+  const fifth = applyScrew(state, top.screw.id);
+  assert.equal(fifth.ok, true);
+  assert.equal(fifth.route, 'tray');
+  assert.equal(state.tray.length, 5);
+  assert.equal(state.status, 'playing');
+  assert.equal(fifth.failed, false);
+
+  const next = reachableScrews(state).find(hit => hit.reachable && !state.boxes.some(box => box.color === hit.screw.color));
+  assert.ok(next, 'fixture exposes another unmatched screw');
+  const panelsBefore = structuredClone(state.panels);
+  const sixth = applyScrew(state, next.screw.id);
+  assert.equal(sixth.ok, false);
+  assert.equal(sixth.reason, 'tray_full');
+  assert.equal(sixth.failed, true);
+  assert.equal(state.status, 'failed');
+  assert.deepEqual(state.panels, panelsBefore);
+});
+
 test('undo restores the entire move and charges exactly one use', () => {
   const state = createScrewState({ level:3 });
   const before = structuredClone(state);
@@ -114,31 +142,26 @@ test('legacy random-board saves migrate to the deterministic campaign while keep
 });
 
 test('endless mode continuously adds new layers instead of completing a level', () => {
-  const state = createScrewState({ mode:'endless' });
+  const state = createScrewState({ mode:'endless', seed:0x24681357 });
   const initialPanels = state.panels.length;
+  assert.ok(initialPanels >= SCREW_ENDLESS_MIN_PANELS && initialPanels <= SCREW_ENDLESS_MAX_PANELS);
+  assert.ok(state.panels.every(panel => panel.screws.length >= 2 && panel.screws.length <= 4));
+  assert.equal(state.panels.reduce((sum, panel) => sum + panel.screws.length, 0) % 3, 0);
   assert.equal(state.status, 'playing');
   assert.equal(state.details.endlessLayers, 1);
   assert.equal(state.tools.extra, 3);
 
-  let extended = false;
-  for (let turn = 0; turn < 100 && !extended; turn += 1) {
-    const id = useHint(state);
-    assert.ok(id, 'endless mode always exposes a safe move');
-    state.tools.hint += 1;
-    const result = applyScrew(state, id);
-    assert.equal(result.ok, true);
-    extended ||= result.endlessExtended;
-  }
-
-  assert.equal(extended, true);
+  const oldIds = new Set(state.panels.map(panel => panel.id));
+  assert.equal(extendEndlessState(state, true), true);
   assert.equal(state.status, 'playing');
   assert.equal(state.details.endlessLayers, 2);
   assert.ok(state.panels.length > initialPanels);
   assert.ok(state.panels.some(panel => panel.id.startsWith('e2-')));
+  assert.ok(state.panels.some(panel => oldIds.has(panel.id)), 'unfinished panels stay in the same continuous run');
 });
 
 test('endless add-box tool restores the original capacity and score multiplier rules', () => {
-  const state = createScrewState({ mode:'endless' });
+  const state = createScrewState({ mode:'endless', seed:0x31415926 });
   state.details.boxesCompleted = 10;
   assert.equal(endlessScore(state), 2640);
   assert.equal(addEndlessBox(state), true);
@@ -154,17 +177,16 @@ test('endless add-box tool restores the original capacity and score multiplier r
 });
 
 test('undo restores an endless move that triggered a new layer', () => {
-  const state = createScrewState({ mode:'endless' });
-  let result;
-  let before;
-  for (let turn = 0; turn < 100; turn += 1) {
-    const id = useHint(state);
-    assert.ok(id);
-    state.tools.hint += 1;
-    before = structuredClone(state);
-    result = applyScrew(state, id);
-    if (result.endlessExtended) break;
+  const state = createScrewState({ mode:'endless', seed:0x42424242 });
+  const reachable = reachableScrews(state).filter(hit => hit.reachable);
+  const move = reachable.find(hit => state.boxes.some(box => box.color === hit.screw.color)) || reachable[0];
+  const keep = new Set([move.screw.id]);
+  for (const hit of reachableScrews(state)) {
+    if (keep.size < 25) keep.add(hit.screw.id);
+    hit.screw.gone = !keep.has(hit.screw.id);
   }
+  const before = structuredClone(state);
+  const result = applyScrew(state, move.screw.id);
   assert.equal(result?.endlessExtended, true);
   assert.equal(undoScrew(state), true);
   assert.equal(state.details.endlessLayers, before.details.endlessLayers);
@@ -181,7 +203,8 @@ test('completed saves from the short-lived endless campaign resume as a continuo
   assert.equal(migrated, true);
   assert.equal(state.status, 'playing');
   assert.equal(state.details.endlessLayers, 2);
-  assert.ok(state.panels.some(panel => panel.id.startsWith('e2-')));
+  assert.equal(state.endlessRulesVersion, SCREW_ENDLESS_RULES_VERSION);
+  assert.ok(state.panels.length >= SCREW_ENDLESS_MIN_PANELS && state.panels.length <= SCREW_ENDLESS_MAX_PANELS);
 });
 
 function fallingAt(fps, milliseconds = 800) {

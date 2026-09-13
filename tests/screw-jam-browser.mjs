@@ -5,7 +5,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 
 const port = Number(process.env.CDP_PORT || 9357);
 const origin = process.env.QA_ORIGIN || 'http://127.0.0.1:8877';
-const out = process.env.QA_OUT || '.local/qa-screw-jam-1.2.0/browser';
+const out = process.env.QA_OUT || '.local/qa-screw-jam-1.2.1/browser';
 mkdirSync(out, { recursive:true });
 
 const tabs = await (await fetch(`http://127.0.0.1:${port}/json`)).json();
@@ -84,6 +84,14 @@ async function openScrew({ choice = 'normal', continueSaved = false } = {}) {
   }
   throw Error('Screw Jam did not start');
 }
+async function returnToCatalog() {
+  for (let attempt = 0; attempt < 8; attempt += 1) {
+    if (!await evaluate('wanbaApp.inspect().game')) return;
+    await evaluate('wanbaApp.back()');
+    await wait(120);
+  }
+  throw Error('Screw Jam did not return to the catalog');
+}
 async function layout() {
   return evaluate(`(()=>{const rect=element=>{const r=element.getBoundingClientRect();return{x:r.x,y:r.y,width:r.width,height:r.height,right:r.right,bottom:r.bottom}};const canvas=document.querySelector('#wb-screw-canvas'),box=document.querySelector('#wb-gamebox'),panel=document.querySelector('.wb-screw-panel'),top=document.querySelector('.wb-screw-top');return{viewport:{width:innerWidth,height:innerHeight},canvas:rect(canvas),gamebox:rect(box),panel:rect(panel),top:rect(top),raw:{width:canvas.width,height:canvas.height},art:canvas.dataset.screwArt,mode:canvas.dataset.renderMode,boxes:document.querySelectorAll('.wb-screw-box').length,slots:document.querySelectorAll('.wb-screw-slot').length,tools:[...document.querySelectorAll('.wb-screw-tool')].map(rect),overflow:document.documentElement.scrollWidth-innerWidth,state:wanbaApp.inspect().controller}})()`);
 }
@@ -97,6 +105,36 @@ async function playSafeMove() {
   await touchPoint(move.x, move.y);
   await until(`wanbaApp.inspect().controller.moves>${before}`);
   return move;
+}
+async function movePointFor(kind) {
+  return evaluate(`(async()=>{const model=await import('/src/games/plugins/screw/model.js');const state=wanbaApp.inspect().controller,active=new Set(state.boxes.map(box=>box.color)),hits=model.reachableScrews(state).filter(item=>item.reachable).sort((a,b)=>b.panel.z-a.panel.z),hit=hits.find(item=>${kind === 'active' ? 'active.has(item.screw.color)' : '!active.has(item.screw.color)'});if(!hit)return null;const rect=document.querySelector('#wb-screw-canvas').getBoundingClientRect();return{id:hit.screw.id,x:rect.x+hit.point.x/420*rect.width,y:rect.y+hit.point.y/560*rect.height};})()`);
+}
+async function storeEndlessFixture(kind) {
+  return evaluate(`(async()=>{
+    const model=await import('/src/games/plugins/screw/model.js');
+    const state=model.createScrewState({mode:'endless',seed:${kind === 'tray-pressure' ? '0x13572468' : '0x24681357'}});
+    if(${JSON.stringify(kind)}==='tray-pressure'){
+      const active=new Set(state.boxes.map(box=>box.color));
+      const unmatched=model.reachableScrews(state).find(hit=>hit.reachable&&!active.has(hit.screw.color));
+      const matched=model.reachableScrews(state).find(hit=>hit.reachable&&active.has(hit.screw.color));
+      if(!unmatched||!matched)throw Error('Fixture needs active and future-colour screws');
+      state.tray=Array.from({length:4},(_,index)=>({id:'held-'+index,color:'future'}));
+    }else{
+      const hits=model.reachableScrews(state);
+      const move=hits.find(hit=>hit.reachable&&state.boxes.some(box=>box.color===hit.screw.color))||hits.find(hit=>hit.reachable);
+      if(!move)throw Error('Fixture needs a reachable screw');
+      const keep=new Set([move.screw.id]);
+      for(const hit of hits)if(keep.size<25)keep.add(hit.screw.id);
+      for(const panel of state.panels){
+        for(const screw of panel.screws)screw.gone=!keep.has(screw.id);
+        panel.gone=panel.screws.every(screw=>screw.gone);
+      }
+    }
+    state.choice='endless';state.difficulty='endless';state.history=[];state.savedAt=Date.now();state.startedAt=Date.now();
+    const key='wanbanXiaowu_progress_v1',all=JSON.parse(localStorage.getItem(key)||'{}');
+    all.screw=state;localStorage.setItem(key,JSON.stringify(all));
+    return {panels:state.panels.length,live:model.allLiveScrews(state).length,tray:state.tray.length};
+  })()`);
 }
 
 try {
@@ -226,18 +264,15 @@ try {
   await until('wanbaApp.inspect().controller?.render?.idle');
   let endless = (await layout()).state;
   assert.equal(endless.mode, 'endless');
+  assert.equal(endless.endlessRulesVersion, 2);
   assert.equal(endless.details.endlessLayers, 1);
   assert.equal(endless.status, 'playing');
-  for (let move = 0; move < 40 && endless.details.endlessLayers < 2; move += 1) {
-    await playSafeMove();
-    endless = (await layout()).state;
-  }
-  assert.equal(endless.details.endlessLayers, 2);
-  assert.equal(endless.status, 'playing');
-  assert.ok(endless.liveScrews >= 50, 'new layer arrives before the board clears');
-  assert.equal(await evaluate('document.querySelector("#wb-screw-result").hidden'), true);
-  assert.match(await evaluate('document.querySelector("#wb-screw-progress-text").textContent'), /已收纳 .*盒 · 持续补充/);
-  await screenshot('endless-continuous-layer-2');
+  assert.ok(endless.panels.length >= 28 && endless.panels.length <= 32);
+  assert.ok(endless.panels.every(panel => panel.screws.length >= 2 && panel.screws.length <= 4));
+  assert.equal(endless.trayCapacity, 5);
+  assert.equal(endless.boxCapacity, 3);
+  await screenshot('endless-original-board');
+
   const boxesBefore = endless.boxes.length;
   await touch('#wb-screw-extra');
   endless = (await layout()).state;
@@ -245,8 +280,56 @@ try {
   assert.equal(endless.boxCapacity, 4);
   assert.equal(endless.boxes.length, 4);
   assert.equal(await evaluate('document.querySelector("#wb-screw-extra-label").textContent'), '加盒');
-  await screenshot('endless-add-box');
-  checks.push({ check:'endless mode adds a new layer without a level result and expands from three to four collection boxes',
+  checks.push({ check:'original endless board restores 28–32 panels, five temporary holes, and expandable three-to-six boxes',
+    state:{ panels:endless.panels.length, liveScrews:endless.liveScrews, boxes:endless.boxes.length, capacity:endless.boxCapacity } });
+
+  console.log('PHASE endless-tray-pressure');
+  await returnToCatalog();
+  await storeEndlessFixture('tray-pressure');
+  await navigate();
+  await openScrew({ continueSaved:true });
+  let pressure = (await layout()).state;
+  assert.equal(pressure.tray.length, 4);
+  const fifth = await movePointFor('unmatched');
+  assert.ok(fifth, 'future-colour screw is exposed');
+  await touchPoint(fifth.x, fifth.y);
+  await until('wanbaApp.inspect().controller.tray.length===5');
+  pressure = (await layout()).state;
+  assert.equal(pressure.status, 'playing');
+  assert.match(await evaluate('document.querySelector("#wb-screw-callout").textContent'), /下一颗必须匹配/);
+  const recovery = await movePointFor('active');
+  assert.ok(recovery, 'active-box screw remains playable with five occupied holes');
+  const movesBeforeRecovery = pressure.moves;
+  await touchPoint(recovery.x, recovery.y);
+  await until(`wanbaApp.inspect().controller.moves>${movesBeforeRecovery}`);
+  assert.equal((await layout()).state.status, 'playing');
+  const sixth = await movePointFor('unmatched');
+  assert.ok(sixth, 'another future-colour screw is exposed');
+  await touchPoint(sixth.x, sixth.y);
+  await until('wanbaApp.inspect().controller.status==="failed"');
+  assert.equal(await evaluate('document.querySelector("#wb-screw-result").hidden'), false);
+  await screenshot('endless-five-hole-pressure');
+  checks.push({ check:'the fifth temporary hole remains recoverable and only the next unmatched screw ends the run',
+    touched:{ fifth:fifth.id, recovery:recovery.id, sixth:sixth.id } });
+
+  console.log('PHASE endless-continuous-refill');
+  await returnToCatalog();
+  const refillFixture = await storeEndlessFixture('near-refill');
+  assert.equal(refillFixture.live, 25);
+  await navigate();
+  await openScrew({ continueSaved:true });
+  const refillMove = await movePointFor('active');
+  assert.ok(refillMove, 'near-refill fixture exposes a safe screw');
+  await touchPoint(refillMove.x, refillMove.y);
+  await until('wanbaApp.inspect().controller.details.endlessLayers===2');
+  endless = (await layout()).state;
+  assert.equal(endless.details.endlessLayers, 2);
+  assert.equal(endless.status, 'playing');
+  assert.ok(endless.liveScrews > 24, 'new layer arrives before the board clears');
+  assert.equal(await evaluate('document.querySelector("#wb-screw-result").hidden'), true);
+  assert.match(await evaluate('document.querySelector("#wb-screw-progress-text").textContent'), /已收纳 .*盒 · 持续补充/);
+  await screenshot('endless-continuous-layer-2');
+  checks.push({ check:'endless mode adds a large new layer without a level result and keeps unfinished panels',
     state:{ layers:endless.details.endlessLayers, status:endless.status, boxes:endless.boxes.length, capacity:endless.boxCapacity,
       liveScrews:endless.liveScrews, boxesCompleted:endless.details.boxesCompleted } });
 

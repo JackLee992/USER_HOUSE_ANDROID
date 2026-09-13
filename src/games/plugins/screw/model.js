@@ -1,7 +1,10 @@
 export const SCREW_STATE_SCHEMA = 2;
 export const SCREW_CAMPAIGN_LEVELS = 12;
 export const SCREW_TRAY_SIZE = 5;
-export const SCREW_ENDLESS_WAVE_PANELS = 12;
+export const SCREW_ENDLESS_RULES_VERSION = 2;
+export const SCREW_ENDLESS_MIN_PANELS = 28;
+export const SCREW_ENDLESS_MAX_PANELS = 32;
+export const SCREW_ENDLESS_WAVE_PANELS = SCREW_ENDLESS_MIN_PANELS;
 export const SCREW_ENDLESS_REFILL_SCREWS = 24;
 export const SCREW_COLORS = Object.freeze([
   Object.freeze({ id:'ruby', name:'珊瑚红', hex:'#d96872', dark:'#8f354a', light:'#f5abb1' }),
@@ -113,6 +116,91 @@ function makePanels(level, seed, panelCount) {
   return { panels, groups };
 }
 
+// Endless mode deliberately keeps the first 玩伴小屋 board generator: a large,
+// irregular 28–32 panel pile, two to four screws per panel, and boxes queued in
+// random three-colour batches. The new campaign uses the smaller deterministic
+// boards above, while endless retains the original continuous-play rhythm.
+function makeEndlessPanels(seed) {
+  const rand = mulberry32(seed);
+  const between = (min, max) => min + rand() * (max - min);
+  const choices = ['capsule','bar','plate','triangle','disc','shield','cross'];
+  const panelCount = SCREW_ENDLESS_MIN_PANELS + Math.floor(rand() * (SCREW_ENDLESS_MAX_PANELS - SCREW_ENDLESS_MIN_PANELS + 1));
+  const layout = Math.floor(rand() * 4);
+  const templates = Array.from({ length:panelCount }, (_, index) => {
+    const column = index % 5, row = Math.floor(index / 5) % 7;
+    const ring = index / panelCount * Math.PI * 2;
+    const shape = choices[Math.floor(rand() * choices.length)];
+    if (layout === 0) return { x:38 + column * 86 + between(-18,18), y:46 + row * 118 + between(-20,20), a:(index % 2 ? .58 : -.58) + between(-.28,.28), shape };
+    if (layout === 1) return { x:36 + (index % 6) * 70 + between(-18,18), y:52 + Math.floor(index / 6) * 124 + (index % 2 ? 24 : -8) + between(-16,16), a:(index % 2 ? 1 : -1) * between(.16,.62), shape };
+    if (layout === 2) {
+      const slots = [[52,58],[210,54],[366,62],[56,190],[188,174],[342,188],[68,324],[214,316],[360,328],[52,462],[204,456],[366,464]];
+      const slot = slots[index % slots.length];
+      return { x:slot[0] + between(-24,24), y:slot[1] + between(-20,20) + Math.floor(index / slots.length) * 20, a:(index % 2 ? .82 : -.82) + between(-.22,.22), shape };
+    }
+    return { x:210 + Math.cos(ring) * (116 + index % 4 * 28) + between(-14,14), y:268 + Math.sin(ring) * (176 + index % 3 * 28) + between(-14,14), a:ring + between(-.42,.42), shape };
+  });
+
+  const screwCounts = templates.map(() => 2 + Math.floor(rand() * 3));
+  let screwTotal = screwCounts.reduce((sum, count) => sum + count, 0);
+  while (screwTotal % 3) {
+    if (screwTotal % 3 === 1) {
+      const index = screwCounts.findIndex(count => count > 2);
+      if (index >= 0) { screwCounts[index] -= 1; screwTotal -= 1; }
+      else { screwCounts[0] += 2; screwTotal += 2; }
+    } else {
+      const index = screwCounts.findIndex(count => count < 4);
+      if (index >= 0) { screwCounts[index] += 1; screwTotal += 1; }
+      else { screwCounts[0] -= 2; screwTotal -= 2; }
+    }
+  }
+
+  const boxCount = Math.max(3, screwTotal / 3), boxQueue = [];
+  for (let index = 0; index < boxCount; index += 3) {
+    boxQueue.push(...shuffle(rand, SCREW_COLORS.map(color => color.id)).slice(0, Math.min(3, boxCount - index)));
+  }
+  const screwColors = shuffle(rand, boxQueue.flatMap(color => [color,color,color]));
+  let colorOffset = 0;
+  for (const count of screwCounts) {
+    const slice = screwColors.slice(colorOffset, colorOffset + count);
+    if (count >= 3 && slice.every(color => color === slice[0])) {
+      const swapAt = screwColors.findIndex((color, index) => index >= colorOffset + count && color !== slice[0]);
+      if (swapAt >= 0) [screwColors[colorOffset + count - 1], screwColors[swapAt]] = [screwColors[swapAt], screwColors[colorOffset + count - 1]];
+    }
+    colorOffset += count;
+  }
+
+  colorOffset = 0;
+  const panels = templates.map((template, index) => {
+    const wide = template.shape === 'capsule' || template.shape === 'bar';
+    const round = template.shape === 'disc';
+    const w = wide ? between(150,222) : round ? between(104,158) : between(112,178);
+    const h = wide ? between(48,72) : round ? w : template.shape === 'triangle' || template.shape === 'cross' ? between(106,158) : between(86,142);
+    const cosine = Math.abs(Math.cos(template.a)), sine = Math.abs(Math.sin(template.a));
+    const marginX = Math.min(196, cosine * w / 2 + sine * h / 2 + 14);
+    const marginY = Math.min(266, sine * w / 2 + cosine * h / 2 + 14);
+    const x = Math.max(marginX, Math.min(420 - marginX, template.x));
+    const y = Math.max(marginY, Math.min(560 - marginY, template.y));
+    const count = screwCounts[index], candidates = [];
+    for (let attempt = 0; attempt < 180; attempt += 1) {
+      const point = [between(-w * .37,w * .37), between(-h * .37,h * .37)];
+      const inside = panelContains({ shape:template.shape, x:0, y:0, w, h, a:0 }, point[0], point[1]);
+      if (inside && candidates.every(other => Math.hypot(other[0] - point[0], other[1] - point[1]) >= Math.max(30, Math.min(w,h) * .27))) candidates.push(point);
+      if (candidates.length >= count) break;
+    }
+    while (candidates.length < count) {
+      const angle = candidates.length / count * Math.PI * 2;
+      candidates.push([Math.cos(angle) * w * .24, Math.sin(angle) * h * .24]);
+    }
+    const id = `p${index}`;
+    const screws = candidates.slice(0,count).map(([lx,ly], screwIndex) => ({
+      id:`${id}s${screwIndex}`, lx:Number(lx.toFixed(2)), ly:Number(ly.toFixed(2)), color:screwColors[colorOffset + screwIndex], gone:false,
+    }));
+    colorOffset += count;
+    return { id, z:index, order:index, shape:template.shape, x:Number(x.toFixed(2)), y:Number(y.toFixed(2)), w:Number(w.toFixed(2)), h:Number(h.toFixed(2)), a:Number(template.a.toFixed(4)), material:MATERIALS[index % MATERIALS.length], tint:index % 7, gone:false, screws };
+  });
+  return { panels, boxQueue };
+}
+
 function baseDetails(previous = {}) {
   return {
     removed:Number(previous.removed || 0),
@@ -134,17 +222,17 @@ function baseDetails(previous = {}) {
   };
 }
 
-export function createScrewState({ level = 1, mode = 'normal', score = 0, details, campaignStars = 0 } = {}) {
+export function createScrewState({ level = 1, mode = 'normal', score = 0, details, campaignStars = 0, seed:requestedSeed } = {}) {
   const safeLevel = Math.max(1, Math.floor(Number(level) || 1));
   const endless = mode === 'endless';
-  const seed = (0x51f15e5d ^ Math.imul(safeLevel, 0x45d9f3b) ^ (endless ? 0x7f4a7c15 : 0)) >>> 0;
-  const panelCount = endless ? SCREW_ENDLESS_WAVE_PANELS : panelCountForLevel(safeLevel);
-  const made = makePanels(endless ? Math.max(9, safeLevel) : safeLevel, seed, panelCount);
-  const boxQueue = made.groups.flat();
+  const seed = endless ? (Number.isFinite(Number(requestedSeed)) ? Number(requestedSeed) >>> 0 : (Date.now() ^ Math.floor(Math.random() * 1e9)) >>> 0) :
+    (0x51f15e5d ^ Math.imul(safeLevel, 0x45d9f3b)) >>> 0;
+  const made = endless ? makeEndlessPanels(seed) : makePanels(safeLevel, seed, panelCountForLevel(safeLevel));
+  const boxQueue = made.boxQueue || made.groups.flat();
   return {
     screwSchema:SCREW_STATE_SCHEMA,
     mode:endless ? 'endless' : 'normal',
-    endlessRulesVersion:endless ? 1 : 0,
+    endlessRulesVersion:endless ? SCREW_ENDLESS_RULES_VERSION : 0,
     level:safeLevel,
     seed,
     score:Math.max(0, Math.floor(Number(score) || 0)),
@@ -177,10 +265,27 @@ export function restoreScrewState(saved, mode = 'normal') {
   state.level = Math.max(1, Math.floor(Number(state.level) || 1));
   state.score = Math.max(0, Math.floor(Number(state.score) || 0));
   state.trayCapacity = Math.max(SCREW_TRAY_SIZE, Math.min(7, Math.floor(Number(state.trayCapacity) || SCREW_TRAY_SIZE)));
-  const restoringOldEndless = state.mode === 'endless' && state.endlessRulesVersion !== 1;
+  const restoringOldEndless = state.mode === 'endless' && state.endlessRulesVersion !== SCREW_ENDLESS_RULES_VERSION;
+  if (restoringOldEndless) {
+    const addBoxUses = Math.max(0, Math.min(3, Number(state.details?.addBoxUses ?? Math.max(0, Number(state.boxCapacity || state.maxBoxes || 3) - 3)) || 0));
+    const previousLayer = Math.max(1, Number(state.details?.endlessLayers || state.level) || 1);
+    const targetLayer = state.status === 'level_complete' ? previousLayer + 1 : previousLayer;
+    const migrated = createScrewState({
+      mode:'endless',
+      level:targetLayer,
+      score:Number(state.score) || 0,
+      details:state.details,
+      campaignStars:Number(state.campaignStars) || 0,
+    });
+    migrated.details.endlessLayers = targetLayer;
+    migrated.boxCapacity = 3 + addBoxUses;
+    migrated.tools.extra = 3 - addBoxUses;
+    migrated.details.addBoxUses = addBoxUses;
+    refillBoxes(migrated);
+    return { state:migrated, migrated:true };
+  }
   state.tools = { undo:Math.max(0, Number(state.tools?.undo ?? 3)), hint:Math.max(0, Number(state.tools?.hint ?? 3)), extra:Math.max(0, Number(state.tools?.extra ?? (state.mode === 'endless' ? 3 : 1))) };
-  if (restoringOldEndless) state.tools.extra = 3;
-  state.endlessRulesVersion = state.mode === 'endless' ? 1 : 0;
+  state.endlessRulesVersion = state.mode === 'endless' ? SCREW_ENDLESS_RULES_VERSION : 0;
   state.boxQueue = Array.isArray(state.boxQueue) ? state.boxQueue.slice() : state.boxes.map(box => box.color);
   state.boxIndex = Math.max(0, Math.min(state.boxQueue.length, Math.floor(Number(state.boxIndex) || state.boxes.length)));
   state.boxCapacity = state.mode === 'endless' ? Math.max(3, Math.min(6, Math.floor(Number(state.boxCapacity || state.maxBoxes) || state.boxes.length || 3))) : 3;
@@ -292,6 +397,8 @@ function refillBoxes(state) {
 function replaceCompletedBox(state, box, events) {
   const index = state.boxes.indexOf(box);
   events.completedBoxes.push(box.color);
+  state.details.packed += 3;
+  state.details.matches += 1;
   state.details.boxesCompleted += 1;
   state.boxes.splice(index, 1);
   if (state.boxIndex < state.boxQueue.length) {
@@ -305,8 +412,6 @@ function packIntoBox(state, color, events, source) {
   const box = activeBox(state, color);
   if (!box) return false;
   box.fill += 1;
-  state.details.packed += 1;
-  state.details.matches += 1;
   events.packed.push({ color, source, boxId:box.id });
   if (box.fill >= 3) replaceCompletedBox(state, box, events);
   return true;
@@ -339,7 +444,15 @@ export function applyScrew(state, screwId) {
   const hit = reachableScrews(state).find(item => item.screw.id === screwId);
   if (!hit) return events;
   if (!hit.reachable) { state.details.blocked += 1; events.reason = 'blocked'; return events; }
-  if (!activeBox(state, hit.screw.color) && state.tray.length >= state.trayCapacity) { events.reason = 'tray_full'; return events; }
+  if (!activeBox(state, hit.screw.color) && state.tray.length >= state.trayCapacity) {
+    events.reason = 'tray_full';
+    if (state.mode === 'endless') {
+      state.status = 'failed';
+      state.details.completed = false;
+      events.failed = true;
+    }
+    return events;
+  }
 
   state.history.push(coreSnapshot(state));
   state.history = state.history.slice(-3);
@@ -364,9 +477,11 @@ export function applyScrew(state, screwId) {
   if (state.tray.length === 4) state.details.trayFourCount += 1;
   if (state.tray.length >= state.trayCapacity) {
     state.details.trayFullCount += 1;
-    state.status = 'failed';
-    state.details.completed = false;
-    events.failed = true;
+    if (state.mode !== 'endless') {
+      state.status = 'failed';
+      state.details.completed = false;
+      events.failed = true;
+    }
   } else if (state.mode === 'endless') {
     events.endlessExtended = extendEndlessState(state);
   } else if (allLiveScrews(state).length === 0 && state.tray.length === 0 && state.boxes.length === 0) {
@@ -436,8 +551,8 @@ export function extendEndlessState(state, force = false) {
   if (!force && live > SCREW_ENDLESS_REFILL_SCREWS && active.length > 8) return false;
   const nextLayer = Math.max(1, Number(state.details?.endlessLayers) || 1) + 1;
   const seed = (state.seed ^ Math.imul(nextLayer, 0x6d2b79f5) ^ 0xa511e9b3) >>> 0;
-  const made = makePanels(Math.min(24, 8 + nextLayer), seed, SCREW_ENDLESS_WAVE_PANELS);
-  const zLift = SCREW_ENDLESS_WAVE_PANELS + 1;
+  const made = makeEndlessPanels(seed);
+  const zLift = made.panels.length + 1;
   const prefix = `e${nextLayer}-`;
   const fresh = made.panels.map(panel => ({
     ...panel,
@@ -445,7 +560,7 @@ export function extendEndlessState(state, force = false) {
     screws:panel.screws.map(screw => ({ ...screw, id:prefix + screw.id })),
   }));
   state.panels = fresh.concat(active.map(panel => ({ ...panel, z:(Number(panel.z) || 0) + zLift })));
-  state.boxQueue = state.boxQueue.concat(made.groups.flat());
+  state.boxQueue = state.boxQueue.concat(made.boxQueue);
   state.seed = seed;
   state.level = nextLayer;
   state.details.endlessLayers = nextLayer;
