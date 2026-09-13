@@ -544,7 +544,7 @@
     },
     "screwclassic": {
       "title": "Screw Sort",
-      "rules": "The complete original launch version. Each run creates 21–23 layered panels. Upper panels cover lower screws. A panel with one screw pivots and swings from that anchor; after its last screw is removed, it accelerates under gravity and can be stopped by screws still fixed to panels in front. Three color toolboxes are open at first, each packing three matching screws. Other colors use a five-slot tray, and up to six boxes can be opened. Clear every panel to finish."
+      "rules": "The complete original launch version. Normal games create 42–47 layered panels; endless mode continuously adds batches of 28–32. Upper panels cover lower screws. A panel with one screw pivots and swings from that anchor; after its last screw is removed, it accelerates under gravity and can be stopped by screws still fixed to panels in front. Three color toolboxes are open at first, each packing three matching screws. Other colors use a five-slot tray, and up to six boxes can be opened."
     },
     "screw": {
       "title": "Crazy Screw Sort",
